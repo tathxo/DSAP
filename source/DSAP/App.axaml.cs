@@ -955,6 +955,7 @@ public partial class App : Application
             }
             else
             {
+                success = true;
                 Log.Logger.Warning($"Unable to identify received item {itemId}, receiving rubbish instead.");
                 Client.AddOverlayMessage($"Unable to identify received item {itemId}, receiving rubbish instead.");
                 var filler = AllItems.First(x => x.Id == 380);

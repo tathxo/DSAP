@@ -1,11 +1,16 @@
 # Dark Souls: Remastered Archipelago Randomizer Setup Guide
 
+
+## What gets randomized?
+
+See [the Game Page](./en_Dark%20Souls%20Remastered.md).
+
 ## Required Software
 
-- [Dark Souls: Remastered](https://store.steampowered.com/app/570940/DARK_SOULS_REMASTERED/)
-- [dsr.apworld - Dark Souls: Remastered Apworld](https://github.com/ArsonAssassin/DSAP/releases/latest)
-- [DSAP - Dark Souls: Remastered AP client](https://github.com/ArsonAssassin/DSAP/releases/latest)
-- [Archipelago Launcher](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+- Dark Souls: Remastered [(Steam)](https://store.steampowered.com/app/570940/DARK_SOULS_REMASTERED/)
+- dsr.apworld - Dark Souls: Remastered Apworld [(GitHub)](https://github.com/ArsonAssassin/DSAP/releases/latest)
+- DSAP.Desktop.exe - Dark Souls: Remastered AP client [(.zip on GitHub)](https://github.com/ArsonAssassin/DSAP/releases/latest)
+- Archipelago Launcher [(GitHub)](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
 ## Optional Software
 

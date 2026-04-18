@@ -289,6 +289,7 @@ class DSRWorld(World):
         create_connection_2way("Upper Undead Burg - Before Fog", "Upper Undead Burg - Fog")
         create_connection_2way("Upper Undead Burg - Fog", "Upper Undead Burg")
         create_connection("Upper Undead Burg - Hellkite Bridge", "Undead Burg Basement Door")
+        create_connection("Upper Undead Burg - Hellkite Bridge", "Upper Undead Burg") # Bonfire ladder
         create_connection("Upper Undead Burg", "Upper Undead Burg - Taurus Demon")
         create_connection("Upper Undead Burg - Taurus Demon", "Upper Undead Burg - Hellkite Bridge")
         create_connection_2way("Upper Undead Burg - Hellkite Bridge", "Undead Parish - Before Fog")

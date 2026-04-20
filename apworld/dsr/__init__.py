@@ -419,7 +419,7 @@ class DSRWorld(World):
         create_connection("Sanctuary Garden - Sanctuary Guardian", "Oolacile Sanctuary")
         create_connection("Oolacile Sanctuary", "Royal Wood")
         create_connection("Royal Wood", "Royal Wood - Artorias")
-        create_connection("Royal Wood", "Oolacile Township")
+        create_connection("Royal Wood - Artorias", "Oolacile Township")
         create_connection("Oolacile Township", "Oolacile Township - After Crest Key")
         create_connection("Oolacile Township", "Oolacile Township - Behind Light-Dispelled Walls")
         create_connection("Oolacile Township - After Crest Key", "Royal Wood - After Hawkeye Gough")
@@ -750,7 +750,7 @@ class DSRWorld(World):
         set_rule(self.multiworld.get_entrance("Darkroot Basin -> Sanctuary Garden", self.player), lambda state: state.has("Broken Pendant", self.player))
 
         set_rule(self.multiworld.get_entrance("Sanctuary Garden - Sanctuary Guardian -> Oolacile Sanctuary", self.player), lambda state: state.has("Sanctuary Guardian Defeated", self.player))
-        set_rule(self.multiworld.get_entrance("Royal Wood -> Oolacile Township", self.player), lambda state: state.has("Artorias the Abysswalker Defeated", self.player))
+        set_rule(self.multiworld.get_entrance("Royal Wood - Artorias -> Oolacile Township", self.player), lambda state: state.has("Artorias the Abysswalker Defeated", self.player))
         set_rule(self.multiworld.get_entrance("Oolacile Township -> Oolacile Township - After Crest Key", self.player), lambda state: state.has("Crest Key", self.player))
         set_rule(self.multiworld.get_entrance("Oolacile Township -> Oolacile Township - Behind Light-Dispelled Walls", self.player), lambda state: state.has("Skull Lantern", self.player))
     

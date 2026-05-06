@@ -289,6 +289,7 @@ class DSRWorld(World):
         create_connection_2way("Upper Undead Burg - Before Fog", "Upper Undead Burg - Fog")
         create_connection_2way("Upper Undead Burg - Fog", "Upper Undead Burg")
         create_connection("Upper Undead Burg - Hellkite Bridge", "Undead Burg Basement Door")
+        create_connection("Upper Undead Burg - Hellkite Bridge", "Upper Undead Burg") # Bonfire ladder
         create_connection("Upper Undead Burg", "Upper Undead Burg - Taurus Demon")
         create_connection("Upper Undead Burg - Taurus Demon", "Upper Undead Burg - Hellkite Bridge")
         create_connection_2way("Upper Undead Burg - Hellkite Bridge", "Undead Parish - Before Fog")
@@ -418,7 +419,7 @@ class DSRWorld(World):
         create_connection("Sanctuary Garden - Sanctuary Guardian", "Oolacile Sanctuary")
         create_connection("Oolacile Sanctuary", "Royal Wood")
         create_connection("Royal Wood", "Royal Wood - Artorias")
-        create_connection("Royal Wood", "Oolacile Township")
+        create_connection("Royal Wood - Artorias", "Oolacile Township")
         create_connection("Oolacile Township", "Oolacile Township - After Crest Key")
         create_connection("Oolacile Township", "Oolacile Township - Behind Light-Dispelled Walls")
         create_connection("Oolacile Township - After Crest Key", "Royal Wood - After Hawkeye Gough")
@@ -629,7 +630,7 @@ class DSRWorld(World):
 
 
     def get_filler_item_name(self) -> str:
-        return "1000 Souls"
+        return "Soul of a Proud Knight"
     
     def set_rules(self) -> None:           
         #print("Setting rules")   
@@ -749,7 +750,7 @@ class DSRWorld(World):
         set_rule(self.multiworld.get_entrance("Darkroot Basin -> Sanctuary Garden", self.player), lambda state: state.has("Broken Pendant", self.player))
 
         set_rule(self.multiworld.get_entrance("Sanctuary Garden - Sanctuary Guardian -> Oolacile Sanctuary", self.player), lambda state: state.has("Sanctuary Guardian Defeated", self.player))
-        set_rule(self.multiworld.get_entrance("Royal Wood -> Oolacile Township", self.player), lambda state: state.has("Artorias the Abysswalker Defeated", self.player))
+        set_rule(self.multiworld.get_entrance("Royal Wood - Artorias -> Oolacile Township", self.player), lambda state: state.has("Artorias the Abysswalker Defeated", self.player))
         set_rule(self.multiworld.get_entrance("Oolacile Township -> Oolacile Township - After Crest Key", self.player), lambda state: state.has("Crest Key", self.player))
         set_rule(self.multiworld.get_entrance("Oolacile Township -> Oolacile Township - Behind Light-Dispelled Walls", self.player), lambda state: state.has("Skull Lantern", self.player))
     

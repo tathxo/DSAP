@@ -630,7 +630,7 @@ class DSRWorld(World):
 
 
     def get_filler_item_name(self) -> str:
-        return "1000 Souls"
+        return "Soul of a Proud Knight"
     
     def set_rules(self) -> None:           
         #print("Setting rules")   

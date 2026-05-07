@@ -1152,10 +1152,18 @@ public partial class App : Application
         }
         else if (goal == (int)DSGoal.AllBosses)
         {
+            var hasGoaledBosses = true;
             var bossLocs = Helpers.LocationHelper.GetBossFlagLocations();
             if(bossLocs.Any(x => x.Name == e.CompletedLocation.Name))
             {
-                if(bossLocs.All(x => Client.CurrentSession.Locations.AllLocationsChecked.Contains(x.Id)))
+                foreach (var boss in bossLocs) 
+                {
+                    if (!boss.Check())
+                    {
+                        hasGoaledBosses = false;
+                    }
+                }
+                if(hasGoaledBosses)
                 {
                     Log.Logger.Information($"Sending Goal for All Bosses");
                     SendGoal();

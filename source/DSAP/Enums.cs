@@ -9,6 +9,12 @@ namespace DSAP
 {
     public class Enums
     {
+
+        public enum DSGoal
+        {
+            Gwyn = 0,
+            AllBosses = 1
+        }
         public enum DSItemCategory
         {
             AnyWeapon = 0x00000000,

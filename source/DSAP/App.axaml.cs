@@ -103,7 +103,7 @@ public partial class App : Application
     public void Start()
     {
         Context = new MainWindowViewModel("0.6.2 - 0.6.5");
-        
+
         Context.ClientVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
         Context.ConnectClicked += Context_ConnectClicked;
         Context.UnstuckClicked += Context_UnstuckClicked;
@@ -180,7 +180,7 @@ public partial class App : Application
                 else
                     Log.Logger.Warning("invalid command - too many values specified!");
             }
-            else 
+            else
             {
                 if (command.StartsWith('/'))
                 {
@@ -358,7 +358,7 @@ public partial class App : Application
                 Log.Logger.Information("You cannot run this command while not connected & in game. Processing terminated.");
                 return;
             }
-            List<(string shortItemName, int placeflag, string longItemName, bool placed, bool received)> items = 
+            List<(string shortItemName, int placeflag, string longItemName, bool placed, bool received)> items =
                 [
                 ("Lordvessel  ", 11800100, "Lordvessel", false, false),
                 ("Nito Soul   ", 11800201, "Lord Soul (Nito)", false, false),
@@ -423,9 +423,9 @@ public partial class App : Application
         else if (cmdparts.Length == 2)
         {
             if (cmdparts[1].StartsWith("l"))
-                ListEventLocks(displayableEventType, 'L', condition); 
+                ListEventLocks(displayableEventType, 'L', condition);
             else if (cmdparts[1].StartsWith("u"))
-                ListEventLocks(displayableEventType, 'U', condition); 
+                ListEventLocks(displayableEventType, 'U', condition);
             else if (cmdparts[1].StartsWith("a"))
                 ListEventLocks(displayableEventType, 'A', condition);
             else
@@ -477,11 +477,19 @@ public partial class App : Application
     {
         Log.Logger.Warning("Beginning /goalcheck processing");
         bool sendingGoal = false;
+        int.TryParse(Client.Options["goal_condition"]?.ToString() ?? "0", out var goal);
+
 
         // Begin by stating what the goal is.
         // Later, if there are other options, display the appropriate goal, and update the checks performed.
-        Log.Logger.Warning("Your goal is to defeat Gwyn, Lord of Cinder.");
-
+        if (goal == (int)DSGoal.Gwyn)
+        {
+            Log.Logger.Warning("Your goal is to defeat Gwyn, Lord of Cinder.");
+        }
+        else if (goal == (int)DSGoal.AllBosses)
+        {
+            Log.Logger.Warning("Your goal is to defeat All Bosses.");
+        }
         PrintDiagnosticInfo();
 
         // check if goal is completed
@@ -489,15 +497,34 @@ public partial class App : Application
         {
             ulong baseb = AddressHelper.GetBaseBAddress();
             Log.Logger.Warning($"$Baseb={baseb:X}");
-            var locs = Client.CurrentSession.Locations.AllLocationsChecked.Where(x => x == 11110499 || x == 11110500);
-            foreach (var loc in locs)
+
+            if (goal == (int)DSGoal.Gwyn)
             {
-                Log.Logger.Warning($"Lord of Cinder location ({loc}) found as completed. Completing goal.");
-                sendingGoal = true;
+                var locs = Client.CurrentSession.Locations.AllLocationsChecked.Where(x => x == 11110499 || x == 11110500);
+                foreach (var loc in locs)
+                {
+                    Log.Logger.Warning($"Lord of Cinder location ({loc}) found as completed. Completing goal.");
+                    sendingGoal = true;
+                }
             }
+            else if (goal == (int)DSGoal.AllBosses)
+            {
+                var bosses = Helpers.LocationHelper.GetBossFlagLocations();
+                var locs = Client.CurrentSession.Locations.AllLocations.Where(x => bosses.Any(y => y.Id == x));
+                if (Client.CurrentSession.Locations.AllLocationsChecked.Count(x => locs.Any(y => y == x)) == locs.Count())
+                {
+                    sendingGoal = true;
+                }
+            }
+            else
+            {
+                Log.Logger.Warning("Goal condition not detected. If this is unexpected, please report this to the developers.");
+            }
+
+
             if (baseb > 0)
             {
-                
+
                 int ngplus = Memory.ReadByte(baseb + 0x78);
                 if (ngplus > 0)
                 {
@@ -509,31 +536,34 @@ public partial class App : Application
             {
                 Log.Logger.Warning("baseb could not be resolved");
             }
-            var gwynloc = (Location)LocationHelper.GetBossFlagLocations().Where(x => x.Name == "Gwyn, Lord of Cinder").First();
-            if (gwynloc != null)
-            {
-                Log.Logger.Warning($"{gwynloc.Name} at {gwynloc.Address:X}_{gwynloc.AddressBit:X} type {gwynloc.CheckType}.");
 
-                bool result = gwynloc.Check();
-                if (result)
-                {
-                    Log.Logger.Warning("Gwyn bit on. Completing Goal.");
-                    sendingGoal = true;
-                }
-                bool gwynval = Memory.ReadBit(gwynloc.Address, gwynloc.AddressBit);
-                if (gwynval)
-                {
-                    Log.Logger.Warning("Gwyn bit read on. Completing Goal.");
-                    sendingGoal = true;
-                }
-                byte gwynbyte = Memory.ReadByte(gwynloc.Address);
-                Log.Logger.Warning($"Gwyn byte={gwynbyte:X}");
-            }
-            else
+            if (goal == (int)DSGoal.Gwyn)
             {
-                Log.Logger.Warning("No Gwyn location found");
+                var gwynloc = (Location)LocationHelper.GetBossFlagLocations().Where(x => x.Name == "Gwyn, Lord of Cinder").First();
+                if (gwynloc != null)
+                {
+                    Log.Logger.Warning($"{gwynloc.Name} at {gwynloc.Address:X}_{gwynloc.AddressBit:X} type {gwynloc.CheckType}.");
+
+                    bool result = gwynloc.Check();
+                    if (result)
+                    {
+                        Log.Logger.Warning("Gwyn bit on. Completing Goal.");
+                        sendingGoal = true;
+                    }
+                    bool gwynval = Memory.ReadBit(gwynloc.Address, gwynloc.AddressBit);
+                    if (gwynval)
+                    {
+                        Log.Logger.Warning("Gwyn bit read on. Completing Goal.");
+                        sendingGoal = true;
+                    }
+                    byte gwynbyte = Memory.ReadByte(gwynloc.Address);
+                    Log.Logger.Warning($"Gwyn byte={gwynbyte:X}");
+                }
+                else
+                {
+                    Log.Logger.Warning("No Gwyn location found");
+                }
             }
-            
             if (MiscHelper.IsInGame())
             {
                 if (sendingGoal)
@@ -632,9 +662,9 @@ public partial class App : Application
         //Set item category
         Array.Copy(BitConverter.GetBytes(category), 0, command, 0xd, 4);
         // 66 and 83 offset, 0x42 and 0x53, for the result area
-        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0x42, 8); 
-        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0x53, 8); 
-        
+        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0x42, 8);
+        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0x53, 8);
+
         var execResult = Memory.ExecuteCommand(command);
 
         int result = Memory.ReadInt((ulong)resultArea); // get result
@@ -756,7 +786,7 @@ public partial class App : Application
         {
             Client = new ArchipelagoClient(dsrClient);
         }
-        
+
 
         AllItems = MiscHelper.GetAllItems();
         AllItemsByApId = AllItems.ToDictionary(x => x.ApId, x => x);
@@ -793,7 +823,7 @@ public partial class App : Application
 
             }
             Client.MessageReceived += Client_MessageReceived;
-            
+
             await Client.Login(e.Slot, !string.IsNullOrWhiteSpace(e.Password) ? e.Password : null);
 
             if (!Client.IsLoggedIn)
@@ -844,7 +874,7 @@ public partial class App : Application
 
             /* Look for event unlocks in full list of received items and locations */
             DetectEventKeys();
-            
+
             var bossLocations = LocationHelper.GetBossFlagLocations();
             var itemLocations = LocationHelper.GetItemLotLocations();
             var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
@@ -865,9 +895,9 @@ public partial class App : Application
             //StartEventWatcher();
             //Helpers.ListItemLots();
         }
-        
+
         if (DEBUG_TXTLOG)
-        { 
+        {
             Log.CloseAndFlush();
         }
 
@@ -972,7 +1002,7 @@ public partial class App : Application
             {
                 Log.Logger.Debug("Not sending Deathlink - still handling one we received.");
             }
-            else 
+            else
             {
                 Log.Logger.Information($"Not sending Deathlink - less than {graceperiod.TotalSeconds} seconds have passed since last Deathlink.");
                 Client.AddOverlayMessage($"Not sending Deathlink - less than {graceperiod.TotalSeconds} seconds have passed since last Deathlink.");
@@ -981,7 +1011,8 @@ public partial class App : Application
 
         //Restart deathlink when player is alive again
         Memory.MonitorAddressForAction<int>(AddressHelper.GetPlayerHPAddress(),
-            () => {                
+            () =>
+            {
                 /* re-enable monitoring condition */
                 Log.Logger.Debug($"Re-enabling deathlink");
                 Memory.MonitorAddressForAction<int>(AddressHelper.GetPlayerHPAddress(),
@@ -1042,7 +1073,7 @@ public partial class App : Application
 
             // If player is in game, not already handling deathlink, and not in grace period, receive it for real.
             if (playerInGame
-                && !IsHandlingDeathlink 
+                && !IsHandlingDeathlink
                 && lastDeathLinkTime + graceperiod < deathtime)
             {
                 ulong whpp = AddressHelper.GetPlayerWritableHPAddress();
@@ -1105,26 +1136,40 @@ public partial class App : Application
     private static void Client_LocationCompleted(object? sender, Archipelago.Core.Models.LocationCompletedEventArgs e)
     {
         var locid = e.CompletedLocation.Id;
-        if (e.CompletedLocation.Name.Contains("Lord of Cinder"))
+        int.TryParse(Client.Options["goal_condition"]?.ToString() ?? "0", out var goal);
+        if (goal == (int)DSGoal.Gwyn)
         {
-            Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
-            SendGoal();
-        }
-        else if (locid == 11110499) // hardcoded "Gwyn, Lord of Cinder" location
-        {
-            Log.Logger.Information($"Sending Goal for location id: {locid}");
-            SendGoal();
-        }
-        else
-        {
-            // if it's in our scouted locs & not in our own game,
-            if (scoutedLocationInfo.TryGetValue(e.CompletedLocation.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
+            if (e.CompletedLocation.Name.Contains("Lord of Cinder"))
             {
-                bool will_popup = WillPopupSend(value.Player, value.Flags);
-                if (will_popup)
-                    AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
+                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
+                SendGoal();
+            }
+            else if (locid == 11110499) // hardcoded "Gwyn, Lord of Cinder" location
+            {
+                Log.Logger.Information($"Sending Goal for location id: {locid}");
+                SendGoal();
             }
         }
+        else if (goal == (int)DSGoal.AllBosses)
+        {
+            var bossLocs = Helpers.LocationHelper.GetBossFlagLocations();
+            if(bossLocs.Any(x => x.Name == e.CompletedLocation.Name))
+            {
+                if(bossLocs.All(x => Client.CurrentSession.Locations.AllLocationsChecked.Contains(x.Id)))
+                {
+                    Log.Logger.Information($"Sending Goal for All Bosses");
+                    SendGoal();
+                }
+            }
+        }
+        // if it's in our scouted locs & not in our own game,
+        if (scoutedLocationInfo.TryGetValue(e.CompletedLocation.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
+        {
+            bool will_popup = WillPopupSend(value.Player, value.Flags);
+            if (will_popup)
+                AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
+        }
+
 
         Log.Logger.Debug($"Location Completed: {e.CompletedLocation.Name} at {e.CompletedLocation.Id}");
     }
@@ -1133,7 +1178,7 @@ public partial class App : Application
     {
         Task.Run(async () =>
         {
-            await _goalSemaphore.WaitAsync(); 
+            await _goalSemaphore.WaitAsync();
             try
             {
                 if (!_goalSent)
@@ -1204,7 +1249,7 @@ public partial class App : Application
         else status = "All";
 
         Log.Logger.Information($"-- List of {status} {displayableEventType} -- ");
-        var emklist = EmkControllers.Where(x=>condition(x.Type)).OrderBy(x => x.HasKey).ThenBy(x => x.Name).ToList();
+        var emklist = EmkControllers.Where(x => condition(x.Type)).OrderBy(x => x.HasKey).ThenBy(x => x.Name).ToList();
         foreach (var emk in emklist)
         {
             if (filter == 'A'
@@ -1303,7 +1348,7 @@ public partial class App : Application
                     lastItemReceived = dtnow;
                 }
             }
-            
+
             var fog_key = MiscHelper.GetDsrEventItems().Find(x => x.ApId == e.Item.Id);
             if (fog_key != null) // make sure to receive fog key items; then later received the "unlock event"
             {
@@ -1355,11 +1400,11 @@ public partial class App : Application
         {
             Log.Logger.Warning($"Failed to receive item - Player not loaded into game. Will retry when player is once again in game.");
             Client.AddOverlayMessage($"Failed to receive item - Player not loaded into game. Will retry when player is once again in game.");
-            
+
             Task.Run(async () =>
             {
                 /* Check every second if player is in game again yet */
-                while(!SaveidSet || !MiscHelper.IsInGame() || !MiscHelper.CanPopupItems())
+                while (!SaveidSet || !MiscHelper.IsInGame() || !MiscHelper.CanPopupItems())
                 {
                     await Task.Delay(1000);
                 }
@@ -1475,7 +1520,7 @@ public partial class App : Application
                         CheckSaveId = false; // don't keep sending message until user has /resetsave or /saveloaded
                     }
                 }
-                
+
 
             }
             else // seed matches, but slot does not
@@ -1604,7 +1649,7 @@ public partial class App : Application
 
             // Then, if player has the option to always have warping available turned on, and hasn't unlocked warping, unlock it with a cheeky message change
             if (DSOptions.CanWarpWithoutLordvessel)
-            { 
+            {
                 var canwarp_eventflag = 710; // 710 is the lordvessel warp flag. Future: maybe turn on 717 (emergency warp) instead, until player has lordvessel, to prevent Frampt nomming & Ingward granting Key To the Seal?
                 var canwarp_address = baseAddress + AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item1;
                 var canwarp_bit = AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item2;
@@ -1676,9 +1721,9 @@ public partial class App : Application
 
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
-        
+
         /* Initialize flag to off - to prevent receiving items until we have set the saveid */
-        SaveidSet = false; 
+        SaveidSet = false;
 
         /* Make ready to receive items */
         /* If we haven't yet initialized the dictionary, do so. */
@@ -1712,7 +1757,7 @@ public partial class App : Application
         }
         ItemLotHelper.RandomizeStartingLoadouts();
         if (DSOptions.NoWeaponRequirements)
-            ParamHelper.RemoveWeaponRequirements(); 
+            ParamHelper.RemoveWeaponRequirements();
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements();
 

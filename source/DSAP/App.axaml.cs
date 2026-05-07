@@ -409,6 +409,16 @@ public partial class App : Application
             string[] cmdparts = command.Split(" ");
             if (cmdparts.Length == 2)
                 MonitorEventFlag(Int32.Parse(cmdparts[1]));
+
+            if (cmdparts.Length == 3) // monitor a range of flags
+            {
+                int start = Int32.Parse(cmdparts[1]);
+                int end = Int32.Parse(cmdparts[2]);
+                for (int i=start; i < end; i++)
+                {
+                    MonitorEventFlag(i);
+                }
+            }   
         }
         //else if (command.StartsWith("/get")) // for debugging
         //{

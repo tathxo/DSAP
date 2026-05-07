@@ -636,8 +636,20 @@ class DSRWorld(World):
         #print("Setting rules")   
         for region in self.multiworld.get_regions(self.player):
             for location in region.locations:
-                    set_rule(location, lambda state: True)        
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Gwyn, Lord of Cinder Defeated", self.player)
+                    set_rule(location, lambda state: True)       
+        if self.options.goal_condition.value == 0:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Gwyn, Lord of Cinder Defeated", self.player)
+        elif self.options.goal_condition.value == 1:
+            boss_defeated_items = [
+                item.name
+                for item in item_dictionary.values()
+                if item.category == DSRItemCategory.EVENT and "Defeated" in item.name
+            ]
+            
+            self.multiworld.completion_condition[self.player] = lambda state, items=boss_defeated_items: all(
+                state.has(item, self.player) for item in items
+            )
+            
 
         set_rule(self.multiworld.get_entrance("Undead Asylum Cell -> Undead Asylum Cell Door", self.player), lambda state: state.has("Dungeon Cell Key", self.player))   
         #set_rule(self.multiworld.get_entrance("Undead Asylum Cell Door -> Northern Undead Asylum", self.player), lambda state: state.has("Dungeon Cell Key", self.player))      

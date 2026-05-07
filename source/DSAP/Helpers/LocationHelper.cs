@@ -53,22 +53,19 @@ namespace DSAP.Helpers
         public static List<ILocation> GetBonfireFlagLocations()
         {
             List<ILocation> locations = new List<ILocation>();
-            var lotFlags = GetBonfireFlags().Where(x => x.Offset != 0);
-            var offset = AddressHelper.GetProgressionFlagOffset();
-            var baseAddress = (ulong)Memory.ReadInt(offset);
-            var baseAddress2 = (ulong)Memory.ReadInt(baseAddress);
-            Log.Logger.Verbose($"bfloc offset={offset},0x{offset:X}");
+            var bonfireFlags = GetBonfireFlags().Where(x => x.Flag != 0);
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            
             Log.Logger.Verbose($"bfloc baseadd={baseAddress},0x{baseAddress:X}");
-            Log.Logger.Verbose($"bfloc baseadd2={baseAddress2},0x{baseAddress2:X}");
 
-            foreach (var lot in lotFlags)
+            foreach (var bonfire in bonfireFlags)
             {
                 locations.Add(new Location
                 {
-                    Name = lot.Name,
-                    Address = baseAddress2 + lot.Offset,
-                    AddressBit = lot.AddressBit,
-                    Id = lot.Id
+                    Name = bonfire.Name,
+                    Address = baseAddress + AddressHelper.GetEventFlagOffset(bonfire.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagOffset(bonfire.Flag).Item2,
+                    Id = bonfire.Id
                 });
             }
             return locations;
@@ -124,30 +121,6 @@ namespace DSAP.Helpers
             }
             return locations;
         }
-        public static List<Location> GetBossLocations()
-        {
-            var offset = AddressHelper.GetProgressionFlagOffset();
-            var bosses = GetBosses();
-            var locations = new List<Location>();
-            foreach (var b in bosses)
-            {
-                var location = new Location
-                {
-                    Id = b.LocationId,
-                    Name = b.Name,
-                    Address = offset + (ulong)b.Offset,
-                    AddressBit = b.AddressBit
-                };
-                locations.Add(location);
-            }
-            return locations;
-        }
-        public static List<Boss> GetBosses()
-        {
-            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.Bosses.json");
-            var list = JsonSerializer.Deserialize<List<Boss>>(json, MiscHelper.GetJsonOptions());
-            return list;
-        }
         #endregion Location Helpers
         #region Flag Helpers
         public static bool ReadBonfireFlag(string name)
@@ -179,10 +152,10 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<BossFlag>>(json, MiscHelper.GetJsonOptions());
             return list;
         }
-        public static List<BonfireFlag> GetBonfireFlags()
+        public static List<EventFlag> GetBonfireFlags()
         {
             var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.Bonfires.json");
-            var list = JsonSerializer.Deserialize<List<BonfireFlag>>(json, MiscHelper.GetJsonOptions());
+            var list = JsonSerializer.Deserialize<List<EventFlag>>(json, MiscHelper.GetJsonOptions());
             return list;
         }
         public static List<DoorFlag> GetDoorFlags()

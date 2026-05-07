@@ -1594,12 +1594,10 @@ public partial class App : Application
         BonfireWarp? bonfire = AllBonfireWarps.Find(x => x.ItemId == ApId);
         if (bonfire != null)
         {
-            var bit = bonfire.AddressBit;
-            var progOffset = AddressHelper.GetProgressionFlagOffset();
-            var baseAddress = (ulong)Memory.ReadInt(progOffset);
-            var baseAddress2 = (ulong)Memory.ReadInt(baseAddress);
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
 
-            var address = bonfire.Offset + baseAddress2;
+            var address = baseAddress + AddressHelper.GetEventFlagOffset(bonfire.Flag).Item1;
+            var bit = AddressHelper.GetEventFlagOffset(bonfire.Flag).Item2;
             if (!Memory.ReadBit(address, bit)) // if the bonfire flag isn't already true
                 Memory.WriteBit(address, bit, true); // mark it as true
             Log.Logger.Debug($"Marked {bonfire.Name} flag as true at {address:X}[{bit}]");
@@ -1607,8 +1605,9 @@ public partial class App : Application
             // Then, if player has the option to always have warping available turned on, and hasn't unlocked warping, unlock it with a cheeky message change
             if (DSOptions.CanWarpWithoutLordvessel)
             { 
-                var canwarp_bit = 1;
-                var canwarp_address = 0x5b + baseAddress2;
+                var canwarp_eventflag = 710; // 710 is the lordvessel warp flag. Future: maybe turn on 717 (emergency warp) instead, until player has lordvessel, to prevent Frampt nomming & Ingward granting Key To the Seal?
+                var canwarp_address = baseAddress + AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item1;
+                var canwarp_bit = AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item2;
                 if (!Memory.ReadBit(canwarp_address, canwarp_bit)) // if it's not already set
                 {
                     // change "By the power of the Lordvessel, [etc]" -> "By the power of Archipelago"

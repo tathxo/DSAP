@@ -48,7 +48,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Armor.json" />
     <EmbeddedResource Include="Resources\Bonfires.json" />
-    <EmbeddedResource Include="Resources\Bosses.json" />
     <EmbeddedResource Include="Resources\BossFlags.json" />
 	<EmbeddedResource Include="Resources\GiftParams.json" />
 	<EmbeddedResource Include="Resources\ThiefItemsPool.json" />

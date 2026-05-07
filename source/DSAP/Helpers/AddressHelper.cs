@@ -27,6 +27,10 @@ namespace DSAP.Helpers
         public static AoBHelper SoloParamAob = new AoBHelper("SoloParam",
                 [0x4C, 0x8B, 0x05, 0x00, 0x00, 0x00, 0x00, 0x48, 0x63, 0xC9, 0x48, 0x8D, 0x04, 0xC9],
                 "xxx????xxxxxxx", 3, 4);
+        
+        public static AoBHelper EventFlagsAoB = new AoBHelper("EventFlags",
+                [0x48, 0x8B, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x99, 0x33, 0xC2, 0x45, 0x33, 0xC0, 0x2B, 0xC2, 0x8D, 0x50, 0xF6],
+                "xxx????xxxxxxxxxxx", 3, 4);
         public static ulong GetBaseAddress()
         {
             var address = Memory.GetBaseAddress("DarkSoulsRemastered");
@@ -95,21 +99,6 @@ namespace DSAP.Helpers
 
             return (ulong)chrBaseClassAddress;
         }
-        public static ulong GetProgressionFlagOffset()
-        {
-            var baseAddress = GetBaseAddress();
-            byte[] pattern = { 0x48, 0x8B, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x41, 0xB8, 0x01, 0x00, 0x00, 0x00, 0x44 };
-            string mask = "xxx????xxxxxxx";
-            IntPtr getPFAddress = Memory.FindSignature((nint)baseAddress, 0x1000000, pattern, mask);
-
-            int offset = BitConverter.ToInt32(Memory.ReadByteArray((ulong)(getPFAddress + 3), 4), 0);
-            IntPtr progressionFlagsAddress = getPFAddress + offset + 7;
-            Log.Logger.Verbose($"getpf={getPFAddress}");
-            Log.Logger.Verbose($"getpf offset={offset}");
-            Log.Logger.Verbose($"pf @ ={progressionFlagsAddress}");
-
-            return (ulong)progressionFlagsAddress;
-        }
         public static ulong GetSoloParamOffset()
         {
             var baseAddress = GetBaseAddress();
@@ -123,15 +112,12 @@ namespace DSAP.Helpers
         }
         public static ulong GetEventFlagsOffset()
         {
-            var baseAddress = GetBaseAddress();
-            byte[] pattern = { 0x48, 0x8B, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x99, 0x33, 0xC2, 0x45, 0x33, 0xC0, 0x2B, 0xC2, 0x8D, 0x50, 0xF6 };
-            string mask = "xxx????xxxxxxxxxxx";
-            IntPtr getEFAddress = Memory.FindSignature((nint)baseAddress, 0x1000000, pattern, mask);
-
-            int offset = BitConverter.ToInt32(Memory.ReadByteArray((ulong)(getEFAddress + 3), 4), 0);
-            IntPtr eventFlagsAddress = getEFAddress + offset + 7;
-
-            return (ulong)(BitConverter.ToInt32(Memory.ReadFromPointer((ulong)eventFlagsAddress, 4, 2)));
+            IntPtr baseAddr = EventFlagsAoB.Address;
+            if (baseAddr == IntPtr.Zero)
+            {
+                return 0;
+            }
+            return (ulong)(BitConverter.ToInt32(Memory.ReadFromPointer((ulong)baseAddr, 4, 1)));
         }
         public static (ulong, int) GetEventFlagOffset(int eventFlag)
         {

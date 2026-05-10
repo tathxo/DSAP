@@ -11,6 +11,7 @@ namespace DSAP.Models
     public class MsgManStruct
     {
         const int HEADER_SIZE = 0x1c;
+        public const int OFFSET_BONFIRES = 0xA0;
         public const int OFFSET_BANNERS = 0x330;
         public const int OFFSET_SYSTEM_TEXT = 0x3e0;
         public const int OFFSET_ITEM_NAMES = 0x380;

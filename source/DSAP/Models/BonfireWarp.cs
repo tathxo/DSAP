@@ -9,5 +9,7 @@ namespace DSAP.Models
         public int ItemId { get; set; }
         public string ItemName { get; set; }
         public int DsrId { get; set; }
+        public int EntityId { get; set; }
+        public int FmgId { get; set; }
     }
 }

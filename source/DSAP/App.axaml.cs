@@ -386,6 +386,15 @@ public partial class App : Application
                 }
             }
         }
+        else if (command.StartsWith("/sef")) // set event flag
+        {
+            string[] cmdparts = command.Split(" ");
+            if (cmdparts.Length == 2)
+            {
+                int result = SetEventFlag(Int32.Parse(cmdparts[1]));
+                Log.Logger.Information($"{cmdparts[1]}={result}");
+            }
+        }
         else if (command.StartsWith("/cef")) // check event flag
         {
             string[] cmdparts = command.Split(" ");
@@ -437,6 +446,17 @@ public partial class App : Application
         }
     }
 
+    private int SetEventFlag(int flagnum)
+    {
+        var baseAddress = AddressHelper.GetEventFlagsOffset();
+        Location newloc = new Location()
+        {
+            Address = baseAddress + AddressHelper.GetEventFlagOffset(flagnum).Item1,
+            AddressBit = AddressHelper.GetEventFlagOffset(flagnum).Item2
+        };
+        Memory.WriteBit(newloc.Address, newloc.AddressBit, true);
+        return 1;
+    }
     private int CheckEventFlag(int flagnum)
     {
         var baseAddress = AddressHelper.GetEventFlagsOffset();
@@ -1783,6 +1803,7 @@ public partial class App : Application
             scoutedLocationInfo = await Client.CurrentSession.Locations.ScoutLocationsAsync(false, locids);
 
             await ApItemInjectorHelper.AddAPItems(scoutedLocationInfo);
+            await BonfireInjectorHelper.UpdateBonfires();
 
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, SlotLocToItemUpgMap, scoutedLocationInfo);
         }

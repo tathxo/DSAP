@@ -316,6 +316,17 @@ namespace DSAP.Helpers
             }).ToList();
             return newlist;
         }
+        // flag, entityid, fmgid, string
+        public static List<(int, int, int, string)> GetBonfireDsrStruct()
+        {
+            var json = OpenEmbeddedResource("DSAP.Resources.Bonfires.json");
+            var list = JsonSerializer.Deserialize<List<BonfireWarp>>(json, GetJsonOptions());
+            List<(int, int, int, string)> dsrBonfireList = list
+                .Select(x => (x.Flag, x.EntityId, x.FmgId, x.Name))
+                .OrderBy(x=> x.Name == "Firelink Shrine" ? "aa" : x.Name)
+                .ToList();
+            return dsrBonfireList;
+        }
         public static List<BonfireWarp> GetBonfireWarpInfos()
         {
             var json = OpenEmbeddedResource("DSAP.Resources.Bonfires.json");

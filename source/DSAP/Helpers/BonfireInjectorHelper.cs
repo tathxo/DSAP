@@ -1,0 +1,251 @@
+﻿using Archipelago.Core.Util;
+using Archipelago.MultiClient.Net.Models;
+using DSAP.Models;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static DSAP.Enums;
+
+namespace DSAP.Helpers
+{
+    public class BonfireInjectorHelper
+    {
+        // probably builds the list of entries
+        public const ulong hook1_loc = 0x1406ed2d6;
+        public const int hook1_length = 14;
+
+        // also build the list?
+        public const ulong hook2_loc = 0x1406ed7c6;
+        public const int hook2_length = 20;
+
+        // probably set "this bonfire's flag"
+        public const ulong hook3_loc = 0x1406ed300;
+        public const int hook3_length = 16;
+
+        // overwrite "bonfire warp" routine for the "new" structures
+        public const ulong hook4_loc = 0x1404aaf38;
+        public const int hook4_length = 15;
+
+        private static readonly object _memAllocLock = new object();
+        internal static async Task UpdateBonfires()
+        {
+            var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct();
+            //var new_bonfire_struct = new int[]
+            //{
+            //    200, 1021960, 2000,
+            //    205, 1011961, 2001,
+            //    203, 1511960, 2002,
+            //    207, 1511950, 2003,
+            //    208, 1511962, 2004,
+            //    204, 1601950, 2005,
+            //    202, 1401960, 2006,
+            //    206, 1311950, 2007,
+            //    201, 1321960, 2008,
+            //    209, 1211963, 2009,
+            //    210, 1211961, 2010,
+            //    211, 1211962, 2011,
+            //    212, 1211950, 2012,
+            //    213, 1211964, 2013,
+            //    214, 1001960, 2014,
+            //    215, 1011964, 2015,
+            //    216, 1101960, 2016,
+            //    217, 1311961, 2017,
+            //    218, 1701960, 2018,
+            //    219, 1701950, 2019,
+            //    220, 1301962, 2020
+            //};
+
+            // write it to a byte array
+            var new_bonfire_bytes = new byte[new_bonfire_struct.Count*3 * 4 + 4];
+            for (int i=0; i < new_bonfire_struct.Count; i++)
+            {
+                var bonfire = new_bonfire_struct[i];
+                Array.Copy(BitConverter.GetBytes(bonfire.Item1), 0, new_bonfire_bytes, i * 12 + 0, 4);
+                Array.Copy(BitConverter.GetBytes(bonfire.Item2), 0, new_bonfire_bytes, i * 12 + 4, 4);
+                Array.Copy(BitConverter.GetBytes(bonfire.Item3), 0, new_bonfire_bytes, i * 12 + 8, 4);
+            }
+            Array.Copy(BitConverter.GetBytes(-1), 0, new_bonfire_bytes, new_bonfire_bytes.Length - 4, 4);
+
+            // allocate a new area and write to it
+            ulong new_bonfire_struct_pos = (ulong)Memory.Allocate((uint)(new_bonfire_struct.Count * 12 + 4), Memory.PAGE_EXECUTE_READWRITE);
+            Memory.WriteByteArray(new_bonfire_struct_pos, new_bonfire_bytes);
+
+
+            // build hook1
+            var new_instructions_1 = new byte[]
+            {
+                0x48, 0xb8, 0x08, 0x07, 0x06, 0x05, 0x04,    //movabs      rax,[0x0102030405060708]
+                0x03, 0x02, 0x01,
+                0x49, 0xb8, 0x08, 0x07, 0x06, 0x05, 0x04,    //movabs      r8,[0x0102030405060708]
+                0x03, 0x02, 0x01,
+            };
+
+            // replace +2 with (ulong)struct+4
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, new_instructions_1, 2, sizeof(ulong));
+            // replace +12 with (ulong)struct end + 4, or start + (0xc) * count
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, new_instructions_1, 12, sizeof(ulong));
+
+            // build hook2
+            var new_instructions_2 = new byte[]
+            {
+                0x48, 0xbb,                                  //mov rbx,0x0102030405060708
+                    0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+                0x48, 0xbf,                                  //mov rdi,0x0102030405060708
+                    0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+                0x41, 0xbe,                                  //mov r14d,0x01
+                   0x01, 0x00, 0x00, 0x00,
+            };
+
+            // replace +2 with (ulong)struct+4
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, new_instructions_2, 2, sizeof(ulong));
+            // replace +12 with (ulong)struct start
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, new_instructions_2, 12, sizeof(ulong));
+            // replace +22 with (int)count of elements
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct.Count), 0, new_instructions_2, 22, sizeof(int));
+
+            // build hook3
+            var new_instructions_3 = new byte[]
+            {
+                0x48, 0xbf,                                  //mov rdi,0x0102030405060708
+                    0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+            };
+
+            // replace +2 with (ulong)struct start
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, new_instructions_3, 2, sizeof(ulong));
+
+            // build hook4
+            //Push rcx
+            //Push rax
+            //Push rdx
+            //Push r14
+            //MOV RAX, QWORD PTR[0x0102030405060708]
+            //SUB RCX,980
+            //mov    QWORD PTR [rax],rcx
+            //mov edx,0x1
+            //movabs r14,0x1404867e0
+            //sub rsp,0x38
+            //call r14
+            // add rsp,0x38
+            //Pop r14
+            //Pop rdx
+            //POP RAX
+            //POP RCX
+            var new_instructions_4 = new byte[]
+            {
+                0x51,                      					 // push   rcx
+                0x50,                      					 // push   rax
+                0x52,                      					 // push   rdx
+                0x41, 0x56,                   				 // push   r14
+                0x48, 0xa1, 0x08, 0x07, 0x06, 0x05, 0x04,    // movabs rax,ds:0x102030405060708
+                0x03, 0x02, 0x01,
+                0x48, 0x05, 0x34, 0x0b, 0x00, 0x00,          // add    rax,0xb34
+                //0x48, 0x81, 0xc2, 0xd4, 0x03, 0x00, 0x00,    // add    rdx,0x3d4 / 980
+                0x48, 0x81, 0xc2, 0xbc, 0x07, 0x00, 0x00,    // add    rdx,0x7bc / 1980
+                0x89, 0x10,                                  // mov    DWORD PTR [rax],edx
+                0xba, 0x01, 0x00, 0x00, 0x00,          		 // mov    edx,0x1
+                0x49, 0xbe, 0xe0, 0x67, 0x48, 0x40, 0x01,    // movabs r14,0x1404867e0
+                0x00, 0x00, 0x00,
+                0x48, 0x83, 0xec, 0x38,             		 // sub    rsp,0x38
+                0x41, 0xff, 0xd6,                		     // call   r14
+                0x48, 0x83, 0xc4, 0x38,           		     // add    rsp,0x38
+                0x41, 0x5e,                   				 // pop    r14
+                0x5a,                      					 // pop    rdx
+                0x58,                      					 // pop    rax
+                0x59,                      					 // pop    rcx
+                0xc3,           
+            };
+
+            // replace +7 with (int) basec ptr
+            ulong basecPtr = AddressHelper.GetBaseCOffset();
+            Array.Copy(BitConverter.GetBytes(basecPtr), 0, new_instructions_4, 7, sizeof(ulong));
+
+            // build hook 4
+
+
+            AddHook(hook1_loc, hook1_length, new_instructions_1, false);
+            AddHook(hook2_loc, hook2_length, new_instructions_2, false);
+            AddHook(hook3_loc, hook3_length, new_instructions_3, true);
+            AddHook(hook4_loc, hook4_length, new_instructions_4, false);
+
+            // update messages
+            bool updateRequired = MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BONFIRES, x => x.MsgEntries.Any(x => x.id >= 99999998));
+            msgManStruct.PrintAllFmgs();
+            if (updateRequired)
+            {
+                foreach (var bonfire in new_bonfire_struct)
+                {
+                    if (bonfire.Item3 > 2020) // if it's after "last" bonfire message
+                    {
+                        msgManStruct.AddMsg((uint)bonfire.Item3, bonfire.Item4);
+                    }
+                }
+
+                msgManStruct.AddMsg(99999998, ""); // add dummy message to mark that we've been here
+                msgManStruct.MsgEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+                MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BONFIRES);
+                Log.Logger.Information("Updated Bonfire text struct");
+            }
+        }
+
+        // creates a hook at loc_start
+        // replaces loc_Start with a jmp to the given new_instructions array of bytes
+        // Adds replaced_length bytes of instructions from loc_start before the new_instructions, and a jmp back.
+        //  -> This means that the first jmp's code only will be actually processed, because a 2nd inserted jmp would simply jmp to the first one, which returns to the original position
+        private static void AddHook(ulong loc_start, int replaced_length, byte[] new_instructions, bool include_replaced_bytes)
+        {
+            byte[] replaced_instructions = Memory.ReadByteArray(loc_start, replaced_length);
+            ulong replacement_func_start_addr = (ulong)Memory.Allocate(1000, Memory.PAGE_EXECUTE_READWRITE);
+
+            var jmpstub = new byte[]
+            {
+                0xff, 0x25, 0x00, 0x00, 0x00, 0x00,       //jmp    QWORD PTR [rip+0x0]        # 6 <_main+0x6>
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // target address
+                // then the address to jump to (8 bytes)
+            };
+            Array.Copy(BitConverter.GetBytes(replacement_func_start_addr), 0, jmpstub, 6, 8); // target address
+
+            var return_jmp = new byte[]
+            {
+                0xff, 0x25, 0x00, 0x00, 0x00, 0x00,          // jmp    QWORD PTR [rip+0x8]
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // jmp's target address
+            };
+
+            ulong next_write_pos = replacement_func_start_addr;
+            // write the replaced instructions if the bool is on
+            if (include_replaced_bytes)
+            {
+                Memory.WriteByteArray(next_write_pos, replaced_instructions); // write the replaced instructions
+                next_write_pos += (ulong)replaced_instructions.Length;
+            }
+
+            Memory.WriteByteArray(next_write_pos, new_instructions); // write new instructions into its hook area
+            next_write_pos += (ulong)new_instructions.Length;
+
+            Memory.WriteByteArray(next_write_pos, return_jmp); // write the return instruction
+            next_write_pos += (ulong)6; // point to return address
+            Memory.WriteByteArray(next_write_pos, BitConverter.GetBytes(loc_start + (ulong)replaced_length)); // write the return address
+            
+            //Memory.WriteByteArray(replacement_func_start_addr + new_instructions.Length, return_jmp);
+            Memory.WriteByteArray(loc_start, jmpstub); // write jmp stub (e.g. "create hook")
+        }
+
+        internal static string BuildItemCaption(KeyValuePair<long, ScoutedItemInfo> item)
+        {
+            const byte progression = 0b001;
+            const byte useful = 0b010;
+            const byte trap = 0b100;
+            string item_type = "normal";
+            if (((byte)item.Value.Flags) == 0b001) item_type = "Progression";
+            if (((byte)item.Value.Flags) == 0b010) item_type = "Useful";
+            if (((byte)item.Value.Flags) == 0b100) item_type = "Trap";
+            return $"A {item_type} Archipelago item for {item.Value.Player}'s {item.Value.ItemGame}.\0";
+        }
+        internal static string BuildDsrEventItemCaption()
+        {
+            return "A boon from another world. Makes a fog wall passable.\0";
+        }
+    }
+}

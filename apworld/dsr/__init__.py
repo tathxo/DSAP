@@ -905,6 +905,7 @@ class DSRWorld(World):
             "options": {
                 "goal_condition": self.options.goal_condition.current_key, # text of the option
                 "can_warp_without_lordvessel": self.options.can_warp_without_lordvessel.value,
+                "warp_to_all_bonfires": self.options.warp_to_all_bonfires.value,
                 "guaranteed_items": self.options.guaranteed_items.value,
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
@@ -933,7 +934,7 @@ class DSRWorld(World):
             "itemsId": items_id,
             "itemsUpgrades": items_upgrades,
             "itemsAddress": items_address,
-            "apworld_api_version" : "0.1.0.3" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.1.2.0" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

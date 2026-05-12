@@ -4,14 +4,18 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, Op
 from Options import OptionGroup
 
 
-
+# QoL
 class CanWarpWithoutLordvessel(DefaultOnToggle):
-    """Gain the ability to warp as soon as you have rested at any warpable bonfire.
-    You will still need to actually rest at the warpable points to be able to warp to them.
-
-    Warpable bonfires are synced between all saves on the slot, regardless of your choice.
-    Warning: If you start a new save, don't warp out of the Asylum without getting your Estus Flask."""
+    """Gain the ability to warp as soon as you have rested at any warpable bonfire."""
     display_name = "Can Warp Without Lordvessel"
+
+class WarpToAllBonfires(DefaultOnToggle):
+    """Makes all bonfires eligible to be warped to via the in-game menu.
+    As a side-effect, this will also make warping set your destination as your "return" point upon next death, homeward, etc.
+    
+    No matter your settings, you will still need to actually rest at the warpable points to be able to warp to them.
+    Warpable bonfires are synced between all saves on the slot, regardless of your choice."""
+    display_name = "Warp To All Bonfires"
 
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
@@ -203,6 +207,7 @@ class GoalConditionOption(Choice):
 option_groups = [
     OptionGroup("Quality of Life", [
         CanWarpWithoutLordvessel,
+        WarpToAllBonfires,
         ]),
     OptionGroup("Sanity", [
         FogwallSanity,
@@ -238,6 +243,7 @@ option_groups = [
 class DSROption(PerGameCommonOptions):
     #goal: GoalOption
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
+    warp_to_all_bonfires: WarpToAllBonfires
     guaranteed_items: GuaranteedItemsOption
     excluded_location_behavior: ExcludedLocationBehaviorOption
     fogwall_sanity: FogwallSanity

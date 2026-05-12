@@ -7,6 +7,7 @@
     "FmgId": 2021,
     "ItemId": 11111321,
     "DsrId": 11109921,
+    "PersistId": 1,
     "ItemName": "Warp Unlock - Undead Asylum - Courtyard"
   },
   {
@@ -17,6 +18,7 @@
     "FmgId": 2022,
     "ItemId": 11111322,
     "DsrId": 11109922,
+    "PersistId": 2,
     "ItemName": "Warp Unlock - Undead Asylum - Interior"
   },
   {
@@ -27,6 +29,7 @@
     "FmgId": 2000,
     "ItemId": 11111300,
     "DsrId": 11109900,
+    "PersistId": 3,
     "ItemName": "Warp Unlock - Firelink Shrine"
   },
   {
@@ -37,6 +40,7 @@
     "FmgId": 2023,
     "ItemId": 11111323,
     "DsrId": 11109923,
+    "PersistId": 4,
     "ItemName": "Warp Unlock - Undead Burg"
   },
   {
@@ -47,6 +51,7 @@
     "FmgId": 2001,
     "ItemId": 11111301,
     "DsrId": 11109901,
+    "PersistId": 5,
     "ItemName": "Warp Unlock - Sunlight Altar"
   },
   {
@@ -57,6 +62,7 @@
     "FmgId": 2015,
     "ItemId": 11111302,
     "DsrId": 11109902,
+    "PersistId": 6,
     "ItemName": "Warp Unlock - Undead Parish"
   },
   {
@@ -67,6 +73,7 @@
     "FmgId": 2026,
     "ItemId": 11111326,
     "DsrId": 11109926,
+    "PersistId": 7,
     "ItemName": "Warp Unlock - Darkroot Garden (Hidden)"
   },
   {
@@ -77,6 +84,7 @@
     "FmgId": 2027,
     "ItemId": 11111327,
     "DsrId": 11109927,
+    "PersistId": 8,
     "ItemName": "Warp Unlock - Darkroot Basin"
   },
   {
@@ -87,6 +95,7 @@
     "FmgId": 2014,
     "ItemId": 11111303,
     "DsrId": 11109903,
+    "PersistId": 9,
     "ItemName": "Warp Unlock - Depths"
   },
   {
@@ -97,6 +106,7 @@
     "FmgId": 2024,
     "ItemId": 11111324,
     "DsrId": 11109924,
+    "PersistId": 10,
     "ItemName": "Warp Unlock - Blighttown Catwalk"
   },
   {
@@ -107,6 +117,7 @@
     "FmgId": 2025,
     "ItemId": 11111325,
     "DsrId": 11109925,
+    "PersistId": 11,
     "ItemName": "Warp Unlock - Blighttown Swamp"
   },
   {
@@ -117,6 +128,7 @@
     "FmgId": 2006,
     "ItemId": 11111304,
     "DsrId": 11109904,
+    "PersistId": 12,
     "ItemName": "Warp Unlock - Daughter of Chaos"
   },
   {
@@ -127,6 +139,7 @@
     "FmgId": 2028,
     "ItemId": 11111328,
     "DsrId": 11109928,
+    "PersistId": 13,
     "ItemName": "Warp Unlock - The Great Hollow (Hidden)"
   },
   {
@@ -137,6 +150,7 @@
     "FmgId": 2029,
     "ItemId": 11111329,
     "DsrId": 11109929,
+    "PersistId": 14,
     "ItemName": "Warp Unlock - Ash Lake - Entrance"
   },
   {
@@ -147,6 +161,7 @@
     "FmgId": 2008,
     "ItemId": 11111305,
     "DsrId": 11109905,
+    "PersistId": 15,
     "ItemName": "Warp Unlock - Stone Dragon"
   },
   {
@@ -157,6 +172,7 @@
     "FmgId": 2034,
     "ItemId": 11111334,
     "DsrId": 11109934,
+    "PersistId": 16,
     "ItemName": "Warp Unlock - Demon Ruins - Entrance"
   },
   {
@@ -167,6 +183,7 @@
     "FmgId": 2035,
     "ItemId": 11111335,
     "DsrId": 11109935,
+    "PersistId": 17,
     "ItemName": "Warp Unlock - Demon Ruins - Burrowing Rockworm"
   },
   {
@@ -177,6 +194,7 @@
     "FmgId": 2036,
     "ItemId": 11111336,
     "DsrId": 11109936,
+    "PersistId": 18,
     "ItemName": "Warp Unlock - Demon Ruins - Hall Before Centipede"
   },
   {
@@ -187,6 +205,7 @@
     "FmgId": 2037,
     "ItemId": 11111337,
     "DsrId": 11109937,
+    "PersistId": 19,
     "ItemName": "Warp Unlock - Lost Izalith - Entrance"
   },
   {
@@ -197,6 +216,7 @@
     "FmgId": 2038,
     "ItemId": 11111338,
     "DsrId": 11109938,
+    "PersistId": 20,
     "ItemName": "Warp Unlock - Lost Izalith - Ancient City (Hidden)"
   },
   {
@@ -207,6 +227,7 @@
     "FmgId": 2039,
     "ItemId": 11111339,
     "DsrId": 11109939,
+    "PersistId": 21,
     "ItemName": "Warp Unlock - Lost Izalith - Heart of Chaos"
   },
   {
@@ -217,6 +238,7 @@
     "FmgId": 2030,
     "ItemId": 11111330,
     "DsrId": 11109930,
+    "PersistId": 22,
     "ItemName": "Warp Unlock - Sen's Funhouse"
   },
   {
@@ -227,6 +249,7 @@
     "FmgId": 2002,
     "ItemId": 11111306,
     "DsrId": 11109906,
+    "PersistId": 23,
     "ItemName": "Warp Unlock - Anor Londo"
   },
   {
@@ -237,6 +260,7 @@
     "FmgId": 2004,
     "ItemId": 11111307,
     "DsrId": 11109907,
+    "PersistId": 24,
     "ItemName": "Warp Unlock - Darkmoon Tomb"
   },
   {
@@ -247,6 +271,7 @@
     "FmgId": 2031,
     "ItemId": 11111331,
     "DsrId": 11109931,
+    "PersistId": 25,
     "ItemName": "Warp Unlock - Anor Londo - Residence"
   },
   {
@@ -257,6 +282,7 @@
     "FmgId": 2003,
     "ItemId": 11111308,
     "DsrId": 11109908,
+    "PersistId": 26,
     "ItemName": "Warp Unlock - Chamber of the Princess"
   },
   {
@@ -267,6 +293,7 @@
     "FmgId": 2016,
     "ItemId": 11111309,
     "DsrId": 11109909,
+    "PersistId": 27,
     "ItemName": "Warp Unlock - Painted World"
   },
   {
@@ -277,6 +304,7 @@
     "FmgId": 2032,
     "ItemId": 11111332,
     "DsrId": 11109932,
+    "PersistId": 28,
     "ItemName": "Warp Unlock - Duke's Archives - Entrance"
   },
   {
@@ -287,6 +315,7 @@
     "FmgId": 2033,
     "ItemId": 11111333,
     "DsrId": 11109933,
+    "PersistId": 29,
     "ItemName": "Warp Unlock - Duke's Archives - Cell"
   },
   {
@@ -297,6 +326,7 @@
     "FmgId": 2018,
     "ItemId": 11111310,
     "DsrId": 11109910,
+    "PersistId": 30,
     "ItemName": "Warp Unlock - Duke's Archives"
   },
   {
@@ -307,6 +337,7 @@
     "FmgId": 2019,
     "ItemId": 11111311,
     "DsrId": 11109911,
+    "PersistId": 31,
     "ItemName": "Warp Unlock - Crystal Cave"
   },
   {
@@ -317,6 +348,7 @@
     "FmgId": 2040,
     "ItemId": 11111340,
     "DsrId": 11109940,
+    "PersistId": 32,
     "ItemName": "Warp Unlock - Catacombs - Necromancer Cave"
   },
   {
@@ -327,6 +359,7 @@
     "FmgId": 2020,
     "ItemId": 11111320,
     "DsrId": 11109920,
+    "PersistId": 33,
     "ItemName": "Warp Unlock - Catacombs"
   },
   {
@@ -337,6 +370,7 @@
     "FmgId": 2041,
     "ItemId": 11111341,
     "DsrId": 11109941,
+    "PersistId": 34,
     "ItemName": "Warp Unlock - Catacombs - Patches (Hidden)"
   },
   {
@@ -347,6 +381,7 @@
     "FmgId": 2017,
     "ItemId": 11111313,
     "DsrId": 11109913,
+    "PersistId": 35,
     "ItemName": "Warp Unlock - Tomb of the Giants"
   },
   {
@@ -357,6 +392,7 @@
     "FmgId": 2042,
     "ItemId": 11111342,
     "DsrId": 11109942,
+    "PersistId": 36,
     "ItemName": "Warp Unlock - Tomb of the Giants - Before Nito"
   },
   {
@@ -367,6 +403,7 @@
     "FmgId": 2007,
     "ItemId": 11111314,
     "DsrId": 11109914,
+    "PersistId": 37,
     "ItemName": "Warp Unlock - Altar of the Gravelord"
   },
   {
@@ -377,6 +414,7 @@
     "FmgId": 2005,
     "ItemId": 11111315,
     "DsrId": 11109915,
+    "PersistId": 38,
     "ItemName": "Warp Unlock - The Abyss"
   },
   {
@@ -387,6 +425,7 @@
     "FmgId": 2009,
     "ItemId": 11111316,
     "DsrId": 11109916,
+    "PersistId": 39,
     "ItemName": "Warp Unlock - Sanctuary Garden"
   },
   {
@@ -397,6 +436,7 @@
     "FmgId": 2010,
     "ItemId": 11111317,
     "DsrId": 11109917,
+    "PersistId": 40,
     "ItemName": "Warp Unlock - Oolacile Sanctuary"
   },
   {
@@ -407,6 +447,7 @@
     "FmgId": 2011,
     "ItemId": 11111318,
     "DsrId": 11109918,
+    "PersistId": 41,
     "ItemName": "Warp Unlock - Oolacile Township"
   },
   {
@@ -417,6 +458,7 @@
     "FmgId": 2013,
     "ItemId": 11111319,
     "DsrId": 11109919,
+    "PersistId": 42,
     "ItemName": "Warp Unlock - Oolacile Township Dungeon"
   },
   {
@@ -427,6 +469,7 @@
     "FmgId": 2012,
     "ItemId": 11111312,
     "DsrId": 11109912,
+    "PersistId": 43,
     "ItemName": "Warp Unlock - Chasm of the Abyss"
   },
   {
@@ -437,6 +480,7 @@
     "FmgId": 2043,
     "ItemId": 11111343,
     "DsrId": 11109943,
+    "PersistId": 44,
     "ItemName": "Warp Unlock - Firelink Altar - Lordvessel"
   }
 ]

@@ -63,7 +63,7 @@ public partial class App : Application
     static uint batchItemsReceived = 0;
     //
     public static DarkSoulsOptions DSOptions;
-    public static bool SaveidSet = false;
+    public static bool SaveidSet { get; set; } = false;
     public static bool CheckSaveId = true;
     private static bool _goalSent = false;
     private static readonly SemaphoreSlim _goalSemaphore = new SemaphoreSlim(1, 1);
@@ -391,7 +391,7 @@ public partial class App : Application
             string[] cmdparts = command.Split(" ");
             if (cmdparts.Length == 2)
             {
-                int result = SetEventFlag(Int32.Parse(cmdparts[1]));
+                int result = SetEventFlag(Int32.Parse(cmdparts[1]), true);
                 Log.Logger.Information($"{cmdparts[1]}={result}");
             }
         }
@@ -456,7 +456,7 @@ public partial class App : Application
         }
     }
 
-    private int SetEventFlag(int flagnum)
+    internal static int SetEventFlag(int flagnum, bool newValue)
     {
         var baseAddress = AddressHelper.GetEventFlagsOffset();
         Location newloc = new Location()
@@ -464,10 +464,10 @@ public partial class App : Application
             Address = baseAddress + AddressHelper.GetEventFlagOffset(flagnum).Item1,
             AddressBit = AddressHelper.GetEventFlagOffset(flagnum).Item2
         };
-        Memory.WriteBit(newloc.Address, newloc.AddressBit, true);
+        Memory.WriteBit(newloc.Address, newloc.AddressBit, newValue);
         return 1;
     }
-    private int CheckEventFlag(int flagnum)
+    internal static int CheckEventFlag(int flagnum)
     {
         var baseAddress = AddressHelper.GetEventFlagsOffset();
         Location newloc = new Location()
@@ -969,6 +969,7 @@ public partial class App : Application
                     {
                         if (SaveidSet)
                         {
+                            BonfireInjectorHelper.ResetKnownBonfires();
                             SaveidSet = false;
                             CheckSaveId = true;
                         }
@@ -1231,6 +1232,11 @@ public partial class App : Application
                 AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
         }
 
+        // if it's in our scouted locs & not in our own game,
+        if (MiscHelper.GetBonfireWarpInfos().ToDictionary(x=> x.Id, x => x).TryGetValue(locid, out var bonfire))
+        {
+            BonfireInjectorHelper.setBonfireByLoc(locid);
+        }
 
         Log.Logger.Debug($"Location Completed: {e.CompletedLocation.Name} at {e.CompletedLocation.Id}");
     }
@@ -1783,8 +1789,10 @@ public partial class App : Application
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
 
-        /* Initialize flag to off - to prevent receiving items until we have set the saveid */
         SaveidSet = false;
+        BonfireInjectorHelper.TrackLitBonfiresAsync();
+        /* Initialize flag to off - to prevent receiving items until we have set the saveid */
+        BonfireInjectorHelper.ResetKnownBonfires();
 
         /* Make ready to receive items */
         /* If we haven't yet initialized the dictionary, do so. */

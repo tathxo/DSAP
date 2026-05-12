@@ -1,11 +1,14 @@
-﻿using Archipelago.Core.Util;
+﻿using Archipelago.Core;
+using Archipelago.Core.Util;
+using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using DSAP.Models;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static DSAP.Enums;
 
@@ -142,7 +145,9 @@ namespace DSAP.Helpers
                 0x48, 0xa1, 0x08, 0x07, 0x06, 0x05, 0x04,    // movabs rax,ds:0x102030405060708
                 0x03, 0x02, 0x01,
                 0x48, 0x05, 0x34, 0x0b, 0x00, 0x00,          // add    rax,0xb34
-                //0x48, 0x81, 0xc2, 0xd4, 0x03, 0x00, 0x00,    // add    rdx,0x3d4 / 980
+                //0x50,                                        // push rax -> backup "target bonfire address"
+                //0x8b, 0x38,                                  // mov edi,DWORD PTR [rax]  
+                //0x57,                                        // push rdi -> backup old bonfire address
                 0x48, 0x81, 0xc2, 0xbc, 0x07, 0x00, 0x00,    // add    rdx,0x7bc / 1980
                 0x89, 0x10,                                  // mov    DWORD PTR [rax],edx
                 0xba, 0x01, 0x00, 0x00, 0x00,          		 // mov    edx,0x1
@@ -151,11 +156,14 @@ namespace DSAP.Helpers
                 0x48, 0x83, 0xec, 0x38,             		 // sub    rsp,0x38
                 0x41, 0xff, 0xd6,                		     // call   r14
                 0x48, 0x83, 0xc4, 0x38,           		     // add    rsp,0x38
+                //0x5f,                                        // pop    rdi
+                //0x58,                      					 // pop    rax
+                //0x89, 0x38,                                  // mov    DWORD PTR [rax],edi
                 0x41, 0x5e,                   				 // pop    r14
                 0x5a,                      					 // pop    rdx
                 0x58,                      					 // pop    rax
                 0x59,                      					 // pop    rcx
-                0xc3,           
+                0xc3,                                        // ret
             };
 
             // replace +7 with (int) basec ptr
@@ -172,7 +180,7 @@ namespace DSAP.Helpers
 
             // update messages
             bool updateRequired = MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BONFIRES, x => x.MsgEntries.Any(x => x.id >= 99999998));
-            msgManStruct.PrintAllFmgs();
+            //msgManStruct.PrintAllFmgs();
             if (updateRequired)
             {
                 foreach (var bonfire in new_bonfire_struct)
@@ -232,20 +240,122 @@ namespace DSAP.Helpers
             Memory.WriteByteArray(loc_start, jmpstub); // write jmp stub (e.g. "create hook")
         }
 
-        internal static string BuildItemCaption(KeyValuePair<long, ScoutedItemInfo> item)
+        public static void setBonfireByLoc(int locid)
         {
-            const byte progression = 0b001;
-            const byte useful = 0b010;
-            const byte trap = 0b100;
-            string item_type = "normal";
-            if (((byte)item.Value.Flags) == 0b001) item_type = "Progression";
-            if (((byte)item.Value.Flags) == 0b010) item_type = "Useful";
-            if (((byte)item.Value.Flags) == 0b100) item_type = "Trap";
-            return $"A {item_type} Archipelago item for {item.Value.Player}'s {item.Value.ItemGame}.\0";
+            List<BonfireWarp> bonfirelocs = MiscHelper.GetBonfireWarpInfos();
+            BonfireWarp bonfire = bonfirelocs.Find(x => x.Id == locid);
+            if (bonfire != null)
+            {
+                if (((ulong)(long)(App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"]) & ((ulong) 1 << (bonfire.PersistId -1))) == 0)
+                {
+                    Log.Logger.Information($"Turning on bit: {bonfire.PersistId - 1}, {bonfire.Name}");
+                    currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
+                    App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
+                }
+                
+            }
         }
-        internal static string BuildDsrEventItemCaption()
+
+        /// <summary>
+        /// Start tracking bonfire list status
+        /// </summary>
+        /// <returns></returns>
+        public static void TrackLitBonfiresAsync()
         {
-            return "A boon from another world. Makes a fog wall passable.\0";
+
+            ArchipelagoClient Client = App.Client;
+            Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"].Initialize(0);
+
+            Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"].OnValueChanged -= UpdateBonfiresFromServer;
+            Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"].OnValueChanged += UpdateBonfiresFromServer;
+
+
+            //string storageKey = $"bonfires_{Client.CurrentSession.ConnectionInfo.Team}_{Client.CurrentSession.ConnectionInfo.Slot}";
+        }
+        internal static async void ResetKnownBonfires()
+        {
+            ctsource.Cancel();
+            currentBonfiresInfo = 0;
+            while (!MiscHelper.IsInGame() || !App.SaveidSet) // player is not in game
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1)); // wait a second between checks
+            }
+
+            // only called once in game
+            foreach (var bonfire in MiscHelper.GetBonfireWarpInfos())
+            {
+                if (App.CheckEventFlag(bonfire.Flag) == 1)
+                {
+                    currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
+                }
+            }
+            // if current list doesn't match data storage, update data storage
+            if (App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] != currentBonfiresInfo)
+            {
+                App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or(currentBonfiresInfo);
+            }
+        }
+
+        internal static CancellationTokenSource ctsource = new CancellationTokenSource();
+        static long currentBonfiresInfo = 0;
+        static DateTime LatestUpdate = DateTime.MinValue;
+        private static async void UpdateBonfiresFromServer(JToken originalValue, JToken newValue, Dictionary<string, JToken> additionalArguments)
+        {
+            CancellationToken ctoken = ctsource.Token;
+            // also pass in time of creation?
+            var createdTime = DateTime.Now;
+            LatestUpdate = createdTime;
+            await Task.Run(async () =>
+            {
+                if ((long)newValue != currentBonfiresInfo) // if bonfire list has changed
+                {
+                    Log.Logger.Information($"Updating from server, {currentBonfiresInfo} to {(long)newValue | currentBonfiresInfo}");
+                    List<BonfireWarp> bonfirelocs = MiscHelper.GetBonfireWarpInfos();
+                    Dictionary<int, BonfireWarp> bonfiremap = bonfirelocs.ToDictionary(x => x.PersistId, x => x);
+                    var saved_conninfo = App.Client.CurrentSession.ConnectionInfo;
+
+                    while (!MiscHelper.IsInGame() || !App.SaveidSet) // player is not in game
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1)); // wait a second between checks
+                        
+                        if (LatestUpdate > createdTime) // a later task like this exists - Skip this one.
+                            return;
+                        if (ctoken.IsCancellationRequested)
+                            return;
+                    }
+
+                    // player is now in game, in a valid save, on the same connection.
+                    long difference = ((long)newValue) & (currentBonfiresInfo ^ 0x7fffffffffffffff); // get all flags that are on in the new value and not in our cached value
+
+                    int diffcount = 0;
+                    for (int i = 1; i <= 64; i++)
+                    {
+                        if (((difference >> (i - 1)) & 0x00000001) == 1) // if (i-1) bit is on
+                        {
+                            if (bonfiremap.TryGetValue(i, out var bonfire)) // get the corresponding bonfire
+                            {
+                                diffcount++;
+                                // check event flag. If it's off, set it on and put a message out
+                                // then update currentBonfiresInfo
+                                if (App.CheckEventFlag(bonfire.Flag) == 0)
+                                {
+                                    App.SetEventFlag(bonfire.Flag, true);
+                                    Log.Logger.Information($"Unlocked bonfire {bonfire.Name}");
+                                }
+                                currentBonfiresInfo |= ((long)1 << (i - 1));
+                            }
+                        }
+                    }
+                    if (diffcount > 0)
+                    {
+                        Log.Logger.Information($"{diffcount} bonfires updated");
+                    }
+                }
+                else
+                {
+                    Log.Logger.Information($"Unchanged bonfire string {newValue} == {currentBonfiresInfo}");
+                }
+            });
         }
     }
 }

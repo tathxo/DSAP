@@ -557,8 +557,9 @@ class DSRWorld(World):
         # for item in skipitempool:
         #     print("skip item: " + str(item))
         limited_pool = [item for item in StillRequiredPool if item_dictionary[item.name].category not in [DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]]
-        for item in limited_pool:
-            print("non-fogwall required item: " + str(item))
+        
+        # for item in limited_pool:
+        #     print("non-fogwall required item: " + str(item))
 
         # Replace "Soul of a Lost Undead" if needed
         if len(StillRequiredPool) + len(guaranteedpool) > len(removable_items):

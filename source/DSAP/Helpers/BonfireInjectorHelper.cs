@@ -31,6 +31,9 @@ namespace DSAP.Helpers
         // overwrite "bonfire warp" routine for the "new" structures
         public const ulong hook4_loc = 0x1404aaf38;
         public const int hook4_length = 15;
+        // overwrite "detect if we have to show the warp menu" with new structures
+        public const ulong hook5_loc = 0x1406ed276;
+        public const int hook5_length = 16;
 
         private static readonly object _memAllocLock = new object();
         internal static async Task UpdateBonfires()
@@ -170,13 +173,28 @@ namespace DSAP.Helpers
             ulong basecPtr = AddressHelper.GetBaseCOffset();
             Array.Copy(BitConverter.GetBytes(basecPtr), 0, new_instructions_4, 7, sizeof(ulong));
 
-            // build hook 4
+            // build hook 5
+            var new_instructions_5 = new byte[]
+            {
+                0x48, 0xbb,                                     // movabs      rbx,[0x0102030405060708]
+                0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+                0x48, 0xbd,                                     // movabs      rbp,[0x0102030405060708]
+                0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+                0x33, 0xff,                                     // XOR        EDI,EDI. could also be 0x31ff instead, apparently
+
+            };
+
+            // replace +2 with (ulong)struct+4
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, new_instructions_5, 2, sizeof(ulong));
+            // replace +12 with (ulong)struct end + 4, or start + (0xc) * count
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, new_instructions_5, 12, sizeof(ulong));
 
 
             AddHook(hook1_loc, hook1_length, new_instructions_1, false);
             AddHook(hook2_loc, hook2_length, new_instructions_2, false);
             AddHook(hook3_loc, hook3_length, new_instructions_3, true);
             AddHook(hook4_loc, hook4_length, new_instructions_4, false);
+            AddHook(hook5_loc, hook5_length, new_instructions_5, false);
 
             // update messages
             bool updateRequired = MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BONFIRES, x => x.MsgEntries.Any(x => x.id >= 99999998));

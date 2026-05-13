@@ -46,7 +46,7 @@ public partial class App : Application
     public static ArchipelagoClient Client { get; set; }
     public static List<DarkSoulsItem> AllItems { get; set; }
     public static Dictionary<int, DarkSoulsItem> AllItemsByApId { get; set; }
-    public static List<BonfireWarp> AllBonfireWarps { get; set; }
+    public static List<BonfireWarp> AllowedBonfireWarps { get; set; } = [];
     // 
     private static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
     private static Dictionary<int, ItemLot> ItemLotReplacementMap = new Dictionary<int, ItemLot>();
@@ -832,7 +832,6 @@ public partial class App : Application
 
         AllItems = MiscHelper.GetAllItems();
         AllItemsByApId = AllItems.ToDictionary(x => x.ApId, x => x);
-        AllBonfireWarps = MiscHelper.GetBonfireWarpInfos();
         Client.Connected += OnConnectedAsync;
         Client.Disconnected += OnDisconnected;
         Client.GameDisconnected += OnGameDisconnected;
@@ -1231,10 +1230,11 @@ public partial class App : Application
             if (will_popup)
                 AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
         }
-
-        // if it's in our scouted locs & not in our own game,
-        if (MiscHelper.GetBonfireWarpInfos().ToDictionary(x=> x.Id, x => x).TryGetValue(locid, out var bonfire))
+ 
+        // if it's the bonfire list of locs
+        if (App.AllowedBonfireWarps.ToDictionary(x=> x.Id, x => x).TryGetValue(locid, out var bonfire))
         {
+            // send it to slotdata, to mark as "bonfires completed"
             BonfireInjectorHelper.setBonfireByLoc(locid);
         }
 
@@ -1703,39 +1703,14 @@ public partial class App : Application
         /* Find the bonfire warp in the bonfire warp flags list,
          * and set its progression flag to unlock the warp point. */
 
-        BonfireWarp? bonfire = AllBonfireWarps.Find(x => x.ItemId == ApId);
+        BonfireWarp? bonfire = AllowedBonfireWarps.Find(x => x.ItemId == ApId);
         if (bonfire != null)
         {
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
-
-            var address = baseAddress + AddressHelper.GetEventFlagOffset(bonfire.Flag).Item1;
-            var bit = AddressHelper.GetEventFlagOffset(bonfire.Flag).Item2;
-            if (!Memory.ReadBit(address, bit)) // if the bonfire flag isn't already true
-                Memory.WriteBit(address, bit, true); // mark it as true
-            Log.Logger.Debug($"Marked {bonfire.Name} flag as true at {address:X}[{bit}]");
-
-            // Then, if player has the option to always have warping available turned on, and hasn't unlocked warping, unlock it with a cheeky message change
-            if (DSOptions.CanWarpWithoutLordvessel)
-            {
-                var canwarp_eventflag = 710; // 710 is the lordvessel warp flag. Future: maybe turn on 717 (emergency warp) instead, until player has lordvessel, to prevent Frampt nomming & Ingward granting Key To the Seal?
-                var canwarp_address = baseAddress + AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item1;
-                var canwarp_bit = AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item2;
-                if (!Memory.ReadBit(canwarp_address, canwarp_bit)) // if it's not already set
-                {
-                    // change "By the power of the Lordvessel, [etc]" -> "By the power of Archipelago"
-                    MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BANNERS, x => false);
-                    msgManStruct.UpdateMsg(10010620, "By the power of the multiworld, you may now warp between bonfires");
-                    MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BANNERS);
-
-                    // unlock warping
-                    Memory.WriteBit(canwarp_address, canwarp_bit, true);
-                }
-
-            }
+            BonfireInjectorHelper.setBonfireByLoc(bonfire.Flag);
         }
         else
         {
-            Log.Logger.Error($"Error, received item {ApId}, but no bonfire found. Check that your AP world and client match.");
+            Log.Logger.Error($"Error, received item {ApId}, classified as a bonfire, but no bonfire found. Either you were sent a bonfire not in your allowed list, or your AP world and client do not match.");
         }
     }
 

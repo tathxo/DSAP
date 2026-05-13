@@ -319,12 +319,12 @@ namespace DSAP.Helpers
         // flag, entityid, fmgid, string
         public static List<(int, int, int, string)> GetBonfireDsrStruct()
         {
-            var json = OpenEmbeddedResource("DSAP.Resources.Bonfires.json");
-            var list = JsonSerializer.Deserialize<List<BonfireWarp>>(json, GetJsonOptions());
+            var list = App.AllowedBonfireWarps;
             List<(int, int, int, string)> dsrBonfireList = list
                 .Select(x => (x.Flag, x.EntityId, x.FmgId, x.Name))
-                .OrderBy(x=> x.Name == "Firelink Shrine" ? "aa" : x.Name)
                 .ToList();
+            if (!App.DSOptions.WarpToAllBonfires) // only vanilla warps
+                dsrBonfireList = dsrBonfireList.Where(x => x.Item1 <= 220).ToList();
             return dsrBonfireList;
         }
         public static List<BonfireWarp> GetBonfireWarpInfos()

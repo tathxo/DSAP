@@ -260,7 +260,7 @@ namespace DSAP.Helpers
 
         public static void setBonfireByLoc(int locid)
         {
-            List<BonfireWarp> bonfirelocs = MiscHelper.GetBonfireWarpInfos();
+            List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
             BonfireWarp bonfire = bonfirelocs.Find(x => x.Id == locid);
             if (bonfire != null)
             {
@@ -270,7 +270,6 @@ namespace DSAP.Helpers
                     currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
                     App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
                 }
-                
             }
         }
 
@@ -300,7 +299,7 @@ namespace DSAP.Helpers
             }
 
             // only called once in game
-            foreach (var bonfire in MiscHelper.GetBonfireWarpInfos())
+            foreach (var bonfire in App.AllowedBonfireWarps)
             {
                 if (App.CheckEventFlag(bonfire.Flag) == 1)
                 {
@@ -328,7 +327,7 @@ namespace DSAP.Helpers
                 if ((long)newValue != currentBonfiresInfo) // if bonfire list has changed
                 {
                     Log.Logger.Information($"Updating from server, {currentBonfiresInfo} to {(long)newValue | currentBonfiresInfo}");
-                    List<BonfireWarp> bonfirelocs = MiscHelper.GetBonfireWarpInfos();
+                    List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
                     Dictionary<int, BonfireWarp> bonfiremap = bonfirelocs.ToDictionary(x => x.PersistId, x => x);
                     var saved_conninfo = App.Client.CurrentSession.ConnectionInfo;
 

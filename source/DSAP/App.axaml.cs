@@ -1234,8 +1234,12 @@ public partial class App : Application
         // if it's the bonfire list of locs
         if (App.AllowedBonfireWarps.ToDictionary(x=> x.Id, x => x).TryGetValue(locid, out var bonfire))
         {
-            // send it to slotdata, to mark as "bonfires completed"
-            BonfireInjectorHelper.setBonfireByLoc(locid);
+            // run in another thread because this manipulates slot data, so it could deadlock on packet received
+            Task.Run(() =>
+            {
+                // send it to slotdata, to mark as "bonfires completed"
+                BonfireInjectorHelper.setBonfireByLoc(locid);
+            });
         }
 
         Log.Logger.Debug($"Location Completed: {e.CompletedLocation.Name} at {e.CompletedLocation.Id}");
@@ -1788,6 +1792,7 @@ public partial class App : Application
             Log.Logger.Debug($"{DSOptions.ToString()}");
 
             EmkControllers = EmkHelper.BuildEmkControllers(slotData);
+            AllowedBonfireWarps = MiscHelper.GetBonfireWarpInfos();
 
             SlotLocToItemUpgMap = MiscHelper.BuildSlotLocationToItemUpgMap(slotData, currentSlot);
 
@@ -1823,8 +1828,11 @@ public partial class App : Application
         }
         Log.Logger.Error("Disconnected from Archipelago");
         Client.AddOverlayMessage("Disconnected from Archipelago");
+        SaveidSet = false;
+        BonfireInjectorHelper.ResetKnownBonfires();
         SlotLocToItemUpgMap = [];
         EmkControllers = [];
+        AllowedBonfireWarps = [];
         ItemLotReplacementMap = [];
         scoutedLocationInfo = [];
     }

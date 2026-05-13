@@ -316,15 +316,35 @@ namespace DSAP.Helpers
             }).ToList();
             return newlist;
         }
-        // flag, entityid, fmgid, string
-        public static List<(int, int, int, string)> GetBonfireDsrStruct()
+        // flag, entityid, fmgid
+        public static List<(int, int, int)> GetBonfireDsrStruct(bool vanillaNames, int sortType)
         {
             var list = App.AllowedBonfireWarps;
-            List<(int, int, int, string)> dsrBonfireList = list
-                .Select(x => (x.Flag, x.EntityId, x.FmgId, x.Name))
-                .ToList();
+            List<(int, int, int)> dsrBonfireList = [];
             if (!App.DSOptions.WarpToAllBonfires) // only vanilla warps
-                dsrBonfireList = dsrBonfireList.Where(x => x.Item1 <= 220).ToList();
+                list = list.Where(x => x.Flag <= 220).ToList();
+            
+            if (sortType == 0) // vanilla sort
+                list = list.OrderBy(x => x.VanillaSort).ToList();
+            else if (sortType == 1) // alphabetical sort, but force Firelink to the top
+            {
+                if (vanillaNames)
+                    list = list.OrderBy(x => x.Name == "Firelink Shrine" ? "aa" : x.VanillaName).ToList();
+                else
+                    list = list.OrderBy(x => x.Name == "Firelink Shrine" ? "aa" : x.Name).ToList();
+            }
+            else if (sortType == 2) // progression sort
+            {
+                list = list.OrderBy(x => x.ProgressiveSort).ToList();
+            }
+
+            if (vanillaNames)
+                dsrBonfireList = list.Select(x => (x.Flag, x.EntityId, x.VanillaFmgId))
+                    .ToList();
+            else
+                dsrBonfireList = list.Select(x => (x.Flag, x.EntityId, x.UpdatedFmgId))
+                    .ToList();
+
             return dsrBonfireList;
         }
         public static List<BonfireWarp> GetBonfireWarpInfos()

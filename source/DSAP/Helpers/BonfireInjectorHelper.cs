@@ -38,7 +38,8 @@ namespace DSAP.Helpers
         private static readonly object _memAllocLock = new object();
         internal static async Task UpdateBonfires()
         {
-            var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct();
+            var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct(false, 1);
+            Log.Logger.Warning($"bonfire struct size={new_bonfire_struct.Count}");
             //var new_bonfire_struct = new int[]
             //{
             //    200, 1021960, 2000,
@@ -115,12 +116,14 @@ namespace DSAP.Helpers
             // build hook3
             var new_instructions_3 = new byte[]
             {
+                0x48, 0x89, 0x7c, 0x24, 0x20,                // first replaced instruction (stores rdi onto stack)
                 0x48, 0xbf,                                  //mov rdi,0x0102030405060708
                     0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+                0x48, 0x8d, 0x1c, 0x40,                      // 3rd replaced instruction - set rbx based on rax
             };
 
-            // replace +2 with (ulong)struct start
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, new_instructions_3, 2, sizeof(ulong));
+            // replace +7 with (ulong)struct start
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, new_instructions_3, 7, sizeof(ulong));
 
             // build hook4
             //Push rcx
@@ -192,7 +195,7 @@ namespace DSAP.Helpers
 
             AddHook(hook1_loc, hook1_length, new_instructions_1, false);
             AddHook(hook2_loc, hook2_length, new_instructions_2, false);
-            AddHook(hook3_loc, hook3_length, new_instructions_3, true);
+            AddHook(hook3_loc, hook3_length, new_instructions_3, false);
             AddHook(hook4_loc, hook4_length, new_instructions_4, false);
             AddHook(hook5_loc, hook5_length, new_instructions_5, false);
 
@@ -201,12 +204,13 @@ namespace DSAP.Helpers
             //msgManStruct.PrintAllFmgs();
             if (updateRequired)
             {
-                foreach (var bonfire in new_bonfire_struct)
+                foreach (var bonfire in App.AllowedBonfireWarps)
                 {
-                    if (bonfire.Item3 > 2020) // if it's after "last" bonfire message
+                    if (bonfire.VanillaFmgId > 2020) // if it's after "last" vanilla bonfire message
                     {
-                        msgManStruct.AddMsg((uint)bonfire.Item3, bonfire.Item4);
+                        msgManStruct.AddMsg((uint)bonfire.VanillaFmgId, bonfire.VanillaName); // add "vanilla" names for non-vanilla bonfires option
                     }
+                    msgManStruct.AddMsg((uint)bonfire.UpdatedFmgId, bonfire.Name); // add names for "non-vanilla" names option
                 }
 
                 msgManStruct.AddMsg(99999998, ""); // add dummy message to mark that we've been here
@@ -269,6 +273,29 @@ namespace DSAP.Helpers
                     Log.Logger.Information($"Turning on bit: {bonfire.PersistId - 1}, {bonfire.Name}");
                     currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
                     App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
+                    givePlayerLordvesselFlag();
+                }
+            }
+        }
+
+        public static void givePlayerLordvesselFlag()
+        {
+            // Then, if player has the option to always have warping available turned on, and hasn't unlocked warping, unlock it with a cheeky message change
+            if (App.DSOptions.CanWarpWithoutLordvessel)
+            {
+                var canwarp_eventflag = 710; // 710 is the lordvessel warp flag. Future: maybe turn on 717 (emergency warp) instead, until player has lordvessel, to prevent Frampt nomming & Ingward granting Key To the Seal?
+                var baseAddress = AddressHelper.GetEventFlagsOffset();
+                var canwarp_address = baseAddress + AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item1;
+                var canwarp_bit = AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item2;
+                if (!Memory.ReadBit(canwarp_address, canwarp_bit)) // if it's not already set
+                {
+                    // change "By the power of the Lordvessel, [etc]" -> "By the power of Archipelago"
+                    MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BANNERS, x => false);
+                    msgManStruct.UpdateMsg(10010620, "By the power of the multiworld, you may now warp between bonfires");
+                    MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BANNERS);
+
+                    // unlock warping
+                    Memory.WriteBit(canwarp_address, canwarp_bit, true);
                 }
             }
         }
@@ -307,9 +334,12 @@ namespace DSAP.Helpers
                 }
             }
             // if current list doesn't match data storage, update data storage
-            if (App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] != currentBonfiresInfo)
+            if (App.Client?.CurrentSession?.DataStorage[Scope.Slot, "Bonfires"] != null)
             {
-                App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or(currentBonfiresInfo);
+                if (App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] != currentBonfiresInfo)
+                {
+                    App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or(currentBonfiresInfo);
+                }
             }
         }
 
@@ -366,6 +396,7 @@ namespace DSAP.Helpers
                     if (diffcount > 0)
                     {
                         Log.Logger.Information($"{diffcount} bonfires updated");
+                        givePlayerLordvesselFlag();
                     }
                 }
                 else

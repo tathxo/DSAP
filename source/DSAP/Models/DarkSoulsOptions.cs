@@ -17,7 +17,8 @@ namespace DSAP.Models
         // Game
         public Enums.DSGoal Goal {  get; set; }
         // QoL
-        public bool CanWarpWithoutLordvessel {  get; set; }
+        public bool WarpToAllBonfires { get; set; }
+        public bool CanWarpWithoutLordvessel { get; set; }
         // equipment
         public bool RandomizeStartingLoadouts { get; set; }
         public bool RandomizeStartingGifts { get; set; }
@@ -119,7 +120,8 @@ namespace DSAP.Models
             else
                 Goal = Enums.DSGoal.Gwyn;
 
-            // warp option
+            // warp options
+            WarpToAllBonfires = GetBool("warp_to_all_bonfires");
             CanWarpWithoutLordvessel = GetBool("can_warp_without_lordvessel");
 
             // Equipment options group start

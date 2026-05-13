@@ -115,7 +115,6 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
-        self.enabled_location_categories.add(DSRLocationCategory.BONFIRE_WARP)
         # self.enabled_location_categories.add(DSRLocationCategory.DOOR)
         if (self.options.fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.FOG_WALL)
@@ -452,21 +451,21 @@ class DSRWorld(World):
                     self.location_name_to_id[location.name],
                     new_region
                 )
-            elif (location.category in self.enabled_location_categories and
-                  location.category in location_locked_categories): # DSRLocationCategory.BONFIRE_WARP
-                self.bw = self.bw + 1
-                default_item = location.default_item
-                # Place bonfire warp locations statically
-                event_item = self.create_item(default_item)
-                new_location = DSRLocation(
-                    self.player,
-                    location.name,
-                    location.category,
-                    default_item,
-                    self.location_name_to_id[location.name],
-                    new_region
-                )
-                new_location.place_locked_item(event_item)
+            # elif (location.category in self.enabled_location_categories and
+            #       location.category in location_locked_categories): # DSRLocationCategory.BONFIRE_WARP
+            #     self.bw = self.bw + 1
+            #     default_item = location.default_item
+            #     # Place bonfire warp locations statically
+            #     event_item = self.create_item(default_item)
+            #     new_location = DSRLocation(
+            #         self.player,
+            #         location.name,
+            #         location.category,
+            #         default_item,
+            #         self.location_name_to_id[location.name],
+            #         new_region
+            #     )
+            #     new_location.place_locked_item(event_item)
             else:
                 self.bc = self.bc + 1
                 default_item = location.default_item

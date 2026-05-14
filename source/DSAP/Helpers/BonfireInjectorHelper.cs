@@ -3,6 +3,7 @@ using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using DSAP.Models;
+using DSAP.ViewModels;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -35,13 +36,74 @@ namespace DSAP.Helpers
         public const ulong hook5_loc = 0x1406ed276;
         public const int hook5_length = 16;
 
+        private static bool hooks_set = false;
+        private static ulong bonfire_stub_area = 0;
+
         private static readonly object _memAllocLock = new object();
+        public static void ClearHookArea()
+        {
+            hooks_set = false;
+            bonfire_stub_area = 0;
+        }
+        public static async void UpdateBonfiresStruct(bool vanillaWarpNames, string warpSortOrder)
+        {
+            if (hooks_set && bonfire_stub_area != 0 && App.DSOptions != null)
+            {
+                Log.Logger.Information($"Updating bonfires to have {(vanillaWarpNames ? "vanilla" : "non-vanilla")} warp names and sort order to {warpSortOrder}");
+                ulong old_bonfire_struct = Memory.ReadULong(bonfire_stub_area); // read the address of the structure
+
+                var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct(App.ControlsContext.VanillaWarpNames, App.ControlsContext.WarpSortOrder);
+                Log.Logger.Warning($"bonfire struct size={new_bonfire_struct.Count}");
+
+                // write it to a byte array
+                var new_bonfire_bytes = new byte[new_bonfire_struct.Count * 12 + 4];
+                for (int i = 0; i < new_bonfire_struct.Count; i++)
+                {
+                    var bonfire = new_bonfire_struct[i];
+                    Array.Copy(BitConverter.GetBytes(bonfire.Item1), 0, new_bonfire_bytes, i * 12 + 0, 4);
+                    Array.Copy(BitConverter.GetBytes(bonfire.Item2), 0, new_bonfire_bytes, i * 12 + 4, 4);
+                    Array.Copy(BitConverter.GetBytes(bonfire.Item3), 0, new_bonfire_bytes, i * 12 + 8, 4);
+                }
+                Array.Copy(BitConverter.GetBytes(-1), 0, new_bonfire_bytes, new_bonfire_bytes.Length - 4, 4);
+
+                // allocate a new area and write to it
+                ulong new_bonfire_struct_pos = (ulong)Memory.Allocate((uint)(new_bonfire_struct.Count * 12 + 8), Memory.PAGE_EXECUTE_READWRITE);
+                Memory.WriteByteArray(new_bonfire_struct_pos, new_bonfire_bytes);
+
+                // update the bonfire stub area, which was already allocated previously.
+                byte[] bonfire_stub_bytes = new byte[8 + 8 + 8 + 4];
+                Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, bonfire_stub_bytes, 0, sizeof(long));
+                Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, bonfire_stub_bytes, 8, sizeof(long));
+                Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, bonfire_stub_bytes, 16, sizeof(long));
+                Array.Copy(BitConverter.GetBytes(new_bonfire_struct.Count), 0, bonfire_stub_bytes, 24, sizeof(int));
+                Memory.WriteByteArray(bonfire_stub_area, bonfire_stub_bytes);
+
+                Memory.FreeMemory((nint)old_bonfire_struct); // free old struct
+            }
+        }
+        /// <summary>
+        /// Build a new bonfire area structure and stub zone, and insert hooks
+        /// </summary>
+        /// <returns></returns>
         internal static async Task UpdateBonfires()
         {
-            var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct(false, 1);
-            Log.Logger.Warning($"bonfire struct size={new_bonfire_struct.Count}");
-            //var new_bonfire_struct = new int[]
-            //{
+            // if never saved, set defaults
+            {
+                if (!App.DSOptions.WarpToAllBonfires)
+                {
+                    App.ControlsContext.VanillaWarpNames = true;
+                    App.ControlsContext.WarpSortOrder = "Vanilla";
+                }
+                else
+                {
+                    App.ControlsContext.VanillaWarpNames = false;
+                    App.ControlsContext.WarpSortOrder = "Alphabetical";
+                }
+            }
+            var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct(App.ControlsContext.VanillaWarpNames, App.ControlsContext.WarpSortOrder);
+            Log.Logger.Debug($"bonfire struct size={new_bonfire_struct.Count}");
+
+            // vanilla looks like:
             //    200, 1021960, 2000,
             //    205, 1011961, 2001,
             //    203, 1511960, 2002,
@@ -81,7 +143,7 @@ namespace DSAP.Helpers
             Memory.WriteByteArray(new_bonfire_struct_pos, new_bonfire_bytes);
 
             // allocate a new area and write to it. This will store the meta information for the structure; we can just update this when it needs to change.
-            ulong bonfire_stub_area = (ulong)Memory.Allocate(8 + 8 + 8 + 4); // 3 pointers and 1 integer
+            bonfire_stub_area = (ulong)Memory.Allocate(8 + 8 + 8 + 4); // 3 pointers and 1 integer
             byte[] bonfire_stub_bytes = new byte[8 + 8 + 8 + 4];
             Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, bonfire_stub_bytes, 0, sizeof(long));
             Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos+4), 0, bonfire_stub_bytes, 8, sizeof(long));
@@ -221,6 +283,7 @@ namespace DSAP.Helpers
                 MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BONFIRES);
                 Log.Logger.Information("Updated Bonfire text struct");
             }
+            hooks_set = true;
         }
 
         // creates a hook at loc_start

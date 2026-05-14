@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
+﻿using DSAP.Helpers;
 using ReactiveUI;
 using Serilog;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive;
 
@@ -27,6 +29,8 @@ namespace DSAP.ViewModels
         private bool _receivedItemUseful = true;
         private bool _receivedItemTrap = true;
         private bool _receivedItemFiller = true;
+        private bool _vanillaWarpNames = false;
+        private string _warpSortOrder = "";
         private bool _deathlink = false;
 
         public bool FoundItemProgressive
@@ -89,6 +93,25 @@ namespace DSAP.ViewModels
             get => _receivedItemFiller;
             set => this.RaiseAndSetIfChanged(ref _receivedItemFiller, value);
         }
+        public bool VanillaWarpNames
+        {
+            get => _vanillaWarpNames;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _vanillaWarpNames, value);
+                BonfireInjectorHelper.UpdateBonfiresStruct(_vanillaWarpNames, _warpSortOrder);
+            }
+        }
+        public string WarpSortOrder
+        {
+            get => _warpSortOrder;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _warpSortOrder, value);
+                BonfireInjectorHelper.UpdateBonfiresStruct(_vanillaWarpNames, _warpSortOrder);
+            }
+        }
+        public List<string> WarpSortItems { get; set; } = ["Vanilla", "Alphabetical", "Progression"];
         public bool Deathlink
         {
             get => _deathlink;
@@ -111,6 +134,7 @@ namespace DSAP.ViewModels
         
         public DsrControlsWindowModel()
         {
+            WarpSortOrder = WarpSortItems[0];
             //ToggleDeathlinkClicked = ReactiveCommand.Create(ToggleDeathlink);
         }
 

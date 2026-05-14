@@ -4,8 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:DSAP.ViewModels"
         x:DataType="vm:DsrControlsWindowModel"
-        mc:Ignorable="d" d:DesignWidth="250" 
-        Width="300" Height="250"
+        mc:Ignorable="d" d:DesignWidth="300" 
+        Width="300" Height="350"
         x:Class="DSAP.DsrControlsWindow"
         Title="DsrControlsWindow">
     <!-- WindowStartupLocation="CenterOwner" ExtendClientAreaChromeHints="NoChrome" ExtendClientAreaToDecorationsHint="True" -->
@@ -42,7 +42,13 @@
 		<SolidColorBrush x:Key="ToggleButtonForeground" Color="{StaticResource ForegroundBlack}"/>
 		<SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{StaticResource BackgroundMedium}"/>
 		<SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{StaticResource ForegroundWhite}"/>
+
+		<SolidColorBrush x:Key="ComboBoxItemBackground" Color="{StaticResource BackgroundLight}"/>
+		<SolidColorBrush x:Key="ComboBoxItemForeground" Color="{StaticResource ForegroundBlack}"/>
+		<SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="{StaticResource BackgroundMedium}"/>
+		<SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="{StaticResource ForegroundWhite}"/>
 		
+
 		<SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{StaticResource ForegroundBlack}" />
 		<SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{StaticResource BackgroundMedium}" />
 
@@ -63,9 +69,6 @@
 		<SolidColorBrush x:Key="ToggleSwitchFillOff" Color="{StaticResource BackgroundDark}"/>
 		<SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="{StaticResource ForegroundWhite}"/>
 		<SolidColorBrush x:Key="ToggleSwitchKnobFillOff" Color="{StaticResource ForegroundWhite}"/>
-
-		<SolidColorBrush x:Key="ComboBoxForeground" Color="{StaticResource ForegroundWhite}"/>
-		<SolidColorBrush x:Key="ComboBoxBackground" Color="{StaticResource BackgroundMedium}"/>
 
 		<SolidColorBrush x:Key="MenuFlyoutItemBackground" Color="{StaticResource BackgroundDark}"/>
 		
@@ -107,6 +110,16 @@
                 <ToggleButton IsChecked="{Binding ReceivedItemUseful}">Useful</ToggleButton>   
                 <ToggleButton IsChecked="{Binding ReceivedItemTrap}">Trap</ToggleButton>   
                 <ToggleButton IsChecked="{Binding ReceivedItemFiller}">Filler</ToggleButton>   
+            </StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Vanilla warp names</Label>
+				<ToggleSwitch IsChecked="{Binding VanillaWarpNames}"></ToggleSwitch>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+				<Label>Warp list Sort order</Label>
+				<ComboBox SelectedValue="{Binding WarpSortOrder}" ItemsSource="{Binding WarpSortItems}"
+				SelectedIndex="1">
+				</ComboBox>
             </StackPanel>
         </StackPanel>
         <ToggleButton Grid.Row="2" 

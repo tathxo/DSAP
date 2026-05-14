@@ -66,7 +66,7 @@ namespace DSAP.Helpers
             //};
 
             // write it to a byte array
-            var new_bonfire_bytes = new byte[new_bonfire_struct.Count*3 * 4 + 4];
+            var new_bonfire_bytes = new byte[new_bonfire_struct.Count * 12 + 4];
             for (int i=0; i < new_bonfire_struct.Count; i++)
             {
                 var bonfire = new_bonfire_struct[i];
@@ -77,53 +77,57 @@ namespace DSAP.Helpers
             Array.Copy(BitConverter.GetBytes(-1), 0, new_bonfire_bytes, new_bonfire_bytes.Length - 4, 4);
 
             // allocate a new area and write to it
-            ulong new_bonfire_struct_pos = (ulong)Memory.Allocate((uint)(new_bonfire_struct.Count * 12 + 4), Memory.PAGE_EXECUTE_READWRITE);
+            ulong new_bonfire_struct_pos = (ulong)Memory.Allocate((uint)(new_bonfire_struct.Count * 12 + 8), Memory.PAGE_EXECUTE_READWRITE);
             Memory.WriteByteArray(new_bonfire_struct_pos, new_bonfire_bytes);
+
+            // allocate a new area and write to it. This will store the meta information for the structure; we can just update this when it needs to change.
+            ulong bonfire_stub_area = (ulong)Memory.Allocate(8 + 8 + 8 + 4); // 3 pointers and 1 integer
+            byte[] bonfire_stub_bytes = new byte[8 + 8 + 8 + 4];
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, bonfire_stub_bytes, 0, sizeof(long));
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos+4), 0, bonfire_stub_bytes, 8, sizeof(long));
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, bonfire_stub_bytes, 16, sizeof(long));
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct.Count), 0, bonfire_stub_bytes, 24, sizeof(int));
+            Memory.WriteByteArray(bonfire_stub_area, bonfire_stub_bytes);
+
 
 
             // build hook1
             var new_instructions_1 = new byte[]
             {
-                0x48, 0xb8, 0x08, 0x07, 0x06, 0x05, 0x04,    //movabs      rax,[0x0102030405060708]
-                0x03, 0x02, 0x01,
-                0x49, 0xb8, 0x08, 0x07, 0x06, 0x05, 0x04,    //movabs      r8,[0x0102030405060708]
-                0x03, 0x02, 0x01,
+                0x49, 0xb8,                                     //movabs      r8,[0x0102030405060708] <- overwrite pointer to stub area
+                0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,  
+                0x49, 0x8b, 0x40, 0x08,                         //mov    rax,QWORD PTR [r8+0x8]  (struct start + 4)
+                0x4d, 0x8b, 0x40, 0x10,                         //mov    r8,QWORD PTR [r8+0x10]  (end)
             };
 
-            // replace +2 with (ulong)struct+4
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, new_instructions_1, 2, sizeof(ulong));
-            // replace +12 with (ulong)struct end + 4, or start + (0xc) * count
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, new_instructions_1, 12, sizeof(ulong));
+            // replace +2 with (ulong)stub
+            Array.Copy(BitConverter.GetBytes(bonfire_stub_area), 0, new_instructions_1, 2, sizeof(ulong));
 
             // build hook2
             var new_instructions_2 = new byte[]
             {
-                0x48, 0xbb,                                  //mov rbx,0x0102030405060708
+                0x48, 0xbf,                                  //mov rdi,0x0102030405060708 (stub)
                     0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
-                0x48, 0xbf,                                  //mov rdi,0x0102030405060708
-                    0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
-                0x41, 0xbe,                                  //mov r14d,0x01
-                   0x01, 0x00, 0x00, 0x00,
+                0x48, 0x8b, 0x5f, 0x08,                      //mov    rbx,QWORD PTR [r8+0x8]  (struct start + 4)
+                0x44, 0x8b, 0x77, 0x18,                      //mov r14d, DWORD PTR[r8 + 0x18] (count)
+                0x48, 0x8b, 0x3f,                            //mov rdi, QWORD PTR[r8]         (start)
             };
 
-            // replace +2 with (ulong)struct+4
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, new_instructions_2, 2, sizeof(ulong));
-            // replace +12 with (ulong)struct start
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, new_instructions_2, 12, sizeof(ulong));
-            // replace +22 with (int)count of elements
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct.Count), 0, new_instructions_2, 22, sizeof(int));
+            // replace +2 with (ulong)stub
+            Array.Copy(BitConverter.GetBytes(bonfire_stub_area), 0, new_instructions_2, 2, sizeof(ulong));
 
             // build hook3
             var new_instructions_3 = new byte[]
             {
                 0x48, 0x89, 0x7c, 0x24, 0x20,                // first replaced instruction (stores rdi onto stack)
-                0x48, 0xbf,                                  //mov rdi,0x0102030405060708
-                    0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
                 0x48, 0x8d, 0x1c, 0x40,                      // 3rd replaced instruction - set rbx based on rax
+                0x48, 0xbf,                                  //mov rdi,0x0102030405060708 (stub)
+                    0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
+                0x48, 0x8b, 0x3f,                            //mov    rdi,QWORD PTR [rdi]
             };
 
-            // replace +7 with (ulong)struct start
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, new_instructions_3, 7, sizeof(ulong));
+            // replace +11 with (ulong)stub
+            Array.Copy(BitConverter.GetBytes(bonfire_stub_area), 0, new_instructions_3, 11, sizeof(ulong));
 
             // build hook4
             //Push rcx
@@ -179,19 +183,15 @@ namespace DSAP.Helpers
             // build hook 5
             var new_instructions_5 = new byte[]
             {
-                0x48, 0xbb,                                     // movabs      rbx,[0x0102030405060708]
+                0x48, 0xbd,                                     // movabs      rbp,[0x0102030405060708] (stub)
                 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
-                0x48, 0xbd,                                     // movabs      rbp,[0x0102030405060708]
-                0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
-                0x33, 0xff,                                     // XOR        EDI,EDI. could also be 0x31ff instead, apparently
-
+                0x48, 0x8b, 0x5d, 0x08,                         // mov rbx, QWORD PTR[rbp + 0x8]        (struct+4)
+                0x48, 0x8b, 0x6d, 0x10,                         // mov rbp, QWORD PTR[rbp + 0x10]       (end)
+                0x33, 0xff,                                     // XOR        EDI,EDI. machine code could also be 0x31ff instead, apparently
             };
 
-            // replace +2 with (ulong)struct+4
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, new_instructions_5, 2, sizeof(ulong));
-            // replace +12 with (ulong)struct end + 4, or start + (0xc) * count
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, new_instructions_5, 12, sizeof(ulong));
-
+            // replace +2 with (ulong)stub
+            Array.Copy(BitConverter.GetBytes(bonfire_stub_area), 0, new_instructions_5, 2, sizeof(ulong));
 
             AddHook(hook1_loc, hook1_length, new_instructions_1, false);
             AddHook(hook2_loc, hook2_length, new_instructions_2, false);

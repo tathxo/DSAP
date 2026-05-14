@@ -656,7 +656,7 @@
     "ProgressionSort": 2
   },
   {
-    "Name": "Undead Burg",
+    "Name": "Undead Burg 1",
     "Id": 11110039,
     "Flag": 223,
     "EntityId": 1011962,
@@ -672,7 +672,7 @@
     "ProgressionSort": 4
   },
   {
-    "Name": "Undead Burg - Sunlight Altar",
+    "Name": "Undead Burg 2 - Sunlight Altar",
     "Id": 11110832,
     "Flag": 205,
     "EntityId": 1011961,

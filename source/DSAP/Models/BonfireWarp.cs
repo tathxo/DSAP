@@ -15,6 +15,6 @@ namespace DSAP.Models
         public int VanillaFmgId { get; set; }
         public int UpdatedFmgId { get; set; }
         public int VanillaSort { get; set; }
-        public int ProgressiveSort { get; set; }
+        public int ProgressionSort { get; set; }
     }
 }

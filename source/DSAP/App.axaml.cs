@@ -1841,5 +1841,6 @@ public partial class App : Application
         Log.Logger.Error("Disconnected from DSR");
         Client.AddOverlayMessage("Disconnected from DSR");
         EmkHelper.ReleaseEvents(EmkControllers); // pointers in emk list become invalid on game restart
+        BonfireInjectorHelper.ClearHookArea();
     }
 }

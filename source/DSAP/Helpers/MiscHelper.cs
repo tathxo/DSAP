@@ -317,25 +317,25 @@ namespace DSAP.Helpers
             return newlist;
         }
         // flag, entityid, fmgid
-        public static List<(int, int, int)> GetBonfireDsrStruct(bool vanillaNames, int sortType)
+        public static List<(int, int, int)> GetBonfireDsrStruct(bool vanillaNames, string sortType)
         {
             var list = App.AllowedBonfireWarps;
             List<(int, int, int)> dsrBonfireList = [];
             if (!App.DSOptions.WarpToAllBonfires) // only vanilla warps
                 list = list.Where(x => x.Flag <= 220).ToList();
             
-            if (sortType == 0) // vanilla sort
+            if (sortType == "Vanilla") // vanilla sort
                 list = list.OrderBy(x => x.VanillaSort).ToList();
-            else if (sortType == 1) // alphabetical sort, but force Firelink to the top
+            else if (sortType == "Alphabetical") // alphabetical sort, but force Firelink to the top
             {
                 if (vanillaNames)
                     list = list.OrderBy(x => x.Name == "Firelink Shrine" ? "aa" : x.VanillaName).ToList();
                 else
                     list = list.OrderBy(x => x.Name == "Firelink Shrine" ? "aa" : x.Name).ToList();
             }
-            else if (sortType == 2) // progression sort
+            else if (sortType == "Progression") // progression sort
             {
-                list = list.OrderBy(x => x.ProgressiveSort).ToList();
+                list = list.OrderBy(x => x.ProgressionSort).ToList();
             }
 
             if (vanillaNames)

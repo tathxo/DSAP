@@ -131,8 +131,8 @@ namespace DSAP.Helpers
             //Push rdx
             //Push r14
             //MOV RAX, QWORD PTR[0x0102030405060708]
-            //SUB RCX,980
-            //mov    QWORD PTR [rax],rcx
+            //add rdx, 1980
+            //mov    DWORD PTR [rax],edx
             //mov edx,0x1
             //movabs r14,0x1404867e0
             //sub rsp,0x38
@@ -195,8 +195,11 @@ namespace DSAP.Helpers
 
             AddHook(hook1_loc, hook1_length, new_instructions_1, false);
             AddHook(hook2_loc, hook2_length, new_instructions_2, false);
+            
             AddHook(hook3_loc, hook3_length, new_instructions_3, false);
-            AddHook(hook4_loc, hook4_length, new_instructions_4, false);
+            // only hook "warp" routine if player has setting on. Otherwise, leave vanilla behavior, so "last bonfire" stays as source of warp
+            if (App.DSOptions.WarpToAllBonfires)
+                AddHook(hook4_loc, hook4_length, new_instructions_4, false);
             AddHook(hook5_loc, hook5_length, new_instructions_5, false);
 
             // update messages

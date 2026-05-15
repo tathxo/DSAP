@@ -90,6 +90,8 @@ namespace DSAP.Helpers
                 return;
 
             StorageKey = $"bonfires_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
+            App.Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
+
 
             // if not loaded from settings, set some defaults
             if (!SaveLoadHelper.SettingsLoaded) 
@@ -379,13 +381,8 @@ namespace DSAP.Helpers
         {
 
             ArchipelagoClient Client = App.Client;
-            Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
-
             Client.CurrentSession.DataStorage[StorageKey].OnValueChanged -= UpdateBonfiresFromServer;
             Client.CurrentSession.DataStorage[StorageKey].OnValueChanged += UpdateBonfiresFromServer;
-
-
-            //string storageKey = $"bonfires_{Client.CurrentSession.ConnectionInfo.Team}_{Client.CurrentSession.ConnectionInfo.Slot}";
         }
         internal static async void ResetKnownBonfires()
         {
@@ -410,6 +407,7 @@ namespace DSAP.Helpers
                 if (App.Client.CurrentSession.DataStorage[StorageKey] != currentBonfiresInfo)
                 {
                     App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or(currentBonfiresInfo);
+                    UpdateBonfiresFromServer(App.Client.CurrentSession.DataStorage[StorageKey]);
                 }
             }
         }
@@ -419,15 +417,19 @@ namespace DSAP.Helpers
         static DateTime LatestUpdate = DateTime.MinValue;
         private static async void UpdateBonfiresFromServer(JToken originalValue, JToken newValue, Dictionary<string, JToken> additionalArguments)
         {
+            UpdateBonfiresFromServer((long)newValue);
+        }
+        private static async void UpdateBonfiresFromServer(long newValue)
+        {
             CancellationToken ctoken = ctsource.Token;
             // also pass in time of creation?
             var createdTime = DateTime.Now;
             LatestUpdate = createdTime;
             await Task.Run(async () =>
             {
-                if ((long)newValue != currentBonfiresInfo) // if bonfire list has changed
+                if (newValue != currentBonfiresInfo) // if bonfire list has changed
                 {
-                    Log.Logger.Information($"Updating from server, {currentBonfiresInfo} to {(long)newValue | currentBonfiresInfo}");
+                    Log.Logger.Information($"Updating from server, {currentBonfiresInfo} to {newValue | currentBonfiresInfo}");
                     List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
                     Dictionary<int, BonfireWarp> bonfiremap = bonfirelocs.ToDictionary(x => x.PersistId, x => x);
                     var saved_conninfo = App.Client.CurrentSession.ConnectionInfo;

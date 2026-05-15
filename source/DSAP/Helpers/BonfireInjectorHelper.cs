@@ -1,9 +1,7 @@
 ﻿using Archipelago.Core;
 using Archipelago.Core.Util;
-using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using DSAP.Models;
-using DSAP.ViewModels;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -11,30 +9,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static DSAP.Enums;
 
 namespace DSAP.Helpers
 {
     public class BonfireInjectorHelper
     {
+        private static string StorageKey = "";
         // probably builds the list of entries
-        public const ulong hook1_loc = 0x1406ed2d6;
-        public const int hook1_length = 14;
+        private const ulong hook1_loc = 0x1406ed2d6;
+        private const int hook1_length = 14;
 
         // also build the list?
-        public const ulong hook2_loc = 0x1406ed7c6;
-        public const int hook2_length = 20;
+        private const ulong hook2_loc = 0x1406ed7c6;
+        private const int hook2_length = 20;
 
         // probably set "this bonfire's flag"
-        public const ulong hook3_loc = 0x1406ed300;
-        public const int hook3_length = 16;
+        private const ulong hook3_loc = 0x1406ed300;
+        private const int hook3_length = 16;
 
         // overwrite "bonfire warp" routine for the "new" structures
-        public const ulong hook4_loc = 0x1404aaf38;
-        public const int hook4_length = 15;
+        private const ulong hook4_loc = 0x1404aaf38;
+        private const int hook4_length = 15;
         // overwrite "detect if we have to show the warp menu" with new structures
-        public const ulong hook5_loc = 0x1406ed276;
-        public const int hook5_length = 16;
+        private const ulong hook5_loc = 0x1406ed276;
+        private const int hook5_length = 16;
 
         private static bool hooks_set = false;
         private static ulong bonfire_stub_area = 0;
@@ -42,6 +40,7 @@ namespace DSAP.Helpers
         private static readonly object _memAllocLock = new object();
         public static void ClearHookArea()
         {
+            StorageKey = "";
             hooks_set = false;
             bonfire_stub_area = 0;
         }
@@ -87,7 +86,13 @@ namespace DSAP.Helpers
         /// <returns></returns>
         internal static async Task UpdateBonfires()
         {
-            // if never saved, set defaults
+            if (App.Client?.CurrentSession?.ConnectionInfo == null)
+                return;
+
+            StorageKey = $"bonfires_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
+
+            // if not loaded from settings, set some defaults
+            if (!SaveLoadHelper.SettingsLoaded) 
             {
                 if (!App.DSOptions.WarpToAllBonfires)
                 {
@@ -129,7 +134,7 @@ namespace DSAP.Helpers
 
             // write it to a byte array
             var new_bonfire_bytes = new byte[new_bonfire_struct.Count * 12 + 4];
-            for (int i=0; i < new_bonfire_struct.Count; i++)
+            for (int i = 0; i < new_bonfire_struct.Count; i++)
             {
                 var bonfire = new_bonfire_struct[i];
                 Array.Copy(BitConverter.GetBytes(bonfire.Item1), 0, new_bonfire_bytes, i * 12 + 0, 4);
@@ -146,7 +151,7 @@ namespace DSAP.Helpers
             bonfire_stub_area = (ulong)Memory.Allocate(8 + 8 + 8 + 4); // 3 pointers and 1 integer
             byte[] bonfire_stub_bytes = new byte[8 + 8 + 8 + 4];
             Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos), 0, bonfire_stub_bytes, 0, sizeof(long));
-            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos+4), 0, bonfire_stub_bytes, 8, sizeof(long));
+            Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + 4), 0, bonfire_stub_bytes, 8, sizeof(long));
             Array.Copy(BitConverter.GetBytes(new_bonfire_struct_pos + (ulong)new_bonfire_bytes.Length), 0, bonfire_stub_bytes, 16, sizeof(long));
             Array.Copy(BitConverter.GetBytes(new_bonfire_struct.Count), 0, bonfire_stub_bytes, 24, sizeof(int));
             Memory.WriteByteArray(bonfire_stub_area, bonfire_stub_bytes);
@@ -157,7 +162,7 @@ namespace DSAP.Helpers
             var new_instructions_1 = new byte[]
             {
                 0x49, 0xb8,                                     //movabs      r8,[0x0102030405060708] <- overwrite pointer to stub area
-                0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,  
+                0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01,
                 0x49, 0x8b, 0x40, 0x08,                         //mov    rax,QWORD PTR [r8+0x8]  (struct start + 4)
                 0x4d, 0x8b, 0x40, 0x10,                         //mov    r8,QWORD PTR [r8+0x10]  (end)
             };
@@ -257,7 +262,7 @@ namespace DSAP.Helpers
 
             AddHook(hook1_loc, hook1_length, new_instructions_1, false);
             AddHook(hook2_loc, hook2_length, new_instructions_2, false);
-            
+
             AddHook(hook3_loc, hook3_length, new_instructions_3, false);
             // only hook "warp" routine if player has setting on. Otherwise, leave vanilla behavior, so "last bonfire" stays as source of warp
             if (App.DSOptions.WarpToAllBonfires)
@@ -323,7 +328,7 @@ namespace DSAP.Helpers
             Memory.WriteByteArray(next_write_pos, return_jmp); // write the return instruction
             next_write_pos += (ulong)6; // point to return address
             Memory.WriteByteArray(next_write_pos, BitConverter.GetBytes(loc_start + (ulong)replaced_length)); // write the return address
-            
+
             //Memory.WriteByteArray(replacement_func_start_addr + new_instructions.Length, return_jmp);
             Memory.WriteByteArray(loc_start, jmpstub); // write jmp stub (e.g. "create hook")
         }
@@ -334,11 +339,11 @@ namespace DSAP.Helpers
             BonfireWarp bonfire = bonfirelocs.Find(x => x.Id == locid);
             if (bonfire != null)
             {
-                if (((ulong)(long)(App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"]) & ((ulong) 1 << (bonfire.PersistId -1))) == 0)
+                if (((ulong)(long)(App.Client.CurrentSession.DataStorage[StorageKey]) & ((ulong)1 << (bonfire.PersistId - 1))) == 0)
                 {
                     Log.Logger.Information($"Turning on bit: {bonfire.PersistId - 1}, {bonfire.Name}");
                     currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
-                    App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
+                    App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
                     givePlayerLordvesselFlag();
                 }
             }
@@ -374,10 +379,10 @@ namespace DSAP.Helpers
         {
 
             ArchipelagoClient Client = App.Client;
-            Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"].Initialize(0);
+            Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
 
-            Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"].OnValueChanged -= UpdateBonfiresFromServer;
-            Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"].OnValueChanged += UpdateBonfiresFromServer;
+            Client.CurrentSession.DataStorage[StorageKey].OnValueChanged -= UpdateBonfiresFromServer;
+            Client.CurrentSession.DataStorage[StorageKey].OnValueChanged += UpdateBonfiresFromServer;
 
 
             //string storageKey = $"bonfires_{Client.CurrentSession.ConnectionInfo.Team}_{Client.CurrentSession.ConnectionInfo.Slot}";
@@ -400,11 +405,11 @@ namespace DSAP.Helpers
                 }
             }
             // if current list doesn't match data storage, update data storage
-            if (App.Client?.CurrentSession?.DataStorage[Scope.Slot, "Bonfires"] != null)
+            if (App.Client?.CurrentSession?.DataStorage[StorageKey] != null)
             {
-                if (App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] != currentBonfiresInfo)
+                if (App.Client.CurrentSession.DataStorage[StorageKey] != currentBonfiresInfo)
                 {
-                    App.Client.CurrentSession.DataStorage[Scope.Slot, "Bonfires"] += Bitwise.Or(currentBonfiresInfo);
+                    App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or(currentBonfiresInfo);
                 }
             }
         }
@@ -430,7 +435,7 @@ namespace DSAP.Helpers
                     while (!MiscHelper.IsInGame() || !App.SaveidSet) // player is not in game
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1)); // wait a second between checks
-                        
+
                         if (LatestUpdate > createdTime) // a later task like this exists - Skip this one.
                             return;
                         if (ctoken.IsCancellationRequested)

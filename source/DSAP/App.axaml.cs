@@ -97,12 +97,12 @@ public partial class App : Application
                 DataContext = Context
             };
         }
-
+        SaveLoadHelper.Init();
         base.OnFrameworkInitializationCompleted();
     }
     public void Start()
     {
-        Context = new MainWindowViewModel("0.6.2 - 0.6.5");
+        Context = new MainWindowViewModel("0.6.2 - 0.6.7");
 
         Context.ClientVersion = Assembly.GetEntryAssembly().GetName().Version.ToString();
         Context.ConnectClicked += Context_ConnectClicked;
@@ -386,6 +386,13 @@ public partial class App : Application
                 }
             }
         }
+        else if (command.StartsWith("/settings")) // get settings file location
+        {
+            Log.Logger.Information("Settings file location:");
+            Log.Logger.Information($"{SaveLoadHelper.RunningDirectory}");
+            Log.Logger.Information("Settings file name:");
+            Log.Logger.Information($"{SaveLoadHelper.SettingsFileName}");
+        }
         else if (command.StartsWith("/sef")) // set event flag
         {
             string[] cmdparts = command.Split(" ");
@@ -414,11 +421,11 @@ public partial class App : Application
             {
                 int start = Int32.Parse(cmdparts[1]);
                 int end = Int32.Parse(cmdparts[2]);
-                for (int i=start; i < end; i++)
+                for (int i = start; i < end; i++)
                 {
                     MonitorEventFlag(i);
                 }
-            }   
+            }
         }
         //else if (command.StartsWith("/get")) // for debugging
         //{
@@ -878,6 +885,8 @@ public partial class App : Application
             {
                 SetDeathlink(true);
             }
+            SaveLoadHelper.SaveAllSettings();
+
             if (ControlsContext.Deathlink != deathlink_enabled) // if button wasn't set correctly
                 ControlsContext.Deathlink = deathlink_enabled;
 

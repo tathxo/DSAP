@@ -11,9 +11,9 @@ class CanWarpWithoutLordvessel(DefaultOnToggle):
 
 class WarpToAllBonfires(DefaultOnToggle):
     """Makes all bonfires eligible to be warped to via the in-game menu.
-    As a side-effect, this will also make warping set your destination as your "return" point upon next death, homeward, etc.
-    
     No matter your settings, you will still need to actually rest at the warpable points to be able to warp to them.
+
+    As a side-effect, this will also make warping set your destination as your "return" point upon next death, homeward, etc.
     Warpable bonfires are synced between all saves on the slot, regardless of your choice."""
     display_name = "Warp To All Bonfires"
 

@@ -52,7 +52,7 @@ namespace DSAP.Helpers
                 ulong old_bonfire_struct = Memory.ReadULong(bonfire_stub_area); // read the address of the structure
 
                 var new_bonfire_struct = MiscHelper.GetBonfireDsrStruct(App.ControlsContext.VanillaWarpNames, App.ControlsContext.WarpSortOrder);
-                Log.Logger.Warning($"bonfire struct size={new_bonfire_struct.Count}");
+                Log.Logger.Debug($"bonfire struct size={new_bonfire_struct.Count}");
 
                 // write it to a byte array
                 var new_bonfire_bytes = new byte[new_bonfire_struct.Count * 12 + 4];
@@ -343,7 +343,7 @@ namespace DSAP.Helpers
             {
                 if (((ulong)(long)(App.Client.CurrentSession.DataStorage[StorageKey]) & ((ulong)1 << (bonfire.PersistId - 1))) == 0)
                 {
-                    Log.Logger.Information($"Turning on bit: {bonfire.PersistId - 1}, {bonfire.Name}");
+                    Log.Logger.Debug($"Turning on bit: {bonfire.PersistId - 1}, {bonfire.Name}");
                     currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
                     App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
                     givePlayerLordvesselFlag();
@@ -429,7 +429,7 @@ namespace DSAP.Helpers
             {
                 if (newValue != currentBonfiresInfo) // if bonfire list has changed
                 {
-                    Log.Logger.Information($"Updating from server, {currentBonfiresInfo} to {newValue | currentBonfiresInfo}");
+                    Log.Logger.Debug($"Updating from server, {currentBonfiresInfo} to {newValue | currentBonfiresInfo}");
                     List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
                     Dictionary<int, BonfireWarp> bonfiremap = bonfirelocs.ToDictionary(x => x.PersistId, x => x);
                     var saved_conninfo = App.Client.CurrentSession.ConnectionInfo;
@@ -468,13 +468,13 @@ namespace DSAP.Helpers
                     }
                     if (diffcount > 0)
                     {
-                        Log.Logger.Information($"{diffcount} bonfires updated");
+                        Log.Logger.Debug($"{diffcount} bonfires updated");
                         givePlayerLordvesselFlag();
                     }
                 }
                 else
                 {
-                    Log.Logger.Information($"Unchanged bonfire string {newValue} == {currentBonfiresInfo}");
+                    Log.Logger.Debug($"Unchanged bonfire string {newValue} == {currentBonfiresInfo}");
                 }
             });
         }

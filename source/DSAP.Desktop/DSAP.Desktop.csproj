@@ -15,14 +15,14 @@
     <!-- App Identifier -->
     <ApplicationId>com.arsonassassin.dsap</ApplicationId>
     <!-- Versions -->
-    <ApplicationDisplayVersion>0.1.0.2</ApplicationDisplayVersion>
-    <ApplicationVersion>0.1.0.2</ApplicationVersion>
-    <Version>0.1.0.2</Version>
+    <ApplicationDisplayVersion>0.1.2.0</ApplicationDisplayVersion>
+    <ApplicationVersion>0.1.2.0</ApplicationVersion>
+    <Version>0.1.2.0</Version>
     <!-- Single File Publishing Properties -->
     <PublishSingleFile>true</PublishSingleFile>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <SelfContained>true</SelfContained>
-    <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <!-- Windows specific settings -->
     <UseWindowsForms>false</UseWindowsForms>
     <UseWPF>false</UseWPF>

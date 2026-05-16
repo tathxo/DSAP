@@ -71,7 +71,7 @@ class LogicToAccessCatacombs(Choice):
 
 class RandomizeStartingLoadouts(DefaultOnToggle):
     """Randomize each class's starting weapons, shields, and armors.
-    This will also randomize the thief's master key, which would break logic.
+    This will also replace the thief's master key, which would break logic.
     Shields will always be 1-handed-wieldable with starting stats.
     Weapons will always be at least 2-handed-wieldable with starting stats.
     You can see what weapons/shield/item each class starts with in their description.

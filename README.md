@@ -1,6 +1,6 @@
-# Archipelago implementation for Dark Souls Remastered
+# Archipelago Multiworld Randomizer Apworld and Client for Dark Souls Remastered
 
-## **This implementation is still considered unstable/in alpha. Expect bugs and issues.**
+## **This implementation is still considered unstable/in beta. Expect bugs and issues.**
 
 ## How does it work? See the [Game Page](/apworld/dsr/docs/en_Dark%20Souls%20Remastered.md).
 ## Setting up? See the [Setup Guide](/apworld/dsr/docs/setup_en.md).
@@ -13,12 +13,16 @@
 [Contributors](#Contributors)  
 
 # Compatibility
-* This version has been tested with Dark Souls: Remastered, Steam version (App ver. 1.03.1 & Regulation ver. 1.04) on Windows 11, with Archipelago Launcher version 0.6.6. Using incorrect versions of Dark Souls: Remastered may result in a crash upon connecting.
-* Linux has preliminary support via Proton with v0.1.0. You should be able to add `PROTON_REMOTE_DEBUG_CMD="/full/path/to/DSAP.client.exe" %command%` to your steam Launch Options (tested with Proton Hotfix branch on 2026-03-27) to run both DSAP and DS:R in the same environment. It has not been thoroughly tested, however, so 1) consider it unstable, 2) let us know how it plays/runs (whether well or badly), and 3) Please report any issues.
+* This version has been tested with Dark Souls: Remastered, Steam version (App ver. 1.03.1 & Regulation ver. 1.04) on Windows 11, with Archipelago Launcher version 0.6.7. Using incorrect versions of Dark Souls: Remastered may result in a crash upon connecting.
+* Linux has preliminary support via Proton with v0.1.0. See the Setup Guide for more information.
 
 # Known issues
-* Master Key chosen from character creation (whether as a gift or thief starting item) is not considered to be in-logic. Randomized Character creation/gifts replaces the master key from the thief's starting item and the starting gifts respectively.
+* Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively.
+* Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. There are plans to resolve this in the future.
+* If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
 * Placing Lord Souls at Firelink Altar does not open the door - This seems to be due to not having received some number of the Lord Souls or Lordvessel. We could use information for this - If you see this, please run the /lordvessel command, which will both provide diagnostic information & the missing items. Please provide a screenshot of the output with any additional context you can provide about the missing items to the dark-souls-1 channel in the AP discord (such as, if you know it, did the items come in while you were offline, was it with other items, etc).
+* Using "Can Warp Without Lordvessel" option results in two unintended behaviors when the player does not have the Lordvessel: Frampt takes you into the Firelink Altar (expecting you to place it), and Ingward in New Londo will grant you the "Key to the Seal" location check. As workarounds: the first can be escaped by using the "unstuck" button (or homeward, a homeward bone, or dark sign), and the second is just an unintended "out of logic" check.
+* v0.1.0 and above: /help function doesn't provide useful output.
 * v0.0.22.0 and v0.0.21.0: Hard lock / infinite loop of receiving Rubbish if player has been /send'd a valid AP item that the client doesn't know about (Estus flask, Event items, etc). Resolved in v0.1.0 with an error message instead.
 * v0.0.21.0: Dispelling of Golden fogwalls inconcorrectly considered in logic once player had Lordvessel, even if it cannot be placed at Firelink Altar.
 * v0.0.21.0: Boss fog walls in the DLC do not correctly "Lock" with boss fog wall locks on.
@@ -37,6 +41,20 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+## Version 0.1.2
+* Add "warp_to_all_bonfires" - making all bonfires eligible to be warp targets - on by default. This still only unlocks warp points once you've rested at them. As a side effect, the target of the warp also becomes your new respawn point upon death/homeward/dark sign.
+* Added to client "custom controls" the ability to change bonfire warp menu sort types (alphabetical, vanilla, progression), and to optionally use changed/enhanced names instead of "vanilla" ones.
+* Added connection details and custom control options persisting between client sessions.
+* Special thanks to discord user GhostEye85 for their code and help with the bonfire warping & settings persistence.
+
+## Version 0.1.1
+* Version update -> 0.1.0. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**
+* Feature: `goal_condition` option, and `all_bosses` goal added. No longer will you only need 5 macguffins to fight Gwyn and beat the game! Note: DSAP does not prevent NG+ from triggering upon defeating Gwyn - it is recommended to leave him for last.
+* Feature: Added goal tracking for `all_bosses` goal to `/goalcheck`
+* Fix: Logic - Add Hellkite Bridge -> Upper Undead Burg Bonfire ladder connection
+* Fix: Item Syncs were failing with null replacements
+* Fix: Add faith requirements to Crescent Axe and Astoras Greatsword for starting rando purposes
+
 ## Version 0.1.0
 * Version update -> 0.1.0. Both Apworld and Client have updated. **This Client version will NOT be compatible with earlier versions of the apworld.**
 * Feature: Linux support - huge thanks to discord user @theabysmalkraken. From basic tests appears to work, but not tested thoroughly - should be considered somewhat more unstable.
@@ -151,8 +169,10 @@
 * Option to consider certain in-game skips logical.
 
 # Contributors
-* ArsonAssassin - Creator and Maintainer
-* tathxo (aka noka) - Contributor
+* tathxo (aka noka) - Maintainer (as of May 2026)
+* ArsonAssassin - Creator and Maintainer from initial creation in Oct 2024 through May 2026, creator of the memory library "Archipelago.Core" used heavily by this implementation.
 * Nave - Contributor
 * TheAbysmalKraken - Linux-enabling fix in dependant memory library
 * Edgarra1619 - Logic fix
+* GhostEye85 (discord) - Settings Persistence and Bonfire Warping features and code
+* ahhhreptar (discord) - Provided a 2nd method for linux via the `launch_dsr.sh` script

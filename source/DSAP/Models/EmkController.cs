@@ -12,6 +12,7 @@ namespace DSAP.Models
     {
         public bool Deactivated; // Whether the event has been "deactivated"
         public string Name {  get; set; }
+        public string KeychainName { get; set; }
         public DsrEventType Type { get; set; }
         public int ApId { get; set; } // AP item id that clears this event lock
         public int Eventid { get; set; }
@@ -20,11 +21,12 @@ namespace DSAP.Models
         public ulong Saved_Ptr { get; set; } // pointer to the saved event, if it has been detached.
         public bool HasKey { get; set; } // whether player has the "key" to the event, and to stop "locking" it
 
-        public EmkController(string name, DsrEventType type, int eventid, int eventslot, int apid)
+        public EmkController(string name, string keychainName, DsrEventType type, int eventid, int eventslot, int apid)
         {
             Deactivated = false;
             HasKey = false;
             Name = name;
+            KeychainName = keychainName;
             Type = type;
             Eventid = eventid;
             Eventslot = eventslot;

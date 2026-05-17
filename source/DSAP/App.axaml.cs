@@ -393,6 +393,14 @@ public partial class App : Application
             Log.Logger.Information("Settings file name:");
             Log.Logger.Information($"{SaveLoadHelper.SettingsFileName}");
         }
+        else if (command.StartsWith("/keys"))
+        {
+            foreach (var keychain in MiscHelper.GetKeychainItems())
+            {
+                Log.Logger.Information($"Adding item: {keychain.Name}, {keychain.Category}, {keychain.Id}, {keychain.Quantity}");
+                AddItemWithMessage((int)keychain.Category, keychain.Id, keychain.Quantity);
+            }
+        }
         else if (command.StartsWith("/sef")) // set event flag
         {
             string[] cmdparts = command.Split(" ");
@@ -922,8 +930,6 @@ public partial class App : Application
                 }
             }
 
-            /* Look for event unlocks in full list of received items and locations */
-            DetectEventKeys();
 
             var bossLocations = LocationHelper.GetBossFlagLocations();
             var itemLocations = LocationHelper.GetItemLotLocations();
@@ -1704,6 +1710,19 @@ public partial class App : Application
         if (emk != null)
         {
             emk.Unlock();
+            
+            var keychains = MiscHelper.GetKeychainItems();
+            DarkSoulsItem keychain = null;
+            // then update description text of the appropriate fogwall type
+            if (emk.Type == DsrEventType.BOSSFOGWALL)
+                keychain = keychains.Find(x => x.Name.Contains("Boss"));
+            else
+                keychain = keychains.Find(x => !x.Name.Contains("Boss"));
+
+            string desc = ApItemInjectorHelper.BuildDsrKeychainDescription(keychain);
+
+            MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_ITEM_DESCRIPTIONS, x => false);
+            msgManStruct.UpdateMsgInPlace((uint)keychain.Id, desc);
         }
         else
         {
@@ -1801,6 +1820,9 @@ public partial class App : Application
             Log.Logger.Debug($"{DSOptions.ToString()}");
 
             EmkControllers = EmkHelper.BuildEmkControllers(slotData);
+            /* Look for event unlocks in full list of received items and locations */
+            DetectEventKeys();
+
             AllowedBonfireWarps = MiscHelper.GetBonfireWarpInfos();
 
             SlotLocToItemUpgMap = MiscHelper.BuildSlotLocationToItemUpgMap(slotData, currentSlot);

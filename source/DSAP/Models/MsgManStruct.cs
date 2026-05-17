@@ -114,6 +114,33 @@ namespace DSAP.Models
 
             MsgEntries[entryIndex] = (updid, stringOffset);
         }
+        internal void UpdateMsgInPlace(uint updid, string newString)
+        {
+            var msgentry = MsgEntries.Find(x => x.id == updid);
+            if (msgentry.stringOffset != 0)
+            {
+                int maxbytes = StringBytes.Length - msgentry.stringOffset;
+                int readbytes = Math.Min(1500, maxbytes);
+                string s = Encoding.Unicode.GetString(StringBytes, msgentry.stringOffset, readbytes);
+                if (s.Split("\0").Length > 1)
+                    s = s.Split("\0")[0];
+                int currentLen = s.Length;
+                if (newString.Length > currentLen)
+                    Log.Logger.Warning("Error: Tried to write message that was too long");
+                else
+                {
+                    byte[] bytes = Encoding.Unicode.GetBytes(newString + '\0');
+
+                    ushort num_entries = BitConverter.ToUInt16(AllBytes, 0x10);
+                    ushort StringOffsetTableOffset = BitConverter.ToUInt16(AllBytes, 0x14);
+
+                    ulong strings_start = BufferLoc + (ulong)StringOffsetTableOffset + (ulong)(4 * num_entries);
+                    ulong writeLocation = strings_start + (ulong)msgentry.stringOffset;
+                    Memory.WriteByteArray(writeLocation, bytes);
+                    Log.Logger.Warning($"debug: wrote {bytes.Length} bytes to {writeLocation:X}, in buffer {BufferLoc:X}");
+                }
+            }
+        }
         //print all fmgs in this msg man structure for research
         internal void PrintAllFmgs()
         {

@@ -22,15 +22,28 @@ namespace DSAP.Helpers
 
             var added_names = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, $"{x.Value.Player}'s {x.Value.ItemDisplayName}\0")).ToList();
             var added_captions = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemCaption(x))).ToList();
+            var added_descriptions = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemCaption(x))).ToList();
 
             var added_emk_names = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
             var added_emk_captions = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrEventItemCaption()));
+            var added_emk_descriptions = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrEventItemCaption()));
+
+            var keychain_names = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
+            var keychain_captions = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrKeychainCaption(x.Name)));
+            var keychain_descriptions = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrKeychainDescription(x)));
+
 
             added_names.AddRange(added_emk_names);
             added_captions.AddRange(added_emk_captions);
+            added_descriptions.AddRange(added_emk_descriptions);
+
+            added_names.AddRange(keychain_names);
+            added_captions.AddRange(keychain_captions);
+            added_descriptions.AddRange(keychain_descriptions);
 
             added_names.Sort((a, b) => a.Key.CompareTo(b.Key));
             added_captions.Sort((a, b) => a.Key.CompareTo(b.Key));
+            added_descriptions.Sort((a, b) => a.Key.CompareTo(b.Key));
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -39,7 +52,7 @@ namespace DSAP.Helpers
 
             AddMsgs(MsgManStruct.OFFSET_ITEM_NAMES, added_names, "Item Names"); // names
             AddMsgs(MsgManStruct.OFFSET_ITEM_CAPTIONS, added_captions, "Item Captions"); // captions
-            AddMsgs(MsgManStruct.OFFSET_ITEM_DESCRIPTIONS, added_captions, "Item Descriptions"); // info
+            AddMsgs(MsgManStruct.OFFSET_ITEM_DESCRIPTIONS, added_descriptions, "Item Descriptions"); // info
             
             watch.Stop();
             Log.Logger.Information($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
@@ -47,13 +60,12 @@ namespace DSAP.Helpers
 
             var local_ap_keys = added_emk_names.ToList();
             local_ap_keys.Sort((a, b) => a.Key.CompareTo(b.Key));
-            // add item removal hook for all "location" items AND all ap items
-            AddAPItemHook(scoutedLocationInfo.Min(x => x.Key), scoutedLocationInfo.Max(x => x.Key));
+            // add item removal hook for all "location" items AND all fogwall key items - which are directly before the locations, by id.
+            AddAPItemHook(added_emk_names.Min(x => x.Key), scoutedLocationInfo.Max(x => x.Key));
             // add item popup removal hook for all "location" items
             AddAPItemPopupHook(scoutedLocationInfo.Min(x => x.Key), scoutedLocationInfo.Max(x => x.Key));
-
         }
-
+        // hook to prevent items going into inventory
         private static void AddAPItemHook(long min, long max)
         {
             ulong target_func_start = 0x1407479E0;
@@ -101,6 +113,7 @@ namespace DSAP.Helpers
             Memory.WriteByteArray(replacement_func_start_addr, new_instructions); // write new instructions into its hook area
             Memory.WriteByteArray(target_func_start, jmpstub); // write jmp stub (e.g. "create hook")
         }
+        // hook to prevent item popups for "location" items...we popup these explicitly in the LocationCompleted instead
         private static void AddAPItemPopupHook(long min, long max)
         {
             ulong target_func_start = 0x140728c90;
@@ -163,6 +176,62 @@ namespace DSAP.Helpers
         internal static string BuildDsrEventItemCaption()
         {
             return "A boon from another world. Makes a fog wall passable.\0";
+        }
+        internal static string BuildDsrKeychainCaption(string name)
+        {
+            if (name.Contains("Boss"))
+                return "Tracks which boss fogwalls you've unlocked";
+            else
+                return "Tracks which fogwalls you've unlocked";
+        }
+
+        internal static string BuildDsrKeychainDescription(DarkSoulsItem keychain)
+        {
+            string builtString = "";
+
+            List<EmkController> items;
+            if (keychain.Name.Contains("Boss"))
+            {
+                items = App.EmkControllers.Where(x => x.Type == Enums.DsrEventType.BOSSFOGWALL).OrderBy(x => x.KeychainName).ToList();
+            }
+            else
+            {
+                items = App.EmkControllers.Where(x => x.Type == Enums.DsrEventType.FOGWALL).OrderBy(x => x.KeychainName).ToList();
+            }
+            if (items.Count == 0)
+            {
+                return "This item shouldn't exist - no events that it locks are detected in this world";
+            }
+            string[] builtStringArray = new string[11];
+            for (int i  = 0; i < 11; i++)
+            {
+                string first = "";
+                if (i < items.Count)
+                {
+                    if (items[i].HasKey)
+                        first = $"[x] {items[i].KeychainName}";
+                    else
+                        first = $"[_] {items[i].KeychainName}";
+                    first = first.PadRight(30, ' ');
+                }
+                else
+                {
+                    Log.Logger.Warning($"Error, size={items.Count}, keychain={keychain.Name}, id={keychain.Id}");
+                }
+                string second = "";
+                if (i + 11 < items.Count)
+                {
+                    if (items[i + 11].HasKey)
+                        second = $"[x] {items[i + 11].KeychainName}";
+                    else
+                        second = $"[_] {items[i + 11].KeychainName}";
+                }
+                builtStringArray[i] = first + second;
+                builtString += builtStringArray[i] + "\n";
+                Log.Logger.Warning($"bs={builtString}");
+            }
+            Log.Logger.Warning($"debug, size={items.Count}, keychain={keychain.Name}, id={keychain.Id}");
+            return builtString;
         }
 
 

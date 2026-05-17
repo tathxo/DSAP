@@ -7,6 +7,7 @@ namespace DSAP.Models
     {
         public string Locname { get; set; }
         public string Itemname { get; set; }
+        public string KeychainName { get; set; }
         public int Itemid { get; set; }
         public int Dsrid { get; set; }
         public int Flag { get; set; }

@@ -353,6 +353,21 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<BonfireWarp>>(json, GetJsonOptions());
             return list;
         }
+        public static List<DarkSoulsItem> GetKeychainItems()
+        {
+            var json = OpenEmbeddedResource("DSAP.Resources.Keychains.json");
+            var list = JsonSerializer.Deserialize<List<Keychain>>(json, GetJsonOptions());
+            List<DarkSoulsItem> newlist = list.Select(x => new DarkSoulsItem()
+            {
+                Name = x.Itemname,
+                Id = x.Dsrid, // dsr id of keychain item
+                StackSize = 1,
+                UpgradeType = Enums.ItemUpgrade.None,
+                Category = Enums.DSItemCategory.KeyItems
+            }
+            ).ToList();
+            return newlist;
+        }
         public static List<DarkSoulsItem> GetDsrEventItems()
         {
             var json = OpenEmbeddedResource("DSAP.Resources.DsrEvents.json");
@@ -373,7 +388,7 @@ namespace DSAP.Helpers
         {
             var json = OpenEmbeddedResource("DSAP.Resources.DsrEvents.json");
             var list = JsonSerializer.Deserialize<List<DsrEvent>>(json, GetJsonOptions());
-            List<EmkController> newlist = list.Select(x => new EmkController(x.Locname, x.Type,
+            List<EmkController> newlist = list.Select(x => new EmkController(x.Locname, x.KeychainName, x.Type,
                 x.Eventid, x.Eventslot, x.Itemid)).ToList();
             return newlist;
         }

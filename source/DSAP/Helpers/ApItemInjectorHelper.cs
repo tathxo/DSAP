@@ -228,7 +228,7 @@ namespace DSAP.Helpers
                 }
                 builtStringArray[i] = first + second;
                 builtString += builtStringArray[i] + "\n";
-                Log.Logger.Warning($"bs={builtString}");
+                //Log.Logger.Warning($"bs={builtString}");
             }
             Log.Logger.Warning($"debug, size={items.Count}, keychain={keychain.Name}, id={keychain.Id}");
             return builtString;
@@ -262,8 +262,8 @@ namespace DSAP.Helpers
             parambytes[0x3a] = 1; // goods type = key
             parambytes[0x3b] = 0; // ref category = like key
             parambytes[0x3e] = 0; // use animation = 0
-                                  // Is Only One?
-                                  // Is Deposit?
+            parambytes[0x44] = 0x00; // all 'enable_<mp>' and is equip flags = 0
+            parambytes[0x45] = 0x30; // only isDrop and isDeposit = 1, is only one = 0
 
             // For each new item, "Add Item" to ParamSt
             for (uint i = 0; i < new_entries; i++)
@@ -280,7 +280,6 @@ namespace DSAP.Helpers
                 byte[] iconbytes = BitConverter.GetBytes((short)2042);
                 parambytes[0x2c] = iconbytes[0]; // icon byte 0
                 parambytes[0x2d] = iconbytes[1]; // icon byte 1
-                parambytes[0x45] |= (byte)(0x30); // turn on isDrop and isDeposit bits
                 // This will add the item to the array, and append its string to the NewString buffer
                 paramStruct.AddParam(newid, parambytes, stringbytes);
             }

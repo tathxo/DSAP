@@ -395,11 +395,20 @@ public partial class App : Application
         }
         else if (command.StartsWith("/keys"))
         {
-            foreach (var keychain in MiscHelper.GetKeychainItems())
-            {
-                Log.Logger.Information($"Adding item: {keychain.Name}, {keychain.Category}, {keychain.Id}, {keychain.Quantity}");
-                AddItemWithMessage((int)keychain.Category, keychain.Id, keychain.Quantity);
-            }
+            //ulong GameDataMan = Memory.ReadULong(0x141c8a530);
+            //ulong playergamedata = Memory.ReadULong(GameDataMan + 0x10);
+            //ulong equipgamedata = playergamedata + 0x280;
+            //ulong slots = Memory.ReadULong(playergamedata+ 0x3b8);
+
+
+
+            // first slot at equipgamedata + 138?
+            //foreach (var keychain in MiscHelper.GetKeychainItems())
+            //{
+            //    Log.Logger.Information($"Adding item: {keychain.Name}, {keychain.Category}, {keychain.Id}, {keychain.Quantity}");
+            //    AddItemWithMessage((int)keychain.Category, keychain.Id, keychain.Quantity);
+            //}
+
         }
         else if (command.StartsWith("/sef")) // set event flag
         {
@@ -1439,6 +1448,14 @@ public partial class App : Application
             if (fog_key != null) // make sure to receive fog key items; then later received the "unlock event"
             {
                 AddItemWithMessage((int)DSItemCategory.KeyItems, fog_key.Id, 1);
+
+                DarkSoulsItem keychain = null;
+                if (fog_key.Name.Contains("Boss"))
+                    keychain = MiscHelper.GetKeychainItems().Find(x => x.Name.Contains("Boss"));
+                else
+                    keychain = MiscHelper.GetKeychainItems().Find(x => !x.Name.Contains("Boss"));
+
+                AddItem((int)keychain.Category, keychain.Id, 1);
             }
 
             var itemId = e.Item.Id;

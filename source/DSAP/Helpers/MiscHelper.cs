@@ -353,8 +353,12 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<BonfireWarp>>(json, GetJsonOptions());
             return list;
         }
+        internal static List<DarkSoulsItem> cached_keychains = null;
         public static List<DarkSoulsItem> GetKeychainItems()
         {
+            if (cached_keychains != null)
+                return cached_keychains;
+
             var json = OpenEmbeddedResource("DSAP.Resources.Keychains.json");
             var list = JsonSerializer.Deserialize<List<Keychain>>(json, GetJsonOptions());
             List<DarkSoulsItem> newlist = list.Select(x => new DarkSoulsItem()
@@ -366,7 +370,8 @@ namespace DSAP.Helpers
                 Category = Enums.DSItemCategory.KeyItems
             }
             ).ToList();
-            return newlist;
+            cached_keychains = newlist;
+            return cached_keychains;
         }
         public static List<DarkSoulsItem> GetDsrEventItems()
         {

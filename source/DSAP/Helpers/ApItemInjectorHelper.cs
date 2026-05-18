@@ -212,7 +212,6 @@ namespace DSAP.Helpers
                         first = $"[x] {items[i].KeychainName}";
                     else
                         first = $"[_] {items[i].KeychainName}";
-                    first = first.PadRight(30, ' ');
                 }
                 else
                 {
@@ -228,9 +227,9 @@ namespace DSAP.Helpers
                 }
                 builtStringArray[i] = first + second;
                 builtString += builtStringArray[i] + "\n";
-                //Log.Logger.Warning($"bs={builtString}");
             }
-            Log.Logger.Warning($"debug, size={items.Count}, keychain={keychain.Name}, id={keychain.Id}");
+            Log.Logger.Debug($"bs={builtString}");
+            Log.Logger.Verbose($"debug, size={items.Count}, keychain={keychain.Name}, id={keychain.Id}");
             return builtString;
         }
 

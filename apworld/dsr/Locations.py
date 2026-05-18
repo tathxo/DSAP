@@ -190,7 +190,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Last id used = 851
+# Last id used = 852
 location_tables = {
 "Undead Asylum Cell": [
     DSRLocationData(11110000, f"UA: Dungeon Cell Key", f"Dungeon Cell Key", DSRLocationCategory.SKIP),

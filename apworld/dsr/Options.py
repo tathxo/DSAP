@@ -17,6 +17,23 @@ class WarpToAllBonfires(DefaultOnToggle):
     Warpable bonfires are synced between all saves on the slot, regardless of your choice."""
     display_name = "Warp To All Bonfires"
 
+# Difficulty
+class GhostDifficulty(Choice):
+    """How to manage difficulty for ghosts.
+
+    - **Normal:** Ghost's behavior is unchanged and no mitigations are made to make them easier to deal with.
+    - **Ghosts Are Not Ghostly:** Ghosts can be damaged by all weapons and items.
+      Similar to having a transient curse always active.
+    - **Rickert Sells Curses:** Rickert, the blacksmith/shopkeeper in the safe part of New Londo, 
+      will sell unlimited transient curse items, 1500 souls apiece.
+    """
+    display_name = "Ghost Difficulty"
+    option_normal = 0
+    option_ghosts_are_not_ghostly = 1
+    option_rickert_sells_curses = 2
+    default = 2
+
+# Game Options
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
     display_name = "Guaranteed Items"
@@ -209,6 +226,9 @@ option_groups = [
         CanWarpWithoutLordvessel,
         WarpToAllBonfires,
         ]),
+    OptionGroup("Difficulty", [
+        GhostDifficulty,
+        ]),
     OptionGroup("Sanity", [
         FogwallSanity,
         BossFogwallSanity,
@@ -241,15 +261,26 @@ option_groups = [
 
 @dataclass
 class DSROption(PerGameCommonOptions):
-    #goal: GoalOption
-    can_warp_without_lordvessel: CanWarpWithoutLordvessel
-    warp_to_all_bonfires: WarpToAllBonfires
+
+    # Game Options
+    enable_deathlink: EnableDeathlinkOption
+    goal_condition: GoalConditionOption
     guaranteed_items: GuaranteedItemsOption
     excluded_location_behavior: ExcludedLocationBehaviorOption
+
+    # QoL
+    can_warp_without_lordvessel: CanWarpWithoutLordvessel
+    warp_to_all_bonfires: WarpToAllBonfires
+
+    # Difficulty
+    ghost_difficulty: GhostDifficulty
+
+    # Sanity
     fogwall_sanity: FogwallSanity
     boss_fogwall_sanity: BossFogwallSanity
     logic_to_access_catacombs: LogicToAccessCatacombs
 
+    # Equipment
     randomize_starting_loadouts: RandomizeStartingLoadouts
     randomize_starting_gifts: RandomizeStartingGifts
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
@@ -262,10 +293,9 @@ class DSROption(PerGameCommonOptions):
     no_spell_stat_requirements: NoSpellStatRequirements
     no_miracle_covenant_requirements: NoMiracleCovenantRequirements
 
+    # Upgraded Weapons
     upgraded_weapons_percentage: UpgradedWeaponsPercentage
     upgraded_weapons_allowed_infusions: UpgradedWeaponsAllowedInfusions
     upgraded_weapons_adjusted_levels : UpgradedWeaponsAdjustedLevels
     upgraded_weapons_min_level: UpgradedWeaponsMinLevel
     upgraded_weapons_max_level: UpgradedWeaponsMaxLevel
-    enable_deathlink: EnableDeathlinkOption
-    goal_condition: GoalConditionOption

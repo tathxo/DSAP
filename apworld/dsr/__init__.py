@@ -902,13 +902,21 @@ class DSRWorld(World):
 
         slot_data = {
             "options": {
+                # Game Options
                 "goal_condition": self.options.goal_condition.current_key, # text of the option
+                "guaranteed_items": self.options.guaranteed_items.value,
+                "enable_deathlink": self.options.enable_deathlink.value,
+                # QoL
                 "can_warp_without_lordvessel": self.options.can_warp_without_lordvessel.value,
                 "warp_to_all_bonfires": self.options.warp_to_all_bonfires.value,
-                "guaranteed_items": self.options.guaranteed_items.value,
+                # Difficulty
+                "ghost_difficulty": self.options.ghost_difficulty.value,
+                # Sanity
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
+                # Logic
                 "logic_to_access_catacombs": self.options.logic_to_access_catacombs.current_key, # text of the option
+                # Equipment
                 "randomize_starting_loadouts": self.options.randomize_starting_loadouts.value,
                 "randomize_starting_gifts": self.options.randomize_starting_gifts.value,
                 "require_one_handed_starting_weapons": self.options.require_one_handed_starting_weapons.value,
@@ -920,12 +928,12 @@ class DSRWorld(World):
                 "no_weapon_requirements": self.options.no_weapon_requirements.value,
                 "no_spell_stat_requirements": self.options.no_spell_stat_requirements.value,
                 "no_miracle_covenant_requirements": self.options.no_miracle_covenant_requirements.value,
+                # Upgraded Weapons
                 "upgraded_weapons_percentage": self.options.upgraded_weapons_percentage.value,
                 "upgraded_weapons_allowed_infusions": self.options.upgraded_weapons_allowed_infusions.value,
                 "upgraded_weapons_adjusted_levels": self.options.upgraded_weapons_adjusted_levels.value,
                 "upgraded_weapons_min_level": self.options.upgraded_weapons_min_level.value,
                 "upgraded_weapons_max_level": self.options.upgraded_weapons_max_level.value,
-                "enable_deathlink": self.options.enable_deathlink.value,
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server

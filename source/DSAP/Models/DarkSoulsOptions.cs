@@ -19,6 +19,13 @@ namespace DSAP.Models
         // QoL
         public bool WarpToAllBonfires { get; set; }
         public bool CanWarpWithoutLordvessel { get; set; }
+        // Difficulty
+        public Enums.DSGhostDifficulty GhostDifficulty { get; set; }
+        // Sanity
+        public bool FogwallSanity { get; set; }
+        public bool BossFogwallSanity { get; set; }
+        // Logic
+        public Enums.DSLogicToAccessCatacombs LogicToAccessCatacombs { get; set; }
         // equipment
         public bool RandomizeStartingLoadouts { get; set; }
         public bool RandomizeStartingGifts { get; set; }
@@ -101,24 +108,23 @@ namespace DSAP.Models
                 outofdate = true;
             }
 
-            if (App.Client.Options.ContainsKey("goal_condition"))
-            {
-                string GoalString = ((JsonElement)App.Client.Options["goal_condition"]).GetString();
-                switch (GoalString)
-                {
-                    case "gwyn":
-                        Goal = Enums.DSGoal.Gwyn;
-                        break;
-                    case "all_bosses":
-                        Goal = Enums.DSGoal.AllBosses;
-                        break;
-                    default:
-                        Goal = Enums.DSGoal.Gwyn;
-                        break;
-                }
-            }
+            if (App.Client.Options.ContainsKey("goal_condition") && Enum.TryParse(((JsonElement)App.Client.Options["goal_condition"]).ToString(), out Enums.DSGoal goal))
+                Goal = goal;
             else
-                Goal = Enums.DSGoal.Gwyn;
+                Goal = Enums.DSGoal.gwyn;
+
+            if (App.Client.Options.ContainsKey("ghost_difficulty") && Enum.TryParse(((JsonElement)App.Client.Options["ghost_difficulty"]).ToString(), out Enums.DSGhostDifficulty gd))
+                GhostDifficulty = gd;
+            else
+                GhostDifficulty = Enums.DSGhostDifficulty.normal;
+
+            FogwallSanity = GetBool("fogwall_sanity");
+            BossFogwallSanity = GetBool("boss_fogwall_sanity");
+
+            if (App.Client.Options.ContainsKey("logic_to_access_catacombs") && Enum.TryParse(((JsonElement)App.Client.Options["logic_to_access_catacombs"]).ToString(), out Enums.DSLogicToAccessCatacombs ltac))
+                LogicToAccessCatacombs = ltac;
+            else
+                LogicToAccessCatacombs = Enums.DSLogicToAccessCatacombs.andre_or_undead_merchant;
 
             // warp options
             WarpToAllBonfires = GetBool("warp_to_all_bonfires");
@@ -185,11 +191,20 @@ namespace DSAP.Models
         }
         public string ToString()
         {
-            string result = $"[UpgradedWeaponsPercentage={UpgradedWeaponsPercentage},";
-            result += $"UpgradedWeaponsAllowedInfusionTypes={UpgradedWeaponsAllowedInfusionTypes.ToString()}";
-            result += $"UpgradedWeaponsAdjustedLevels={(UpgradedWeaponsAdjustedLevels ? "true" : "false")}";
-            result += $"UpgradedWeaponsMinLevel={UpgradedWeaponsMinLevel},";
-            result += $"UpgradedWeaponsMaxLevel ={UpgradedWeaponsMaxLevel}";
+            string result = "[\n";
+            result += $"Goal={Goal},\n";
+            result += $"CanWarpWithoutLordvessel={CanWarpWithoutLordvessel},\n";
+            result += $"WarpToAllBonfires={WarpToAllBonfires},\n";
+            result += $"GhostDifficulty={GhostDifficulty},\n";
+            result += $"FogwallSanity={FogwallSanity},\n";
+            result += $"BossFogwallSanity={BossFogwallSanity},\n";
+            result += $"UpgradedWeaponsPercentage={UpgradedWeaponsPercentage},\n";
+            result += $"UpgradedWeaponsPercentage={UpgradedWeaponsPercentage},\n";
+            result += $"UpgradedWeaponsAllowedInfusionTypes={UpgradedWeaponsAllowedInfusionTypes.Count},\n";
+            result += $"UpgradedWeaponsAdjustedLevels={(UpgradedWeaponsAdjustedLevels ? "true" : "false")},\n";
+            result += $"UpgradedWeaponsMinLevel={UpgradedWeaponsMinLevel},\n";
+            result += $"UpgradedWeaponsMaxLevel ={UpgradedWeaponsMaxLevel}\n";
+            result += $"]";
             return result;
         }
         

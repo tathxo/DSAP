@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json.Serialization;
-
-namespace DSAP
+﻿namespace DSAP
 {
     public class Enums
     {
 
         public enum DSGoal
         {
-            Gwyn = 0,
-            AllBosses = 1
+            gwyn = 0,
+            all_bosses = 1
+        }
+        public enum DSGhostDifficulty
+        {
+            normal = 0,
+            ghosts_are_not_ghostly = 1,
+            rickert_sells_curses = 2
+        }
+        public enum DSLogicToAccessCatacombs
+        {
+            no_logic = 0,
+            undead_merchant = 1,
+            andre = 2,
+            andre_or_undead_merchant = 3,
+            ornstein_and_smough = 4,
         }
         public enum DSItemCategory
         {

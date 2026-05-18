@@ -410,6 +410,11 @@ public partial class App : Application
             //}
 
         }
+        else if (command.StartsWith("/options")) // get options
+        {
+            if (DSOptions != null)
+                Log.Logger.Information($"Options={DSOptions.ToString()}");
+        }
         else if (command.StartsWith("/sef")) // set event flag
         {
             string[] cmdparts = command.Split(" ");
@@ -533,11 +538,11 @@ public partial class App : Application
         bool sendingGoal = false;
 
         // Begin by stating what the goal is.
-        if (DSOptions.Goal == DSGoal.Gwyn)
+        if (DSOptions.Goal == DSGoal.gwyn)
         {
             Log.Logger.Warning("Your goal is to defeat Gwyn, Lord of Cinder.");
         }
-        else if (DSOptions.Goal == DSGoal.AllBosses)
+        else if (DSOptions.Goal == DSGoal.all_bosses)
         {
             Log.Logger.Warning("Your goal is to defeat All Bosses.");
         }
@@ -549,7 +554,7 @@ public partial class App : Application
         // check if that goal is completed
         if (MiscHelper.IsInGame())
         {
-            if (DSOptions.Goal == DSGoal.Gwyn)
+            if (DSOptions.Goal == DSGoal.gwyn)
             {
                 var locs = Client.CurrentSession.Locations.AllLocationsChecked.Where(x => x == 11110499 || x == 11110500);
                 foreach (var loc in locs)
@@ -597,7 +602,7 @@ public partial class App : Application
                     Log.Logger.Warning("No Gwyn location found");
                 }
             }
-            else if (DSOptions.Goal == DSGoal.AllBosses)
+            else if (DSOptions.Goal == DSGoal.all_bosses)
             {
                 var bossLocs = LocationHelper.GetBossFlagLocations();
                 bossLocs.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -1202,7 +1207,7 @@ public partial class App : Application
     private static void Client_LocationCompleted(object? sender, Archipelago.Core.Models.LocationCompletedEventArgs e)
     {
         var locid = e.CompletedLocation.Id;
-        if (DSOptions.Goal == DSGoal.Gwyn)
+        if (DSOptions.Goal == DSGoal.gwyn)
         {
             if (e.CompletedLocation.Name.Contains("Lord of Cinder"))
             {
@@ -1215,7 +1220,7 @@ public partial class App : Application
                 SendGoal();
             }
         }
-        else if (DSOptions.Goal == DSGoal.AllBosses)
+        else if (DSOptions.Goal == DSGoal.all_bosses)
         {
             var hasGoaledBosses = true;
             var bossLocs = LocationHelper.GetBossFlagLocations();
@@ -1858,6 +1863,10 @@ public partial class App : Application
             ParamHelper.RemoveWeaponRequirements();
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements();
+        if (DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
+            ParamHelper.RemoveGhostTransience();
+        else if (DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)
+            ParamHelper.AddRickertCurses();
 
         /* Set to only receive remote items and starting inventory */
         UpdateItemLots();

@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.Json;
 
 namespace DSAP.Models
@@ -192,19 +193,12 @@ namespace DSAP.Models
         public string ToString()
         {
             string result = "[\n";
-            result += $"Goal={Goal},\n";
-            result += $"CanWarpWithoutLordvessel={CanWarpWithoutLordvessel},\n";
-            result += $"WarpToAllBonfires={WarpToAllBonfires},\n";
-            result += $"GhostDifficulty={GhostDifficulty},\n";
-            result += $"FogwallSanity={FogwallSanity},\n";
-            result += $"BossFogwallSanity={BossFogwallSanity},\n";
-            result += $"UpgradedWeaponsPercentage={UpgradedWeaponsPercentage},\n";
-            result += $"UpgradedWeaponsPercentage={UpgradedWeaponsPercentage},\n";
-            result += $"UpgradedWeaponsAllowedInfusionTypes={UpgradedWeaponsAllowedInfusionTypes.Count},\n";
-            result += $"UpgradedWeaponsAdjustedLevels={(UpgradedWeaponsAdjustedLevels ? "true" : "false")},\n";
-            result += $"UpgradedWeaponsMinLevel={UpgradedWeaponsMinLevel},\n";
-            result += $"UpgradedWeaponsMaxLevel ={UpgradedWeaponsMaxLevel}\n";
-            result += $"]";
+            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(this))
+            {
+                string name = descriptor.Name;
+                object value = descriptor.GetValue(this);
+                result += $"{name}={value}\n";
+            }
             return result;
         }
         

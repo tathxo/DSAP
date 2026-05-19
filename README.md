@@ -18,10 +18,11 @@
 
 # Known issues
 * Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively.
-* Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. There are plans to resolve this in the future.
 * If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
 * Placing Lord Souls at Firelink Altar does not open the door - This seems to be due to not having received some number of the Lord Souls or Lordvessel. We could use information for this - If you see this, please run the /lordvessel command, which will both provide diagnostic information & the missing items. Please provide a screenshot of the output with any additional context you can provide about the missing items to the dark-souls-1 channel in the AP discord (such as, if you know it, did the items come in while you were offline, was it with other items, etc).
 * Using "Can Warp Without Lordvessel" option results in two unintended behaviors when the player does not have the Lordvessel: Frampt takes you into the Firelink Altar (expecting you to place it), and Ingward in New Londo will grant you the "Key to the Seal" location check. As workarounds: the first can be escaped by using the "unstuck" button (or homeward, a homeward bone, or dark sign), and the second is just an unintended "out of logic" check.
+* "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
+* v0.1.2 - v0.1.0: Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. This is fixed in v0.1.3 with the implementation of "fogwall keychains"
 * v0.1.0 and above: /help function doesn't provide useful output.
 * v0.0.22.0 and v0.0.21.0: Hard lock / infinite loop of receiving Rubbish if player has been /send'd a valid AP item that the client doesn't know about (Estus flask, Event items, etc). Resolved in v0.1.0 with an error message instead.
 * v0.0.21.0: Dispelling of Golden fogwalls inconcorrectly considered in logic once player had Lordvessel, even if it cannot be placed at Firelink Altar.
@@ -41,14 +42,22 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+## Version 0.1.3
+* Version update -> 0.1.3. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**
+* Feature: Add `Fogwall Keychain` and `Boss Fogwall Keychain` key items - instead of the many Fog Wall Key items and Boss Fog Wall Key items, you now have 2 keychain items whose extended descriptions tell you which fog walls you have unlocked.
+* Feature: Add `ghost_difficulty` yaml options - with possible values of `normal`, `ghosts_are_not_ghostly`, or (default) `rickert_sells_curses`. Less death-runs in New Londo! See the template yaml file or option creator tooltips for more information.
+* Feature: Add `/options` command to print out the apworld options the client knows about.
+* Fix: As a result of Fogwall Keychains, running out of key item slots should no longer happen, so the "player stops receiving key items after 64 key item slots are filled" issue will no longer occur.
+
 ## Version 0.1.2
-* Add "warp_to_all_bonfires" - making all bonfires eligible to be warp targets - on by default. This still only unlocks warp points once you've rested at them. As a side effect, the target of the warp also becomes your new respawn point upon death/homeward/dark sign.
-* Added to client "custom controls" the ability to change bonfire warp menu sort types (alphabetical, vanilla, progression), and to optionally use changed/enhanced names instead of "vanilla" ones.
-* Added connection details and custom control options persisting between client sessions.
+* Version update -> 0.1.2. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**
+* Feature: Add "warp_to_all_bonfires" - making all bonfires eligible to be warp targets - on by default. This still only unlocks warp points once you've rested at them. As a side effect, the target of the warp also becomes your new respawn point upon death/homeward/dark sign.
+* Feature: Added to client "custom controls" the ability to change bonfire warp menu sort types (alphabetical, vanilla, progression), and to optionally use changed/enhanced names instead of "vanilla" ones.
+* Feature: Added connection details and custom control options persisting between client sessions.
 * Special thanks to discord user GhostEye85 for their code and help with the bonfire warping & settings persistence.
 
 ## Version 0.1.1
-* Version update -> 0.1.0. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**
+* Version update -> 0.1.1. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**
 * Feature: `goal_condition` option, and `all_bosses` goal added. No longer will you only need 5 macguffins to fight Gwyn and beat the game! Note: DSAP does not prevent NG+ from triggering upon defeating Gwyn - it is recommended to leave him for last.
 * Feature: Added goal tracking for `all_bosses` goal to `/goalcheck`
 * Fix: Logic - Add Hellkite Bridge -> Upper Undead Burg Bonfire ladder connection

@@ -126,7 +126,7 @@ namespace DSAP.Models
                     s = s.Split("\0")[0];
                 int currentLen = s.Length;
                 if (newString.Length > currentLen)
-                    Log.Logger.Warning("Error: Tried to write message that was too long");
+                    Log.Logger.Warning("Error: Tried to write FMG (message text) that was too long");
                 else
                 {
                     byte[] bytes = Encoding.Unicode.GetBytes(newString + '\0');
@@ -137,7 +137,7 @@ namespace DSAP.Models
                     ulong strings_start = BufferLoc + (ulong)StringOffsetTableOffset + (ulong)(4 * num_entries);
                     ulong writeLocation = strings_start + (ulong)msgentry.stringOffset;
                     Memory.WriteByteArray(writeLocation, bytes);
-                    Log.Logger.Warning($"debug: wrote {bytes.Length} bytes to {writeLocation:X}, in buffer {BufferLoc:X}");
+                    Log.Logger.Debug($"UpdateMsgInPlace: wrote {bytes.Length} bytes to {writeLocation:X}, in buffer {BufferLoc:X}");
                 }
             }
         }

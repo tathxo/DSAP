@@ -131,7 +131,7 @@ namespace DSAP.Helpers
             weaponParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
 
             weaponParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 1 items to EquipParamWeapon struct");
+            Log.Logger.Debug($"Added 1 items to EquipParamWeapon struct");
 
             ParamHelper.WriteFromParamSt(weaponParamStruct, EquipParamWeapon.spOffset);
             return true;
@@ -174,7 +174,7 @@ namespace DSAP.Helpers
                                                      (ps) => ps.ParamEntries.Last().id >= 99999990);
             if (!reloadRequired)
             {
-                Log.Logger.Debug("Skipping reload of NPC Params");
+                Log.Logger.Warning("Skipping reload of NPC Params");
                 return false;
             }
             // if we are here, we are updating the params.
@@ -191,7 +191,7 @@ namespace DSAP.Helpers
             npcParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
 
             npcParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 1 items to NpcParam struct");
+            Log.Logger.Debug($"Added 1 items to NpcParam struct");
 
             ParamHelper.WriteFromParamSt(npcParamStruct, NpcParam.spOffset);
             return true;
@@ -206,7 +206,7 @@ namespace DSAP.Helpers
             {
                 npcParamStruct.ParamBytes[ghost.paramOffset + 0x145] &= 0xef;   // turn off bit 4, "isGhost"
             }
-            Log.Logger.Information($"Removed Ghostliness");
+            Log.Logger.Information($"Removed Ghostliness from ghosts");
         }
         internal static bool ModifyShopLineupParams()
         {
@@ -239,7 +239,7 @@ namespace DSAP.Helpers
             
             ParamHelper.WriteFromParamSt(shopLineupParamStruct, ShopLineupParam.spOffset);
             
-            Log.Logger.Information($"Updated Shop Lineup Params");
+            Log.Logger.Debug($"Updated Shop Lineup Params");
 
             return true;
         }

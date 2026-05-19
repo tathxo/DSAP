@@ -1858,15 +1858,15 @@ public partial class App : Application
 
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, SlotLocToItemUpgMap, scoutedLocationInfo);
         }
-        ItemLotHelper.RandomizeStartingLoadouts();
-        if (DSOptions.NoWeaponRequirements)
-            ParamHelper.RemoveWeaponRequirements();
+        ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
+
+        // update the various params (options are read within)
+        ParamHelper.ModifyWeaponParams();
+        ParamHelper.ModifyNpcParams();
+        ParamHelper.ModifyShopLineupParams();
+
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
-            ParamHelper.RemoveSpellRequirements();
-        if (DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
-            ParamHelper.RemoveGhostTransience();
-        else if (DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)
-            ParamHelper.AddRickertCurses();
+            ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
         /* Set to only receive remote items and starting inventory */
         UpdateItemLots();

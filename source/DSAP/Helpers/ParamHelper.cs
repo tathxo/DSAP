@@ -10,49 +10,6 @@ namespace DSAP.Helpers
 {
     internal class ParamHelper
     {
-        internal static bool RemoveWeaponRequirements()
-        {
-            // Read in the Param Structure
-            // Modify it,
-            // Then save it back
-            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<EquipParamWeapon> paramStruct,
-                                                     EquipParamWeapon.spOffset,
-                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
-            if (!reloadRequired)
-            {
-                Log.Logger.Debug("Skipping reload of Weapons");
-                return false;
-            }
-            // if we are here, we are updating the params.
-
-            // Get first entry's Param (e.g. White Sign Soapstone), use it as basis for new params.
-            byte[] parambytes = new byte[EquipParamWeapon.Size];
-            var copyentry = paramStruct.ParamEntries.Find((x) => x.id == 100000);
-            Array.Copy(paramStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
-
-            Array.Copy(BitConverter.GetBytes(2000000), 0, parambytes, 0x0, sizeof(int)); // make it an arrow
-            parambytes[0x8a] = 98; // set to 98 arrows
-
-            // For each existing item, modify required str/dex/int/faith
-            for (int i = 0; i < paramStruct.ParamEntries.Count; i++)
-            {
-                var ent = paramStruct.ParamEntries[i];
-                paramStruct.ParamBytes[ent.paramOffset + 0xed] = 0; // str
-                paramStruct.ParamBytes[ent.paramOffset + 0xee] = 0; // dex
-                paramStruct.ParamBytes[ent.paramOffset + 0xef] = 0; // int
-                paramStruct.ParamBytes[ent.paramOffset + 0xf0] = 0; // faith
-            }
-
-            // add a dummy item at 99999998 so that we can know we've been here.
-            paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
-
-            paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 1 items to EquipParamWeapon struct and removed stat requirements");
-
-            ParamHelper.WriteFromParamSt(paramStruct, EquipParamWeapon.spOffset);
-
-            return true;
-        }
         internal static bool RemoveSpellRequirements()
         {
             // Read in the Param Structure
@@ -144,12 +101,75 @@ namespace DSAP.Helpers
 
             return true;
         }
-        internal static bool RemoveGhostTransience()
+        internal static bool ModifyWeaponParams()
         {
+
             // Read in the Param Structure
             // Modify it,
             // Then save it back
-            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<NpcParam> paramStruct,
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<EquipParamWeapon> weaponParamStruct,
+                                                     EquipParamWeapon.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+            if (!reloadRequired)
+                Log.Logger.Debug("There may be an error during reloading Weapons Params");
+
+
+            if (App.DSOptions.NoWeaponRequirements)
+                ParamHelper.RemoveWeaponRequirements(weaponParamStruct); // modifies EquipParamWeapons
+            if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
+                ParamHelper.AddGhostEffectiveWeapons(weaponParamStruct); // modifies npc params
+
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            // Get a weapon's Param, and use it as basis for new params.
+            byte[] parambytes = new byte[EquipParamWeapon.Size];
+            var copyentry = weaponParamStruct.ParamEntries.Find((x) => x.id == 100000);
+            Array.Copy(weaponParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
+
+            Array.Copy(BitConverter.GetBytes(2000000), 0, parambytes, 0x0, sizeof(int)); // make it an arrow
+            parambytes[0x8a] = 98; // set to 98 arrows
+            weaponParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            weaponParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Information($"Added 1 items to EquipParamWeapon struct");
+
+            ParamHelper.WriteFromParamSt(weaponParamStruct, EquipParamWeapon.spOffset);
+            return true;
+        }
+        internal static bool RemoveWeaponRequirements(ParamStruct<EquipParamWeapon> paramStruct)
+        {
+            // if we are here, we are updating the params.
+            // For each existing item, modify required str/dex/int/faith
+            for (int i = 0; i < paramStruct.ParamEntries.Count; i++)
+            {
+                var ent = paramStruct.ParamEntries[i];
+                paramStruct.ParamBytes[ent.paramOffset + 0xed] = 0; // str
+                paramStruct.ParamBytes[ent.paramOffset + 0xee] = 0; // dex
+                paramStruct.ParamBytes[ent.paramOffset + 0xef] = 0; // int
+                paramStruct.ParamBytes[ent.paramOffset + 0xf0] = 0; // faith
+            }
+
+            Log.Logger.Information($"Remvoed stat requirements from all weapons and shields");
+            return true;
+        }
+        // Updates Weapons and Npc Params
+        internal static bool AddGhostEffectiveWeapons(ParamStruct<EquipParamWeapon> weaponParamStruct)
+        {
+            // For each existing weapon, modify it to allow attacking ghosts
+            for (int i = 0; i < weaponParamStruct.ParamEntries.Count; i++)
+            {
+                var ent = weaponParamStruct.ParamEntries[i];
+                weaponParamStruct.ParamBytes[ent.paramOffset + 0x102] |= 0x80; // turn on 0x102 bit 7 - isVersusGhostWep
+            }
+            Log.Logger.Information($"Added ghost-effectiveness to all weapons and shields");
+
+            return true;
+        }
+        // Updates Npc Params
+        internal static bool ModifyNpcParams()
+        {
+            // Update the NPC Param Struct, and the Weapon Param struct passed in
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<NpcParam> npcParamStruct,
                                                      NpcParam.spOffset,
                                                      (ps) => ps.ParamEntries.Last().id >= 99999990);
             if (!reloadRequired)
@@ -158,71 +178,83 @@ namespace DSAP.Helpers
                 return false;
             }
             // if we are here, we are updating the params.
+            if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
+                RemoveGhostGhostliness(npcParamStruct);
 
+
+            // Get first entry's Param (e.g. test npc), use it as basis for new params.
+            byte[] parambytes = new byte[NpcParam.Size];
+            var copyentry = npcParamStruct.ParamEntries.Find((x) => x.id == 0);
+            Array.Copy(npcParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            npcParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            npcParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Information($"Added 1 items to NpcParam struct");
+
+            ParamHelper.WriteFromParamSt(npcParamStruct, NpcParam.spOffset);
+            return true;
+
+        }
+        internal static void RemoveGhostGhostliness(ParamStruct<NpcParam> npcParamStruct)
+        {
             // find ghosts. Make them non-ghost
-            var ghosts = paramStruct.ParamEntries.Where(x => x.id == 267000 || x.id == 268000);
+            var ghosts = npcParamStruct.ParamEntries.Where(x => x.id == 267000 || x.id == 268000);
 
             foreach (var ghost in ghosts)
             {
-                paramStruct.ParamBytes[ghost.paramOffset + 0x145] &= 0xef;   // turn off bit 4, "isGhost"
+                npcParamStruct.ParamBytes[ghost.paramOffset + 0x145] &= 0xef;   // turn off bit 4, "isGhost"
             }
-
-            // Get first entry's Param (e.g. White Sign Soapstone), use it as basis for new params.
-            byte[] parambytes = new byte[NpcParam.Size];
-            var copyentry = paramStruct.ParamEntries.Find((x) => x.id == 0);
-            Array.Copy(paramStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
-
-            // For each existing npc, modify e.g. soul count?
-            //for (int i = 0; i < paramStruct.ParamEntries.Count; i++)
-            //{
-            //    var ent = paramStruct.ParamEntries[i];
-            //    paramStruct.ParamBytes[ent.paramOffset + 0xed] = 0; // str
-            //    paramStruct.ParamBytes[ent.paramOffset + 0xee] = 0; // dex
-            //    paramStruct.ParamBytes[ent.paramOffset + 0xef] = 0; // int
-            //    paramStruct.ParamBytes[ent.paramOffset + 0xf0] = 0; // faith
-            //}
-
-            // add a dummy item at 99999998 so that we can know we've been here.
-            paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
-
-            paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 1 items to NpcParam struct and removed ghostlyness");
-
-            ParamHelper.WriteFromParamSt(paramStruct, NpcParam.spOffset);
-
-            return true;
+            Log.Logger.Information($"Removed Ghostliness");
         }
-        internal static bool AddRickertCurses()
+        internal static bool ModifyShopLineupParams()
         {
             // Read in the Param Structure
             // Modify it,
             // Then save it back
-            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ShopLineupParam> paramStruct,
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ShopLineupParam> shopLineupParamStruct,
                                                      ShopLineupParam.spOffset,
                                                      (ps) => ps.ParamEntries.Last().id >= 99999990);
             if (!reloadRequired)
             {
-                Log.Logger.Debug("Skipping reload of Shop Lineup Params");
+                Log.Logger.Warning("Skipping reload of Shop Lineup Params");
                 return false;
             }
             // if we are here, we are updating the params.
 
             // Get rickert's weapon item, use it as basis for new shop lineup item.
+            if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)
+            {
+                AddRickertCurses(shopLineupParamStruct);
+            }
+
             byte[] parambytes = new byte[ShopLineupParam.Size];
-            var copyentry = paramStruct.ParamEntries.Find((x) => x.id == 2102);
-            Array.Copy(paramStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
-            Array.Copy(BitConverter.GetBytes(312), 0, parambytes, 0, sizeof(int)); // equip id
-            parambytes[0x17] = (byte)3; // equip type = good
-            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, 0x4, sizeof(int)); // value
-
-            paramStruct.AddParam(2103, parambytes, Encoding.ASCII.GetBytes("[AP]+transient curses")); 
+            var copyentry = shopLineupParamStruct.ParamEntries.Find((x) => x.id == 2102);
+            Array.Copy(shopLineupParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
             // add a dummy item at 99999998 so that we can know we've been here.
-            paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+            shopLineupParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
 
-            paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 2 items to Shop Lineup Param struct");
+            shopLineupParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            
+            ParamHelper.WriteFromParamSt(shopLineupParamStruct, ShopLineupParam.spOffset);
+            
+            Log.Logger.Information($"Updated Shop Lineup Params");
 
-            ParamHelper.WriteFromParamSt(paramStruct, ShopLineupParam.spOffset);
+            return true;
+        }
+        internal static bool AddRickertCurses(ParamStruct<ShopLineupParam> shopLineupParamStruct)
+        {
+            // Get rickert's weapon item, use it as basis for new shop lineup item.
+            byte[] parambytes = new byte[ShopLineupParam.Size];
+            var copyentry = shopLineupParamStruct.ParamEntries.Find((x) => x.id == 2102);
+            Array.Copy(shopLineupParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
+            Array.Copy(BitConverter.GetBytes(312), 0, parambytes, 0, sizeof(int)); // equip id for transient curse
+            parambytes[0x17] = (byte)3; // equip type = "good"
+            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, 0x4, sizeof(int)); // value = 1500 souls
+
+            shopLineupParamStruct.AddParam(2103, parambytes, Encoding.ASCII.GetBytes("[AP]+transient curses"));
+            Log.Logger.Information("Added transient curses to Rickert's shop");
 
             return true;
         }

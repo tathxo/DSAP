@@ -9,7 +9,7 @@
 
 ## Optional Software
 
-- [Poptracker pack with maps](https://github.com/routhken/Dark_Souls_Remastered_tracker/releases/tag/v1.0.22)
+- [Poptracker pack with maps](https://github.com/routhken/Dark_Souls_Remastered_tracker/releases)
 
 ## Setting Up
 

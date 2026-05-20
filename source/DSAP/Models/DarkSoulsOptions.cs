@@ -22,6 +22,9 @@ namespace DSAP.Models
         public bool CanWarpWithoutLordvessel { get; set; }
         // Difficulty
         public Enums.DSGhostDifficulty GhostDifficulty { get; set; }
+        public uint SoulMultiplierBase { get; set; }
+        public uint SoulMultiplierMax { get; set; }
+        public uint SoulMultiplierSteps { get; set; }
         // Sanity
         public bool FogwallSanity { get; set; }
         public bool BossFogwallSanity { get; set; }
@@ -118,6 +121,25 @@ namespace DSAP.Models
                 GhostDifficulty = gd;
             else
                 GhostDifficulty = Enums.DSGhostDifficulty.normal;
+
+            if (App.Client.Options.ContainsKey("soul_multiplier_base"))
+                SoulMultiplierBase = ((JsonElement)App.Client.Options["soul_multiplier_base"]).GetUInt32();
+            else
+                SoulMultiplierBase = 100;
+
+            if (App.Client.Options.ContainsKey("soul_multiplier_max"))
+                SoulMultiplierMax = ((JsonElement)App.Client.Options["soul_multiplier_max"]).GetUInt32();
+            else
+                SoulMultiplierMax = 100;
+
+            if (App.Client.Options.ContainsKey("soul_multiplier_steps"))
+                SoulMultiplierSteps = ((JsonElement)App.Client.Options["soul_multiplier_steps"]).GetUInt32();
+            else 
+            { // not found - default to max = base, 0 steps
+                SoulMultiplierMax = SoulMultiplierBase;
+                SoulMultiplierSteps = 0;
+            }
+            
 
             FogwallSanity = GetBool("fogwall_sanity");
             BossFogwallSanity = GetBool("boss_fogwall_sanity");

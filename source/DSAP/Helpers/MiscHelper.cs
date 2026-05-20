@@ -19,10 +19,9 @@ namespace DSAP.Helpers
         /// </summary>
         /// <param name="descArea"></param>
         /// <param name="checkArea"></param>
-        /// <returns>whether reload is required</returns>
+        /// <returns>whether can continue with reload</returns>
         internal static bool ValidateDescArea(DescArea descArea, string checkArea)
         {
-            bool requires_reload = false;
             if (descArea.DescSize >= DescArea.size)
             {
                 int old_slot = descArea.Slot;
@@ -59,16 +58,16 @@ namespace DSAP.Helpers
                         return true;
                     }
                 }
-                else // seed and slot checked out fine. Looks good, no need to reload.
+                else // seed and slot checked out fine. Looks good to proceed
                 {
-                    return false;
+                    return true;
                 }
             }
             else // desc area too small
             {
                 Log.Logger.Error($"Unknown metadata size detected on {checkArea}. A different mod may be interfering.");
                 Log.Logger.Error("Try restarting DSR without other mods.");
-                return false;
+                return false; // stop reload
             }
         }
         internal static int GetPlayerHP()
@@ -421,6 +420,12 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json, GetJsonOptions());
             return list;
         }
+        public static List<DarkSoulsItem> GetProgressiveItems()
+        {
+            var json = OpenEmbeddedResource("DSAP.Resources.ProgressiveItems.json");
+            var list = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json, GetJsonOptions());
+            return list;
+        }
         public static DarkSoulsItem UpgradeItem(DarkSoulsItem item, string itemupg, bool log = false)
         {
             if (itemupg != null)
@@ -493,6 +498,7 @@ namespace DSAP.Helpers
             results = results.Concat(GetTraps()).ToList();
             results = results.Concat(GetDsrEventItems()).ToList();
             results = results.Concat(GetBonfireWarpItems()).ToList();
+            results = results.Concat(GetProgressiveItems()).ToList();
 
             return results;
         }

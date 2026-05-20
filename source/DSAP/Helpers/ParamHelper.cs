@@ -1,10 +1,13 @@
-﻿using Archipelago.Core.Util;
+﻿using Archipelago.Core.Models;
+using Archipelago.Core.Util;
 using DSAP.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DSAP.Helpers
 {
@@ -165,6 +168,12 @@ namespace DSAP.Helpers
 
             return true;
         }
+        internal static uint SoulMultipliersReceived = 0;
+        internal static void UpdateSoulMultiplier()
+        {
+            var psm = MiscHelper.GetProgressiveItems().Find(x => x.Name == "Progressive Soul Multiplier");
+            SoulMultipliersReceived = (uint)App.Client.CurrentSession.Items.AllItemsReceived.Where(x => x.ItemId == psm.ApId).Count();
+        }
         // Updates Npc Params
         internal static bool ModifyNpcParams()
         {
@@ -174,13 +183,14 @@ namespace DSAP.Helpers
                                                      (ps) => ps.ParamEntries.Last().id >= 99999990);
             if (!reloadRequired)
             {
-                Log.Logger.Warning("Skipping reload of NPC Params");
-                return false;
+                Log.Logger.Warning("Warning: reload of NPC Params");
+                //return false;
             }
             // if we are here, we are updating the params.
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
                 RemoveGhostGhostliness(npcParamStruct);
-
+            if (App.DSOptions.SoulMultiplierBase != 100 || App.DSOptions.SoulMultiplierSteps > 0)
+                MultiplySouls(npcParamStruct);
 
             // Get first entry's Param (e.g. test npc), use it as basis for new params.
             byte[] parambytes = new byte[NpcParam.Size];
@@ -207,6 +217,85 @@ namespace DSAP.Helpers
                 npcParamStruct.ParamBytes[ghost.paramOffset + 0x145] &= 0xef;   // turn off bit 4, "isGhost"
             }
             Log.Logger.Information($"Removed Ghostliness from ghosts");
+        }
+        internal static void MultiplySouls(ParamStruct<NpcParam> npcParamStruct)
+        {
+            uint multiplier = App.DSOptions.SoulMultiplierBase; // base value, if 0 or less multiplier items received
+
+            if (App.DSOptions.SoulMultiplierSteps == 0) // explicitly handle this case to avoid dividing by 0
+                multiplier = App.DSOptions.SoulMultiplierBase;
+            else if (SoulMultipliersReceived >= App.DSOptions.SoulMultiplierSteps) // cap at max multiplier
+                multiplier = App.DSOptions.SoulMultiplierMax;
+            else if (SoulMultipliersReceived > 0) // otherwise, calculate as part of the way from base to max
+            {
+                uint difference = (App.DSOptions.SoulMultiplierMax - App.DSOptions.SoulMultiplierBase);
+                uint distance = (difference * SoulMultipliersReceived) / App.DSOptions.SoulMultiplierSteps;
+                multiplier = App.DSOptions.SoulMultiplierBase + distance;
+            }
+            // multiply all souls values
+            foreach (var enemy in npcParamStruct.ParamEntries)
+            {
+                int souls = BitConverter.ToInt32(npcParamStruct.ParamBytes, (int)(enemy.paramOffset + 0x28));
+                souls = (souls * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(souls), 0, npcParamStruct.ParamBytes, enemy.paramOffset + 0x28, sizeof(int));
+            }
+            Log.Logger.Information($"Updated enemy soul drops with multiplier {multiplier}%");
+        }
+        // Updates Game Area Params
+        internal static bool ModifyGameAreaParams()
+        {
+            // Update the NPC Param Struct, and the Weapon Param struct passed in
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<GameAreaParam> gameAreaParamStruct,
+                                                     GameAreaParam.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+            if (!reloadRequired)
+            {
+                Log.Logger.Warning("Warning: reload of GameArea Params");
+                //return false;
+            }
+            // if we are here, we are updating the params.
+            if (App.DSOptions.SoulMultiplierBase != 100 || App.DSOptions.SoulMultiplierMax != 100)
+                MultiplySouls(gameAreaParamStruct);
+
+            // Get first entry's Param (e.g. test npc), use it as basis for new params.
+            byte[] parambytes = new byte[GameAreaParam.Size];
+            var copyentry = gameAreaParamStruct.ParamEntries.Find((x) => x.id == 0);
+            Array.Copy(gameAreaParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            gameAreaParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            gameAreaParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Debug($"Added 1 items to GameAreaParam struct");
+
+            ParamHelper.WriteFromParamSt(gameAreaParamStruct, GameAreaParam.spOffset);
+            return true;
+
+        }
+        internal static void MultiplySouls(ParamStruct<GameAreaParam> gameAreaParamStruct)
+        {
+            uint multiplier = App.DSOptions.SoulMultiplierBase; // base value, if 0 or less multiplier items received
+
+            if (SoulMultipliersReceived >= App.DSOptions.SoulMultiplierSteps) // cap at max multiplier
+                multiplier = App.DSOptions.SoulMultiplierMax;
+            else if (SoulMultipliersReceived > 0) // otherwise, calculate as part of the way from base to max
+            {
+                uint difference = (App.DSOptions.SoulMultiplierMax - App.DSOptions.SoulMultiplierBase);
+                uint distance = (difference * SoulMultipliersReceived) / App.DSOptions.SoulMultiplierSteps;
+                multiplier = App.DSOptions.SoulMultiplierBase + distance;
+            }
+            // multiply all souls values
+            foreach (var area in gameAreaParamStruct.ParamEntries)
+            {
+                int singlesouls = BitConverter.ToInt32(gameAreaParamStruct.ParamBytes, (int)(area.paramOffset + 0x4));
+                singlesouls = (singlesouls * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(singlesouls), 0, gameAreaParamStruct.ParamBytes, area.paramOffset + 0x4, sizeof(int));
+
+                int multisouls = BitConverter.ToInt32(gameAreaParamStruct.ParamBytes, (int)(area.paramOffset + 0x0));
+                multisouls = (multisouls * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(multisouls), 0, gameAreaParamStruct.ParamBytes, area.paramOffset + 0x0, sizeof(int));
+            }
+            Log.Logger.Information($"Updated Boss soul drops with multiplier {multiplier}%");
         }
         internal static bool ModifyShopLineupParams()
         {
@@ -276,8 +365,8 @@ namespace DSAP.Helpers
             result.ReadFromBytes(BufferLoc, BufferSize, isUsedCondition);
             if (result.DescArea != null)
             {
-                bool reloadRequired = MiscHelper.ValidateDescArea(result.DescArea, typeof(ParamT).Name);
-                if (!reloadRequired)
+                bool canReload = MiscHelper.ValidateDescArea(result.DescArea, typeof(ParamT).Name);
+                if (!canReload)
                 {
                     return false;
                 }
@@ -319,6 +408,7 @@ namespace DSAP.Helpers
                 Memory.FreeMemory((nint)oldBufferLoc);
                 Log.Logger.Debug($"Free old {typeof(ParamT).Name} @ {oldBufferLoc:X}");
             }
+            
             return true;
         }
     }

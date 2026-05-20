@@ -46,6 +46,7 @@ public partial class App : Application
     public static ArchipelagoClient Client { get; set; }
     public static List<DarkSoulsItem> AllItems { get; set; }
     public static Dictionary<int, DarkSoulsItem> AllItemsByApId { get; set; }
+    public static Dictionary<int, DarkSoulsItem> EventsByApId { get; set; }
     public static List<BonfireWarp> AllowedBonfireWarps { get; set; } = [];
     // 
     private static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
@@ -710,6 +711,16 @@ public partial class App : Application
         {
             ReceiveBonfireWarpItem(item.ApId);
         }
+        else if (category == (int)DSItemCategory.Progressive)
+        {
+            if (item.Name == "Progressive Soul Multiplier")
+            {
+                ParamHelper.UpdateSoulMultiplier();
+                ParamHelper.ModifyNpcParams();
+                ParamHelper.ModifyGameAreaParams();
+                // the above two lines crash the game for some reason. investigate
+            }
+        }
         else
         {
             if (doPopup)
@@ -861,6 +872,7 @@ public partial class App : Application
 
         AllItems = MiscHelper.GetAllItems();
         AllItemsByApId = AllItems.ToDictionary(x => x.ApId, x => x);
+        EventsByApId = MiscHelper.GetDsrEventItems().ToDictionary(x => x.ApId, x => x);
         Client.Connected += OnConnectedAsync;
         Client.Disconnected += OnDisconnected;
         Client.GameDisconnected += OnGameDisconnected;
@@ -1449,8 +1461,7 @@ public partial class App : Application
                 }
             }
 
-            var fog_key = MiscHelper.GetDsrEventItems().Find(x => x.ApId == e.Item.Id);
-            if (fog_key != null) // make sure to receive fog key items; then later received the "unlock event"
+            if (EventsByApId.TryGetValue((int)e.Item.Id, out var fog_key)) // make sure to receive fog key items; then later received the "unlock event"
             {
                 AddItemWithMessage((int)DSItemCategory.KeyItems, fog_key.Id, 1);
 
@@ -1862,7 +1873,10 @@ public partial class App : Application
 
         // update the various params (options are read within)
         ParamHelper.ModifyWeaponParams();
+
+        ParamHelper.UpdateSoulMultiplier();
         ParamHelper.ModifyNpcParams();
+        ParamHelper.ModifyGameAreaParams();
         ParamHelper.ModifyShopLineupParams();
 
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)

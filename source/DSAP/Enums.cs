@@ -41,6 +41,7 @@
             MysteryGoods = 0x40000000,
             DsrEvent = 0x11111111,
             BonfireWarp = 0x11111112,
+            Progressive = 0x11111113,
             Trap = 0x33333333
         }
         public enum SpellCategory

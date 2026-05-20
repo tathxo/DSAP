@@ -112,6 +112,20 @@ class DSRWorld(World):
         if self.options.upgraded_weapons_percentage.value > 0 and len(self.options.upgraded_weapons_allowed_infusions.value) == 0:
             self.options.upgraded_weapons_allowed_infusions.value = ['Normal']
 
+        # If multiplier steps is 0, don't make there be an increase at all. Base is the base and max
+        if self.options.soul_multiplier_steps.value == 0:
+            self.options.soul_multiplier_max.value = self.options.soul_multiplier_base.value
+
+        # If multiplier base and max are equal, set steps to 0.
+        if self.options.soul_multiplier_max.value == self.options.soul_multiplier_base.value:
+            self.options.soul_multiplier_steps.value = 0
+
+        # If multiplier base > max, reverse them
+        if self.options.soul_multiplier_base.value > self.options.soul_multiplier_max.value:
+            (self.options.soul_multiplier_base.value, self.options.soul_multiplier_max.value) = (self.options.soul_multiplier_max.value, self.options.soul_multiplier_base.value)
+
+
+
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
@@ -614,9 +628,11 @@ class DSRWorld(World):
 
 
     def create_item(self, name: str) -> Item:
-        useful_categories = {
+        useful_categories = [
             DSRItemCategory.EMBER,
-        }
+            DSRItemCategory.FIRE_KEEPER_SOUL,
+            DSRItemCategory.PROGRESSIVE_MULTIPLIER,
+        ]
         data = self.item_name_to_id[name]
 
         if name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT, DSRItemCategory.KEY_ITEM, DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]:
@@ -911,6 +927,9 @@ class DSRWorld(World):
                 "warp_to_all_bonfires": self.options.warp_to_all_bonfires.value,
                 # Difficulty
                 "ghost_difficulty": self.options.ghost_difficulty.value,
+                "soul_multiplier_base": self.options.soul_multiplier_base.value,
+                "soul_multiplier_max": self.options.soul_multiplier_max.value,
+                "soul_multiplier_steps": self.options.soul_multiplier_steps.value,
                 # Sanity
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
@@ -941,7 +960,7 @@ class DSRWorld(World):
             "itemsId": items_id,
             "itemsUpgrades": items_upgrades,
             "itemsAddress": items_address,
-            "apworld_api_version" : "0.1.3.0" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.1.4.0" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

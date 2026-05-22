@@ -310,7 +310,8 @@ class DSROption(PerGameCommonOptions):
     # QoL
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
     warp_to_all_bonfires: WarpToAllBonfires
-
+  
+  
     # Difficulty
     ghost_difficulty: GhostDifficulty
     soul_multiplier_base: SoulMultiplierBase

@@ -254,6 +254,7 @@ class GoalConditionOption(Choice):
     option_gwyn = 0
     option_all_bosses = 1
     option_ornstein_and_smough = 2
+    option_manus = 3
     default = 0
     
 # Group relevant options

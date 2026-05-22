@@ -7,7 +7,8 @@
         {
             gwyn = 0,
             all_bosses = 1,
-            ornstein_and_smough = 2
+            ornstein_and_smough = 2,
+            manus = 3
         }
         public enum DSGhostDifficulty
         {

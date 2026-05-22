@@ -668,6 +668,8 @@ class DSRWorld(World):
                 )
             case GoalConditionOption.option_ornstein_and_smough:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has("Ornstein and Smough Defeated", self.player)
+            case GoalConditionOption.option_manus:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has("Manus, Father of the Abyss Defeated", self.player)
 
         set_rule(self.multiworld.get_entrance("Undead Asylum Cell -> Undead Asylum Cell Door", self.player), lambda state: state.has("Dungeon Cell Key", self.player))   
         #set_rule(self.multiworld.get_entrance("Undead Asylum Cell Door -> Northern Undead Asylum", self.player), lambda state: state.has("Dungeon Cell Key", self.player))      

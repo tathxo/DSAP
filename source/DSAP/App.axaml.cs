@@ -547,6 +547,10 @@ public partial class App : Application
         {
             Log.Logger.Warning("Your goal is to defeat All Bosses.");
         }
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        { 
+            Log.Logger.Debug("Your  goal is to defeat Ornstein and Smough.");
+        }
         else
         {
             Log.Logger.Warning("Unknown goal condition detected.");
@@ -1263,7 +1267,14 @@ public partial class App : Application
                 }
             }
         }
-
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        {
+            if (e.CompletedLocation.Name.Contains("Ornstein"))
+            {
+                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
+                SendGoal();
+            }
+        }    
         // if it's in our scouted locs & not in our own game,
         if (scoutedLocationInfo.TryGetValue(e.CompletedLocation.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
         {

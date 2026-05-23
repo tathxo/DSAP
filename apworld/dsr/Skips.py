@@ -19,6 +19,7 @@ class SkipDifficulty(IntEnum):
     VERY_HARD=enum.auto()
 
 
+
 class SkipTechniques(IntEnum):
     PLATFORMING=enum.auto()
     DEATHCAM=enum.auto()
@@ -54,6 +55,7 @@ class Skip():
     def has_rules(self):
         return not (len(self.required_items) + len(self.required_items_groups) == 0 and self.extra_conditions is None)
 
+
 def get_all_skips() -> Iterable[Skip]:
     return sorted(_all_skips, key=lambda x: x.name)
 
@@ -78,17 +80,18 @@ def required_item_pool_for_skips(world: World, current_required_item_pool: list[
     skip_progression_items: set[str] = set()
 
     for skip in enabled_skips:
-        skip_progression_item_groups.union(skip.required_items_groups)
-        skip_progression_items.union(skip.required_items)
+        skip_progression_item_groups = skip_progression_item_groups.union(skip.required_items_groups)
+        skip_progression_items = skip_progression_items.union(skip.required_items)
 
     for group in skip_progression_item_groups:
         
-        skip_progression_items.add(World.random.choice(Groups.item_name_groups[group]))
+        skip_progression_items.add(world.random.choice(Groups.item_name_groups[group]))
 
     result = []
     for item in skip_progression_items:
         if item not in current_required_item_pool:
             result.append(item)
+    # print(result)
     return result
     
 
@@ -178,14 +181,6 @@ Skip(name="Quellag Skip",
     difficulty=SkipDifficulty.HARD     
 )
 
-
-Skip(name="Pinwheel Skip",
-     starting_location="The Catacombs - After Door 1",
-     ending_location="Tomb of the Giants",
-
-    techniques=[SkipTechniques.WRONG_WARP],
-    difficulty=SkipDifficulty.EASY     
-)
 
 Skip(name="Kiln Wrong warp",
      starting_location= "Firelink Altar",
@@ -277,6 +272,19 @@ Skip(name=f"Firesage skip",
     required_items_groups=["Medium Shields"]  
 )
 
+
+
+
+Skip(name="Pinwheel Skip",
+     starting_location="The Catacombs - After Door 1",
+     ending_location="Tomb of the Giants",
+
+    techniques=[SkipTechniques.WRONG_WARP],
+    difficulty=SkipDifficulty.EASY,
+
+    extra_conditions= lambda state, player: state.can_reach_location("The Depths", player), # You can farm basilisks there
+    # required_items=["Eye of death"] 
+)
 
 Skip(name="Quellag Boss Cheese",
      starting_location="Lower Blighttown - After Quelaag",

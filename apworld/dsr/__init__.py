@@ -363,9 +363,9 @@ class DSRWorld(World):
         create_connection_2way("Lower Blighttown", "Upper Blighttown VotD Side")
         create_connection("Lower Blighttown", "The Great Hollow")
 
-        create_connection("Lower Blighttown", "Lower Blighttown - Quelaag")
+        create_connection_2way("Lower Blighttown", "Lower Blighttown - Quelaag")
         create_connection("Lower Blighttown - Quelaag", "Lower Blighttown - After Quelaag")
-        create_connection("Lower Blighttown - After Quelaag", "Demon Ruins - Early")
+        create_connection_2way("Lower Blighttown - After Quelaag", "Demon Ruins - Early")
 
         create_connection("The Great Hollow", "Ash Lake")
 
@@ -405,8 +405,8 @@ class DSRWorld(World):
         create_connection("The Catacombs", "The Catacombs - Door 1")
         create_connection("The Catacombs - Door 1", "The Catacombs - After Door 1")
         create_connection("The Catacombs - After Door 1", "The Catacombs - Pinwheel")
-        create_connection("The Catacombs - Pinwheel", "The Catacombs - After Pinwheel")
-        create_connection("The Catacombs - After Pinwheel", "Tomb of the Giants")
+        create_connection_2way("The Catacombs - Pinwheel", "The Catacombs - After Pinwheel")
+        create_connection_2way("The Catacombs - After Pinwheel", "Tomb of the Giants")
 
         create_connection("Tomb of the Giants", "Tomb of the Giants - After White Fog")
         create_connection("Tomb of the Giants - After White Fog", "Tomb of the Giants - Behind Golden Fog Wall")

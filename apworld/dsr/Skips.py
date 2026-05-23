@@ -19,7 +19,6 @@ class SkipDifficulty(IntEnum):
     VERY_HARD=enum.auto()
 
 
-
 class SkipTechniques(IntEnum):
     PLATFORMING=enum.auto()
     DEATHCAM=enum.auto()
@@ -53,11 +52,7 @@ class Skip():
         _all_skips.append(self)
 
     def has_rules(self):
-        return not (len(self.required_items) == 0 and self.extra_conditions is None)
-
-
-
-
+        return not (len(self.required_items) + len(self.required_items_groups) == 0 and self.extra_conditions is None)
 
 def get_all_skips() -> Iterable[Skip]:
     return sorted(_all_skips, key=lambda x: x.name)

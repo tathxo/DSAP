@@ -562,7 +562,7 @@ class DSRWorld(World):
             item.classification = ItemClassification.progression
         crip = [self.create_item(item.name) for item in rip]
         crip.extend(required_skip_itempool)
-        
+
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]
         guaranteedpool = BuildGuaranteedItemPool(self)
@@ -928,7 +928,9 @@ class DSRWorld(World):
                 continue
  
             set_rule(spot=entrance, 
-                     rule=lambda state: state.has_all(skip.required_items, self.player) 
+                     rule=lambda state: (state.has_all(skip.required_items, self.player)
+                                        and all(state.has_group(group, self.player) for group in skip.required_items_groups)
+                                        and skip.extra_conditions(state, self.player) if skip.extra_conditions is not None else True)
                                         or entrance.access_rule(state)) # Lets us specify multiple skip techniques
         
 

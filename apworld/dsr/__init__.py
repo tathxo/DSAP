@@ -11,6 +11,7 @@ from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, it
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
+from . import Skips
 
 from settings import Group, FilePath
 
@@ -328,6 +329,7 @@ class DSRWorld(World):
         create_connection("Darkroot Garden - Moonlight Butterfly", "Darkroot Garden - After Moonlight Butterfly")
 
         create_connection("Undead Burg Basement Door", "Lower Undead Burg")
+        create_connection("Lower Undead Burg", "Upper Undead Burg") 
         create_connection("Lower Undead Burg", "Depths")
         create_connection("Lower Undead Burg", "Lower Undead Burg - After Residence Key")
         create_connection("Lower Undead Burg", "Lower Undead Burg - Capra Demon")
@@ -359,11 +361,11 @@ class DSRWorld(World):
         create_connection_2way("Upper Blighttown Depths Side", "Lower Blighttown - Fog")
         create_connection_2way("Lower Blighttown - Fog", "Lower Blighttown")
         create_connection_2way("Lower Blighttown", "Upper Blighttown VotD Side")
-        create_connection("Lower Blighttown", "Demon Ruins - Early")
         create_connection("Lower Blighttown", "The Great Hollow")
 
         create_connection("Lower Blighttown", "Lower Blighttown - Quelaag")
         create_connection("Lower Blighttown - Quelaag", "Lower Blighttown - After Quelaag")
+        create_connection("Lower Blighttown - After Quelaag", "Demon Ruins - Early")
 
         create_connection("The Great Hollow", "Ash Lake")
 
@@ -438,6 +440,15 @@ class DSRWorld(World):
         create_connection("Oolacile Township - After Crest Key", "Royal Wood - After Hawkeye Gough")
         create_connection("Oolacile Township", "Chasm of the Abyss")
         create_connection("Chasm of the Abyss", "Chasm of the Abyss - Manus")
+
+        # Skips 
+        for skip in Skips.get_all_skips():
+            # We create connection only when it already doesnt exist
+            try:
+                self.get_entrance(f"{skip.starting_location} -> {skip.ending_location}")
+            except KeyError: 
+                create_connection(skip.starting_location, skip.ending_location)
+
         # end of entrances
         
     # For each region, add the associated locations retrieved from the corresponding location_table
@@ -892,11 +903,33 @@ class DSRWorld(World):
         # End yaml options for "logic"
         
 
+        # Skip logic
+        selected_skips = Skips.parse_skip_options([self.options.skip_logic_easy, 
+                                                   self.options.skip_logic_medium, 
+                                                   self.options.skip_logic_hard, 
+                                                   self.options.skip_logic_very_hard])
+
+        for skip in Skips.get_user_selected_skips(selected_skips):
+            if not skip.has_rules(): 
+                continue
+
+            # Currently not used
+            # extra_condition_value = skip.extra_conditions() if skip.extra_conditions is not None else True
+            
+            entrance = self.multiworld.get_entrance(f"{skip.starting_location} -> {skip.ending_location}", self.player)
+
+            set_rule(spot=entrance, 
+                     rule=lambda state: state.has_all(skip.required_items, self.player) 
+                                        or entrance.access_rule(state)) # The original access rule
+        
+
+
+
         # for debugging purposes, you may want to visualize the layout of your world. Uncomment the following code to
         # write a PlantUML diagram to the file "my_world.puml" that can help you see whether your regions and locations
         # are connected and placed as desired
-        # from Utils import visualize_regions
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+        from Utils import visualize_regions
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
  
         
     def fill_slot_data(self) -> Dict[str, object]:

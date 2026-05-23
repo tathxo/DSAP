@@ -1,7 +1,8 @@
 import typing
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionDict, OptionCounter, OptionSet
 from Options import OptionGroup
+from . import Skips
 
 
 # QoL
@@ -102,6 +103,46 @@ class BossFogwallSanity(Toggle):
       Seath (2nd encounter), and
       Kalameet."""
     display_name = "Boss Fogwall Sanity" 
+
+
+
+
+
+def skip_logic_helper(difficulty: Skips.SkipDifficulty): 
+    available_skips = Skips.get_all_skips()
+    valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
+    default = {skip.name: 100 for skip in available_skips if skip.difficulty == difficulty}
+
+    return valid_keys, default
+
+class SkipLogicEasy(OptionCounter):
+    """ In the following section you can enable specific skips to perform. The skips are losely categorized by their difficulty. 
+        Number corresponds to the % chance of the skip being enabled in the playthrough. Set a value to 100 to always enable it or 0 to disable it entirely. 
+        Recommended to edit in the yaml. 
+
+        For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?usp=sharing
+    """
+    display_name = "Enable Easy Difficulty Skips"
+    difficulty = Skips.SkipDifficulty.EASY
+    valid_keys, default = skip_logic_helper(difficulty)
+
+
+class SkipLogicMedium(OptionCounter):
+    display_name = "Enabled Medium Skips"
+    difficulty=Skips.SkipDifficulty.MEDIUM
+    valid_keys, default = skip_logic_helper(difficulty)
+
+
+class SkipLogicHard(OptionCounter):
+    display_name = "Enabled Hard Skips"
+    difficulty=Skips.SkipDifficulty.HARD
+    valid_keys, default = skip_logic_helper(difficulty)
+
+class SkipLogicVeryHard(OptionCounter):
+    display_name = "Enabled Very Hard Skips"
+    difficulty=Skips.SkipDifficulty.VERY_HARD
+    valid_keys, default = skip_logic_helper(difficulty)
+
 
 class LogicToAccessCatacombs(Choice):
     """Artificial logic for The Catacombs access. 
@@ -272,6 +313,10 @@ option_groups = [
         ]),
     OptionGroup("Logic", [
         LogicToAccessCatacombs,
+        SkipLogicEasy,
+        SkipLogicMedium,
+        SkipLogicHard,
+        SkipLogicVeryHard
         ]),
     OptionGroup("Equipment", [
         RandomizeStartingLoadouts,
@@ -318,7 +363,13 @@ class DSROption(PerGameCommonOptions):
     # Sanity
     fogwall_sanity: FogwallSanity
     boss_fogwall_sanity: BossFogwallSanity
+
+    # Logic
     logic_to_access_catacombs: LogicToAccessCatacombs
+    skip_logic_easy: SkipLogicEasy
+    skip_logic_medium: SkipLogicMedium
+    skip_logic_hard: SkipLogicHard
+    skip_logic_very_hard: SkipLogicVeryHard
 
     # Equipment
     randomize_starting_loadouts: RandomizeStartingLoadouts

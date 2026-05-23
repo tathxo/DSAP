@@ -298,17 +298,6 @@ Skip(name="Quellag Boss Cheese",
 )
 
 
-Skip(name="Lost Izalith Shortcut",
-     starting_location="Demon Ruins",
-     ending_location= "Lost Izalith" ,
-
-    techniques=[],
-    difficulty=SkipDifficulty.EASY ,
-
-    extra_conditions= lambda state, player: state.can_reach_location("The Depths", player), # You can farm rats there
-    # required_items=["Renewable Humanity"] 
-)
-
 Skip(name="Anor londo rafters drop",
      starting_location="Anor Londo",
      ending_location=  "Anor Londo - Painting Room",

@@ -3,7 +3,11 @@ from typing import Iterable, Callable
 import enum
 from enum import IntEnum
 from Options import OptionCounter
+from BaseClasses import CollectionState
 
+from worlds.AutoWorld import World
+
+from . import Items, Groups
 
 # Skips automatically populate this with their init method
 _all_skips: list["Skip"] = []
@@ -24,6 +28,7 @@ class SkipTechniques(IntEnum):
     SEAM_WALKING=enum.auto()
     BOSS_CHEESE=enum.auto()
     WRONG_WARP=enum.auto()
+    FALL_CONTROL_QUITOUT=enum.auto()
 
 
 @dataclasses.dataclass
@@ -39,7 +44,10 @@ class Skip():
 
     # These are used for Rules
     required_items: list[str] = dataclasses.field(default_factory=list)
-    extra_conditions: Callable[..., bool]|None = None
+    required_items_groups: list[str] = dataclasses.field(default_factory=list)
+    
+    #state and player
+    extra_conditions: Callable[[CollectionState, int], bool]|None = None
 
     def __post_init__(self):
         _all_skips.append(self)
@@ -54,18 +62,41 @@ class Skip():
 def get_all_skips() -> Iterable[Skip]:
     return sorted(_all_skips, key=lambda x: x.name)
 
-def get_user_selected_skips(selected_skips_names: list[str]) -> Iterable[Skip]:
-    return filter(lambda skip: skip.name in selected_skips_names , get_all_skips())
 
-def parse_skip_options(options:list[OptionCounter]) -> list[str]:
-
-    result = []
-
+def get_user_selected_skips(options:list[OptionCounter]) -> Iterable[Skip]: 
+    enabled_skips = []
     for option in options:
         for key, val in option.items():
-            if val> 0:
-                result.append(key)
+            if val != 0:
+                enabled_skips.append(key)
+    return filter(lambda skip: skip.name in enabled_skips, get_all_skips())
+
+
+
+def required_item_pool_for_skips(world: World, current_required_item_pool: list[str]) -> list[str]: 
+    skip_options = [world.options.skip_logic_easy, 
+                    world.options.skip_logic_medium, 
+                    world.options.skip_logic_hard, 
+                    world.options.skip_logic_very_hard]
+    enabled_skips = get_user_selected_skips(skip_options)
+    skip_progression_item_groups: set[str] = set()
+    skip_progression_items: set[str] = set()
+
+    for skip in enabled_skips:
+        skip_progression_item_groups.union(skip.required_items_groups)
+        skip_progression_items.union(skip.required_items)
+
+    for group in skip_progression_item_groups:
+        
+        skip_progression_items.add(World.random.choice(Groups.item_name_groups[group]))
+
+    result = []
+    for item in skip_progression_items:
+        if item not in current_required_item_pool:
+            result.append(item)
     return result
+    
+
 
 
 
@@ -119,14 +150,6 @@ Skip(name="Blighttown Key Skip - From Undeadburg",
     difficulty=SkipDifficulty.MEDIUM     
 )
 
-# TODO remove from __init__ but set as default
-Skip(name="Blighttown fog skip",
-     starting_location="Upper Blighttown Depths Side",
-     ending_location="Lower Blighttown",
-
-    techniques=[],
-    difficulty=SkipDifficulty.EASY     
-)
 
 Skip(name="The Annex skip",
      starting_location="Painted World of Ariamis",
@@ -159,7 +182,6 @@ Skip(name="Quellag Skip",
     techniques=[SkipTechniques.DEATHCAM],
     difficulty=SkipDifficulty.HARD     
 )
-
 
 
 Skip(name="Pinwheel Skip",
@@ -222,9 +244,32 @@ Skip(name="Tomb of Giants fogwall skip",
 )
 
 
+Skip(name="OS fogwall Cheese",
+     starting_location="Anor Londo - After Second Fog",
+     ending_location="Anor Londo - Ornstein and Smough" ,
+
+    techniques=[SkipTechniques.BOSS_CHEESE],
+    difficulty=SkipDifficulty.MEDIUM ,
+)
+
+
+
+
+Skip(name="Moonlight Butterfly Skip",
+     starting_location="Darkroot Garden",
+     ending_location= "Darkroot Garden - After Moonlight Butterfly",
+
+    techniques=[SkipTechniques.DEATHCAM ],
+    difficulty=SkipDifficulty.VERY_HARD ,
+)
+
+
+
 ########
 ### Skips with items
 ########
+
+#TODO: After shop sanity gets implemented conditions for this need to change, the extra condition lambda -> required item check
 
 
 Skip(name=f"Firesage skip",
@@ -234,7 +279,7 @@ Skip(name=f"Firesage skip",
     techniques=[SkipTechniques.OUT_OF_BOUNDS, SkipTechniques.GRAB_CANCEL],
     difficulty=SkipDifficulty.HARD,
 
-    required_items=["Shield"]  # TODO CHANGE TO MEDIUM SHIELD   
+    required_items_groups=["Medium Shields"]  
 )
 
 
@@ -245,7 +290,114 @@ Skip(name="Quellag Boss Cheese",
     techniques=[SkipTechniques.BOSS_CHEESE ],
     difficulty=SkipDifficulty.EASY ,
 
-    required_items=["Dungpie"]  # TODO CHANGE    
+    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg", player),
+    # required_items=["Renewable Dung Pie"] 
+)
+
+
+Skip(name="Lost Izalith Shortcut",
+     starting_location="Demon Ruins",
+     ending_location= "Lost Izalith" ,
+
+    techniques=[],
+    difficulty=SkipDifficulty.EASY ,
+
+    extra_conditions= lambda state, player: state.can_reach_location("The Depths", player), # You can farm rats there
+    # required_items=["Renewable Humanity"] 
+)
+
+Skip(name="Anor londo rafters drop",
+     starting_location="Anor Londo",
+     ending_location=  "Anor Londo - Painting Room",
+
+    techniques=[SkipTechniques.FALL_CONTROL_QUITOUT ],
+    difficulty=SkipDifficulty.MEDIUM ,
+
+    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg - After Residence Key", player),
+    required_items_groups=["Catalysts"],
+    # required_items=["Fall Control"] 
+)
+
+
+Skip(name="Four kings skip",
+     starting_location="Upper New Londo Ruins",
+     ending_location="The Abyss",
+
+    techniques=[SkipTechniques.OUT_OF_BOUNDS],
+    difficulty=SkipDifficulty.MEDIUM,
+
+    required_items=["Covenant of Artorias"] 
+)
+
+# There is also a version of this without firebombs
+Skip(name="Capra Cheese",
+     starting_location= "Lower Undead Burg",
+     ending_location="Lower Undead Burg - Capra Demon",
+
+    techniques=[SkipTechniques.BOSS_CHEESE ],
+    difficulty=SkipDifficulty.EASY ,
+
+        ### Player can always reach undead merchant (female) from this location, so no condition necessary till shop sanity
+    # extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg", player), 
+    # required_items_groups=["Renewable Throwable"] 
+)
+
+Skip(name="Manus Cheese",
+     starting_location="Chasm of the Abyss",
+     ending_location= "Chasm of the Abyss - Manus" ,
+
+    techniques=[SkipTechniques.BOSS_CHEESE ],
+    difficulty=SkipDifficulty.EASY ,
+    required_items_groups=["Ranged Weapons"],
+    required_items=["Hawk Ring"] 
+)
+
+
+Skip(name="Archives Golden Fog gate skip",
+     starting_location="Anor Londo",
+     ending_location="The Duke's Archives",
+
+    techniques=[SkipTechniques.OUT_OF_BOUNDS, SkipTechniques.SEAM_WALKING ],
+    difficulty=SkipDifficulty.HARD ,
+
+    required_items_groups=["Bows"] 
+)
+
+
+Skip(name="Artorias skip",
+     starting_location="Royal Wood",
+     ending_location="Chasm of the Abyss" ,
+
+    techniques=[SkipTechniques.FALL_CONTROL_QUITOUT ],
+    difficulty=SkipDifficulty.MEDIUM ,
+
+    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg - After Residence Key", player),
+    required_items_groups=["Catalysts"],
+    # required_items=["Fall Control"] 
+)
+
+
+Skip(name="Artorias Cheese",
+     starting_location= "Oolacile Township",
+     ending_location="Royal Wood - Artorias",
+
+    techniques=[SkipTechniques.BOSS_CHEESE ],
+    difficulty=SkipDifficulty.EASY ,
+
+    required_items_groups=["Bows"] 
+)
+
+
+Skip(name="Great Hollow Skip",
+     starting_location="Upper Blighttown Depths Side",
+     ending_location="Ash Lake" ,
+
+    techniques=[SkipTechniques.OUT_OF_BOUNDS, SkipTechniques.SEAM_WALKING, SkipTechniques.FALL_CONTROL_QUITOUT ],
+    difficulty=SkipDifficulty.HARD ,
+
+    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg - After Residence Key", player),
+    required_items_groups=["Catalysts"],
+    # required_items=["Fall Control"] 
 )
 
 

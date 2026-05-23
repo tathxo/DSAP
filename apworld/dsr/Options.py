@@ -111,20 +111,21 @@ class BossFogwallSanity(Toggle):
 def skip_logic_helper(difficulty: Skips.SkipDifficulty): 
     available_skips = Skips.get_all_skips()
     valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
-    default = {skip.name: 100 for skip in available_skips if skip.difficulty == difficulty}
+    default = {skip.name: 0 for skip in available_skips if skip.difficulty == difficulty}
 
     return valid_keys, default
 
 class SkipLogicEasy(OptionCounter):
     """ In the following section you can enable specific skips to perform. The skips are losely categorized by their difficulty. 
-        Number corresponds to the % chance of the skip being enabled in the playthrough. Set a value to 100 to always enable it or 0 to disable it entirely. 
+        Numbers other than 0 put the skip into logic.
         Recommended to edit in the yaml. 
 
         For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?usp=sharing
     """
-    display_name = "Enable Easy Difficulty Skips"
+    display_name = "Enabled Easy Skips"
     difficulty = Skips.SkipDifficulty.EASY
     valid_keys, default = skip_logic_helper(difficulty)
+    cull_zeroes=True
 
 
 class SkipLogicMedium(OptionCounter):

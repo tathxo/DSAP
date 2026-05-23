@@ -83,6 +83,7 @@ item_name_groups = {
     "Spell Tools"       : [item[0] for item in _all_items_base if item[2] == DSRItemCategory.WEAPON and item[3] == DSRWeaponType.SpellTool],
     "Melee Weapons"     : [item[0] for item in _all_items_base if item[2] == DSRItemCategory.WEAPON and item[3] == DSRWeaponType.Melee],
     "Ranged Weapons"    : [item[0] for item in _all_items_base if item[2] == DSRItemCategory.WEAPON and item[3] == DSRWeaponType.Ranged],
+    "Bows"              : [item[0] for item in _all_items_base if item[2] == DSRItemCategory.WEAPON and item[3] == DSRWeaponType.Ranged and "bow" in item[0].lower() and not "cross" in item[0].lower()],
     # Spell Tool types
     "Catalysts"         : [item for item in item_dictionary.keys() if "catalyst" in item.lower()],
     "Talismans"         : [item for item in item_dictionary.keys() if "talisman" in item.lower() and "lloyd" not in item.lower()],
@@ -94,8 +95,15 @@ item_name_groups = {
     "Carvings"          : [item for item in item_dictionary.keys() if "carving" in item.lower()],
     "Multiplayer Items" : [item for item in multiplayer_items],
     "Covenant Items"    : [item for item in covenant_items],
-    "Junk"              : [item for item in item_dictionary.keys() if "carving" in item.lower()] + [item for item in multiplayer_items] + [item for item in covenant_items] + ["Pendant"] + ["Prism Stone x20"]
+    "Junk"              : [item for item in item_dictionary.keys() if "carving" in item.lower()] + [item for item in multiplayer_items] + [item for item in covenant_items] + ["Pendant"] + ["Prism Stone x20"],
+
+    # Used for skips
+    "Medium Shields"    : ["Balder Shield","Black Knight Shield","Bloodshield","Caduceus Kite Shield","Crest Shield", "Crystal Shield", 
+                        "Dragon Crest Shield", "East-West Shield", "Gargoyle's Shield", "Grass Crest Shield", "Heater Shield", "Hollow Soldier Shield", 
+                        "Iron Round Shield", "Knight Shield", "Large Leather Shield","Pierce Shield", "Sanctus", "Silver Knight Shield", "Spider Shield", 
+                        "Spiked Shield", "Sunlight Shield", "Tower Kite Shield", "Wooden Shield"],
 }
+
 
 location_name_groups = {
     "All Doors": set(),

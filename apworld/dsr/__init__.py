@@ -204,6 +204,7 @@ class DSRWorld(World):
             "Sen's Fortress - After Iron Golem",
             "Anor Londo",
             "Anor Londo - After First Fog",
+            "Anor Londo - Painting Room",
             "Anor Londo - After Second Fog",
             "Anor Londo - Ornstein and Smough",
             "Anor Londo - After Ornstein and Smough",
@@ -278,9 +279,14 @@ class DSRWorld(World):
         def create_connection_2way(from_region: str, to_region: str):
             create_connection(from_region, to_region)
             create_connection(to_region, from_region)
-            
+
+        def create_skip_connection(from_region: str, to_region: str, skip_name):
+            connection = Entrance(self.player, f"SKIP: {skip_name} ({from_region} -> {to_region})", regions[from_region])
+            regions[from_region].exits.append(connection)
+            connection.connect(regions[to_region])
+
+
         create_connection("Menu", "Undead Asylum Cell")    
-        
         create_connection("Undead Asylum Cell", "Undead Asylum Cell Door") 
         create_connection("Undead Asylum Cell Door", "Northern Undead Asylum")
         create_connection("Northern Undead Asylum", "Northern Undead Asylum - After Fog")
@@ -289,9 +295,9 @@ class DSRWorld(World):
         create_connection("Northern Undead Asylum - After F2 East Door", "Northern Undead Asylum - Big Pilgrim Door")
         create_connection("Northern Undead Asylum - Big Pilgrim Door", "Firelink Shrine")
 
-        create_connection("Firelink Shrine", "Upper Undead Burg - Before Fog")
-        create_connection("Firelink Shrine", "The Catacombs")
-        create_connection("Firelink Shrine", "Upper New Londo Ruins")
+        create_connection_2way("Firelink Shrine", "Upper Undead Burg - Before Fog")
+        create_connection_2way("Firelink Shrine", "The Catacombs")
+        create_connection_2way("Firelink Shrine", "Upper New Londo Ruins")
         create_connection("Firelink Shrine - After Undead Parish Elevator", "Northern Undead Asylum Second Visit")
         create_connection("Firelink Shrine", "Firelink Altar")
         create_connection("Firelink Altar", "Kiln of the First Flame")
@@ -375,8 +381,8 @@ class DSRWorld(World):
         create_connection("Sen's Fortress - Iron Golem", "Sen's Fortress - After Iron Golem")
         create_connection("Sen's Fortress - After First Fog", "Sen's Fortress - After Cage Key")
         create_connection("Sen's Fortress - After Iron Golem", "Anor Londo")
-
         create_connection("Anor Londo", "Anor Londo - After First Fog")
+        create_connection("Anor Londo - After First Fog", "Anor Londo - Painting Room")
         create_connection("Anor Londo - After First Fog", "Anor Londo - After Second Fog")
         create_connection("Anor Londo - After Second Fog", "Anor Londo - Ornstein and Smough")
         create_connection("Anor Londo - Ornstein and Smough", "Anor Londo - After Ornstein and Smough")
@@ -384,7 +390,7 @@ class DSRWorld(World):
         create_connection("Anor Londo - Gwyndolin", "Anor Londo - After Gwyndolin")
 
         create_connection("Anor Londo", "The Duke's Archives")
-        create_connection("Anor Londo - After First Fog", "Painted World of Ariamis")
+        create_connection("Anor Londo - Painting Room", "Painted World of Ariamis")
 
         create_connection("Painted World of Ariamis", "Painted World of Ariamis - After Fog")
         create_connection("Painted World of Ariamis - After Fog", "Painted World of Ariamis - After Annex Key")
@@ -438,16 +444,12 @@ class DSRWorld(World):
         create_connection("Oolacile Township", "Oolacile Township - After Crest Key")
         create_connection("Oolacile Township", "Oolacile Township - Behind Light-Dispelled Walls")
         create_connection("Oolacile Township - After Crest Key", "Royal Wood - After Hawkeye Gough")
-        create_connection("Oolacile Township", "Chasm of the Abyss")
+        create_connection_2way("Oolacile Township", "Chasm of the Abyss")
         create_connection("Chasm of the Abyss", "Chasm of the Abyss - Manus")
 
         # Skips 
         for skip in Skips.get_all_skips():
-            # We create connection only when it already doesnt exist
-            try:
-                self.get_entrance(f"{skip.starting_location} -> {skip.ending_location}")
-            except KeyError: 
-                create_connection(skip.starting_location, skip.ending_location)
+            create_skip_connection(skip.starting_location, skip.ending_location, skip.name)
 
         # end of entrances
         
@@ -555,7 +557,12 @@ class DSRWorld(World):
 
         # Add any Key + useful items
         rip = BuildRequiredItemPool(self, itempoolSize)
+        required_skip_itempool = [self.create_item(name) for name in Skips.required_item_pool_for_skips(self, rip)]
+        for item in required_skip_itempool:
+            item.classification = ItemClassification.progression
         crip = [self.create_item(item.name) for item in rip]
+        crip.extend(required_skip_itempool)
+        
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]
         guaranteedpool = BuildGuaranteedItemPool(self)
@@ -638,7 +645,7 @@ class DSRWorld(World):
             #print(item.name)
 
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> DSRItem:
         useful_categories = [
             DSRItemCategory.EMBER,
             DSRItemCategory.FIRE_KEEPER_SOUL,
@@ -729,7 +736,6 @@ class DSRWorld(World):
         set_rule(self.multiworld.get_entrance("Depths -> Depths to Blighttown Door", self.player), lambda state: state.has("Blighttown Key", self.player))
         set_rule(self.multiworld.get_entrance("Upper Blighttown Depths Side -> Depths to Blighttown Door", self.player), lambda state: state.has("Depths -> Blighttown opened", self.player))
         set_rule(self.multiworld.get_entrance("Lower Blighttown - Quelaag -> Lower Blighttown - After Quelaag", self.player), lambda state: state.has("Chaos Witch Quelaag Defeated", self.player))
-        set_rule(self.multiworld.get_entrance("Lower Blighttown -> Demon Ruins - Early", self.player), lambda state: state.has("Chaos Witch Quelaag Defeated", self.player))
         
         set_rule(self.multiworld.get_location("UP: Bell of Awakening #1 rung", self.player), lambda state: state.has("Bell Gargoyles Defeated", self.player))
         # set_rule(self.multiworld.get_location("BT: Bell of Awakening #2 rung", self.player), lambda state: state.has("Chaos Witch Quelaag Defeated", self.player))
@@ -750,7 +756,7 @@ class DSRWorld(World):
         set_rule(self.multiworld.get_location("DA: Broken Pendant", self.player), lambda state: state.has("Dusk Rescued", self.player))
         set_rule(self.multiworld.get_entrance("Crystal Cave -> Crystal Cave - After Seath", self.player), lambda state: state.has("Seath the Scaleless Defeated", self.player))
         set_rule(self.multiworld.get_entrance("Crystal Cave -> The Duke's Archives - First Arena after Seath's Death", self.player), lambda state: state.has("Seath the Scaleless Defeated", self.player))
-        set_rule(self.multiworld.get_entrance("Anor Londo - After First Fog -> Painted World of Ariamis", self.player), lambda state: state.has("Peculiar Doll", self.player))
+        set_rule(self.multiworld.get_entrance("Anor Londo - Painting Room -> Painted World of Ariamis", self.player), lambda state: state.has("Peculiar Doll", self.player))
         set_rule(self.multiworld.get_entrance("Painted World of Ariamis - After Fog -> Painted World of Ariamis - After Annex Key", self.player), lambda state: state.has("Annex Key", self.player))
         
         set_rule(self.multiworld.get_entrance("Lower New Londo Ruins -> The Abyss", self.player), lambda state: state.has("Covenant of Artorias", self.player) and ((self.options.boss_fogwall_sanity.value == False) or state.has ("Boss Fog Wall Key - Four Kings", self.player)))
@@ -901,26 +907,29 @@ class DSRWorld(World):
                     temp_condition = lambda state: state.has("Andre Access", self.player) or state.has("Undead Merchant Access", self.player)
             set_rule(self.multiworld.get_entrance("Firelink Shrine -> The Catacombs", self.player), temp_condition)
         # End yaml options for "logic"
+
+        
         
 
         # Skip logic
-        selected_skips = Skips.parse_skip_options([self.options.skip_logic_easy, 
-                                                   self.options.skip_logic_medium, 
-                                                   self.options.skip_logic_hard, 
-                                                   self.options.skip_logic_very_hard])
+        skip_options = [self.options.skip_logic_easy, 
+                        self.options.skip_logic_medium, 
+                        self.options.skip_logic_hard, 
+                        self.options.skip_logic_very_hard]
+        
+        for skip in Skips.get_all_skips(): # Skips start disabled by default
+            entrance = self.multiworld.get_entrance(f"SKIP: {skip.name} ({skip.starting_location} -> {skip.ending_location})", self.player)
+            set_rule(entrance, lambda state: False)
 
-        for skip in Skips.get_user_selected_skips(selected_skips):
+        for skip in Skips.get_user_selected_skips(skip_options): 
+            entrance = self.multiworld.get_entrance(f"SKIP: {skip.name} ({skip.starting_location} -> {skip.ending_location})", self.player)
             if not skip.has_rules(): 
+                set_rule(entrance, lambda state: True)
                 continue
-
-            # Currently not used
-            # extra_condition_value = skip.extra_conditions() if skip.extra_conditions is not None else True
-            
-            entrance = self.multiworld.get_entrance(f"{skip.starting_location} -> {skip.ending_location}", self.player)
-
+ 
             set_rule(spot=entrance, 
                      rule=lambda state: state.has_all(skip.required_items, self.player) 
-                                        or entrance.access_rule(state)) # The original access rule
+                                        or entrance.access_rule(state)) # Lets us specify multiple skip techniques
         
 
 

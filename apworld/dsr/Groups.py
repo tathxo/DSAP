@@ -103,7 +103,7 @@ location_name_groups = {
     "All DLC regions": set(),
     "All Fog Walls": set(),
     "All Boss Fog Walls": set(),
-    "Post OS": set()
+    "Post O+S": set()
 }
 
 category_to_loc_name_map = {
@@ -176,8 +176,8 @@ for region in location_tables.keys(): # For each region
         # Add all DLC locations to the DLC location group
         if (region in dlc_regions): 
             location_name_groups['All DLC regions'].add(location.name)
-        if (region in post_os_regions ):
-            location_name_groups["Post OS"].add(location.name)
+        if (region in post_os_regions):
+            location_name_groups["Post O+S"].add(location.name)
         # Add each location to its category type location group (e.g. DOOR -> All Doors, ITEM_LOT -> All ITEM_LOTs, etc)
         if location.category.name in category_to_loc_name_map.keys():
             location_name_groups[category_to_loc_name_map[location.category.name]].add(location.name)

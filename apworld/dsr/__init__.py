@@ -1,8 +1,8 @@
 # world/dsr/__init__.py
-from typing import Dict, Set, List, ClassVar, TextIO, Any
+from typing import Dict, Set, List, ClassVar, TextIO, Any, Optional
 
-from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
-from Options import Toggle, OptionError
+from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location
+from Options import Toggle, OptionError, Option
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
@@ -103,7 +103,7 @@ class DSRWorld(World):
                     # You can also set .value directly but that won't work if you have OptionSets
                     setattr(self.options, key, opt.from_any(value))
         # End UT yamlless support
-        
+            
         # if upgrade level max < min, reverse them
         if self.options.upgraded_weapons_percentage.value > 0 and self.options.upgraded_weapons_max_level.value < self.options.upgraded_weapons_min_level.value:
             (self.options.upgraded_weapons_min_level, self.options.upgraded_weapons_max_level) = (self.options.upgraded_weapons_max_level, self.options.upgraded_weapons_min_level)
@@ -666,7 +666,10 @@ class DSRWorld(World):
                 self.multiworld.completion_condition[self.player] = lambda state, items=boss_defeated_items: all(
                     state.has(item, self.player) for item in items
                 )
-            
+            case GoalConditionOption.option_ornstein_and_smough:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has("Ornstein and Smough Defeated", self.player)
+            case GoalConditionOption.option_manus:
+                self.multiworld.completion_condition[self.player] = lambda state: state.has("Manus, Father of the Abyss Defeated", self.player)
 
         set_rule(self.multiworld.get_entrance("Undead Asylum Cell -> Undead Asylum Cell Door", self.player), lambda state: state.has("Dungeon Cell Key", self.player))   
         #set_rule(self.multiworld.get_entrance("Undead Asylum Cell Door -> Northern Undead Asylum", self.player), lambda state: state.has("Dungeon Cell Key", self.player))      

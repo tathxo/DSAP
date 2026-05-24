@@ -547,6 +547,14 @@ public partial class App : Application
         {
             Log.Logger.Warning("Your goal is to defeat All Bosses.");
         }
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        { 
+            Log.Logger.Warning("Your goal is to defeat Ornstein and Smough.");
+        }
+        else if (DSOptions.Goal == DSGoal.manus)
+        {
+            Log.Logger.Warning("Your goal is to defeat Manus.");
+        }    
         else
         {
             Log.Logger.Warning("Unknown goal condition detected.");
@@ -632,6 +640,36 @@ public partial class App : Application
                             Log.Logger.Information($"[x] {boss.Name}");
                         else
                             Log.Logger.Information($"[_] {boss.Name}");
+                    }
+                }
+            }
+            else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+            {
+                var osloc = (Location)LocationHelper.GetBossFlagLocations().Where(x => x.Name == "Ornstein").First();
+                if (osloc != null)
+                {
+                    Log.Logger.Warning($"{osloc.Name} at {osloc.Address:X}_{osloc.AddressBit:X} type {osloc.CheckType}.");
+
+                    bool result = osloc.Check();
+                    if (result)
+                    {
+                        Log.Logger.Warning("O+S bit on. Completing Goal.");
+                        sendingGoal = true;
+                    }
+                }
+            }
+            else if (DSOptions.Goal == DSGoal.manus)
+            {
+                var manusloc = (Location)LocationHelper.GetBossFlagLocations().Where(x => x.Name == "Manus").First();
+                if (manusloc != null)
+                {
+                    Log.Logger.Warning($"{manusloc.Name} at {manusloc.Address:X}_{manusloc.AddressBit:X} type {manusloc.CheckType}.");
+
+                    bool result = manusloc.Check();
+                    if (result)
+                    {
+                        Log.Logger.Warning("Manus bit on. Completing Goal.");
+                        sendingGoal = true;
                     }
                 }
             }
@@ -1263,7 +1301,22 @@ public partial class App : Application
                 }
             }
         }
-
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        {
+            if (e.CompletedLocation.Name.Contains("Ornstein"))
+            {
+                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
+                SendGoal();
+            }
+        }
+        else if (DSOptions.Goal == DSGoal.manus)
+        {
+            if (e.CompletedLocation.Name.Contains("Manus"))
+            {
+                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
+                SendGoal();
+            }    
+        }    
         // if it's in our scouted locs & not in our own game,
         if (scoutedLocationInfo.TryGetValue(e.CompletedLocation.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
         {

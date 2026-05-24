@@ -103,7 +103,7 @@ location_name_groups = {
     "All DLC regions": set(),
     "All Fog Walls": set(),
     "All Boss Fog Walls": set(),
-    "Post O+S": set()
+    "After O+S": set()
 }
 
 category_to_loc_name_map = {
@@ -151,6 +151,17 @@ post_os_regions  = [
     "Tomb of the Giants - Behind Golden Fog Wall",
     "Tomb of the Giants - Nito",
     "Tomb of the Giants - After Nito",
+    "Sanctuary Garden",
+    "Sanctuary Garden - Sanctuary Guardian",
+    "Oolacile Sanctuary",
+    "Royal Wood",
+    "Royal Wood - Artorias",
+    "Royal Wood - After Hawkeye Gough",
+    "Oolacile Township",
+    "Oolacile Township - Behind Light-Dispelled Walls",
+    "Oolacile Township - After Crest Key",
+    "Chasm of the Abyss",
+    "Chasm of the Abyss - Manus",
     "Firelink Altar",
     "Kiln of the First Flame",
     "Kiln of the First Flame - Gwyn"
@@ -177,7 +188,7 @@ for region in location_tables.keys(): # For each region
         if (region in dlc_regions): 
             location_name_groups['All DLC regions'].add(location.name)
         if (region in post_os_regions):
-            location_name_groups["Post O+S"].add(location.name)
+            location_name_groups["After O+S"].add(location.name)
         # Add each location to its category type location group (e.g. DOOR -> All Doors, ITEM_LOT -> All ITEM_LOTs, etc)
         if location.category.name in category_to_loc_name_map.keys():
             location_name_groups[category_to_loc_name_map[location.category.name]].add(location.name)

@@ -256,6 +256,7 @@ _all_items_base = [
     ("Bonfire Warp Unlock - Firelink Altar - Lordvessel", 1343, DSRItemCategory.BONFIREWARP),
 
     ("Progressive Soul Multiplier", 1400, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
+    ("Progressive Weight Reducer", 1401, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
 
     ("Eye of Death", 2000, DSRItemCategory.CONSUMABLE),
     ("Cracked Red Eye Orb", 2001, DSRItemCategory.CONSUMABLE),
@@ -1074,6 +1075,12 @@ def BuildRequiredItemPool(world, count):
     if world.options.soul_multiplier_steps > 0:
         for i in range(world.options.soul_multiplier_steps):
             item = item_dictionary["Progressive Soul Multiplier"]
+            item_pool.append(item)
+            remaining_count = remaining_count - 1
+
+    if world.options.weight_multiplier_steps > 0:
+        for i in range(world.options.weight_multiplier_steps):
+            item = item_dictionary["Progressive Weight Reducer"]
             item_pool.append(item)
             remaining_count = remaining_count - 1
 

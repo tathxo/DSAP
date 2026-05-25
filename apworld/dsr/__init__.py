@@ -112,17 +112,31 @@ class DSRWorld(World):
         if self.options.upgraded_weapons_percentage.value > 0 and len(self.options.upgraded_weapons_allowed_infusions.value) == 0:
             self.options.upgraded_weapons_allowed_infusions.value = ['Normal']
 
-        # If multiplier steps is 0, don't make there be an increase at all. Base is the base and max
+        ## Soul Multiplier
+        # If soul multiplier steps is 0, don't make there be an increase at all. Base is both the base and max
         if self.options.soul_multiplier_steps.value == 0:
             self.options.soul_multiplier_max.value = self.options.soul_multiplier_base.value
 
-        # If multiplier base and max are equal, set steps to 0.
+        # If soul multiplier base and max are equal, set steps to 0.
         if self.options.soul_multiplier_max.value == self.options.soul_multiplier_base.value:
             self.options.soul_multiplier_steps.value = 0
 
-        # If multiplier base > max, reverse them
+        # If soul multiplier base > max, reverse them
         if self.options.soul_multiplier_base.value > self.options.soul_multiplier_max.value:
             (self.options.soul_multiplier_base.value, self.options.soul_multiplier_max.value) = (self.options.soul_multiplier_max.value, self.options.soul_multiplier_base.value)
+
+        ## Weight Multiplier
+        # If weight multiplier steps is 0, don't make there be an increase at all. Base is both the base and max
+        if self.options.weight_multiplier_steps.value == 0:
+            self.options.weight_multiplier_min.value = self.options.weight_multiplier_base.value
+
+        # If weight multiplier base and max are equal, set steps to 0.
+        if self.options.weight_multiplier_min.value == self.options.weight_multiplier_base.value:
+            self.options.weight_multiplier_steps.value = 0
+
+        # If weight multiplier base < min, reverse them
+        if self.options.weight_multiplier_base.value < self.options.weight_multiplier_min.value:
+            (self.options.weight_multiplier_base.value, self.options.weight_multiplier_min.value) = (self.options.weight_multiplier_min.value, self.options.weight_multiplier_base.value)
 
 
 
@@ -933,6 +947,9 @@ class DSRWorld(World):
                 "soul_multiplier_base": self.options.soul_multiplier_base.value,
                 "soul_multiplier_max": self.options.soul_multiplier_max.value,
                 "soul_multiplier_steps": self.options.soul_multiplier_steps.value,
+                "weight_multiplier_base": self.options.weight_multiplier_base.value,
+                "weight_multiplier_min": self.options.weight_multiplier_min.value,
+                "weight_multiplier_steps": self.options.weight_multiplier_steps.value,
                 # Sanity
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,

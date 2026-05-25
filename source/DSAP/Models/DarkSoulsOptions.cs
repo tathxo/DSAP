@@ -25,6 +25,9 @@ namespace DSAP.Models
         public uint SoulMultiplierBase { get; set; }
         public uint SoulMultiplierMax { get; set; }
         public uint SoulMultiplierSteps { get; set; }
+        public uint WeightMultiplierBase { get; set; }
+        public uint WeightMultiplierMin { get; set; }
+        public uint WeightMultiplierSteps { get; set; }
         // Sanity
         public bool FogwallSanity { get; set; }
         public bool BossFogwallSanity { get; set; }
@@ -121,7 +124,8 @@ namespace DSAP.Models
                 GhostDifficulty = gd;
             else
                 GhostDifficulty = Enums.DSGhostDifficulty.normal;
-
+            
+            // soul multiplier
             if (App.Client.Options.ContainsKey("soul_multiplier_base"))
                 SoulMultiplierBase = ((JsonElement)App.Client.Options["soul_multiplier_base"]).GetUInt32();
             else
@@ -134,12 +138,31 @@ namespace DSAP.Models
 
             if (App.Client.Options.ContainsKey("soul_multiplier_steps"))
                 SoulMultiplierSteps = ((JsonElement)App.Client.Options["soul_multiplier_steps"]).GetUInt32();
-            else 
+            else
             { // not found - default to max = base, 0 steps
                 SoulMultiplierMax = SoulMultiplierBase;
                 SoulMultiplierSteps = 0;
             }
-            
+
+            // weight multiplier
+            if (App.Client.Options.ContainsKey("weight_multiplier_base"))
+                WeightMultiplierBase = ((JsonElement)App.Client.Options["weight_multiplier_base"]).GetUInt32();
+            else
+                WeightMultiplierBase = 100;
+
+            if (App.Client.Options.ContainsKey("weight_multiplier_min"))
+                WeightMultiplierMin = ((JsonElement)App.Client.Options["weight_multiplier_min"]).GetUInt32();
+            else
+                WeightMultiplierMin = 100;
+
+            if (App.Client.Options.ContainsKey("weight_multiplier_steps"))
+                WeightMultiplierSteps = ((JsonElement)App.Client.Options["weight_multiplier_steps"]).GetUInt32();
+            else
+            { // not found - default to min = base, 0 steps
+                WeightMultiplierMin = WeightMultiplierBase;
+                WeightMultiplierSteps = 0;
+            }
+
 
             FogwallSanity = GetBool("fogwall_sanity");
             BossFogwallSanity = GetBool("boss_fogwall_sanity");

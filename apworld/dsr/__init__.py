@@ -126,7 +126,7 @@ class DSRWorld(World):
             (self.options.soul_multiplier_base.value, self.options.soul_multiplier_max.value) = (self.options.soul_multiplier_max.value, self.options.soul_multiplier_base.value)
 
         ## Weight Multiplier
-        # If weight multiplier steps is 0, don't make there be an increase at all. Base is both the base and max
+        # If weight multiplier steps is 0, don't make there be an increase at all. Base is both the base and min
         if self.options.weight_multiplier_steps.value == 0:
             self.options.weight_multiplier_min.value = self.options.weight_multiplier_base.value
 

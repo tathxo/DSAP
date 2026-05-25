@@ -64,12 +64,10 @@ class SoulMultiplierSteps(Range):
     display_name = "Soul Multiplier Steps"
     range_start = 0
     range_end = 10
-    option_4 = 4
-    option_8 = 8
     default = 0
 
 class WeightMultiplierBase(Range):
-    """Base value for a multiplier applied to weapon, shield, and armor weight, expressed as a percentage.
+    """Base value for a multiplier applied to weight of weapons, shields, and armors, expressed as a percentage.
     100 is vanilla weight.
     50 is half weight.
     0 is no weight."""
@@ -79,7 +77,7 @@ class WeightMultiplierBase(Range):
     default = 100
 
 class WeightMultiplierMin(Range):
-    """Minimum (final) value for a multiplier applied weapon, shield, and armor weight, expressed as a percentage.
+    """Minimum (final) value for a multiplier applied to weight of weapons, shields, and armors, expressed as a percentage.
 
     Only takes effect if not equal to weight_multiplier_base, and weight_multiplier_steps is non-zero."""
     display_name = "Weight Multiplier - Minimum Percentage"
@@ -103,8 +101,6 @@ class WeightMultiplierSteps(Range):
     display_name = "Weight Multiplier Steps"
     range_start = 0
     range_end = 10
-    option_4 = 4
-    option_8 = 8
     default = 0
 
 # Game Options

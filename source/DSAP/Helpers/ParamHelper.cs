@@ -264,9 +264,9 @@ namespace DSAP.Helpers
             // multiply all souls values
             foreach (var weapon in weaponParamStruct.ParamEntries)
             {
-                int souls = BitConverter.ToInt32(weaponParamStruct.ParamBytes, (int)(weapon.paramOffset + EquipParamWeapon.WEIGHT_OFFSET));
-                souls = (souls * (int)multiplier) / 100;
-                Array.Copy(BitConverter.GetBytes(souls), 0, weaponParamStruct.ParamBytes, weapon.paramOffset + 0x28, sizeof(int));
+                float weight = BitConverter.ToSingle(weaponParamStruct.ParamBytes, (int)(weapon.paramOffset + EquipParamWeapon.WEIGHT_OFFSET));
+                weight = (weight * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(weight), 0, weaponParamStruct.ParamBytes, weapon.paramOffset + EquipParamWeapon.WEIGHT_OFFSET, sizeof(float));
             }
             Log.Logger.Information($"Updated weapon weights to multiplier {multiplier}%");
             return true;
@@ -306,9 +306,9 @@ namespace DSAP.Helpers
             // multiply all souls values
             foreach (var armor in armorParamStruct.ParamEntries)
             {
-                int souls = BitConverter.ToInt32(armorParamStruct.ParamBytes, (int)(armor.paramOffset + EquipParamProtector.WEIGHT_OFFSET));
-                souls = (souls * (int)multiplier) / 100;
-                Array.Copy(BitConverter.GetBytes(souls), 0, armorParamStruct.ParamBytes, armor.paramOffset + 0x28, sizeof(int));
+                float weight = BitConverter.ToSingle(armorParamStruct.ParamBytes, (int)(armor.paramOffset + EquipParamProtector.WEIGHT_OFFSET));
+                weight = (weight * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(weight), 0, armorParamStruct.ParamBytes, armor.paramOffset + EquipParamProtector.WEIGHT_OFFSET, sizeof(float));
             }
             Log.Logger.Information($"Updated armor weights to multiplier {multiplier}%");
             return true;

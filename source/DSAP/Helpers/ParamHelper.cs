@@ -13,6 +13,71 @@ namespace DSAP.Helpers
 {
     internal class ParamHelper
     {
+        internal static void UpdateItemLots(Dictionary<int, ItemLot> itemLotReplacementMap)
+        {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            // Read in the Param Structure
+            // Modify it,
+            // Then save it back
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> paramStruct,
+                                                     ItemLotParam.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+            if (!reloadRequired)
+            {
+                Log.Logger.Debug("Skipping reload of Item Lots");
+                //return false;
+            }
+
+            Log.Logger.Debug($"ItemParam list rowcount='{paramStruct.ParamEntries.Count}'");
+
+            if (!ItemLotHelper.VerifyItemLots(paramStruct))
+            {
+                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                Log.Logger.Error("Incorrect item lots detected. This is usually a sign of leftover mod files,");
+                Log.Logger.Error(" and will cause problems with detection of location checks.");
+                Log.Logger.Error("RECOMMENDED ACTIONS:");
+                Log.Logger.Error("1) Full uninstall of the game,");
+                Log.Logger.Error("2) Completely clean out the DS:R install directory, and then");
+                Log.Logger.Error("3) Reinstall.");
+            }
+
+            // if we are here, we are updating the params.
+            int new_entries = 0;
+            ItemLotHelper.AddInitItemLots(paramStruct, ref new_entries);
+            ItemLotHelper.OverwriteItemLots(paramStruct, itemLotReplacementMap);
+            //bool success = ItemLotHelper.AddInitItemLots();
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            byte[] parambytes = new byte[ItemLotParam.Size];
+            Array.Copy(BitConverter.GetBytes(-1), 0, parambytes, 0x80, sizeof(int)); // overwrite getitemflagid with -1, so it isn't used
+            paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Information($"Added {new_entries} items to ItemLotParams");
+
+            ParamHelper.WriteFromParamSt(paramStruct, ItemLotParam.spOffset);
+
+            watch.Stop();
+
+            Log.Logger.Information($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
+            App.Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
+
+            Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
+            Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
+            if (MiscHelper.IsInGame())
+            {
+                App.HomewardBoneCommand();
+                Log.Logger.Information($"After Load screen, new item lots will be live.");
+                App.Client.AddOverlayMessage($"After Load screen, new item lots will be live.");
+            }
+            else
+            {
+                Log.Logger.Information($"You are now safe to load your save.");
+                App.Client.AddOverlayMessage($"You are now safe to load your save.");
+            }
+        }
+
         internal static bool RemoveSpellRequirements()
         {
             // Read in the Param Structure

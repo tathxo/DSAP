@@ -50,7 +50,7 @@ public partial class App : Application
     public static List<BonfireWarp> AllowedBonfireWarps { get; set; } = [];
     // 
     private static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
-    private static Dictionary<int, ItemLot> ItemLotReplacementMap = new Dictionary<int, ItemLot>();
+    internal static Dictionary<int, ItemLot> ItemLotReplacementMap = new Dictionary<int, ItemLot>();
     private static Dictionary<string, Tuple<int, string>> SlotLocToItemUpgMap = [];
     // Logging
     private static readonly object _lockObject = new object();
@@ -1432,59 +1432,6 @@ public partial class App : Application
             Log.Logger.Information($"You do not have {displayableEventType} locking enabled");
         }
     }
-    private static void UpdateItemLots()
-    {
-        var watch = System.Diagnostics.Stopwatch.StartNew();
-        // Read in the Param Structure
-        // Modify it,
-        // Then save it back
-        bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> paramStruct,
-                                                 ItemLotParam.spOffset,
-                                                 (ps) => ps.ParamEntries.Last().id >= 99999990);
-        if (!reloadRequired)
-        {
-            Log.Logger.Debug("Skipping reload of Item Lots");
-            //return false;
-        }
-
-        Log.Logger.Debug($"ItemParam list rowcount='{paramStruct.ParamEntries.Count}'");
-
-        // if we are here, we are updating the params.
-        int new_entries = 0;
-        ItemLotHelper.AddInitItemLots(paramStruct, ref new_entries);
-        ItemLotHelper.OverwriteItemLots(paramStruct, ItemLotReplacementMap);
-        //bool success = ItemLotHelper.AddInitItemLots();
-
-        // add a dummy item at 99999998 so that we can know we've been here.
-        byte[] parambytes = new byte[ItemLotParam.Size];
-        Array.Copy(BitConverter.GetBytes(-1), 0, parambytes, 0x80, sizeof(int)); // overwrite getitemflagid with -1, so it isn't used
-        paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
-
-        paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-        Log.Logger.Information($"Added {new_entries} items to ItemLotParams");
-
-        ParamHelper.WriteFromParamSt(paramStruct, ItemLotParam.spOffset);
-
-        watch.Stop();
-
-        Log.Logger.Information($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
-        Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
-
-        Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
-        Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
-        if (MiscHelper.IsInGame())
-        {
-            HomewardBoneCommand();
-            Log.Logger.Information($"After Load screen, new item lots will be live.");
-            Client.AddOverlayMessage($"After Load screen, new item lots will be live.");
-        }
-        else
-        {
-            Log.Logger.Information($"You are now safe to load your save.");
-            Client.AddOverlayMessage($"You are now safe to load your save.");
-        }
-    }
-
     private static void Client_ItemReceived(object? sender, ItemReceivedEventArgs e)
     {
         LogItem(e.Item, 1);
@@ -1936,7 +1883,7 @@ public partial class App : Application
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
         /* Set to only receive remote items and starting inventory */
-        UpdateItemLots();
+        ParamHelper.UpdateItemLots(ItemLotReplacementMap);
         watch.Stop();
         Log.Logger.Information($"Finished setup, took {watch.ElapsedMilliseconds}ms total");
         Client.AddOverlayMessage($"Finished setup, took {watch.ElapsedMilliseconds}ms total");

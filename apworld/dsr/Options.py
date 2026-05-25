@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionDict, OptionCounter, OptionSet
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter
 from Options import OptionGroup
 from . import Skips
 

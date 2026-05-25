@@ -6,5 +6,13 @@
     "UpgradeType": "None",
     "Category": "Progressive",
     "ApId": 11111400
+  },
+  {
+    "Name": "Progressive Weight Reducer",
+    "Id": 0,
+    "StackLimit": 0,
+    "UpgradeType": "None",
+    "Category": "Progressive",
+    "ApId": 11111401
   }
 ]

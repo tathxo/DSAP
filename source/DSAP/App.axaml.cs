@@ -756,7 +756,12 @@ public partial class App : Application
                 ParamHelper.UpdateSoulMultiplier();
                 ParamHelper.ModifyNpcParams();
                 ParamHelper.ModifyGameAreaParams();
-                // the above two lines crash the game for some reason. investigate
+            }
+            else if (item.Name == "Progressive Weight Reducer")
+            {
+                ParamHelper.UpdateWeightMultiplier();
+                ParamHelper.ModifyWeaponParams();
+                ParamHelper.ModifyArmorParams();
             }
         }
         else
@@ -1872,9 +1877,11 @@ public partial class App : Application
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
         // update the various params (options are read within)
+        ParamHelper.UpdateWeightMultiplier(); // setup weight multiplier for weapons + armor
         ParamHelper.ModifyWeaponParams();
+        ParamHelper.ModifyArmorParams();
 
-        ParamHelper.UpdateSoulMultiplier();
+        ParamHelper.UpdateSoulMultiplier(); // setup soul multiplier for npcs + bosses
         ParamHelper.ModifyNpcParams();
         ParamHelper.ModifyGameAreaParams();
         ParamHelper.ModifyShopLineupParams();

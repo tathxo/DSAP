@@ -680,7 +680,8 @@ location_tables = {
     DSRLocationData(11110838, f"AL: Darkmoon Tomb Bonfire", f"Bonfire Warp Unlock - Darkmoon Tomb", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110268, f"AL: Ring of the Sun's Firstborn", f"Ring of the Sun's Firstborn", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110274, f"AL: Soul of a Hero - Left Silver Archer", f"Soul of a Hero", DSRLocationCategory.ITEM_LOT),
-],"Anor Londo - Painting Room": [
+],
+"Anor Londo - Painting Room": [
     DSRLocationData(11110270, f"AL: Black Iron Helm", f"Black Iron Helm", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110662, f"AL: Black Iron Armor", f"Black Iron Armor", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110663, f"AL: Black Iron Gauntlets", f"Black Iron Gauntlets", DSRLocationCategory.ITEM_LOT),

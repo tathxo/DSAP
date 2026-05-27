@@ -1795,7 +1795,7 @@ public partial class App : Application
         BonfireWarp? bonfire = AllowedBonfireWarps.Find(x => x.ItemId == ApId);
         if (bonfire != null)
         {
-            BonfireInjectorHelper.setBonfireByLoc(bonfire.Flag);
+            App.SetEventFlag(bonfire.Flag, true);
         }
         else
         {

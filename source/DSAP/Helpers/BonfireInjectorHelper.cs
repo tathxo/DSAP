@@ -349,6 +349,10 @@ namespace DSAP.Helpers
                     givePlayerLordvesselFlag();
                 }
             }
+            else
+            {
+                Log.Logger.Warning($"Warning: Did not find bonfire with id {locid} in bonfire list");
+            }
         }
 
         public static void givePlayerLordvesselFlag()

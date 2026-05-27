@@ -213,6 +213,7 @@
     "Eventid": 11515380,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Gwyndolin",
     "Dsrid": 11109978
   },
   {
@@ -225,6 +226,7 @@
     "Eventid": 11515390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Ornstein and Smough",
     "Dsrid": 11109979
   },
   {
@@ -237,6 +239,7 @@
     "Eventid": 11405390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Chaos Witch Quelaag",
     "Dsrid": 11109980
   },
   {
@@ -249,6 +252,7 @@
     "Eventid": 11215020,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Manus, Father of the Abyss",
     "Dsrid": 11109981
   },
   {
@@ -261,6 +265,7 @@
     "Eventid": 11705380,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Seath the Scaleless",
     "Dsrid": 11109982
   },
   {
@@ -273,6 +278,7 @@
     "Eventid": 11005390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Gaping Dragon",
     "Dsrid": 11109983
   },
   {
@@ -285,6 +291,7 @@
     "Eventid": 11205380,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Moonlight Butterfly",
     "Dsrid": 11109984
   },
   {
@@ -297,6 +304,7 @@
     "Eventid": 11415370,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Ceaseless Discharge",
     "Dsrid": 11109985
   },
   {
@@ -309,6 +317,7 @@
     "Eventid": 11415380,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Centipede Demon",
     "Dsrid": 11109986
   },
   {
@@ -321,6 +330,7 @@
     "Eventid": 11415340,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Demon Firesage",
     "Dsrid": 11109987
   },
   {
@@ -333,6 +343,7 @@
     "Eventid": 11805390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Gwyn, Lord of Cinder",
     "Dsrid": 11109988
   },
   {
@@ -345,6 +356,7 @@
     "Eventid": 11415390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Bed of Chaos",
     "Dsrid": 11109989
   },
   {
@@ -357,6 +369,7 @@
     "Eventid": 11605390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "4 Kings",
     "Dsrid": 11109990
   },
   {
@@ -369,6 +382,7 @@
     "Eventid": 11105390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Crossbreed Priscilla",
     "Dsrid": 11109991
   },
   {
@@ -381,6 +395,7 @@
     "Eventid": 11505390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Iron Golem",
     "Dsrid": 11109992
   },
   {
@@ -393,6 +408,7 @@
     "Eventid": 11215000,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Sanctuary Guardian",
     "Dsrid": 11109993
   },
   {
@@ -405,6 +421,7 @@
     "Eventid": 11305390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Pinwheel",
     "Dsrid": 11109994
   },
   {
@@ -417,6 +434,7 @@
     "Eventid": 11315390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Gravelord Nito",
     "Dsrid": 11109995
   },
   {
@@ -429,6 +447,7 @@
     "Eventid": 11215010,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Knight Artorias",
     "Dsrid": 11109996
   },
   {
@@ -441,6 +460,7 @@
     "Eventid": 11015370,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Capra Demon",
     "Dsrid": 11109997
   },
   {
@@ -453,6 +473,7 @@
     "Eventid": 11015380,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Taurus Demon",
     "Dsrid": 11109998
   },
   {
@@ -465,6 +486,7 @@
     "Eventid": 11015390,
     "Eventslot": 0,
     "Type": "BossFogWall",
+    "BossName": "Bell Gargoyles",
     "Dsrid": 11109999
   }
 ]

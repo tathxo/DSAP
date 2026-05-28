@@ -97,11 +97,27 @@ item_name_groups = {
     "Covenant Items"    : [item for item in covenant_items],
     "Junk"              : [item for item in item_dictionary.keys() if "carving" in item.lower()] + [item for item in multiplayer_items] + [item for item in covenant_items] + ["Pendant"] + ["Prism Stone x20"],
 
-    # Used for skips
+    # Following groups are used for skips
+    # These items can be wielded by almost (max needs 5 levels of investment) any character from beginning of the game. 
+
+    # Strength requirement for these is max 10 
+    "Skip Tools - Medium Shield" :  ["Bloodshield","Caduceus Kite Shield","Crest Shield", 
+                                    "Dragon Crest Shield", "East-West Shield", "Grass Crest Shield", "Heater Shield",
+                                    "Knight Shield", "Large Leather Shield", "Sanctus", "Spider Shield", 
+                                    "Spiked Shield", "Tower Kite Shield", "Wooden Shield"],
+
+    # INT requirement for these is max 12
+    "Skip Tools - Catalyst" :       ["Sorcerer's Catalyst", "Beatrice's Catalyst", 'Tin Banishment Catalyst', 
+                                     'Oolacile Ivory Catalyst', "Demon's Catalyst", 'Oolacile Catalyst'],
+
+    # Max requirements DEX 14 STR 11
+    "Skip Tools - Bow" :            ['Short Bow', 'Longbow', 'Composite Bow'],
+
+    # Following are used in runs with disabled item requirement
     "Medium Shields"    : ["Balder Shield","Black Knight Shield","Bloodshield","Caduceus Kite Shield","Crest Shield", "Crystal Shield", 
-                        "Dragon Crest Shield", "East-West Shield", "Gargoyle's Shield", "Grass Crest Shield", "Heater Shield", "Hollow Soldier Shield", 
-                        "Iron Round Shield", "Knight Shield", "Large Leather Shield","Pierce Shield", "Sanctus", "Silver Knight Shield", "Spider Shield", 
-                        "Spiked Shield", "Sunlight Shield", "Tower Kite Shield", "Wooden Shield"],
+                    "Dragon Crest Shield", "East-West Shield", "Gargoyle's Shield", "Grass Crest Shield", "Heater Shield", "Hollow Soldier Shield", 
+                    "Iron Round Shield", "Knight Shield", "Large Leather Shield","Pierce Shield", "Sanctus", "Silver Knight Shield", "Spider Shield", 
+                    "Spiked Shield", "Sunlight Shield", "Tower Kite Shield", "Wooden Shield"],
 }
 
 

@@ -7,7 +7,7 @@ from BaseClasses import CollectionState
 
 from worlds.AutoWorld import World
 
-from Groups import item_name_groups
+from .Groups import item_name_groups
 
 # Skips automatically populate this with their init method
 _all_skips: list["Skip"] = []

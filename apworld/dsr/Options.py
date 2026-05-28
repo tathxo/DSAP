@@ -2,7 +2,7 @@ import typing
 from dataclasses import dataclass
 from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter
 from Options import OptionGroup
-from Skips import SkipDifficulty, get_all_skips
+from .Skips import SkipDifficulty, get_all_skips
 
 
 # QoL

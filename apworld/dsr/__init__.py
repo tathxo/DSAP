@@ -7,11 +7,12 @@ from Options import Toggle, OptionError, Option
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
-from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions, BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
+from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
+from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
-from . import Skips
+from .Skips import get_all_skips, get_user_selected_skips, required_item_pool_for_skips
 
 from settings import Group, FilePath
 
@@ -462,7 +463,7 @@ class DSRWorld(World):
         create_connection("Chasm of the Abyss", "Chasm of the Abyss - Manus")
 
         # Skips 
-        for skip in Skips.get_all_skips():
+        for skip in get_all_skips():
             create_skip_connection(skip.starting_location, skip.ending_location, skip.name)
 
         # end of entrances
@@ -571,7 +572,7 @@ class DSRWorld(World):
 
         # Add any Key + useful items
         rip = BuildRequiredItemPool(self, itempoolSize)
-        required_skip_itempool = [self.create_item(name) for name in Skips.required_item_pool_for_skips(self, rip)]
+        required_skip_itempool = [self.create_item(name) for name in required_item_pool_for_skips(self, rip)]
         for item in required_skip_itempool:
             item.classification = ItemClassification.progression
         crip = [self.create_item(item.name) for item in rip]
@@ -934,11 +935,11 @@ class DSRWorld(World):
                         self.options.skip_logic_hard, 
                         self.options.skip_logic_very_hard]
         
-        for skip in Skips.get_all_skips(): # Skips start disabled by default
+        for skip in get_all_skips(): # Skips start disabled by default
             entrance = self.multiworld.get_entrance(f"SKIP: {skip.name} ({skip.starting_location} -> {skip.ending_location})", self.player)
             set_rule(entrance, lambda state: False)
 
-        for skip in Skips.get_user_selected_skips(skip_options): 
+        for skip in get_user_selected_skips(skip_options): 
             entrance = self.multiworld.get_entrance(f"SKIP: {skip.name} ({skip.starting_location} -> {skip.ending_location})", self.player)
             if not skip.has_rules(): 
                 set_rule(entrance, lambda state: True)

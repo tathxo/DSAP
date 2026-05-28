@@ -396,6 +396,26 @@ namespace DSAP.Helpers
                 x.Eventid, x.Eventslot, x.Itemid)).ToList();
             return newlist;
         }
+        static public Dictionary<string, DsrEvent> cached_DsrBossDeps = [];
+        public static Dictionary<string, DsrEvent> GetDsrBossDeps() // returns a map of boss loc ap ids to the dsr events whose fogwalls they should pop if cheesed
+        {
+            if (cached_DsrBossDeps.Count == 0)
+            {
+                var json = OpenEmbeddedResource("DSAP.Resources.DsrEvents.json");
+                var events = JsonSerializer.Deserialize<List<DsrEvent>>(json, GetJsonOptions());
+
+                Dictionary<string, DsrEvent> newlist = [];
+                foreach (var dsrevent in events)
+                {
+                    if (dsrevent.BossName.Length > 0)
+                    {
+                        newlist.Add(dsrevent.BossName, dsrevent);
+                    }
+                }
+                cached_DsrBossDeps = newlist;
+            }
+            return cached_DsrBossDeps;
+        }
         public static List<DarkSoulsItem> GetRangedWeapons()
         {
             var json = OpenEmbeddedResource("DSAP.Resources.RangedWeapons.json");

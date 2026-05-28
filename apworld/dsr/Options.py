@@ -37,13 +37,14 @@ class GhostDifficulty(Choice):
 class SoulMultiplierBase(Range):
     """Base value for a multiplier applied to enemy & boss soul drops, expressed as a percentage.
     100 is vanilla."""
-    display_name = "Soul Multiplier - Minimum Percentage"
+    display_name = "Soul Multiplier - Base Percentage"
     range_start = 20
     range_end = 500
     default = 100
 
 class SoulMultiplierMax(Range):
-    """Maximum value for a multiplier applied to enemy & boss soul drops, expressed as a percentage.
+    """Maximum (final) value for a multiplier applied to enemy & boss soul drops, expressed as a percentage.
+    
     Only takes effect if not equal to soul_multiplier_base, and soul_multiplier_steps is non-zero."""
     display_name = "Soul Multiplier - Maximum Percentage"
     range_start = 20
@@ -64,8 +65,43 @@ class SoulMultiplierSteps(Range):
     display_name = "Soul Multiplier Steps"
     range_start = 0
     range_end = 10
-    option_4 = 4
-    option_8 = 8
+    default = 0
+
+class WeightMultiplierBase(Range):
+    """Base value for a multiplier applied to weight of weapons, shields, and armors, expressed as a percentage.
+    100 is vanilla weight.
+    50 is half weight.
+    0 is no weight."""
+    display_name = "Weight Multiplier - Base Percentage"
+    range_start = 0
+    range_end = 300
+    default = 100
+
+class WeightMultiplierMin(Range):
+    """Minimum (final) value for a multiplier applied to weight of weapons, shields, and armors, expressed as a percentage.
+
+    Only takes effect if not equal to weight_multiplier_base, and weight_multiplier_steps is non-zero."""
+    display_name = "Weight Multiplier - Minimum Percentage"
+    range_start = 0
+    range_end = 300
+    default = 100
+
+class WeightMultiplierSteps(Range):
+    """Number of steps from the base to the minimum multiplier. 
+    This is how many "Progressive Weight Reducer" items will be added to the item pool.
+    
+    Upon receiving one, the weight multiplier will decrease (1/(this value)) * (the distance from base to min).
+    As an example, if your weight_multiplier_base is 100, weight_multiplier_min is 20, and this is set to 4, then the
+    first such item will set the weight multiplier to 80%, 2nd to 60%, and so on.
+
+    Has no effect if the weight_multiplier_base and weight_multiplier_min are equal.
+
+    If zero, weight_multiplier_base is applied as a static multiplier.
+
+    If you want to turn off weapon and armor weight entirely, set weight_multiplier_base and this value both to 0."""
+    display_name = "Weight Multiplier Steps"
+    range_start = 0
+    range_end = 10
     default = 0
 
 # Game Options
@@ -290,10 +326,13 @@ class GoalConditionOption(Choice):
     """Set the goal condition
     
     - **Gwyn:** Default option -Beat Gwyn, Lord of Cinder
-    - **Bosses:** Defeat all bosses"""
+    - **Bosses:** Defeat all bosses
+    - **Ornstein and Smough:** Kill Ornstein and Smough"""
     display_name = "Goal Condition"
     option_gwyn = 0
     option_all_bosses = 1
+    option_ornstein_and_smough = 2
+    option_manus = 3
     default = 0
     
 # Group relevant options
@@ -354,12 +393,16 @@ class DSROption(PerGameCommonOptions):
     # QoL
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
     warp_to_all_bonfires: WarpToAllBonfires
-
+  
+  
     # Difficulty
     ghost_difficulty: GhostDifficulty
     soul_multiplier_base: SoulMultiplierBase
     soul_multiplier_max: SoulMultiplierMax
     soul_multiplier_steps: SoulMultiplierSteps
+    weight_multiplier_base: WeightMultiplierBase
+    weight_multiplier_min: WeightMultiplierMin
+    weight_multiplier_steps: WeightMultiplierSteps
 
     # Sanity
     fogwall_sanity: FogwallSanity

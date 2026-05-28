@@ -13,6 +13,71 @@ namespace DSAP.Helpers
 {
     internal class ParamHelper
     {
+        internal static void UpdateItemLots(Dictionary<int, ItemLot> itemLotReplacementMap)
+        {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            // Read in the Param Structure
+            // Modify it,
+            // Then save it back
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> paramStruct,
+                                                     ItemLotParam.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+            if (!reloadRequired)
+            {
+                Log.Logger.Debug("Skipping reload of Item Lots");
+                //return false;
+            }
+
+            Log.Logger.Debug($"ItemParam list rowcount='{paramStruct.ParamEntries.Count}'");
+
+            if (!ItemLotHelper.VerifyItemLots(paramStruct))
+            {
+                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                Log.Logger.Error("Incorrect item lots detected. This is usually a sign of leftover mod files,");
+                Log.Logger.Error(" and will cause problems with detection of location checks.");
+                Log.Logger.Error("RECOMMENDED ACTIONS:");
+                Log.Logger.Error("1) Full uninstall of the game,");
+                Log.Logger.Error("2) Completely clean out the DS:R install directory, and then");
+                Log.Logger.Error("3) Reinstall.");
+            }
+
+            // if we are here, we are updating the params.
+            int new_entries = 0;
+            ItemLotHelper.AddInitItemLots(paramStruct, ref new_entries);
+            ItemLotHelper.OverwriteItemLots(paramStruct, itemLotReplacementMap);
+            //bool success = ItemLotHelper.AddInitItemLots();
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            byte[] parambytes = new byte[ItemLotParam.Size];
+            Array.Copy(BitConverter.GetBytes(-1), 0, parambytes, 0x80, sizeof(int)); // overwrite getitemflagid with -1, so it isn't used
+            paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Information($"Added {new_entries} items to ItemLotParams");
+
+            ParamHelper.WriteFromParamSt(paramStruct, ItemLotParam.spOffset);
+
+            watch.Stop();
+
+            Log.Logger.Information($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
+            App.Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
+
+            Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
+            Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
+            if (MiscHelper.IsInGame())
+            {
+                App.HomewardBoneCommand();
+                Log.Logger.Information($"After Load screen, new item lots will be live.");
+                App.Client.AddOverlayMessage($"After Load screen, new item lots will be live.");
+            }
+            else
+            {
+                Log.Logger.Information($"You are now safe to load your save.");
+                App.Client.AddOverlayMessage($"You are now safe to load your save.");
+            }
+        }
+
         internal static bool RemoveSpellRequirements()
         {
             // Read in the Param Structure
@@ -104,6 +169,28 @@ namespace DSAP.Helpers
 
             return true;
         }
+        internal static uint WeightReducersReceived = 0;
+        internal static void UpdateWeightMultiplier()
+        {
+            var pwr = MiscHelper.GetProgressiveItems().Find(x => x.Name == "Progressive Weight Reducer");
+            WeightReducersReceived = (uint)App.Client.CurrentSession.Items.AllItemsReceived.Where(x => x.ItemId == pwr.ApId).Count();
+        }
+        internal static uint CalculateWeightMultiplier()
+        {
+            uint multiplier = App.DSOptions.WeightMultiplierBase; // base value, if 0 or less multiplier items received
+
+            if (App.DSOptions.WeightMultiplierSteps == 0) // explicitly handle this case to avoid dividing by 0
+                multiplier = App.DSOptions.WeightMultiplierBase;
+            else if (WeightReducersReceived >= App.DSOptions.WeightMultiplierSteps) // cap at min multiplier
+                multiplier = App.DSOptions.WeightMultiplierMin;
+            else if (WeightReducersReceived > 0) // otherwise, calculate as part of the way from base to max
+            {
+                uint difference = (App.DSOptions.WeightMultiplierBase - App.DSOptions.WeightMultiplierMin);
+                uint distance = (difference * WeightReducersReceived) / App.DSOptions.WeightMultiplierSteps;
+                multiplier = App.DSOptions.WeightMultiplierBase - distance;
+            }
+            return multiplier;
+        }
         internal static bool ModifyWeaponParams()
         {
 
@@ -122,6 +209,8 @@ namespace DSAP.Helpers
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
                 ParamHelper.AddGhostEffectiveWeapons(weaponParamStruct); // modifies npc params
 
+            if (App.DSOptions.WeightMultiplierBase != 100 || App.DSOptions.WeightMultiplierSteps > 0)
+                MultiplyWeaponWeight(weaponParamStruct); // modify weight
 
             // add a dummy item at 99999998 so that we can know we've been here.
             // Get a weapon's Param, and use it as basis for new params.
@@ -155,7 +244,7 @@ namespace DSAP.Helpers
             Log.Logger.Information($"Remvoed stat requirements from all weapons and shields");
             return true;
         }
-        // Updates Weapons and Npc Params
+        // Updates Weapons
         internal static bool AddGhostEffectiveWeapons(ParamStruct<EquipParamWeapon> weaponParamStruct)
         {
             // For each existing weapon, modify it to allow attacking ghosts
@@ -168,11 +257,84 @@ namespace DSAP.Helpers
 
             return true;
         }
+        // Updates Weapons
+        internal static bool MultiplyWeaponWeight(ParamStruct<EquipParamWeapon> weaponParamStruct)
+        {
+            uint multiplier = CalculateWeightMultiplier();
+            // multiply all souls values
+            foreach (var weapon in weaponParamStruct.ParamEntries)
+            {
+                float weight = BitConverter.ToSingle(weaponParamStruct.ParamBytes, (int)(weapon.paramOffset + EquipParamWeapon.WEIGHT_OFFSET));
+                weight = (weight * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(weight), 0, weaponParamStruct.ParamBytes, weapon.paramOffset + EquipParamWeapon.WEIGHT_OFFSET, sizeof(float));
+            }
+            Log.Logger.Information($"Updated weapon weights to multiplier {multiplier}%");
+            return true;
+        }
+        internal static bool ModifyArmorParams()
+        {
+            // Read in the Param Structure
+            // Modify it,
+            // Then save it back
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<EquipParamProtector> armorParamStruct,
+                                                     EquipParamProtector.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+            if (!reloadRequired)
+                Log.Logger.Debug("There may be an error during reloading Protectors Params");
+
+            if (App.DSOptions.WeightMultiplierBase != 100 || App.DSOptions.WeightMultiplierSteps > 0)
+                MultiplyArmorWeight(armorParamStruct); // modify weight
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            // Get a armor's Param, and use it as basis for new params.
+            byte[] parambytes = new byte[EquipParamProtector.Size];
+            var copyentry = armorParamStruct.ParamEntries.Find((x) => x.id == 10000); // catarina helm
+            Array.Copy(armorParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
+
+            armorParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            armorParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Debug($"Added 1 items to EquipParamProtector struct");
+
+            ParamHelper.WriteFromParamSt(armorParamStruct, EquipParamProtector.spOffset);
+            return true;
+        }
+        // Updates Armors
+        internal static bool MultiplyArmorWeight(ParamStruct<EquipParamProtector> armorParamStruct)
+        {
+            uint multiplier = CalculateWeightMultiplier();
+            // multiply all souls values
+            foreach (var armor in armorParamStruct.ParamEntries)
+            {
+                float weight = BitConverter.ToSingle(armorParamStruct.ParamBytes, (int)(armor.paramOffset + EquipParamProtector.WEIGHT_OFFSET));
+                weight = (weight * (int)multiplier) / 100;
+                Array.Copy(BitConverter.GetBytes(weight), 0, armorParamStruct.ParamBytes, armor.paramOffset + EquipParamProtector.WEIGHT_OFFSET, sizeof(float));
+            }
+            Log.Logger.Information($"Updated armor weights to multiplier {multiplier}%");
+            return true;
+        }
+
         internal static uint SoulMultipliersReceived = 0;
         internal static void UpdateSoulMultiplier()
         {
             var psm = MiscHelper.GetProgressiveItems().Find(x => x.Name == "Progressive Soul Multiplier");
             SoulMultipliersReceived = (uint)App.Client.CurrentSession.Items.AllItemsReceived.Where(x => x.ItemId == psm.ApId).Count();
+        }
+        internal static uint CalculateSoulMultiplier()
+        {
+            uint multiplier = App.DSOptions.SoulMultiplierBase; // base value, if 0 or less multiplier items received
+
+            if (App.DSOptions.SoulMultiplierSteps == 0) // explicitly handle this case to avoid dividing by 0
+                multiplier = App.DSOptions.SoulMultiplierBase;
+            else if (SoulMultipliersReceived >= App.DSOptions.SoulMultiplierSteps) // cap at max multiplier
+                multiplier = App.DSOptions.SoulMultiplierMax;
+            else if (SoulMultipliersReceived > 0) // otherwise, calculate as part of the way from base to max
+            {
+                uint difference = (App.DSOptions.SoulMultiplierMax - App.DSOptions.SoulMultiplierBase);
+                uint distance = (difference * SoulMultipliersReceived) / App.DSOptions.SoulMultiplierSteps;
+                multiplier = App.DSOptions.SoulMultiplierBase + distance;
+            }
+            return multiplier;
         }
         // Updates Npc Params
         internal static bool ModifyNpcParams()
@@ -190,7 +352,7 @@ namespace DSAP.Helpers
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
                 RemoveGhostGhostliness(npcParamStruct);
             if (App.DSOptions.SoulMultiplierBase != 100 || App.DSOptions.SoulMultiplierSteps > 0)
-                MultiplySouls(npcParamStruct);
+                MultiplyNpcSouls(npcParamStruct);
 
             // Get first entry's Param (e.g. test npc), use it as basis for new params.
             byte[] parambytes = new byte[NpcParam.Size];
@@ -218,20 +380,9 @@ namespace DSAP.Helpers
             }
             Log.Logger.Information($"Removed Ghostliness from ghosts");
         }
-        internal static void MultiplySouls(ParamStruct<NpcParam> npcParamStruct)
+        internal static void MultiplyNpcSouls(ParamStruct<NpcParam> npcParamStruct)
         {
-            uint multiplier = App.DSOptions.SoulMultiplierBase; // base value, if 0 or less multiplier items received
-
-            if (App.DSOptions.SoulMultiplierSteps == 0) // explicitly handle this case to avoid dividing by 0
-                multiplier = App.DSOptions.SoulMultiplierBase;
-            else if (SoulMultipliersReceived >= App.DSOptions.SoulMultiplierSteps) // cap at max multiplier
-                multiplier = App.DSOptions.SoulMultiplierMax;
-            else if (SoulMultipliersReceived > 0) // otherwise, calculate as part of the way from base to max
-            {
-                uint difference = (App.DSOptions.SoulMultiplierMax - App.DSOptions.SoulMultiplierBase);
-                uint distance = (difference * SoulMultipliersReceived) / App.DSOptions.SoulMultiplierSteps;
-                multiplier = App.DSOptions.SoulMultiplierBase + distance;
-            }
+            uint multiplier = CalculateSoulMultiplier();
             // multiply all souls values
             foreach (var enemy in npcParamStruct.ParamEntries)
             {
@@ -255,7 +406,7 @@ namespace DSAP.Helpers
             }
             // if we are here, we are updating the params.
             if (App.DSOptions.SoulMultiplierBase != 100 || App.DSOptions.SoulMultiplierMax != 100)
-                MultiplySouls(gameAreaParamStruct);
+                MultiplyBossSouls(gameAreaParamStruct);
 
             // Get first entry's Param (e.g. test npc), use it as basis for new params.
             byte[] parambytes = new byte[GameAreaParam.Size];
@@ -272,18 +423,9 @@ namespace DSAP.Helpers
             return true;
 
         }
-        internal static void MultiplySouls(ParamStruct<GameAreaParam> gameAreaParamStruct)
+        internal static void MultiplyBossSouls(ParamStruct<GameAreaParam> gameAreaParamStruct)
         {
-            uint multiplier = App.DSOptions.SoulMultiplierBase; // base value, if 0 or less multiplier items received
-
-            if (SoulMultipliersReceived >= App.DSOptions.SoulMultiplierSteps) // cap at max multiplier
-                multiplier = App.DSOptions.SoulMultiplierMax;
-            else if (SoulMultipliersReceived > 0) // otherwise, calculate as part of the way from base to max
-            {
-                uint difference = (App.DSOptions.SoulMultiplierMax - App.DSOptions.SoulMultiplierBase);
-                uint distance = (difference * SoulMultipliersReceived) / App.DSOptions.SoulMultiplierSteps;
-                multiplier = App.DSOptions.SoulMultiplierBase + distance;
-            }
+            uint multiplier = CalculateSoulMultiplier();
             // multiply all souls values
             foreach (var area in gameAreaParamStruct.ParamEntries)
             {

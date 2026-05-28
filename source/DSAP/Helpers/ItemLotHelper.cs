@@ -281,13 +281,14 @@ namespace DSAP.Helpers
                      && pair.Key != (int)Enums.SpecialItemLotIds.WhiteSignSoapstone)
                     {
                         Log.Logger.Warning($"Discrepancy: {lot.Items.Count} items in item lot {pair.Key}, but {lot.numPlaced} items placed.");
-                        App.Client.AddOverlayMessage($"Discrepancy: {lot.Items.Count} items in item lot {pair.Key}, but {lot.numPlaced} items placed.");
                         discrepancy_warnings++;
                     }
                 }
-                if (discrepancy_warnings > 20)
+                if (discrepancy_warnings > 5)
                 {
-                    Log.Logger.Error($"More than 20 discrepancies detected.");
+                    Log.Logger.Error($"{discrepancy_warnings} total item descrepancies found!");
+                    App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                    App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
                     break;
                 }
             }
@@ -955,6 +956,51 @@ namespace DSAP.Helpers
             }
             paramStruct.FinalizeParams();
             return true;
+        }
+
+        internal static bool VerifyItemLots(ParamStruct<ItemLotParam> paramStruct)
+        {
+            var result = true;
+            var mismatches = 0;
+            var itemlots = LocationHelper.GetItemLotFlags();
+            Dictionary<int, int> paramlots = [];
+            foreach (var param in paramStruct.ParamEntries)
+            {
+                int flag = BitConverter.ToInt32(paramStruct.ParamBytes, (int)param.paramOffset + 0x80);
+                paramlots.Add((int)param.id, flag);
+            }
+
+            foreach (var item in itemlots)
+            {
+                if (paramlots.TryGetValue(item.ItemLotParamId, out var value))
+                {
+                    if (value == item.Flag)
+                    {
+                        // all ok
+                    }
+                    else
+                    {
+                        mismatches++;
+                        if (mismatches < 5)
+                            Log.Logger.Warning($"Flag mismatch for item lot {item.Name}, expected flag={item.Flag}, but {value} found");
+                        result = false;
+                    }
+                }
+                else
+                {
+                    mismatches++;
+                    if (mismatches < 5)
+                        Log.Logger.Warning($"Could not find item lot {item.Name}, expected param id={item.ItemLotParamId}");
+                    result = false;
+                }
+            }
+            if (mismatches > 0)
+            {
+                Log.Logger.Warning($"{mismatches} total mismatched item lots found!");
+                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+            }
+            return result;
         }
     }
 }

@@ -221,7 +221,7 @@
   {
     "Name": "Ring of Sacrifice - Snuggly Trade",
     "Flag": 51810860,
-    "ItemLotParamId": 3000,
+    "ItemLotParamId": 3060,
     "Id": 11110088
   },
   {
@@ -3408,150 +3408,175 @@
   {
     "Name": "Longsword",
     "Flag": 51810100,
+    "ItemLotParamId": 1810100,
     "Id": 11113668,
     "IsEnabled": false
   },
   {
     "Name": "Heater Shield",
     "Flag": 51810110,
+    "ItemLotParamId": 1810110,
     "Id": 11113669,
     "IsEnabled": false
   },
   {
     "Name": "Broadsword",
     "Flag": 51810120,
+    "ItemLotParamId": 1810120,
     "Id": 11113670,
     "IsEnabled": false
   },
   {
     "Name": "Tower Kite Shield",
     "Flag": 51810130,
+    "ItemLotParamId": 1810130,
     "Id": 11113671,
     "IsEnabled": false
   },
   {
     "Name": "Scimitar",
     "Flag": 51810140,
+    "ItemLotParamId": 1810140,
     "Id": 11113672,
     "IsEnabled": false
   },
   {
     "Name": "Leather Shield",
     "Flag": 51810150,
+    "ItemLotParamId": 1810150,
     "Id": 11113673,
     "IsEnabled": false
   },
   {
     "Name": "Bandit's Knife",
     "Flag": 51810160,
+    "ItemLotParamId": 1810160,
     "Id": 11113674,
     "IsEnabled": false
   },
   {
     "Name": "Target Shield",
     "Flag": 51810170,
+    "ItemLotParamId": 1810170,
     "Id": 11113675,
     "IsEnabled": false
   },
   {
     "Name": "Battle Axe",
     "Flag": 51810180,
+    "ItemLotParamId": 1810180,
     "Id": 11113676,
     "IsEnabled": false
   },
   {
     "Name": "Spider Shield",
     "Flag": 51810190,
+    "ItemLotParamId": 1810190,
     "Id": 11113677,
     "IsEnabled": false
   },
   {
     "Name": "Shortsword",
     "Flag": 51810200,
+    "ItemLotParamId": 1810200,
     "Id": 11113678,
     "IsEnabled": false
   },
   {
     "Name": "Large Leather Shield",
     "Flag": 51810210,
+    "ItemLotParamId": 1810210,
     "Id": 11113679,
     "IsEnabled": false
   },
   {
     "Name": "Short Bow",
     "Flag": 51810220,
+    "ItemLotParamId": 1810220,
     "Id": 11113680,
     "IsEnabled": false
   },
   {
     "Name": "Standard Arrow",
     "Flag": 51810220,
+    "ItemLotParamId": 1810220,
     "Id": 11113681,
     "IsEnabled": false
   },
   {
     "Name": "Dagger",
     "Flag": 51810230,
+    "ItemLotParamId": 1810230,
     "Id": 11113682,
     "IsEnabled": false
   },
   {
     "Name": "Small Leather Shield",
     "Flag": 51810240,
+    "ItemLotParamId": 1810240,
     "Id": 11113683,
     "IsEnabled": false
   },
   {
     "Name": "Sorcerer's Catalyst",
     "Flag": 51810250,
+    "ItemLotParamId": 1810250,
     "Id": 11113684,
     "IsEnabled": false
   },
   {
     "Name": "Hand Axe",
     "Flag": 51810260,
+    "ItemLotParamId": 1810260,
     "Id": 11113685,
     "IsEnabled": false
   },
   {
     "Name": "Cracked Round Shield",
     "Flag": 51810270,
+    "ItemLotParamId": 1810270,
     "Id": 11113686,
     "IsEnabled": false
   },
   {
     "Name": "Pyromancy Flame",
     "Flag": 51810280,
+    "ItemLotParamId": 1810280,
     "Id": 11113687,
     "IsEnabled": false
   },
   {
     "Name": "Mace",
     "Flag": 51810290,
+    "ItemLotParamId": 1810290,
     "Id": 11113688,
     "IsEnabled": false
   },
   {
     "Name": "East-West Shield",
     "Flag": 51810300,
+    "ItemLotParamId": 1810300,
     "Id": 11113689,
     "IsEnabled": false
   },
   {
     "Name": "Canvas Talisman",
     "Flag": 51810310,
+    "ItemLotParamId": 1810310,
     "Id": 11113690,
     "IsEnabled": false
   },
   {
     "Name": "Club",
     "Flag": 51810320,
+    "ItemLotParamId": 1810320,
     "Id": 11113691,
     "IsEnabled": false
   },
   {
     "Name": "Plank Shield",
     "Flag": 51810330,
+    "ItemLotParamId": 1810330,
     "Id": 11113692,
     "IsEnabled": false
   }

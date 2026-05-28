@@ -222,7 +222,7 @@ _all_items_base = [
     ("Bonfire Warp Unlock - Painted World", 1309, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Duke's Archives", 1310, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Crystal Cave", 1311, DSRItemCategory.BONFIREWARP),
-    ("Bonfire Warp Unlock - Catacombs", 1312, DSRItemCategory.BONFIREWARP),
+    ("Bonfire Warp Unlock - Chasm of the Abyss", 1312, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Tomb of the Giants", 1313, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Altar of the Gravelord", 1314, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - The Abyss", 1315, DSRItemCategory.BONFIREWARP),
@@ -230,7 +230,7 @@ _all_items_base = [
     ("Bonfire Warp Unlock - Oolacile Sanctuary", 1317, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Oolacile Township", 1318, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Oolacile Township Dungeon", 1319, DSRItemCategory.BONFIREWARP),
-    ("Bonfire Warp Unlock - Chasm of the Abyss", 1320, DSRItemCategory.BONFIREWARP),
+    ("Bonfire Warp Unlock - Catacombs", 1320, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Undead Asylum - Courtyard", 1321, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Undead Asylum - Interior", 1322, DSRItemCategory.BONFIREWARP),
     ("Bonfire Warp Unlock - Undead Burg", 1323, DSRItemCategory.BONFIREWARP),
@@ -256,6 +256,7 @@ _all_items_base = [
     ("Bonfire Warp Unlock - Firelink Altar - Lordvessel", 1343, DSRItemCategory.BONFIREWARP),
 
     ("Progressive Soul Multiplier", 1400, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
+    ("Progressive Weight Reducer", 1401, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
 
     ("Eye of Death", 2000, DSRItemCategory.CONSUMABLE),
     ("Cracked Red Eye Orb", 2001, DSRItemCategory.CONSUMABLE),
@@ -1074,6 +1075,12 @@ def BuildRequiredItemPool(world, count):
     if world.options.soul_multiplier_steps > 0:
         for i in range(world.options.soul_multiplier_steps):
             item = item_dictionary["Progressive Soul Multiplier"]
+            item_pool.append(item)
+            remaining_count = remaining_count - 1
+
+    if world.options.weight_multiplier_steps > 0:
+        for i in range(world.options.weight_multiplier_steps):
+            item = item_dictionary["Progressive Weight Reducer"]
             item_pool.append(item)
             remaining_count = remaining_count - 1
 

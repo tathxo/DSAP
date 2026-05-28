@@ -50,7 +50,7 @@ public partial class App : Application
     public static List<BonfireWarp> AllowedBonfireWarps { get; set; } = [];
     // 
     private static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
-    private static Dictionary<int, ItemLot> ItemLotReplacementMap = new Dictionary<int, ItemLot>();
+    internal static Dictionary<int, ItemLot> ItemLotReplacementMap = new Dictionary<int, ItemLot>();
     private static Dictionary<string, Tuple<int, string>> SlotLocToItemUpgMap = [];
     // Logging
     private static readonly object _lockObject = new object();
@@ -547,6 +547,14 @@ public partial class App : Application
         {
             Log.Logger.Warning("Your goal is to defeat All Bosses.");
         }
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        { 
+            Log.Logger.Warning("Your goal is to defeat Ornstein and Smough.");
+        }
+        else if (DSOptions.Goal == DSGoal.manus)
+        {
+            Log.Logger.Warning("Your goal is to defeat Manus.");
+        }    
         else
         {
             Log.Logger.Warning("Unknown goal condition detected.");
@@ -635,6 +643,36 @@ public partial class App : Application
                     }
                 }
             }
+            else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+            {
+                var osloc = (Location)LocationHelper.GetBossFlagLocations().Where(x => x.Name == "Ornstein").First();
+                if (osloc != null)
+                {
+                    Log.Logger.Warning($"{osloc.Name} at {osloc.Address:X}_{osloc.AddressBit:X} type {osloc.CheckType}.");
+
+                    bool result = osloc.Check();
+                    if (result)
+                    {
+                        Log.Logger.Warning("O+S bit on. Completing Goal.");
+                        sendingGoal = true;
+                    }
+                }
+            }
+            else if (DSOptions.Goal == DSGoal.manus)
+            {
+                var manusloc = (Location)LocationHelper.GetBossFlagLocations().Where(x => x.Name == "Manus").First();
+                if (manusloc != null)
+                {
+                    Log.Logger.Warning($"{manusloc.Name} at {manusloc.Address:X}_{manusloc.AddressBit:X} type {manusloc.CheckType}.");
+
+                    bool result = manusloc.Check();
+                    if (result)
+                    {
+                        Log.Logger.Warning("Manus bit on. Completing Goal.");
+                        sendingGoal = true;
+                    }
+                }
+            }
             else
             {
                 Log.Logger.Information("Unknown goal condition detected.");
@@ -718,7 +756,12 @@ public partial class App : Application
                 ParamHelper.UpdateSoulMultiplier();
                 ParamHelper.ModifyNpcParams();
                 ParamHelper.ModifyGameAreaParams();
-                // the above two lines crash the game for some reason. investigate
+            }
+            else if (item.Name == "Progressive Weight Reducer")
+            {
+                ParamHelper.UpdateWeightMultiplier();
+                ParamHelper.ModifyWeaponParams();
+                ParamHelper.ModifyArmorParams();
             }
         }
         else
@@ -1263,6 +1306,40 @@ public partial class App : Application
                 }
             }
         }
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        {
+            if (e.CompletedLocation.Name.Contains("Ornstein"))
+            {
+                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
+                SendGoal();
+            }
+        }
+        else if (DSOptions.Goal == DSGoal.manus)
+        {
+            if (e.CompletedLocation.Name.Contains("Manus"))
+            {
+                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
+                SendGoal();
+            }    
+        }
+
+        // if it's a boss location, check the boss fogwall. If its flag is not set, set it
+        var bossdeps = MiscHelper.GetDsrBossDeps();
+        if (bossdeps.TryGetValue(e.CompletedLocation.Name, out DsrEvent dsrevent))
+        {
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            Location loc = new Location
+            {
+                Name = dsrevent.Locname,
+                Address = baseAddress + AddressHelper.GetEventFlagOffset(dsrevent.Flag).Item1,
+                AddressBit = AddressHelper.GetEventFlagOffset(dsrevent.Flag).Item2,
+                Id = dsrevent.Locid,
+            };
+            if (!loc.Check())
+            {
+                Memory.WriteBit(loc.Address, loc.AddressBit, true);
+            }
+        }
 
         // if it's in our scouted locs & not in our own game,
         if (scoutedLocationInfo.TryGetValue(e.CompletedLocation.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
@@ -1379,59 +1456,6 @@ public partial class App : Application
             Log.Logger.Information($"You do not have {displayableEventType} locking enabled");
         }
     }
-    private static void UpdateItemLots()
-    {
-        var watch = System.Diagnostics.Stopwatch.StartNew();
-        // Read in the Param Structure
-        // Modify it,
-        // Then save it back
-        bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> paramStruct,
-                                                 ItemLotParam.spOffset,
-                                                 (ps) => ps.ParamEntries.Last().id >= 99999990);
-        if (!reloadRequired)
-        {
-            Log.Logger.Debug("Skipping reload of Item Lots");
-            //return false;
-        }
-
-        Log.Logger.Debug($"ItemParam list rowcount='{paramStruct.ParamEntries.Count}'");
-
-        // if we are here, we are updating the params.
-        int new_entries = 0;
-        ItemLotHelper.AddInitItemLots(paramStruct, ref new_entries);
-        ItemLotHelper.OverwriteItemLots(paramStruct, ItemLotReplacementMap);
-        //bool success = ItemLotHelper.AddInitItemLots();
-
-        // add a dummy item at 99999998 so that we can know we've been here.
-        byte[] parambytes = new byte[ItemLotParam.Size];
-        Array.Copy(BitConverter.GetBytes(-1), 0, parambytes, 0x80, sizeof(int)); // overwrite getitemflagid with -1, so it isn't used
-        paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
-
-        paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-        Log.Logger.Information($"Added {new_entries} items to ItemLotParams");
-
-        ParamHelper.WriteFromParamSt(paramStruct, ItemLotParam.spOffset);
-
-        watch.Stop();
-
-        Log.Logger.Information($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
-        Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
-
-        Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
-        Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
-        if (MiscHelper.IsInGame())
-        {
-            HomewardBoneCommand();
-            Log.Logger.Information($"After Load screen, new item lots will be live.");
-            Client.AddOverlayMessage($"After Load screen, new item lots will be live.");
-        }
-        else
-        {
-            Log.Logger.Information($"You are now safe to load your save.");
-            Client.AddOverlayMessage($"You are now safe to load your save.");
-        }
-    }
-
     private static void Client_ItemReceived(object? sender, ItemReceivedEventArgs e)
     {
         LogItem(e.Item, 1);
@@ -1771,7 +1795,7 @@ public partial class App : Application
         BonfireWarp? bonfire = AllowedBonfireWarps.Find(x => x.ItemId == ApId);
         if (bonfire != null)
         {
-            BonfireInjectorHelper.setBonfireByLoc(bonfire.Flag);
+            App.SetEventFlag(bonfire.Flag, true);
         }
         else
         {
@@ -1872,9 +1896,11 @@ public partial class App : Application
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
         // update the various params (options are read within)
+        ParamHelper.UpdateWeightMultiplier(); // setup weight multiplier for weapons + armor
         ParamHelper.ModifyWeaponParams();
+        ParamHelper.ModifyArmorParams();
 
-        ParamHelper.UpdateSoulMultiplier();
+        ParamHelper.UpdateSoulMultiplier(); // setup soul multiplier for npcs + bosses
         ParamHelper.ModifyNpcParams();
         ParamHelper.ModifyGameAreaParams();
         ParamHelper.ModifyShopLineupParams();
@@ -1883,7 +1909,7 @@ public partial class App : Application
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
         /* Set to only receive remote items and starting inventory */
-        UpdateItemLots();
+        ParamHelper.UpdateItemLots(ItemLotReplacementMap);
         watch.Stop();
         Log.Logger.Information($"Finished setup, took {watch.ElapsedMilliseconds}ms total");
         Client.AddOverlayMessage($"Finished setup, took {watch.ElapsedMilliseconds}ms total");

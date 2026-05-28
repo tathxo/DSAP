@@ -65,27 +65,32 @@ def BuildRequiredItemPool(world, count):
             group = f"Skip Tools - {group}"
 
         skip_progression_items.update(item_name_groups[group])
-        # skip_progression_items.add(world.random.choice(item_name_groups[group]))
 
     result: list[DSRItemData] = []
     for item in skip_progression_items:
         dsr_item = item_dictionary[item]
 
-        # TODO Temporary, remove this when enemy drops or shop items get added into logic, otherwise too many items get generated
+        # TODO Temporary up to the other comment, remove this when enemy drops or shop items get added into logic, otherwise too many items get generated
         is_tracked_by_logic = True
+        if item not in [loc.default_item for loc in location_dictionary.values()]:
+            is_tracked_by_logic = False
+
         for loc in location_dictionary.values():
             if loc.default_item == item: 
-                if loc.category in [DSRLocationCategory.ENEMY_DROP, DSRLocationCategory.SHOP_ITEM]:
+                if loc.category in [DSRLocationCategory.ENEMY_DROP, DSRLocationCategory.SHOP_ITEM, DSRLocationCategory.SKIP]:
                     is_tracked_by_logic = False
+        
         if not is_tracked_by_logic:
+            print(item)
             continue
-
+        print("              " + item)
+        #### 
 
         if dsr_item not in item_pool:
             result.append(dsr_item)
 
 
-    generated_key_items_names = [x.name for x in result]
+    generated_skip_items_names = [x.name for x in result]
 
     item_pool.extend(result)
     remaining_count = remaining_count - len(result)
@@ -93,7 +98,7 @@ def BuildRequiredItemPool(world, count):
 
 
     world.random.shuffle(item_pool)
-    return item_pool, generated_key_items_names
+    return item_pool, generated_skip_items_names
 
 def BuildGuaranteedItemPool(world):
     item_pool = []

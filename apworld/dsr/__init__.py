@@ -571,12 +571,14 @@ class DSRWorld(World):
         # print("Created item pool size: " + str(len(foo)))
 
         # Add any Key + useful items
-        rip, required_key_item_names = BuildRequiredItemPool(self, itempoolSize)
+        rip, required_skip_item_names = BuildRequiredItemPool(self, itempoolSize)
         crip = [self.create_item(item.name) for item in rip]
 
         for item in crip: 
-            if item.name in required_key_item_names:
+            if item.name in required_skip_item_names:
                 item.classification = ItemClassification.progression
+
+        print(crip)
 
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]

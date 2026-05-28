@@ -2,7 +2,7 @@ import typing
 from dataclasses import dataclass
 from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter
 from Options import OptionGroup
-from . import Skips
+from Skips import SkipDifficulty, get_all_skips
 
 
 # QoL
@@ -144,8 +144,8 @@ class BossFogwallSanity(Toggle):
 
 
 
-def skip_logic_helper(difficulty: Skips.SkipDifficulty): 
-    available_skips = Skips.get_all_skips()
+def skip_logic_helper(difficulty: SkipDifficulty): 
+    available_skips = get_all_skips()
     valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
     default = {skip.name: 0 for skip in available_skips if skip.difficulty == difficulty}
 
@@ -159,25 +159,25 @@ class SkipLogicEasy(OptionCounter):
         For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?usp=sharing
     """
     display_name = "Enabled Easy Skips"
-    difficulty = Skips.SkipDifficulty.EASY
+    difficulty = SkipDifficulty.EASY
     valid_keys, default = skip_logic_helper(difficulty)
     cull_zeroes=True
 
 
 class SkipLogicMedium(OptionCounter):
     display_name = "Enabled Medium Skips"
-    difficulty=Skips.SkipDifficulty.MEDIUM
+    difficulty=SkipDifficulty.MEDIUM
     valid_keys, default = skip_logic_helper(difficulty)
 
 
 class SkipLogicHard(OptionCounter):
     display_name = "Enabled Hard Skips"
-    difficulty=Skips.SkipDifficulty.HARD
+    difficulty=SkipDifficulty.HARD
     valid_keys, default = skip_logic_helper(difficulty)
 
 class SkipLogicVeryHard(OptionCounter):
     display_name = "Enabled Very Hard Skips"
-    difficulty=Skips.SkipDifficulty.VERY_HARD
+    difficulty=SkipDifficulty.VERY_HARD
     valid_keys, default = skip_logic_helper(difficulty)
 
 

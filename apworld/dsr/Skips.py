@@ -7,7 +7,7 @@ from BaseClasses import CollectionState
 
 from worlds.AutoWorld import World
 
-from . import Items, Groups
+from Groups import item_name_groups
 
 # Skips automatically populate this with their init method
 _all_skips: list["Skip"] = []
@@ -85,7 +85,7 @@ def required_item_pool_for_skips(world: World, current_required_item_pool: list[
 
     for group in skip_progression_item_groups:
         
-        skip_progression_items.add(world.random.choice(Groups.item_name_groups[group]))
+        skip_progression_items.add(world.random.choice(item_name_groups[group]))
 
     result = []
     for item in skip_progression_items:

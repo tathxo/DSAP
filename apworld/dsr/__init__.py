@@ -12,7 +12,7 @@ from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, Upgr
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
-from .Skips import get_all_skips, get_user_selected_skips, required_item_pool_for_skips
+from .Skips import get_all_skips, get_user_selected_skips
 
 from settings import Group, FilePath
 
@@ -571,12 +571,12 @@ class DSRWorld(World):
         # print("Created item pool size: " + str(len(foo)))
 
         # Add any Key + useful items
-        rip = BuildRequiredItemPool(self, itempoolSize)
-        required_skip_itempool = [self.create_item(name) for name in required_item_pool_for_skips(self, rip)]
-        for item in required_skip_itempool:
-            item.classification = ItemClassification.progression
+        rip, required_key_item_names = BuildRequiredItemPool(self, itempoolSize)
         crip = [self.create_item(item.name) for item in rip]
-        crip.extend(required_skip_itempool)
+
+        for item in crip: 
+            if item.name in required_key_item_names:
+                item.classification = ItemClassification.progression
 
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]

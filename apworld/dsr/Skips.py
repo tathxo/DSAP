@@ -70,37 +70,6 @@ def get_user_selected_skips(options:list[OptionCounter]) -> Iterable[Skip]:
 
 
 
-def required_item_pool_for_skips(world: World, current_required_item_pool: list[str]) -> list[str]: 
-    skip_options = [world.options.skip_logic_easy, 
-                    world.options.skip_logic_medium, 
-                    world.options.skip_logic_hard, 
-                    world.options.skip_logic_very_hard]
-    enabled_skips = get_user_selected_skips(skip_options)
-    skip_progression_item_groups: set[str] = set()
-    skip_progression_items: set[str] = set()
-
-    for skip in enabled_skips:
-        skip_progression_item_groups = skip_progression_item_groups.union(skip.required_items_groups)
-        skip_progression_items = skip_progression_items.union(skip.required_items)
-
-    for group in skip_progression_item_groups:
-        
-        skip_progression_items.add(world.random.choice(item_name_groups[group]))
-
-    result = []
-    for item in skip_progression_items:
-        if item not in current_required_item_pool:
-            result.append(item)
-    # print(result)
-    return result
-    
-
-
-
-
-
-
-
 ###########
 #### Skips with no Items
 ###########
@@ -259,6 +228,8 @@ Skip(name="Moonlight Butterfly Skip",
 ### Skips with items
 ########
 
+# When adding a new Item Group, make sure to add 2 version 1 with "Skip Tools - " prepended and 1 without
+
 #TODO: After shop sanity gets implemented conditions for this need to change, the extra condition lambda -> required item check
 
 
@@ -340,7 +311,7 @@ Skip(name="Manus Cheese",
 
     techniques=[SkipTechniques.BOSS_CHEESE ],
     difficulty=SkipDifficulty.EASY ,
-    required_items_groups=["Ranged Weapons"],
+    required_items_groups=["Ranged Weapons"], # option to buy arrows or bolts somewhere, currently its always possible to buy them from vamos
     required_items=["Hawk Ring"] 
 )
 
@@ -376,7 +347,7 @@ Skip(name="Artorias Cheese",
     techniques=[SkipTechniques.BOSS_CHEESE ],
     difficulty=SkipDifficulty.EASY ,
 
-    required_items_groups=["Bows"] 
+    required_items_groups=["Bows"] # option to buy arrows somewhere, currently its always possible to buy them from vamos
 )
 
 

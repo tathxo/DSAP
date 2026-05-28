@@ -101,17 +101,18 @@ item_name_groups = {
     # These items can be wielded by almost (max needs 5 levels of investment) any character from beginning of the game. 
 
     # Strength requirement for these is max 10 
-    "Skip Tools - Medium Shield" :  ["Bloodshield","Caduceus Kite Shield","Crest Shield", 
+    "Skip Tools - Medium Shields" :  ["Bloodshield","Caduceus Kite Shield","Crest Shield", 
                                     "Dragon Crest Shield", "East-West Shield", "Grass Crest Shield", "Heater Shield",
                                     "Knight Shield", "Large Leather Shield", "Sanctus", "Spider Shield", 
                                     "Spiked Shield", "Tower Kite Shield", "Wooden Shield"],
 
     # INT requirement for these is max 12
-    "Skip Tools - Catalyst" :       ["Sorcerer's Catalyst", "Beatrice's Catalyst", 'Tin Banishment Catalyst', 
+    "Skip Tools - Catalysts" :       ["Sorcerer's Catalyst", "Beatrice's Catalyst", 'Tin Banishment Catalyst', 
                                      'Oolacile Ivory Catalyst', "Demon's Catalyst", 'Oolacile Catalyst'],
 
     # Max requirements DEX 14 STR 11
-    "Skip Tools - Bow" :            ['Short Bow', 'Longbow', 'Composite Bow'],
+    "Skip Tools - Bows" :            ['Short Bow', 'Longbow', 'Composite Bow'],
+    "Skip Tools - Ranged Weapons": ['Short Bow', 'Longbow', 'Composite Bow', "Light Crossbow"],
 
     # Following are used in runs with disabled item requirement
     "Medium Shields"    : ["Balder Shield","Black Knight Shield","Bloodshield","Caduceus Kite Shield","Crest Shield", "Crystal Shield", 

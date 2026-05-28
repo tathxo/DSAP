@@ -1,5 +1,7 @@
-from.Items import _all_items, key_item_names, DSRItemCategory, item_dictionary, _all_items_base, DSRUpgradeType
-
+from .Items import _all_items, key_item_names, DSRItemCategory, DSRItemData, item_dictionary, _all_items_base, DSRUpgradeType
+from .Skips import get_user_selected_skips
+from .Groups import item_name_groups
+from .Locations import location_dictionary, DSRLocationCategory
 
 
 from worlds.AutoWorld import World
@@ -46,8 +48,52 @@ def BuildRequiredItemPool(world, count):
             item_pool.append(item)
             remaining_count = remaining_count - 1
 
+
+    allow_skips_options = [world.options.skip_logic_easy, 
+                           world.options.skip_logic_medium, 
+                           world.options.skip_logic_hard, 
+                           world.options.skip_logic_very_hard]
+    skip_progression_item_groups: set[str] = set()
+    skip_progression_items: set[str] = set()
+
+    for skip in get_user_selected_skips(allow_skips_options):
+        skip_progression_item_groups = skip_progression_item_groups.union(skip.required_items_groups)
+        skip_progression_items = skip_progression_items.union(skip.required_items)
+
+    for group in skip_progression_item_groups:
+        if not world.options.no_weapon_requirements:
+            group = f"Skip Tools - {group}"
+
+        skip_progression_items.update(item_name_groups[group])
+        # skip_progression_items.add(world.random.choice(item_name_groups[group]))
+
+    result: list[DSRItemData] = []
+    for item in skip_progression_items:
+        dsr_item = item_dictionary[item]
+
+        # TODO Temporary, remove this when enemy drops or shop items get added into logic, otherwise too many items get generated
+        is_tracked_by_logic = True
+        for loc in location_dictionary.values():
+            if loc.default_item == item: 
+                if loc.category in [DSRLocationCategory.ENEMY_DROP, DSRLocationCategory.SHOP_ITEM]:
+                    is_tracked_by_logic = False
+        if not is_tracked_by_logic:
+            continue
+
+
+        if dsr_item not in item_pool:
+            result.append(dsr_item)
+
+
+    generated_key_items_names = [x.name for x in result]
+
+    item_pool.extend(result)
+    remaining_count = remaining_count - len(result)
+
+
+
     world.random.shuffle(item_pool)
-    return item_pool
+    return item_pool, generated_key_items_names
 
 def BuildGuaranteedItemPool(world):
     item_pool = []

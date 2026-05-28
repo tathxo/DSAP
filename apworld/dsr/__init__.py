@@ -578,8 +578,6 @@ class DSRWorld(World):
             if item.name in required_skip_item_names:
                 item.classification = ItemClassification.progression
 
-        print(crip)
-
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]
         guaranteedpool = BuildGuaranteedItemPool(self)

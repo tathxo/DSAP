@@ -81,9 +81,7 @@ def BuildRequiredItemPool(world, count):
                     is_tracked_by_logic = False
         
         if not is_tracked_by_logic:
-            print(item)
             continue
-        print("              " + item)
         #### 
 
         if dsr_item not in item_pool:

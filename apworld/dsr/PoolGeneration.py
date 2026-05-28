@@ -4,7 +4,6 @@ from .Groups import item_name_groups
 from .Locations import location_dictionary, DSRLocationCategory
 
 
-from worlds.AutoWorld import World
 
 
 

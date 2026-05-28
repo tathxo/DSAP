@@ -161,7 +161,6 @@ class SkipLogicEasy(OptionCounter):
     display_name = "Enabled Easy Skips"
     difficulty = SkipDifficulty.EASY
     valid_keys, default = skip_logic_helper(difficulty)
-    cull_zeroes=True
 
 
 class SkipLogicMedium(OptionCounter):

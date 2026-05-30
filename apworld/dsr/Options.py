@@ -58,6 +58,8 @@ class SoulMultiplierSteps(Range):
     As an example, if your soul_multiplier_base is 100, soul_multiplier_max is 200, and this is set to 4, then the
     first such item will set the soul drop multiplier to 125%, 2nd to 150%, and so on.
 
+    Progressive Soul Multiplier update will only take effect when enemies are reloaded or respawned.
+
     Has no effect if the soul_multiplier_base and soul_multiplier_max are equal.
 
     If zero, soul_multiplier_base is applied as a static multiplier."""

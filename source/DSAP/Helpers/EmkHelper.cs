@@ -124,8 +124,8 @@ namespace DSAP.Helpers
                 }
 
                 uint mapid3 = 0; // 3 digit map code
-                uint wnum = MiscHelper.GetWorldNumber();
-                uint anum = MiscHelper.GetAreaNumber();
+                uint wnum = MapHelper.GetWorldNumber();
+                uint anum = MapHelper.GetAreaNumber();
                 if (wnum > 0)
                     mapid3 = 10 * wnum + anum;
                 if (mapid3 != cached_mapid3)

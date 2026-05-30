@@ -446,6 +446,18 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json, GetJsonOptions());
             return list;
         }
+        static Lookup<string, MapPoi>? cached_mapPois = null;
+        public static Lookup<string, MapPoi> GetMapPois()
+        {
+            if (cached_mapPois == null)
+            {
+                var json = OpenEmbeddedResource("DSAP.Resources.MapPois.json");
+                var list = JsonSerializer.Deserialize<List<MapPoi>>(json, GetJsonOptions());
+                cached_mapPois = (Lookup<string, MapPoi>)list.ToLookup(x => x.MapName, x=>x);
+            }
+            return cached_mapPois;
+        }
+
         public static DarkSoulsItem UpgradeItem(DarkSoulsItem item, string itemupg, bool log = false)
         {
             if (itemupg != null)
@@ -537,53 +549,6 @@ namespace DSAP.Helpers
                 return Memory.ReadUInt(next);
             }
             return 0; 
-        }
-        public static PositionData GetPosition()
-        {
-            Log.Logger.Debug("Getting position");
-            var PositionData = new PositionData();
-            if (IsInGame())
-            {
-                // map = worldnumber + area number. e.g. 10 + 02 => m10_02 = firelink shrine
-                ulong eoffset = AddressHelper.GetBaseEAddress();
-                if (eoffset != 0)
-                {
-                    uint worldnumber = GetWorldNumber();
-                    uint areanumber = GetAreaNumber();
-                    Log.Logger.Debug($"Position update: got w/a {worldnumber} {areanumber}");
-                    if (worldnumber > 9 && worldnumber < 19 && areanumber >= 0 && areanumber < 3)
-                    {
-                        PositionData.MapId = (int)(1000000 * worldnumber + 10000 * areanumber);
-                        Log.Logger.Debug($"Got position: {PositionData.MapId}");
-                        return PositionData;
-                    }
-                }
-            }
-            PositionData.MapId = App.Client.GPSHandler?.MapId ?? 0;
-            Log.Logger.Debug($"Got position: {PositionData.MapId} (no update)");
-            return PositionData;
-        }
-        public static uint GetWorldNumber(ulong eOffset = 0) // E + A23
-        {
-            if (eOffset == 0)
-                eOffset = AddressHelper.GetBaseEAddress();
-            if (eOffset != 0)
-            {
-                var next = OffsetPointer(eOffset, 0xA23);
-                return Memory.ReadByte(next);
-            }
-            return 0;
-        }
-        public static uint GetAreaNumber(ulong eOffset = 0) // E + A22
-        {
-            if (eOffset == 0)
-                eOffset = AddressHelper.GetBaseEAddress();
-            if (eOffset != 0)
-            {
-                var next = OffsetPointer(eOffset, 0xA22);
-                return Memory.ReadByte(next);
-            }
-            return 0;
         }
         public static string OpenEmbeddedResource(string resourceName)
         {

@@ -121,6 +121,10 @@
 				SelectedIndex="1">
 				</ComboBox>
             </StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Tracker Map Tab Switching</Label>
+				<ToggleSwitch IsChecked="{Binding TrackerMapTabSwitching}"></ToggleSwitch>
+            </StackPanel>
         </StackPanel>
         <ToggleButton Grid.Row="2" 
                 Content="Deathlink" 

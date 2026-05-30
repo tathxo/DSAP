@@ -1012,6 +1012,7 @@ public partial class App : Application
 
             StartEmkWatchers(EmkControllers);
             StartInGameWatcher();
+            MapHelper.StartMapAutoTracking();
         }
         else
         {
@@ -1025,9 +1026,6 @@ public partial class App : Application
         {
             Log.CloseAndFlush();
         }
-
-        //Client.GPSHandler = new Archipelago.Core.Util.GPS.GPSHandler(MiscHelper.GetPosition, 5000);
-        //Client.GPSHandler.Start();
 
         Context.ConnectButtonEnabled = true;
         Context.UnstuckButtonEnabled = true;

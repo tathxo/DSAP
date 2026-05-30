@@ -118,6 +118,11 @@ namespace DSAP.Helpers
                 get => App.ControlsContext.WarpSortOrder;
                 set => App.ControlsContext.WarpSortOrder = value;
             }
+            public bool TrackerMapTabSwitching
+            {
+                get => App.ControlsContext.TrackerMapTabSwitching;
+                set => App.ControlsContext.TrackerMapTabSwitching = value;
+            }
             //public string ClientGUID
             //{
             //    get => ClientGUID;

@@ -32,6 +32,7 @@ namespace DSAP.ViewModels
         private bool _vanillaWarpNames = false;
         private string _warpSortOrder = "";
         private bool _deathlink = false;
+        private bool _trackerMapTabSwitching = true;
 
         public bool FoundItemProgressive
         {
@@ -125,6 +126,12 @@ namespace DSAP.ViewModels
                 }
             }
         }
+        public bool TrackerMapTabSwitching
+        {
+            get => _trackerMapTabSwitching;
+            set => this.RaiseAndSetIfChanged(ref _trackerMapTabSwitching, value);
+        }
+
         public override void Dispose()
         {
             base.Dispose();

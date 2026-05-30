@@ -1,0 +1,1073 @@
+﻿[
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg Start",
+    "RoomId": 0,
+    "X": -62,
+    "Y": -23.25,
+    "Z": -25
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg 2",
+    "RoomId": 0,
+    "X": -21,
+    "Y": -13.36,
+    "Z": -65
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg Merchant",
+    "RoomId": 0,
+    "X": -39,
+    "Y": -19.45,
+    "Z": -68
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg Bonfire",
+    "RoomId": 0,
+    "X": -7.8,
+    "Y": -9.74,
+    "Z": -75
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg Side Of Door",
+    "RoomId": 0,
+    "X": -7.1,
+    "Y": -10.32,
+    "Z": -102.85
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg Ladder to Roof",
+    "RoomId": 0,
+    "X": -44.4,
+    "Y": -24.5,
+    "Z": -40.5
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Watchtower Basement - Havel",
+    "RoomId": 0,
+    "X": 56.7,
+    "Y": -38.2,
+    "Z": -117
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Lower Burg Side Of Door",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": -9.7,
+    "Y": -19.2,
+    "Z": -102
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Lower Burg Residence",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": -0.1,
+    "Y": -31.3,
+    "Z": -77.8
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Lower Burg Ambush",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": -55.7,
+    "Y": -42.4,
+    "Z": -41
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Lower Burg Central",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": -27.1,
+    "Y": -33.54,
+    "Z": -67
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Lower Burg Capra",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": -72.5,
+    "Y": -43.3,
+    "Z": -16.9
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Sunlight Altar",
+    "RoomId": 0,
+    "X": 20.6,
+    "Y": 9.5,
+    "Z": -22.6
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Undead Parish Start",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": -10.0,
+    "Y": 13.54,
+    "Z": -16.25
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Early Fork",
+    "RoomId": 0,
+    "X": 147.2,
+    "Y": -5.7,
+    "Z": -31
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Basin Entry",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 165.65,
+    "Y": -26.47,
+    "Z": -36.56
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Basin VoD Entry",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 156,
+    "Y": -74.44,
+    "Z": -28.94
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Basin Hydra",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 95.56,
+    "Y": -70.5,
+    "Z": -167.45
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Basin DLC Entry",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 198.4,
+    "Y": -72.3,
+    "Z": -289.7
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Basin Ladder Almost Top",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 172.68,
+    "Y": -31.24,
+    "Z": -145.2
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Ladder Top",
+    "RoomId": 0,
+    "X": 172.68,
+    "Y": -19.8,
+    "Z": -145.2
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Water",
+    "RoomId": 0,
+    "X": 179.7,
+    "Y": -11.45,
+    "Z": -66.3
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Cats",
+    "RoomId": 0,
+    "X": 211.4,
+    "Y": -15.5,
+    "Z": -174.3
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Sif",
+    "RoomId": 0,
+    "X": 255.8,
+    "Y": -16,
+    "Z": -310.8
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Hidden Bonfire",
+    "RoomId": 0,
+    "X": 258.2,
+    "Y": -3.4,
+    "Z": -12.2
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Ambush",
+    "RoomId": 0,
+    "X": 230,
+    "Y": -7.5,
+    "Z": -19.3
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Moonlight Butterfly Tower",
+    "RoomId": 0,
+    "X": 181.6,
+    "Y": -10.34,
+    "Z": -23.33
+  },
+  {
+    "MapName": "* Darkroot Garden / Darkroot Basin",
+    "PoiName": "Darkroot Garden Frogray Zone",
+    "RoomId": 0,
+    "X": 170.75,
+    "Y": -29.25,
+    "Z": 50.452
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Sanctuary Bonfire",
+    "RoomId": 0,
+    "X": 972.0,
+    "Y": -313.47,
+    "Z": 584.64
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Royal Wood Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 992.0,
+    "Y": -318,
+    "Z": 677
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Royal Wood Elevator 1",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 988.0,
+    "Y": -308,
+    "Z": 776
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Royal Wood Kalameet Encounter",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 875.0,
+    "Y": -320,
+    "Z": 749
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Royal Wood Elevator 2",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 981.86,
+    "Y": -303,
+    "Z": 797.4
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Royal Wood Upper Chasm",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 932.37,
+    "Y": -308.6,
+    "Z": 834.65
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Township Bonfire",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 1041.01,
+    "Y": -332,
+    "Z": 876.55
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Township Entry",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 1026.47,
+    "Y": -336.5,
+    "Z": 881.9
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Township Mimic",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 936.45,
+    "Y": -366.3,
+    "Z": 945.7
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Township Lower Hall After Pillars",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 905.95,
+    "Y": -400.5,
+    "Z": 935.3
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Township Dungeon Bonfire",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 863.3,
+    "Y": -447.5,
+    "Z": 913.26
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Chasm Entry",
+    "RoomId": 0,
+    "SubMapId": 3,
+    "X": 863.3,
+    "Y": -447.5,
+    "Z": 897.2
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Chasm Pre-Battle 1",
+    "RoomId": 0,
+    "SubMapId": 3,
+    "X": 896.98,
+    "Y": -457,
+    "Z": 926.4
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Chasm Battle 1",
+    "RoomId": 0,
+    "SubMapId": 3,
+    "X": 913.5,
+    "Y": -460,
+    "Z": 942.25
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Chasm Drop Mist",
+    "RoomId": 0,
+    "SubMapId": 3,
+    "X": 958.55,
+    "Y": -495.4,
+    "Z": 888.18
+  },
+  {
+    "MapName": "* Oolacile",
+    "PoiName": "Chasm Below Bridge",
+    "RoomId": 0,
+    "SubMapId": 3,
+    "X": 887.46,
+    "Y": -516.8,
+    "Z": 891.37
+  },
+  {
+    "MapName": "* Tomb of the Giants",
+    "PoiName": "Upper Tomb Entry",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 58.54,
+    "Y": -159.93,
+    "Z": 124.9
+  },
+  {
+    "MapName": "* Tomb of the Giants",
+    "PoiName": "Upper Tomb Exit",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 87.4,
+    "Y": -221.4,
+    "Z": 8.03
+  },
+  {
+    "MapName": "* Tomb of the Giants",
+    "PoiName": "Lower Tomb Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 73.81,
+    "Y": -227.05,
+    "Z": -2.11
+  },
+  {
+    "MapName": "* Tomb of the Giants",
+    "PoiName": "Lower Tomb Before Nito",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -117.76,
+    "Y": -249.43,
+    "Z": -34.21
+  },
+  {
+    "MapName": "* Great Hollow / Ash Lake",
+    "PoiName": "Great Hollow Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -317.6,
+    "Y": -236.05,
+    "Z": 121.60
+  },
+  {
+    "MapName": "* Great Hollow / Ash Lake",
+    "PoiName": "Great Hollow Midpoint",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -327.8,
+    "Y": -332.34,
+    "Z": 100.6
+  },
+  {
+    "MapName": "* Great Hollow / Ash Lake",
+    "PoiName": "Great Hollow Base",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -325,
+    "Y": -392.3,
+    "Z": 113.3
+  },
+  {
+    "MapName": "* Great Hollow / Ash Lake",
+    "PoiName": "Ash Lake Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -366,
+    "Y": -401.24,
+    "Z": 139.4
+  },
+  {
+    "MapName": "* Great Hollow / Ash Lake",
+    "PoiName": "Ash Lake Hydra Scale",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -320.6,
+    "Y": -414.6,
+    "Z": 76.7
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Blighttown Catwalk Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -275.4,
+    "Y": -136.73,
+    "Z": 73.1
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Blighttown Wall Sucker",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -200,
+    "Y": -147.7,
+    "Z": 72.1
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "End of Front Area",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -228,
+    "Y": -193.9,
+    "Z": 99.66
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Blighttown Back Entry",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -158.8,
+    "Y": -139.0,
+    "Z": 68.9
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Blighttown Elevator Top",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -160.1,
+    "Y": -176.73,
+    "Z": 98.45
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Blighttown Elevator Base",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -160.1,
+    "Y": -214.73,
+    "Z": 98.45
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Quelaag's Domain",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -41.6,
+    "Y": -213.9,
+    "Z": 131.7
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Swamp Bonfire",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -198.2,
+    "Y": -215,
+    "Z": 100.4
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "Lower Front Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -242.2,
+    "Y": -215,
+    "Z": 119.4
+  },
+  {
+    "MapName": "* Blighttown",
+    "PoiName": "BT Exit to Great Hollow",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -317.4,
+    "Y": -206.4,
+    "Z": 83.4
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Demon Ruins Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 195.7,
+    "Y": -267.0,
+    "Z": 130.2
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Ceaseless Discharge Arena",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 386.5,
+    "Y": -278,
+    "Z": 63.1
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Taurus Demons",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 406,
+    "Y": -304,
+    "Z": 98
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Demon Ruins 2nd Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 252,
+    "Y": -334,
+    "Z": 22.7
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Shortcut Door - Demon Ruins Side",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 215,
+    "Y": -367.7,
+    "Z": 137.7
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Elevator Behind Firesage",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 121.8,
+    "Y": -318.2,
+    "Z": 126.1
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Centipede Demon Arena",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 169,
+    "Y": -383.5,
+    "Z": 76
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Lost Izalith 1st Bonfire",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 246.6,
+    "Y": -381.7,
+    "Z": 108.8
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Shortcut Door - Lost Izalith Side",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 264.5,
+    "Y": -367.7,
+    "Z": 178.8
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Lost Izalith Revealed",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 300.6,
+    "Y": -383.5,
+    "Z": 166.8
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Izalith Secret Bonfire",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 455,
+    "Y": -380,
+    "Z": 169
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Bed of Chaos Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 451,
+    "Y": -362,
+    "Z": 336
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Fortress Entry",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 88,
+    "Y": 16.6,
+    "Z": 181
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Axe Room Entry",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 80.2,
+    "Y": 25.2,
+    "Z": 222
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Trapped Chest'",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 96.7,
+    "Y": 30.25,
+    "Z": 249
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Logan's Cage",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 111,
+    "Y": 28,
+    "Z": 214.4
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's 1st Fog",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 120.57,
+    "Y": 36.8,
+    "Z": 271.8
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Stairs Bottom",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 93.0,
+    "Y": 21.0,
+    "Z": 274.7
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Stairs Top",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 98.0,
+    "Y": 48.7,
+    "Z": 293.1
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Under Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 73.0,
+    "Y": 55,
+    "Z": 289
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Stairs Giant",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 98.0,
+    "Y": 62.7,
+    "Z": 293.1
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Sniper Tools",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 98.0,
+    "Y": 56,
+    "Z": 290
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Above Bonfire",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 73.0,
+    "Y": 67,
+    "Z": 289
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Ricard",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 86.0,
+    "Y": 70,
+    "Z": 217
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Iron Giant",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 107.83,
+    "Y": 83.4,
+    "Z": 255.4
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Basement Below Axe Room Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 80.2,
+    "Y": 7.2,
+    "Z": 222
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Basement Back",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 76.9,
+    "Y": 7.2,
+    "Z": 281.7
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Basement Under Trapped Chest'",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 96.7,
+    "Y": 7.3,
+    "Z": 249
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Basement Right Room",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 111.3,
+    "Y": 7.2,
+    "Z": 217.74
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Sen's Front Roof",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 84.5,
+    "Y": 45.25,
+    "Z": 190.9
+  },
+  {
+    "MapName": "* Sen's Fortress",
+    "PoiName": "Near Cage Key",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 98.5,
+    "Y": 41,
+    "Z": 318
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Firekeeper Plaza",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 204.25,
+    "Y": 179.4,
+    "Z": 256
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Moving Staircase",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 335.26,
+    "Y": 117.6,
+    "Z": 254.8
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Darkmoon Hall",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 390,
+    "Y": 68.8,
+    "Z": 255
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Gwyndolin Arena",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 524,
+    "Y": 56.2,
+    "Z": 255
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Stairs to Front Door",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 390,
+    "Y": 120,
+    "Z": 255
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Residence Bonfire",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 504,
+    "Y": 135,
+    "Z": 175.6
+  },
+  {
+    "MapName": "* Anor Londo",
+    "PoiName": "Anor Londo Stairs to O+S",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 524,
+    "Y": 143,
+    "Z": 255
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Bull Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 231.3,
+    "Y": 200,
+    "Z": 481
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Pendant Golem Room",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 262.3,
+    "Y": 277.62,
+    "Z": 506.8
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Big Room Start",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 269.5,
+    "Y": 277.62,
+    "Z": 514.05
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Big Room By Secret Bookcase",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 322.9,
+    "Y": 277.6,
+    "Z": 587.57
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Secret Bookcase Room",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 317.76,
+    "Y": 277.6,
+    "Z": 592.64
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Big Room Near Prison",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 345.7,
+    "Y": 293,
+    "Z": 571.7
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Stairs from Prison",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 358.4,
+    "Y": 293,
+    "Z": 571.2
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Lower Prison",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 416,
+    "Y": 228,
+    "Z": 562
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Balcony Bonfire",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 350.8,
+    "Y": 278,
+    "Z": 595
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Beneath Balcony Bonfire",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 350.8,
+    "Y": 267,
+    "Z": 595
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Near Crystal Cave",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 299,
+    "Y": 248,
+    "Z": 689
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Crystal Cave Entry",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 256,
+    "Y": 229,
+    "Z": 714
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Seath's Real Arena",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": 103,
+    "Y": 134,
+    "Z": 857
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "NLR Entry",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": -48,
+    "Y": -136,
+    "Z": 45
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "VoD Close Entry",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": -45,
+    "Y": -139,
+    "Z": 19
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "VoD Undead Dragon",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 18,
+    "Y": -154,
+    "Z": -70.8
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "VoD Bridge by Flood Gate",
+    "RoomId": 0,
+    "SubMapId": 1,
+    "X": 122,
+    "Y": -172.4,
+    "Z": -38
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "NLR near Flood Gate",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 95,
+    "Y": -170.8,
+    "Z": -3
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "Ingward",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 60.1,
+    "Y": -135.8,
+    "Z": 10.3
+  },
+  {
+    "MapName": "* New Londo Ruins / Valley of Drakes",
+    "PoiName": "The Abyss",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 85.5,
+    "Y": -310.8,
+    "Z": 4
+  }
+]

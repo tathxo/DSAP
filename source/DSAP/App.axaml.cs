@@ -1306,7 +1306,7 @@ public partial class App : Application
         }
         else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
         {
-            if (e.CompletedLocation.Name.Contains("Ornstein"))
+            if (e.CompletedLocation.Name == "Ornstein and Smough")
             {
                 Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
                 SendGoal();
@@ -1314,7 +1314,7 @@ public partial class App : Application
         }
         else if (DSOptions.Goal == DSGoal.manus)
         {
-            if (e.CompletedLocation.Name.Contains("Manus"))
+            if (e.CompletedLocation.Name == "Manus, Father of the Abyss")
             {
                 Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
                 SendGoal();

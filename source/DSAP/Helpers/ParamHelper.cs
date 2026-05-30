@@ -172,8 +172,23 @@ namespace DSAP.Helpers
         internal static uint WeightReducersReceived = 0;
         internal static void UpdateWeightMultiplier()
         {
+
+            uint old_multiplier = CalculateWeightMultiplier();
             var pwr = MiscHelper.GetProgressiveItems().Find(x => x.Name == "Progressive Weight Reducer");
             WeightReducersReceived = (uint)App.Client.CurrentSession.Items.AllItemsReceived.Where(x => x.ItemId == pwr.ApId).Count();
+            uint new_multiplier = CalculateWeightMultiplier();
+
+            if (new_multiplier == old_multiplier)
+            {
+                Log.Logger.Information($"Setting weight multiplier to {new_multiplier}%");
+                App.Client.AddOverlayMessage($"Setting weight multiplier to {new_multiplier}%");
+            }
+            else
+            {
+                Log.Logger.Information($"Updating weight multiplier from {old_multiplier}% to {new_multiplier}%");
+                App.Client.AddOverlayMessage($"Updating weight multiplier from {old_multiplier}% to {new_multiplier}%");
+            }
+                
         }
         internal static uint CalculateWeightMultiplier()
         {
@@ -268,7 +283,7 @@ namespace DSAP.Helpers
                 weight = (weight * (int)multiplier) / 100;
                 Array.Copy(BitConverter.GetBytes(weight), 0, weaponParamStruct.ParamBytes, weapon.paramOffset + EquipParamWeapon.WEIGHT_OFFSET, sizeof(float));
             }
-            Log.Logger.Information($"Updated weapon weights to multiplier {multiplier}%");
+            Log.Logger.Verbose($"Updated weapon weights to multiplier {multiplier}%");
             return true;
         }
         internal static bool ModifyArmorParams()
@@ -310,15 +325,28 @@ namespace DSAP.Helpers
                 weight = (weight * (int)multiplier) / 100;
                 Array.Copy(BitConverter.GetBytes(weight), 0, armorParamStruct.ParamBytes, armor.paramOffset + EquipParamProtector.WEIGHT_OFFSET, sizeof(float));
             }
-            Log.Logger.Information($"Updated armor weights to multiplier {multiplier}%");
+            Log.Logger.Verbose($"Updated armor weights to multiplier {multiplier}%");
             return true;
         }
 
         internal static uint SoulMultipliersReceived = 0;
         internal static void UpdateSoulMultiplier()
         {
+            uint old_multiplier = CalculateSoulMultiplier();
             var psm = MiscHelper.GetProgressiveItems().Find(x => x.Name == "Progressive Soul Multiplier");
             SoulMultipliersReceived = (uint)App.Client.CurrentSession.Items.AllItemsReceived.Where(x => x.ItemId == psm.ApId).Count();
+            uint new_multiplier = CalculateSoulMultiplier();
+
+            if (new_multiplier == old_multiplier)
+            {
+                Log.Logger.Information($"Setting soul multiplier to {new_multiplier}%");
+                App.Client.AddOverlayMessage($"Setting soul multiplier to {new_multiplier}%");
+            }
+            else
+            {
+                Log.Logger.Information($"Updating soul multiplier from {old_multiplier}% to {new_multiplier}%");
+                App.Client.AddOverlayMessage($"Updating soul multiplier from {old_multiplier}% to {new_multiplier}%");
+            }
         }
         internal static uint CalculateSoulMultiplier()
         {
@@ -390,7 +418,7 @@ namespace DSAP.Helpers
                 souls = (souls * (int)multiplier) / 100;
                 Array.Copy(BitConverter.GetBytes(souls), 0, npcParamStruct.ParamBytes, enemy.paramOffset + 0x28, sizeof(int));
             }
-            Log.Logger.Information($"Updated enemy soul drops with multiplier {multiplier}%");
+            Log.Logger.Verbose($"Updated enemy soul drops with multiplier {multiplier}%");
         }
         // Updates Game Area Params
         internal static bool ModifyGameAreaParams()
@@ -437,7 +465,7 @@ namespace DSAP.Helpers
                 multisouls = (multisouls * (int)multiplier) / 100;
                 Array.Copy(BitConverter.GetBytes(multisouls), 0, gameAreaParamStruct.ParamBytes, area.paramOffset + 0x0, sizeof(int));
             }
-            Log.Logger.Information($"Updated Boss soul drops with multiplier {multiplier}%");
+            Log.Logger.Verbose($"Updated Boss soul drops with multiplier {multiplier}%");
         }
         internal static bool ModifyShopLineupParams()
         {

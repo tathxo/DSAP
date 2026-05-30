@@ -709,7 +709,7 @@ namespace DSAP.Helpers
             msgManStruct.AddMsg(99999998, "");  // add dummy message to mark that we've updated them
             msgManStruct.MsgEntries.Sort((x, y) => (x.id.CompareTo(y.id))); // sort for write
             MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_SYSTEM_TEXT); // write the gift names + system text updates
-            Log.Logger.Information($"Updated system text struct");
+            Log.Logger.Debug($"Updated system text struct");
 
             // add a dummy chara init at 99999998 to know we've updated them
             byte[] parambytes = new byte[CharaInitParam.Size];

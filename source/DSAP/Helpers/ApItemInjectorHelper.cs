@@ -307,7 +307,7 @@ namespace DSAP.Helpers
 
             msgManStruct.AddMsg(99999998, ""); // add dummy message to mark that we've been here
             msgManStruct.MsgEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Updated {msgsName} struct");
+            Log.Logger.Debug($"Updated {msgsName} struct");
 
             MsgManHelper.WriteFromMsgManStruct(msgManStruct, msgManOffset); // write the msgs update
         }

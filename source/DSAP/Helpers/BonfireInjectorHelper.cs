@@ -288,7 +288,7 @@ namespace DSAP.Helpers
                 msgManStruct.AddMsg(99999998, ""); // add dummy message to mark that we've been here
                 msgManStruct.MsgEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
                 MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BONFIRES);
-                Log.Logger.Information("Updated Bonfire text struct");
+                Log.Logger.Debug("Updated Bonfire text struct");
             }
             hooks_set = true;
         }

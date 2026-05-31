@@ -45,7 +45,7 @@
 ## Version 0.1.4
 * Version update -> 0.1.4. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**.
 * Feature: Add `Soul Multiplier` and `Weight Multiplier` options - configurable via yaml option to be either be a static multiplier or require an option-defined number of "progressive" items to increase souls or reduce weight. Min/Max soul multipler is 20% to 500%, weight multiplier is 300% to 0%. Defaults are 100% for both and no such "progressive items". Soul multiplier changes via progressive item may not take effect until enemies are reloaded.
-* Feature: More `goal_condition`s! Ornstein & Smough, Manus. Added along with `After O+S` location group - to exclude if you're using the O+S goal; this will exclude all normally Post-Lordvessel checks. `/goalcheck` will tell you what your goal is.
+* Feature: More `goal_condition`s! Ornstein & Smough, Manus. Added along with `After O+S` location group - to exclude if you're using the O+S goal; this will exclude all normally Post-Lordvessel checks. `/goalcheck` will tell you what your goal is. Credit to BroodierLake140 from discord
 * Feature: Tracker Map Auto Tabbing is available (and immediately available via Universal Tracker, with the Poptracker map pack). Controls also added to turn off sending this information from the client (for, e.g. co-op)
 * Feature: Added `Item Lot Param` consistency check - should help catch issues if players didn't clean up their install after using a randomizer or other Param modifier.
 * Fix: Send boss fogwall checks if their respective boss is killed without passing through it. You can now safely cheese the bosses (or try weird fog wall skips)
@@ -189,8 +189,9 @@
 # Contributors
 * tathxo (aka noka) - Maintainer (as of May 2026)
 * ArsonAssassin - Creator and Maintainer from initial creation in Oct 2024 through May 2026, creator of the memory library "Archipelago.Core" used heavily by this implementation.
-* Nave - Contributor
+* Nave - Contributor, research/reverse engineering
+* BroodierLake140 (discord) - Contributor, O+S and Manus goals
 * TheAbysmalKraken - Linux-enabling fix in dependant memory library
-* Edgarra1619 - Logic fix
-* GhostEye85 (discord) - Settings Persistence and Bonfire Warping features and code
+* GhostEye85 (discord) - Contributor, Settings Persistence and Bonfire Warping features and code
 * ahhhreptar (discord) - Provided a 2nd method for linux via the `launch_dsr.sh` script
+* Edgarra1619 - Logic fix

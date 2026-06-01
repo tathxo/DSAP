@@ -14,7 +14,8 @@ from .Locations import DSRLocation, DSRLocationCategory, location_tables, locati
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
-from .Skips import get_all_skips, get_user_selected_skips
+from .Skips import get_all_skips
+
 
 from settings import Group, FilePath
 

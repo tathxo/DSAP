@@ -42,14 +42,14 @@ class Skip():
     required_items: list[str] = dataclasses.field(default_factory=list)
     required_items_groups: list[str] = dataclasses.field(default_factory=list)
     
-    #state and player
-    extra_conditions: Callable[[CollectionState, int], bool]|None = None
+    # extra_conditions
+    has_access_to: str|None = None
 
     def __post_init__(self):
         _all_skips.append(self)
 
     def has_rules(self):
-        return not (len(self.required_items) + len(self.required_items_groups) == 0 and self.extra_conditions is None)
+        return not (len(self.required_items) + len(self.required_items_groups) == 0 and self.has_access_to is None)
 
 
 def get_all_skips() -> Iterable[Skip]:
@@ -249,7 +249,7 @@ Skip(name="Pinwheel Skip",
     techniques=[SkipTechniques.WRONG_WARP],
     difficulty=SkipDifficulty.EASY,
 
-    extra_conditions= lambda state, player: state.can_reach_location("The Depths", player), # You can farm basilisks there
+    has_access_to="Depths", # You can farm basilisks there
     # required_items=["Eye of death"] 
 )
 
@@ -260,7 +260,7 @@ Skip(name="Quellag Boss Cheese",
     techniques=[SkipTechniques.BOSS_CHEESE ],
     difficulty=SkipDifficulty.EASY ,
 
-    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg", player),
+    has_access_to= "Lower Undead Burg",
     # required_items=["Renewable Dung Pie"] 
 )
 
@@ -272,7 +272,7 @@ Skip(name="Anor londo rafters drop",
     techniques=[SkipTechniques.FALL_CONTROL_QUITOUT ],
     difficulty=SkipDifficulty.MEDIUM ,
 
-    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg - After Residence Key", player),
+    has_access_to= "Lower Undead Burg - After Residence Key",
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
 )
@@ -330,7 +330,7 @@ Skip(name="Artorias skip",
     techniques=[SkipTechniques.FALL_CONTROL_QUITOUT ],
     difficulty=SkipDifficulty.MEDIUM ,
 
-    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg - After Residence Key", player),
+    has_access_to="Lower Undead Burg - After Residence Key",
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
 )
@@ -354,7 +354,7 @@ Skip(name="Great Hollow Skip",
     techniques=[SkipTechniques.OUT_OF_BOUNDS, SkipTechniques.SEAM_WALKING, SkipTechniques.FALL_CONTROL_QUITOUT ],
     difficulty=SkipDifficulty.HARD ,
 
-    extra_conditions= lambda state, player: state.can_reach_location("Lower Undead Burg - After Residence Key", player),
+    has_access_to = "Lower Undead Burg - After Residence Key",
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
 )

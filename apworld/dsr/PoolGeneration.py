@@ -2,6 +2,7 @@ from .Items import _all_items, key_item_names, DSRItemCategory, DSRItemData, ite
 from .Skips import get_user_selected_skips
 from .Groups import item_name_groups
 from .Locations import location_dictionary, DSRLocationCategory
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter
 
 
 
@@ -48,12 +49,13 @@ def BuildRequiredItemPool(world, count):
             remaining_count = remaining_count - 1
 
 
-    allow_skips_options = [world.options.skip_logic_easy, 
+    allow_skips_options: list[OptionCounter] = [world.options.skip_logic_easy, 
                            world.options.skip_logic_medium, 
                            world.options.skip_logic_hard, 
                            world.options.skip_logic_very_hard]
     skip_progression_item_groups: set[str] = set()
     skip_progression_items: set[str] = set()
+
 
     for skip in get_user_selected_skips(allow_skips_options):
         skip_progression_item_groups = skip_progression_item_groups.union(skip.required_items_groups)
@@ -82,7 +84,6 @@ def BuildRequiredItemPool(world, count):
         if not is_tracked_by_logic:
             continue
         #### 
-
         if dsr_item not in item_pool:
             result.append(dsr_item)
 

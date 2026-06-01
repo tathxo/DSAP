@@ -1,12 +1,19 @@
 import dataclasses
-from typing import Iterable, Callable
+from typing import Iterable
 import enum
 from enum import IntEnum
 from Options import OptionCounter
-from BaseClasses import CollectionState
+from rule_builder.rules import Rule, True_, And, HasGroup, CanReachRegion, False_
+
+from worlds.AutoWorld import World
+
 
 # Skips automatically populate this with their init method
 _all_skips: list["Skip"] = []
+
+
+def get_all_skips() -> Iterable["Skip"]:
+    return sorted(_all_skips, key=lambda x: x.name)
 
 class SkipDifficulty(IntEnum): 
     EASY=enum.auto()
@@ -25,6 +32,8 @@ class SkipTechniques(IntEnum):
     BOSS_CHEESE=enum.auto()
     WRONG_WARP=enum.auto()
     FALL_CONTROL_QUITOUT=enum.auto()
+
+
 
 
 @dataclasses.dataclass
@@ -50,10 +59,38 @@ class Skip():
 
     def has_rules(self):
         return not (len(self.required_items) + len(self.required_items_groups) == 0 and self.has_access_to is None)
+    
+    def get_rule(self, world: World) -> Rule:        
+        skip_rules_list = []
+
+        match self.difficulty:
+            case SkipDifficulty.EASY:  
+                option_counter = world.options.skip_logic_easy
+            case SkipDifficulty.MEDIUM:  
+                option_counter = world.options.skip_logic_medium
+            case SkipDifficulty.HARD:  
+                option_counter = world.options.skip_logic_hard
+            case SkipDifficulty.VERY_HARD:  
+                option_counter = world.options.skip_logic_very_hard
+            case _:
+                raise AssertionError(f"Unhandled SkipDifficulty (should be exhaustive): {self.difficulty}")
+            
+        if option_counter[self.name] == 0:
+            skip_rules_list.append(False_())
+        else:
+            skip_rules_list.append(True_())
+            
+            
+        skip_rules_list.extend([HasGroup(group) for group in self.required_items_groups])
+        if self.has_access_to is not None:
+            skip_rules_list.append(CanReachRegion(self.has_access_to))
+
+        skip_rule = And(*skip_rules_list)
+
+        return skip_rule
 
 
-def get_all_skips() -> Iterable[Skip]:
-    return sorted(_all_skips, key=lambda x: x.name)
+
 
 
 def get_user_selected_skips(options:list[OptionCounter]) -> Iterable[Skip]: 
@@ -66,6 +103,10 @@ def get_user_selected_skips(options:list[OptionCounter]) -> Iterable[Skip]:
 
 
 
+
+
+
+
 ###########
 #### Skips with no Items
 ###########
@@ -75,7 +116,7 @@ Skip(name=f"Lower Undead Burg Skip",
      ending_location=f"Lower Undead Burg",
 
     techniques=[SkipTechniques.PLATFORMING],
-    difficulty=SkipDifficulty.EASY     
+    difficulty=SkipDifficulty.EASY
 )
 
 
@@ -358,6 +399,4 @@ Skip(name="Great Hollow Skip",
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
 )
-
-
 

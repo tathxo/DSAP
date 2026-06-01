@@ -3,8 +3,7 @@ from typing import Optional, NamedTuple, Dict
 from dataclasses import dataclass
 
 from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter, And, HasGroup, CanReachRegion, Or
-from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs, SkipLogicEasy, SkipLogicMedium, SkipLogicHard, SkipLogicVeryHard
-from .Skips import get_all_skips, SkipDifficulty
+from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs
 
 @dataclass
 class DsrEntranceRule():
@@ -81,6 +80,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Upper Undead Burg": [
     DsrEntranceRule("Upper Undead Burg - Fog", True_()),
     DsrEntranceRule("Upper Undead Burg - Hellkite Bridge", True_()), # bonfire ladder
+    DsrEntranceRule("Lower Undead Burg", True_())
   ],
   "Upper Undead Burg - Pine Resin Chest": [
     DsrEntranceRule("Upper Undead Burg", HasAny("Residence Key", "Master Key")),
@@ -176,12 +176,14 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Lower Blighttown - Fog", True_()),
     # Don't expect player to jump down past fog if they can't teleport
     DsrEntranceRule("Upper Blighttown Depths Side", Has("Lordvessel", options=[OptionFilter(CanWarpWithoutLordvessel, CanWarpWithoutLordvessel.option_false)], filtered_resolution=True)),
+    DsrEntranceRule("Lower Blighttown - Quelaag", True_())
   ],
   "Lower Blighttown - Quelaag": [
     DsrEntranceRule("Lower Blighttown", Has("Boss Fog Wall Key - Quelaag") | bossfogwall_sanity_off),
   ],
   "Lower Blighttown - After Quelaag": [
     DsrEntranceRule("Lower Blighttown", Has("Chaos Witch Quelaag Defeated")),
+    DsrEntranceRule("Demon Ruins - Early", True_()),
   ],
   "Valley of the Drakes": [
     DsrEntranceRule("Upper Blighttown VotD Side", True_()),
@@ -424,6 +426,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "Oolacile Township": [
     DsrEntranceRule("Royal Wood - Artorias", Has("Artorias the Abysswalker Defeated")),
+    DsrEntranceRule("Chasm of the Abyss", True_()),
   ],
   "Oolacile Township - Behind Light-Dispelled Walls": [
     DsrEntranceRule("Oolacile Township", Has("Skull Lantern")),
@@ -439,49 +442,3 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
 }
 
-
-# Skip Logic
-
-all_skips = get_all_skips()
-for skip in all_skips:
-  
-  skip_rules_list = []
-
-  match skip.difficulty:
-    case SkipDifficulty.EASY:  
-      is_option_selected_rule = [OptionFilter(SkipLogicEasy, skip.name)]
-    case SkipDifficulty.MEDIUM:  
-      is_option_selected_rule = [OptionFilter(SkipLogicMedium, skip.name)]
-    case SkipDifficulty.HARD:  
-      is_option_selected_rule = [OptionFilter(SkipLogicHard, skip.name)]
-    case SkipDifficulty.VERY_HARD:  
-      is_option_selected_rule = [OptionFilter(SkipLogicVeryHard, skip.name)]
-    case _:
-      raise AssertionError(f"Unhandled SkipDifficulty (should be exhaustive): {skip.difficulty}")
-    
-
-  # skip_rules_list.append(is_option_selected_rule)
-
-
-  skip_rules_list.append(HasAll(*skip.required_items))
-  skip_rules_list.extend([HasGroup(group) for group in skip.required_items_groups])
-  if skip.has_access_to is not None:
-    skip_rules_list.append(CanReachRegion(skip.has_access_to))
-
-    
-  skip_rule = And(*skip_rules_list)
-
-
-  def get_previous_entrance_rule() -> Optional[DsrEntranceRule]:
-    for rule in region_rules_table[skip.ending_location]:
-       if rule.source == skip.starting_location:
-          return rule
-       
-  original_entrance = get_previous_entrance_rule()
-
-  if original_entrance is None:
-    region_rules_table[skip.ending_location].append(DsrEntranceRule(skip.starting_location, skip_rule))
-
-  else: 
-     original_entrance.rule = Or(original_entrance.rule, skip_rule)
-     

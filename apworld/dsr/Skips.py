@@ -32,6 +32,8 @@ class SkipTechniques(IntEnum):
     BOSS_CHEESE=enum.auto()
     WRONG_WARP=enum.auto()
     FALL_CONTROL_QUITOUT=enum.auto()
+    SLOPE_ROLL = enum.auto()
+    STANDUP_WALL_BREAK = enum.auto()
 
 
 
@@ -52,13 +54,13 @@ class Skip():
     required_items_groups: list[str] = dataclasses.field(default_factory=list)
     
     # extra_conditions
-    has_access_to: str|None = None
+    extra_rules: list[Rule] = dataclasses.field(default_factory=list)
 
     def __post_init__(self):
         _all_skips.append(self)
 
     def has_rules(self):
-        return not (len(self.required_items) + len(self.required_items_groups) == 0 and self.has_access_to is None)
+        return len(self.required_items) + len(self.required_items_groups) + len(self.extra_rules) > 0
     
     def get_rule(self, world: World) -> Rule:        
         skip_rules_list = []
@@ -80,10 +82,9 @@ class Skip():
         else:
             skip_rules_list.append(True_())
             
-            
         skip_rules_list.extend([HasGroup(group) for group in self.required_items_groups])
-        if self.has_access_to is not None:
-            skip_rules_list.append(CanReachRegion(self.has_access_to))
+
+        skip_rules_list.extend(self.extra_rules)
 
         skip_rule = And(*skip_rules_list)
 
@@ -226,7 +227,7 @@ Skip(name="Sens Fortress First fogwall Skip",
      starting_location= "Sen's Fortress",
      ending_location="Sen's Fortress - After First Fog",
 
-    techniques=[SkipTechniques.PLATFORMING],
+    techniques=[SkipTechniques.PLATFORMING, SkipTechniques.STANDUP_WALL_BREAK],
     difficulty=SkipDifficulty.VERY_HARD
 )
 
@@ -260,6 +261,41 @@ Skip(name="Moonlight Butterfly Skip",
 )
 
 
+Skip(name="Seal Skip",
+     starting_location="Upper New Londo Ruins",
+     ending_location="Lower New Londo Ruins - Reachable with Seal Skip",
+
+    techniques=[SkipTechniques.OUT_OF_BOUNDS],
+    difficulty=SkipDifficulty.MEDIUM,
+
+)
+
+
+Skip(name=f"Firesage Cheese",
+     starting_location="Demon Ruins - After Demon Firesage",
+     ending_location="Demon Ruins - Demon Firesage",
+
+    techniques=[SkipTechniques.BOSS_CHEESE],
+    difficulty=SkipDifficulty.HARD,
+)
+
+
+Skip(name=f"No Charred Ring in Demon Ruins",
+     starting_location="Demon Ruins - Ceaseless Discharge",
+     ending_location="Demon Ruins - Items in Lava",
+
+    techniques=[],
+    difficulty=SkipDifficulty.MEDIUM,
+)
+
+
+Skip(name=f"Darkmoon Seance Ring Skip",
+    starting_location="Anor Londo - After First Fog",
+    ending_location="Anor Londo - Behind Gwyndolin Statue",
+    
+    techniques=[SkipTechniques.STANDUP_WALL_BREAK],
+    difficulty=SkipDifficulty.MEDIUM,
+    )
 
 ########
 ### Skips with items
@@ -280,7 +316,32 @@ Skip(name=f"Firesage skip",
     required_items_groups=["Medium Shields"]  
 )
 
+Skip(name=f"Ceaseless skip",
+     starting_location="Demon Ruins - Early",
+     ending_location= "Demon Ruins",
 
+    techniques=[SkipTechniques.PLATFORMING, SkipTechniques.SLOPE_ROLL],
+    difficulty=SkipDifficulty.HARD,
+
+    required_items_groups=["Bows"],
+    required_items=["Rite of Kindling"]
+)
+
+
+Skip(name=f"No Charred Ring in Lost Izalith",
+     starting_location="Demon Ruins - Centipede Demon",
+     ending_location="Lost Izalith",
+
+    techniques=[],
+    difficulty=SkipDifficulty.VERY_HARD,
+    # required_items=["Rite of Kindling", "Flash Sweat"]
+    required_items=["Rite of Kindling"],
+
+    extra_rules=[CanReachRegion("Lower Blighttown - After Quelaag"),# In order to buy Flash Sweat
+                 CanReachRegion("Depths"), # Humanity for extra healing 
+                 HasGroup("Fire Keeper Souls", count=4) # Estus upgrades
+                       ], 
+)
 
 
 Skip(name="Pinwheel Skip",
@@ -290,7 +351,7 @@ Skip(name="Pinwheel Skip",
     techniques=[SkipTechniques.WRONG_WARP],
     difficulty=SkipDifficulty.EASY,
 
-    has_access_to="Depths", # You can farm basilisks there
+    extra_rules=[CanReachRegion("Depths")], # You can farm basilisks there for one eye of death
     # required_items=["Eye of death"] 
 )
 
@@ -301,7 +362,7 @@ Skip(name="Quellag Boss Cheese",
     techniques=[SkipTechniques.BOSS_CHEESE ],
     difficulty=SkipDifficulty.EASY ,
 
-    has_access_to= "Lower Undead Burg",
+    extra_rules= [CanReachRegion("Lower Undead Burg")],
     # required_items=["Renewable Dung Pie"] 
 )
 
@@ -313,13 +374,13 @@ Skip(name="Anor londo rafters drop",
     techniques=[SkipTechniques.FALL_CONTROL_QUITOUT ],
     difficulty=SkipDifficulty.MEDIUM ,
 
-    has_access_to= "Lower Undead Burg - After Residence Key",
+    extra_rules= [CanReachRegion("Lower Undead Burg - After Residence Key")],
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
 )
 
 
-Skip(name="Four kings skip",
+Skip(name="Four kings fogwall",
      starting_location="Upper New Londo Ruins",
      ending_location="The Abyss",
 
@@ -328,6 +389,17 @@ Skip(name="Four kings skip",
 
     required_items=["Covenant of Artorias"] 
 )
+
+Skip(name="Duke skip",
+     starting_location="The Duke's Archives",
+     ending_location= "The Duke's Archives - After First Seath Encounter",
+
+    techniques=[SkipTechniques.PLATFORMING],
+    difficulty=SkipDifficulty.MEDIUM,
+
+    required_items_groups=["Bows"] 
+)
+
 
 # There is also a version of this without firebombs
 Skip(name="Capra Cheese",
@@ -371,7 +443,7 @@ Skip(name="Artorias skip",
     techniques=[SkipTechniques.FALL_CONTROL_QUITOUT ],
     difficulty=SkipDifficulty.MEDIUM ,
 
-    has_access_to="Lower Undead Burg - After Residence Key",
+    extra_rules=[CanReachRegion("Lower Undead Burg - After Residence Key")],
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
 )
@@ -395,8 +467,20 @@ Skip(name="Great Hollow Skip",
     techniques=[SkipTechniques.OUT_OF_BOUNDS, SkipTechniques.SEAM_WALKING, SkipTechniques.FALL_CONTROL_QUITOUT ],
     difficulty=SkipDifficulty.HARD ,
 
-    has_access_to = "Lower Undead Burg - After Residence Key",
+    extra_rules = [CanReachRegion("Lower Undead Burg - After Residence Key")],
     required_items_groups=["Catalysts"],
     # required_items=["Fall Control"] 
+)
+
+
+Skip(name="Lost Izalith Shortcut",
+     starting_location="Demon Ruins - Between Firesage and Golden Foggate",
+     ending_location=  "Lost Izalith - City" ,
+
+    techniques=[],
+    difficulty=SkipDifficulty.EASY ,
+
+    extra_rules = [CanReachRegion("Depths")],
+    # required_items=["30 Humanity"] 
 )
 

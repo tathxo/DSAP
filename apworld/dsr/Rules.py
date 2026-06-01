@@ -2,7 +2,7 @@ from enum import IntEnum
 from typing import Optional, NamedTuple, Dict
 from dataclasses import dataclass
 
-from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter, And, HasGroup, CanReachRegion, Or
+from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter, And, HasGroup, CanReachRegion
 from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs
 
 @dataclass
@@ -30,9 +30,6 @@ location_rules_table = [
   DsrLocationRule("FA: Lordvessel Placed", Has("Lordvessel")),
   # DLC access
   DsrLocationRule("DA: Broken Pendant", Has("Dusk Rescued")),
-  # Demon ruins checks that require the lava-walking ring
-  DsrLocationRule("DR: Large Soul of a Proud Knight - First Jump over the Lava", Has("Orange Charred Ring")),
-  DsrLocationRule("DR: Chaos Flame Ember", Has("Orange Charred Ring")),
   # Fogs that do not affect 
   DsrLocationRule("DE: Fog Wall - Depths Rat Room", Has("Fog Wall Key - Depths Rat Room") | fogwall_sanity_off),
   DsrLocationRule("TC: Fog Wall - Catacombs", Has("Fog Wall Key - Catacombs") | fogwall_sanity_off),
@@ -182,8 +179,11 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Lower Blighttown", Has("Boss Fog Wall Key - Quelaag") | bossfogwall_sanity_off),
   ],
   "Lower Blighttown - After Quelaag": [
-    DsrEntranceRule("Lower Blighttown", Has("Chaos Witch Quelaag Defeated")),
+    DsrEntranceRule("Lower Blighttown - Quelaag", Has("Chaos Witch Quelaag Defeated")),
     DsrEntranceRule("Demon Ruins - Early", True_()),
+  ],
+  "Kirk Armor Set": [
+    DsrEntranceRule("Lower Blighttown - After Quelaag", And(CanReachRegion("Depths"), CanReachRegion("Demon Ruins")& Has("Lordvessel"), CanReachRegion("Lost Izalith - City")))  # It's required to fight him in these areas zones.
   ],
   "Valley of the Drakes": [
     DsrEntranceRule("Upper Blighttown VotD Side", True_()),
@@ -260,9 +260,13 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Anor Londo - After Ornstein and Smough": [
     DsrEntranceRule("Anor Londo - Ornstein and Smough", Has("Ornstein and Smough Defeated")),
   ],
-  "Anor Londo - Gwyndolin": [
+  "Anor Londo - Behind Gwyndolin Statue":[
     # attacking the illusion -> no ring needed
-    DsrEntranceRule("Anor Londo - After Ornstein and Smough", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off), 
+    DsrEntranceRule("Anor Londo - After Ornstein and Smough",True_()),
+    DsrEntranceRule("Anor Londo - After First Fog", Has("Darkmoon Seance Ring"))
+  ],
+  "Anor Londo - Gwyndolin": [
+    DsrEntranceRule("Anor Londo - Behind Gwyndolin Statue", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off),
   ],
   "Anor Londo - After Gwyndolin": [
     DsrEntranceRule("Anor Londo - Gwyndolin", Has("Gwyndolin Defeated")),
@@ -292,6 +296,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "Lower New Londo Ruins": [
     DsrEntranceRule("New Londo Ruins Door to the Seal", True_()),
+  ],
+  "Lower New Londo Ruins - Reachable with Seal Skip": [
+      DsrEntranceRule("Lower New Londo Ruins", True_())
   ],
   "The Abyss": [
     DsrEntranceRule("Lower New Londo Ruins", (Has("Covenant of Artorias") & Has("Boss Fog Wall Key - Crossbreed Priscilla") | bossfogwall_sanity_off)),
@@ -340,25 +347,34 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Demon Ruins - Early", Has("Boss Fog Wall Key - Ceaseless Discharge") | bossfogwall_sanity_off),
   ],
   "Demon Ruins": [
-    DsrEntranceRule("Demon Ruins - Early", Has("Ceaseless Discharge Defeated")),
+    DsrEntranceRule("Demon Ruins - Early", Has("Ceaseless Discharge Defeated") | Has("Orange Charred Ring")),
+  ],
+  "Demon Ruins - Items in Lava": [
+      DsrEntranceRule("Demon Ruins", Has("Orange Charred Ring"))
+  ],
+  "Demon Ruins - Between Firesage and Golden Foggate": [
+      DsrEntranceRule("Demon Ruins", Has("Lordvessel Placed") ), 
+      DsrEntranceRule("Lost Izalith - City", True_()), # opens from the back for free
   ],
   "Demon Ruins - Demon Firesage": [
-    DsrEntranceRule("Demon Ruins", Has("Lordvessel Placed") & Has("Boss Fog Wall Key - Ceaseless Discharge") | bossfogwall_sanity_off),
+    DsrEntranceRule("Demon Ruins - Between Firesage and Golden Foggate",Has("Boss Fog Wall Key - Ceaseless Discharge") | bossfogwall_sanity_off),
   ],
   "Demon Ruins - After Demon Firesage": [
     DsrEntranceRule("Demon Ruins - Demon Firesage", Has("Demon Firesage Defeated")),
+    DsrEntranceRule("Demon Ruins - Centipede Demon", True_()), # After killing Centipede demon you can walk back
   ],
   "Demon Ruins - Centipede Demon": [
     DsrEntranceRule("Demon Ruins - After Demon Firesage", Has("Boss Fog Wall Key - Centipede Demon") | bossfogwall_sanity_off),
   ],
-  "Demon Ruins Shortcut": [
-    DsrEntranceRule("Lost Izalith", True_()), # opens from the back for free
-  ],
   "Lost Izalith": [
     DsrEntranceRule("Demon Ruins - Centipede Demon", HasAll("Orange Charred Ring", "Centipede Demon Defeated")),
+    DsrEntranceRule("Lost Izalith - City", Has("Orange Charred Ring")),
+  ],
+  "Lost Izalith - City":[
+    DsrEntranceRule("Lost Izalith", True_())  
   ],
   "Lost Izalith - Bed of Chaos": [
-    DsrEntranceRule("Lost Izalith", Has("Boss Fog Wall Key - Bed of Chaos") | bossfogwall_sanity_off),
+    DsrEntranceRule("Lost Izalith - City", Has("Boss Fog Wall Key - Bed of Chaos") | bossfogwall_sanity_off),
   ],
   "The Catacombs": [
     # Firelink access is either immediate (if option = "no logic"), or has one of the requirements below

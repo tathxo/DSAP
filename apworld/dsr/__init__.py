@@ -8,11 +8,13 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, add_item_rule
 from rule_builder.rules import Rule, True_, Has
 
-from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions, BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
+from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
+from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
+from .Skips import get_all_skips, get_user_selected_skips
 
 from settings import Group, FilePath
 
@@ -266,6 +268,7 @@ class DSRWorld(World):
             "Sen's Fortress - After Iron Golem",
             "Anor Londo",
             "Anor Londo - After First Fog",
+            "Anor Londo - Painting Room",
             "Anor Londo - After Second Fog",
             "Anor Londo - Ornstein and Smough",
             "Anor Londo - After Ornstein and Smough",
@@ -441,8 +444,13 @@ class DSRWorld(World):
         # print("Created item pool size: " + str(len(foo)))
 
         # Add any Key + useful items
-        rip = BuildRequiredItemPool(self, itempoolSize)
+        rip, required_skip_item_names = BuildRequiredItemPool(self, itempoolSize)
         crip = [self.create_item(item.name) for item in rip]
+
+        for item in crip: 
+            if item.name in required_skip_item_names:
+                item.classification = ItemClassification.progression
+
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]
         guaranteedpool = BuildGuaranteedItemPool(self)
@@ -525,7 +533,7 @@ class DSRWorld(World):
             #print(item.name)
 
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> DSRItem:
         useful_categories = [
             DSRItemCategory.EMBER,
             DSRItemCategory.FIRE_KEEPER_SOUL,

@@ -150,6 +150,23 @@ namespace DSAP.Helpers
             }
             return locations;
         }
+        public static List<ILocation> GetShopLineupFlagLocations()
+        {
+            List<ILocation> locations = new List<ILocation>();
+            var lotFlags = GetShopLineupFlags();
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            foreach (var lot in lotFlags)
+            {
+                locations.Add(new Location
+                {
+                    Name = lot.Name,
+                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Id = lot.Id,
+                });
+            }
+            return locations;
+        }
         public static List<ILocation> GetMiscFlagLocations()
         {
             List<ILocation> locations = new List<ILocation>();

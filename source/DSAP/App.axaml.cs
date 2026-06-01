@@ -1013,6 +1013,7 @@ public partial class App : Application
             var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
             var doorLocations = LocationHelper.GetDoorFlagLocations();
             var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
+            var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
             var miscLocations = LocationHelper.GetMiscFlagLocations();
 
             var fullLocationsList = bossLocations
@@ -1022,6 +1023,7 @@ public partial class App : Application
                 .Union(bonfireLocations)
                 .Union(doorLocations)
                 .Union(fogWallLocations)
+                .Union(shopLineupLocations)
                 .Union(miscLocations)
                 .ToList();
             Client.MonitorLocationsAsync(fullLocationsList);
@@ -1039,6 +1041,7 @@ public partial class App : Application
             //Helpers.ListItemLots();
         }
 
+        //ParamHelper.ModifyShopLineupParams();
         if (DEBUG_TXTLOG)
         {
             Log.CloseAndFlush();

@@ -516,7 +516,8 @@ namespace DSAP.Helpers
 
 
             // print shop lineup params
-            
+            /*
+
             var armors = MiscHelper.GetArmor();
             var weapons = MiscHelper.GetMeleeWeapons();
             weapons.AddRange(MiscHelper.GetRangedWeapons());
@@ -556,6 +557,7 @@ namespace DSAP.Helpers
                 if (flag != -1)
                     Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, name={name}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equiptype}");
             }
+            */
 
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)

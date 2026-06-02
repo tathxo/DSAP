@@ -10,6 +10,41 @@ namespace DSAP.Helpers
 {
     public class MapHelper
     {
+        internal static Dictionary<int, int> MapToIndex = new List<(int, int)>([
+                (1000000, 11), //  "Depths"), 
+                (1001000, 27), //  "* Undead Burg  / Undead Parish"), -> Undead Burg Upper
+                (1001100, 28), //  "* Undead Burg  / Undead Parish"), -> Undead Parish
+                (1001200, 26), //  "* Undead Burg  / Undead Parish"), -> Undead Burg Lower
+                (1002000, 14), // "Firelink Shrine"), 
+                (1100000, 19), // "Painted World"), 
+                (1200000, 9),  // "* Darkroot Garden / Darkroot Basin"), -> Darkroot Garden
+                (1200100, 8),  // "* Darkroot Garden / Darkroot Basin"), -> Darkroot Basin
+                (1201000, 30), // "* Oolacile"), -> Sanctuary Garden & Sanctuary
+                (1201100, 31), // "* Oolacile"), -> Royal wood
+                (1201200, 32), // "* Oolacile"), -> Oolacile Township
+                (1201300, 33), // "* Oolacile"), -> Chasm of the Abyss
+                (1300000, 6),  // "Catacombs"), 
+                (1301000, 24), // "* Tomb of the Giants"), -> Upper
+                (1301100, 23), // "* Tomb of the Giants"), -> Lower
+                (1302000, 15), // "* Great Hollow / Ash Lake"), -> Great Hollow
+                (1302100, 3),  // "* Great Hollow / Ash Lake"), -> Ash Lake
+                (1400000, 5),  // "* Blighttown"), -> Upper
+                (1400100, 4),  // "* Blighttown"), -> Lower
+                (1401000, 10), // "* Demon Ruins / Lost Izalith"), -> Demon Ruins
+                (1401100, 17), // "* Demon Ruins / Lost Izalith"), -> Lost Izalith
+                (1500000, 21), // "* Sen's Fortress"), -> Main
+                (1500100, 20), // "* Sen's Fortress"), -> Basement
+                (1500200, 22), // "* Sen's Fortress"), -> Roof
+                (1501000, 1),  // "* Anor Londo"), -> Exterior
+                (1501100, 2),  // "* Anor Londo"), -> Interior
+                (1600000, 18), // "* New Londo Ruins / Valley of Drakes"), -> New Londo Ruins
+                (1600100, 29), // "* New Londo Ruins / Valley of Drakes"), -> Valley of Drakes
+                (1700000, 12), // "* Duke's Archives / Crystal Cave"), -> Main
+                (1700100, 13), // "* Duke's Archives / Crystal Cave"), -> Big Room
+                (1700200, 7),  // "* Duke's Archives / Crystal Cave"), -> Crystal Cave
+                (1800000, 16), // "Kiln of the First Flame"), 
+                (1801000, 25)  // "Northern Undead Asylum")]]
+            ]).ToDictionary();
         const int REPEAT_TIMER_MS = 1000;
         private static MapInfo cached_mapInfo { get; set; } = new MapInfo();
         internal static void StartMapAutoTracking()
@@ -19,7 +54,7 @@ namespace DSAP.Helpers
             {
                 try
                 {
-                    string MapKey = $"map_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
+                    string MapKey = $"DSR_current_map_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
                     App.Client.CurrentSession.DataStorage[MapKey].Initialize(0);
 
                     while (true)
@@ -35,7 +70,8 @@ namespace DSAP.Helpers
                             var mapInfo = GetPosition();
                             if (mapInfo.MapId != 0 && mapInfo.MapId != cached_mapInfo.MapId)
                             {
-                                App.Client.CurrentSession.DataStorage[MapKey] = mapInfo.MapId;
+                                int mapindex = MapToIndex[mapInfo.MapId];
+                                App.Client.CurrentSession.DataStorage[MapKey] = mapindex;
                                 cached_mapInfo.MapId = mapInfo.MapId;
                             }
                             else
@@ -137,6 +173,7 @@ namespace DSAP.Helpers
             Log.Logger.Debug($"Got position: {MapInfo.MapId} (no update)");
             return MapInfo;
         }
+
         public static uint GetWorldNumber(ulong eOffset = 0) // E + A23
         {
             if (eOffset == 0)

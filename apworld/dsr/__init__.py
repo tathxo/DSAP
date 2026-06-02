@@ -8,11 +8,14 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, add_item_rule
 from rule_builder.rules import Rule, True_, Has
 
-from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions, BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
+from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
+from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
+from .Skips import get_all_skips
+
 
 from settings import Group, FilePath
 
@@ -208,6 +211,7 @@ class DSRWorld(World):
             "Lower Blighttown", 
             "Lower Blighttown - Quelaag", 
             "Lower Blighttown - After Quelaag", 
+            "Kirk Armor Set",
             "Valley of the Drakes", 
             "Valley of the Drakes - After Defeating Four Kings", 
             "Door between Upper New Londo and Valley of the Drakes",
@@ -227,9 +231,11 @@ class DSRWorld(World):
             "Sen's Fortress - After Iron Golem",
             "Anor Londo",
             "Anor Londo - After First Fog",
+            "Anor Londo - Painting Room",
             "Anor Londo - After Second Fog",
             "Anor Londo - Ornstein and Smough",
             "Anor Londo - After Ornstein and Smough",
+            "Anor Londo - Behind Gwyndolin Statue",
             "Anor Londo - Gwyndolin",
             "Anor Londo - After Gwyndolin",
             "Painted World of Ariamis",
@@ -240,6 +246,7 @@ class DSRWorld(World):
             "Upper New Londo Ruins - After Fog",
             "New Londo Ruins Door to the Seal",
             "Lower New Londo Ruins", 
+            "Lower New Londo Ruins - Reachable with Seal Skip",
             "The Abyss", 
             "The Abyss - After Four Kings", 
             "The Duke's Archives", 
@@ -256,11 +263,13 @@ class DSRWorld(World):
             "Demon Ruins - Early",
             "Demon Ruins - Ceaseless Discharge",
             "Demon Ruins", 
+            "Demon Ruins - Items in Lava",
+            "Demon Ruins - Between Firesage and Golden Foggate",
             "Demon Ruins - Demon Firesage",
             "Demon Ruins - After Demon Firesage",
             "Demon Ruins - Centipede Demon",
-            "Demon Ruins Shortcut",
             "Lost Izalith", 
+            "Lost Izalith - City",
             "Lost Izalith - Bed of Chaos", 
             "The Catacombs", 
             "The Catacombs - Door 1",
@@ -292,12 +301,16 @@ class DSRWorld(World):
         # print("DSR: created " + str(self.gc) + " real and "+ str(self.bc) + " fake locations")
 
         # Connect Regions
-        def create_connection(from_region: str, to_region: str, rule=True_()):
+        def create_connection(from_region: str, to_region: str, rule: Rule=True_()):
             self.create_entrance(regions[from_region], regions[to_region], rule)
 
         for region in region_rules_table.keys():
             for entrance in region_rules_table[region]:
                 create_connection(entrance.source, region, rule=entrance.rule)
+
+        for skip in get_all_skips():
+            self.create_entrance(regions[skip.starting_location], regions[skip.ending_location], rule=skip.get_rule(self), name=f"SKIP {skip.name}", force_creation=True)
+        
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
@@ -402,8 +415,11 @@ class DSRWorld(World):
         # print("Created item pool size: " + str(len(foo)))
 
         # Add any Key + useful items
-        rip = BuildRequiredItemPool(self, itempoolSize)
+        rip, required_skip_item_names = BuildRequiredItemPool(self, itempoolSize)
         crip = [self.create_item(item.name) for item in rip]
+
+
+
         disabled_items = [self.create_item(loc.default_item) for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item not in disabled_items]
         guaranteedpool = BuildGuaranteedItemPool(self)
@@ -471,6 +487,11 @@ class DSRWorld(World):
             itempool.remove(item)
             itempool.append(self.create_item("Soul of a Proud Knight"))
 
+
+        for item in itempool: 
+            if item.name in required_skip_item_names:
+                item.classification = ItemClassification.progression
+
         # Add regular items to itempool
         self.multiworld.itempool += itempool
 
@@ -486,7 +507,7 @@ class DSRWorld(World):
             #print(item.name)
 
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> DSRItem:
         useful_categories = [
             DSRItemCategory.EMBER,
             DSRItemCategory.FIRE_KEEPER_SOUL,

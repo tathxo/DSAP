@@ -118,6 +118,15 @@
     "Z": -16.25
   },
   {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Undead Parish Bonfire",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 88,
+    "Y": 15,
+    "Z": 106
+  },
+  {
     "MapName": "* Darkroot Garden / Darkroot Basin",
     "PoiName": "Darkroot Garden Early Fork",
     "RoomId": 0,

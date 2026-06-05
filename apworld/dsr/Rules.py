@@ -1,13 +1,17 @@
 from enum import IntEnum
 from typing import Optional, NamedTuple, Dict
+from dataclasses import dataclass
 
-from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter
+from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter, And, HasGroup, CanReachRegion, Or
 from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs
 
-class DsrEntranceRule(NamedTuple):
+@dataclass
+class DsrEntranceRule():
     source: str
     rule: Rule
-class DsrLocationRule(NamedTuple):
+
+@dataclass
+class DsrLocationRule():
     loc_name: str
     rule: Rule
 
@@ -36,7 +40,7 @@ location_rules_table = [
 ]
 
 # All region rules
-region_rules_table = {
+region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Undead Asylum Cell": [
     DsrEntranceRule("Menu", True_())
   ],
@@ -76,6 +80,7 @@ region_rules_table = {
   "Upper Undead Burg": [
     DsrEntranceRule("Upper Undead Burg - Fog", True_()),
     DsrEntranceRule("Upper Undead Burg - Hellkite Bridge", True_()), # bonfire ladder
+    DsrEntranceRule("Lower Undead Burg", True_())
   ],
   "Upper Undead Burg - Pine Resin Chest": [
     DsrEntranceRule("Upper Undead Burg", HasAny("Residence Key", "Master Key")),
@@ -171,12 +176,14 @@ region_rules_table = {
     DsrEntranceRule("Lower Blighttown - Fog", True_()),
     # Don't expect player to jump down past fog if they can't teleport
     DsrEntranceRule("Upper Blighttown Depths Side", Has("Lordvessel", options=[OptionFilter(CanWarpWithoutLordvessel, CanWarpWithoutLordvessel.option_false)], filtered_resolution=True)),
+    DsrEntranceRule("Lower Blighttown - Quelaag", True_())
   ],
   "Lower Blighttown - Quelaag": [
     DsrEntranceRule("Lower Blighttown", Has("Boss Fog Wall Key - Quelaag") | bossfogwall_sanity_off),
   ],
   "Lower Blighttown - After Quelaag": [
     DsrEntranceRule("Lower Blighttown", Has("Chaos Witch Quelaag Defeated")),
+    DsrEntranceRule("Demon Ruins - Early", True_()),
   ],
   "Valley of the Drakes": [
     DsrEntranceRule("Upper Blighttown VotD Side", True_()),
@@ -240,6 +247,9 @@ region_rules_table = {
   ],
   "Anor Londo - After First Fog": [
     DsrEntranceRule("Anor Londo", Has("Fog Wall Key - Anor Londo #1 (Rafters)") | fogwall_sanity_off),
+  ],  
+  "Anor Londo - Painting Room": [
+    DsrEntranceRule("Anor Londo - After First Fog", Has("Fog Wall Key - Anor Londo #1 (Rafters)") | fogwall_sanity_off),
   ],
   "Anor Londo - After Second Fog": [
     DsrEntranceRule("Anor Londo - After First Fog", Has("Fog Wall Key - Anor Londo #2 (Archers)") | fogwall_sanity_off),
@@ -258,7 +268,7 @@ region_rules_table = {
     DsrEntranceRule("Anor Londo - Gwyndolin", Has("Gwyndolin Defeated")),
   ],
   "Painted World of Ariamis": [
-    DsrEntranceRule("Anor Londo - After First Fog", Has("Peculiar Doll")),
+    DsrEntranceRule("Anor Londo - Painting Room", Has("Peculiar Doll")),
   ],
   "Painted World of Ariamis - After Fog": [
     DsrEntranceRule("Painted World of Ariamis", Has("Fog Wall Key - Painted World") | fogwall_sanity_off),
@@ -416,6 +426,7 @@ region_rules_table = {
   ],
   "Oolacile Township": [
     DsrEntranceRule("Royal Wood - Artorias", Has("Artorias the Abysswalker Defeated")),
+    DsrEntranceRule("Chasm of the Abyss", True_()),
   ],
   "Oolacile Township - Behind Light-Dispelled Walls": [
     DsrEntranceRule("Oolacile Township", Has("Skull Lantern")),
@@ -430,5 +441,4 @@ region_rules_table = {
     DsrEntranceRule("Chasm of the Abyss", Has("Boss Fog Wall Key - Manus") | bossfogwall_sanity_off),
   ],
 }
-
 

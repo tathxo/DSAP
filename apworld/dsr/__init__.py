@@ -6,7 +6,7 @@ from Options import Toggle, OptionError, Option
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, add_item_rule
-from rule_builder.rules import Rule, True_, Has
+from rule_builder.rules import Rule, True_, Has, HasAll
 
 from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
 from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
@@ -530,23 +530,19 @@ class DSRWorld(World):
                 self.set_rule(location, True_())
         match self.options.goal_condition:
             case GoalConditionOption.option_gwyn:
-                self.set_completion_rule = Has("Gwyn, Lord of Cinder Defeated")
-                # self.multiworld.completion_condition[self.player] = lambda state: state.has("Gwyn, Lord of Cinder Defeated", self.player)
+                self.set_completion_rule(Has("Gwyn, Lord of Cinder Defeated"))
             case GoalConditionOption.option_all_bosses:
                 boss_defeated_items = [
                     item.name
                     for item in item_dictionary.values()
                     if item.category == DSRItemCategory.EVENT and "Defeated" in item.name
                 ]
-            
-                self.multiworld.completion_condition[self.player] = lambda state, items=boss_defeated_items: all(
-                    state.has(item, self.player) for item in items
-                )
+                self.set_completion_rule(HasAll(*boss_defeated_items))
+                
             case GoalConditionOption.option_ornstein_and_smough:
-                self.set_completion_rule = Has("Ornstein and Smough Defeated")
-                # self.multiworld.completion_condition[self.player] = lambda state: state.has("Ornstein and Smough Defeated", self.player)
+                self.set_completion_rule(Has("Ornstein and Smough Defeated"))
             case GoalConditionOption.option_manus:
-                self.multiworld.completion_condition[self.player] = lambda state: state.has("Manus, Father of the Abyss Defeated", self.player)
+                self.set_completion_rule(Has("Manus, Father of the Abyss Defeated"))
 
         # Instead of setting rules for regions here, it's done on creating the connections
         

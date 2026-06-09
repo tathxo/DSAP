@@ -191,6 +191,7 @@
 * ArsonAssassin - Creator and Maintainer from initial creation in Oct 2024 through May 2026, creator of the memory library "Archipelago.Core" used heavily by this implementation.
 * Nave - Contributor, research/reverse engineering
 * BroodierLake140 (discord) - Contributor, O+S and Manus goals
+* DeeKay - Contributor, "Allow Skips" Logic
 * TheAbysmalKraken - Linux-enabling fix in dependant memory library
 * GhostEye85 (discord) - Contributor, Settings Persistence and Bonfire Warping features and code
 * ahhhreptar (discord) - Provided a 2nd method for linux via the `launch_dsr.sh` script

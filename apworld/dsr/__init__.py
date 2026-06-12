@@ -179,6 +179,9 @@ class DSRWorld(World):
             self.enabled_location_categories.add(DSRLocationCategory.FOG_WALL)
         if (self.options.boss_fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_FOG_WALL)
+        # if (self.options.shop_sanity.value == True):
+        if (True):
+            self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
 
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
@@ -305,9 +308,41 @@ class DSRWorld(World):
             "Royal Wood - After Hawkeye Gough",
             "Oolacile Township", 
             "Oolacile Township - Behind Light-Dispelled Walls",
-            "Oolacile Township - After Crest Key",
+            # "Oolacile Township - After Crest Key",
             "Chasm of the Abyss",
-            "Chasm of the Abyss - Manus", 
+            "Chasm of the Abyss - Manus",
+            # start merchants
+            "Firelink Shrine - Trusty Patches",
+            "Firelink Shrine - Griggs of Vinheim",
+            "Firelink Shrine - Laurentius of the Great Swamp",
+            "Firelink Shrine - Petrus of Thorolund",
+            "Firelink Shrine - Rhea of Thorolund",
+            "Firelink Shrine - Big Hat Logan",
+            "Upper Undead Burg - Undead Merchant",
+            "Undead Parish - Andre",
+            "Undead Parish - Oswald of Carim",
+            "Lower Undead Burg - Female Undead Merchant",
+            "Depths - Domhnall of Zena",
+            "Depths - Domhnall of Zena - Post Iron Golem",
+            "Depths - Domhnall of Zena - Post O+S",
+            "Depths - Domhnall of Zena - Post Gwyndolin",
+            "Depths - Domhnall of Zena - Post Artorias",
+            "Lower Blighttown - Shiva of the East",
+            "Lower Blighttown - Quelana of Izalith",
+            "Lower Blighttown - Eingyi",
+            "Darkroot Basin - Princess Dusk",
+            "Sen's Fortress - Crestfallen Merchant",
+            "Anor Londo - Giant Blacksmith",
+            "Upper New Londo Ruins - Rickert of Vinheim",
+            "Upper New Londo Ruins - Ingward",
+            "The Catacombs - Vamos",
+            "Oolacile Sanctuary - Elizabeth",
+            "Royal Wood - Marvelous Chester",
+            "Royal Wood - Hawkeye Gough",
+            # start merchants' shared items
+            "2 Merchants - Bottomless Box",
+            "4 Merchants - Repairbox",
+            "3 Blacksmiths - Weapon Smithbox",
             ]
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in our_regions})
        

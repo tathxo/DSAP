@@ -174,9 +174,41 @@ class DSRLocation(Location):
             "Royal Wood - After Hawkeye Gough",
             "Oolacile Township", 
             "Oolacile Township - Behind Light-Dispelled Walls",
-            "Oolacile Township - After Crest Key",
+            # "Oolacile Township - After Crest Key",
             "Chasm of the Abyss",
-            "Chasm of the Abyss - Manus", 
+            "Chasm of the Abyss - Manus",
+            # start merchants
+            "Firelink Shrine - Trusty Patches",
+            "Firelink Shrine - Griggs of Vinheim",
+            "Firelink Shrine - Laurentius of the Great Swamp",
+            "Firelink Shrine - Petrus of Thorolund",
+            "Firelink Shrine - Rhea of Thorolund",
+            "Firelink Shrine - Big Hat Logan",
+            "Upper Undead Burg - Undead Merchant",
+            "Undead Parish - Andre",
+            "Undead Parish - Oswald of Carim",
+            "Lower Undead Burg - Female Undead Merchant",
+            "Depths - Domhnall of Zena",
+            "Depths - Domhnall of Zena - Post Iron Golem",
+            "Depths - Domhnall of Zena - Post O+S",
+            "Depths - Domhnall of Zena - Post Gwyndolin",
+            "Depths - Domhnall of Zena - Post Artorias",
+            "Lower Blighttown - Shiva of the East",
+            "Lower Blighttown - Quelana of Izalith",
+            "Lower Blighttown - Eingyi",
+            "Darkroot Basin - Princess Dusk",
+            "Sen's Fortress - Crestfallen Merchant",
+            "Anor Londo - Giant Blacksmith",
+            "Upper New Londo Ruins - Rickert of Vinheim",
+            "Upper New Londo Ruins - Ingward",
+            "The Catacombs - Vamos",
+            "Oolacile Sanctuary - Elizabeth",
+            "Royal Wood - Marvelous Chester",
+            "Royal Wood - Hawkeye Gough",
+            # start merchants' shared items
+            "2 Merchants - Bottomless Box",
+            "4 Merchants - Repairbox",
+            "3 Blacksmiths - Weapon Smithbox",
         ]
 
         output = {}
@@ -255,7 +287,84 @@ location_tables = {
     DSRLocationData(11110031, f"FS: Soul of a Lost Undead - Aqueduct Cliff", f"Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110032, f"FS: Soul of a Lost Undead - Aqueduct Entrance", f"Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110033, f"FS: Soul of a Lost Undead - Sewer Rat", f"Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
+],
+"Firelink Shrine - Trusty Patches": [
+    # DSRLocationData(11110xxx, f"FS: Trusty Patches", f"Trusty Patches Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110891, f"Trusty Patches: Eye of Death", f"Eye of Death x3", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110892, f"Trusty Patches: Divine Blessing", f"Divine Blessing", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110893, f"Trusty Patches: Humanity", f"Humanity x3", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110894, f"Trusty Patches: Twin Humanities", f"Twin Humanities", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110895, f"Trusty Patches: Miracle: Heal", f"Miracle: Heal", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110896, f"Trusty Patches: Miracle: Great Heal Excerpt", f"Miracle: Great Heal Excerpt", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110897, f"Trusty Patches: Crescent Axe", f"Crescent Axe", DSRLocationCategory.SHOP_ITEM),
+],
+"2 Merchants - Bottomless Box": [ # Undead Merchant or Domhnall of Zena
+    DSRLocationData(11110823, f"Undead Merchant or Domhnall of Zena: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
+],
+"4 Merchants - Repairbox": [ # Giant blacksmith, Undead Merchant, Andre, or Vamos
+    DSRLocationData(11110824, f"Merchant: Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
+],
+"3 Blacksmiths - Weapon Smithbox": [ # Giant blacksmith, Andre, or Vamos
+    DSRLocationData(11110826, f"Blacksmith: Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110864, f"Blacksmith: Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
+],
+"Firelink Shrine - Griggs of Vinheim": [
+    # DSRLocationData(11110xxx, f"FS: Griggs of Vinheim", f"Griggs of Vinheim Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110899, f"Griggs of Vinheim: Sorcery: Soul Arrow", f"Sorcery: Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110900, f"Griggs of Vinheim: Sorcery: Great Soul Arrow", f"Sorcery: Great Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110901, f"Griggs of Vinheim: Sorcery: Heavy Soul Arrow", f"Sorcery: Heavy Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110902, f"Griggs of Vinheim: Sorcery: Great Heavy Soul Arrow", f"Sorcery: Great Heavy Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110903, f"Griggs of Vinheim: Sorcery: Magic Weapon", f"Sorcery: Magic Weapon", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110904, f"Griggs of Vinheim: Sorcery: Magic Shield", f"Sorcery: Magic Shield", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110905, f"Griggs of Vinheim: Sorcery: Aural Decoy", f"Sorcery: Aural Decoy", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110906, f"Griggs of Vinheim: Sorcery: Fall Control", f"Sorcery: Fall Control", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110907, f"Griggs of Vinheim: Bellowing Dragoncrest Ring", f"Bellowing Dragoncrest Ring", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110908, f"Griggs of Vinheim: Lingering Dragoncrest Ring", f"Lingering Dragoncrest Ring", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110909, f"Griggs of Vinheim: Sorcery: Homing Soulmass", f"Sorcery: Homing Soulmass", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110910, f"Griggs of Vinheim: Sorcery: Soul Spear", f"Sorcery: Soul Spear", DSRLocationCategory.SHOP_ITEM),
+],
+"Firelink Shrine - Laurentius of the Great Swamp": [
+    # DSRLocationData(11110xxx, f"FS: Laurentius of the Great Swamp", f"Laurentius of the Great Swamp Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110914, f"Laurentius of the Great Swamp: Pyromancy: Fireball", f"Pyromancy: Fireball", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110915, f"Laurentius of the Great Swamp: Pyromancy: Fire Orb", f"Pyromancy: Fire Orb", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110916, f"Laurentius of the Great Swamp: Pyromancy: Combustion", f"Pyromancy: Combustion", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110917, f"Laurentius of the Great Swamp: Pyromancy: Iron Flesh", f"Pyromancy: Iron Flesh", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110918, f"Laurentius of the Great Swamp: Pyromancy: Flash Sweat", f"Pyromancy: Flash Sweat", DSRLocationCategory.SHOP_ITEM),
+],
+"Firelink Shrine - Petrus of Thorolund": [
+    # DSRLocationData(11110xxx, f"FS: Petrus of Thorolund", f"Petrus of Thorolund Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110930, f"Petrus of Thorolund: Miracle: Heal", f"Miracle: Heal", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110931, f"Petrus of Thorolund: Miracle: Great Heal Excerpt", f"Miracle: Great Heal Excerpt", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110932, f"Petrus of Thorolund: Miracle: Homeward", f"Miracle: Homeward", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110933, f"Petrus of Thorolund: Miracle: Force", f"Miracle: Force", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110934, f"Petrus of Thorolund: Miracle: Seek Guidance", f"Miracle: Seek Guidance", DSRLocationCategory.SHOP_ITEM),
+],
+"Firelink Shrine - Rhea of Thorolund": [
+    # DSRLocationData(11110xxx, f"FS: Petrus of Thorolund", f"Petrus of Thorolund Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110935, f"Rhea of Thorolund: Divine Blessing", f"Divine Blessing", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110936, f"Rhea of Thorolund: Miracle: Heal", f"Miracle: Heal", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110937, f"Rhea of Thorolund: Miracle: Great Heal", f"Miracle: Great Heal", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110938, f"Rhea of Thorolund: Miracle: Great Heal Excerpt", f"Miracle: Great Heal Excerpt", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110939, f"Rhea of Thorolund: Miracle: Homeward", f"Miracle: Homeward", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110940, f"Rhea of Thorolund: Miracle: Force", f"Miracle: Force", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110941, f"Rhea of Thorolund: Miracle: Wrath of the Gods", f"Miracle: Wrath of the Gods", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110942, f"Rhea of Thorolund: Miracle: Seek Guidance", f"Miracle: Seek Guidance", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110943, f"Rhea of Thorolund: Miracle: Magic Barrier", f"Miracle: Magic Barrier", DSRLocationCategory.SHOP_ITEM),
 ],  
+"Firelink Shrine - Big Hat Logan": [
+    # DSRLocationData(11110xxx, f"FS: Big Hat Logan", f"Big Hat Logan Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110950, f"Big Hat Logan: Sorcery: Soul Arrow", f"Sorcery: Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110951, f"Big Hat Logan: Sorcery: Great Soul Arrow", f"Sorcery: Great Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110952, f"Big Hat Logan: Sorcery: Heavy Soul Arrow", f"Sorcery: Heavy Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110953, f"Big Hat Logan: Sorcery: Great Heavy Soul Arrow", f"Sorcery: Great Heavy Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110954, f"Big Hat Logan: Sorcery: Homing Soulmass", f"Sorcery: Homing Soulmass", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110955, f"Big Hat Logan: Sorcery: Soul Spear", f"Sorcery: Soul Spear", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110956, f"Big Hat Logan: Sorcery: Magic Weapon", f"Sorcery: Magic Weapon", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110957, f"Big Hat Logan: Sorcery: Magic Shield", f"Sorcery: Magic Shield", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110958, f"Big Hat Logan: Sorcery: Homing Crystal Soulmass", f"Sorcery: Homing Crystal Soulmass", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110959, f"Big Hat Logan: Sorcery: Crystal Soul Spear", f"Sorcery: Crystal Soul Spear", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110960, f"Big Hat Logan: Sorcery: Crystal Magic Weapon", f"Sorcery: Crystal Magic Weapon", DSRLocationCategory.SHOP_ITEM),
+],
 "Upper Undead Burg - Before Fog": [
     DSRLocationData(11110568, f"UB: Soul of a Lost Undead - Window Corpse", f"Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110034, f"UB: Large Soul of a Lost Undead - Barrel Drop", f"Large Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
@@ -286,7 +395,15 @@ location_tables = {
     DSRLocationData(11110050, f"UB: Twinkling Titanite - Crystal Lizard Drop, In Barrel Before Taurus Demon", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11111013, f"UB: Extra Titanite - Crystal Lizard Drop, In Barrel Before Taurus Demon", f"Extra Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
 ],
-"Upper Undead Burg - Taurus Demon": [    
+"Upper Undead Burg - Undead Merchant": [
+    DSRLocationData(11110829, f"UB: Undead Merchant", f"Undead Merchant Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110042, f"Undead Merchant: Residence Key", f"Residence Key", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110823, f"Undead Merchant: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110824, f"Undead Merchant: Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110858, f"Undead Merchant: Orange Guidance Soapstone", f"Orange Guidance Soapstone", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110859, f"Undead Merchant: Dried Finger", f"Dried Finger", DSRLocationCategory.SHOP_ITEM),
+],
+"Upper Undead Burg - Taurus Demon": [
     DSRLocationData(11110799, f"UB: Boss Fog Wall - Taurus Demon", f"Boss Fog Wall Key - Taurus Demon", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110053, f"UB: Taurus Demon Defeated", f"Taurus Demon Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110968, f"UB: Humanity - Taurus Demon Drop", f"Humanity", DSRLocationCategory.BOSS_HUMANITY),
@@ -318,21 +435,32 @@ location_tables = {
     DSRLocationData(11110833, f"UP: Undead Parish Bonfire", f"Bonfire Warp Unlock - Undead Parish", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110067, f"UP: Halberd", f"Halberd", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110068, f"UP: Basement Key", f"Basement Key", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110830, f"UP: Andre", f"Andre Access", DSRLocationCategory.EVENT),
-    DSRLocationData(11110825, f"UP: Andre - Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110826, f"UP: Andre - Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110827, f"UP: Andre - Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110822, f"UP: Andre - Crest of Artorias", f"Crest of Artorias", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110069, f"UP: Berenike Knight", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
     DSRLocationData(11110070, f"UP: Fire Keeper Soul - Undead Parish", f"Fire Keeper Soul (Undead Parish)", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110071, f"UP: Large Soul of a Nameless Soldier - Parish Window", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110072, f"UP: Humanity - Parish Barrel", f"Humanity", DSRLocationCategory.ITEM_LOT),
+],
+"Undead Parish - Andre": [
+    DSRLocationData(11110830, f"UP: Andre", f"Andre Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110822, f"UP: Andre - Crest of Artorias", f"Crest of Artorias", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110824, f"UP: Andre - Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110826, f"UP: Andre - Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110864, f"UP: Andre - Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
 ],
 "Undead Parish - Bell Gargoyles": [
     DSRLocationData(11110803, f"UP: Boss Fog Wall - Bell Gargoyles", f"Boss Fog Wall Key - Bell Gargoyles", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110073, f"UP: Bell Gargoyles Defeated", f"Bell Gargoyles Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110970, f"UP: Twin Humanities - Bell Gargoyles Drop", f"Twin Humanities",  DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110074, f"UP: Bell of Awakening #1 rung", f"Bell of Awakening #1", DSRLocationCategory.EVENT),
+],
+"Undead Parish - Oswald of Carim": [
+    # DSRLocationData(11110xxx, f"UP: Oswald of Carim", f"Oswald of Carim Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110944, f"Oswald of Carim: Book of the Guilty", f"Book of the Guilty", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110945, f"Oswald of Carim: Purging Stone", f"Purging Stone x5", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110946, f"Oswald of Carim: Miracle: Karmic Justice", f"Miracle: Karmic Justice", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110947, f"Oswald of Carim: Bloodbite Ring", f"Bloodbite Ring", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110948, f"Oswald of Carim: Poisonbite Ring", f"Poisonbite Ring", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110949, f"Oswald of Carim: Ring of Sacrifice", f"Ring of Sacrifice x10", DSRLocationCategory.SHOP_ITEM),
 ],
 "Firelink Shrine - After Undead Parish Elevator": [
     DSRLocationData(11110075, f"FS: Undead Asylum F2 West Key", f"Undead Asylum F2 West Key", DSRLocationCategory.ITEM_LOT),
@@ -393,6 +521,11 @@ location_tables = {
     DSRLocationData(11110566, f"UB: Target Shield", f"Target Shield", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110107, f"UB: Undead Burg Female Merchant Shortcut opened", f"Door Filler", DSRLocationCategory.DOOR),
 ],
+"Lower Undead Burg - Female Undead Merchant": [
+    # DSRLocationData(11110xxx, f"UB: Female Undead Merchant", f"Female Undead Merchant Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110860, f"Female Undead Merchant: Transient Curse", f"Transient Curse x4", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110861, f"Female Undead Merchant: Humanity", f"Humanity", DSRLocationCategory.SHOP_ITEM),
+],
 "Lower Undead Burg - Capra Demon": [
     DSRLocationData(11110800, f"UB: Boss Fog Wall - Capra Demon", f"Boss Fog Wall Key - Capra Demon", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110108, f"UB: Capra Demon Defeated", f"Capra Demon Defeated", DSRLocationCategory.BOSS),
@@ -433,6 +566,46 @@ location_tables = {
     DSRLocationData(11110624, f"DE: Heavy Bolt", f"Heavy Bolt x11", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110126, f"DE: Depths Shortcut opened", f"Door Filler", DSRLocationCategory.DOOR),
     DSRLocationData(11110786, f"DE: Fog Wall - Depths Rat Room", f"Fog Wall Key - Depths Rat Room", DSRLocationCategory.FOG_WALL),
+],
+"Depths - Domhnall of Zena": [
+    # DSRLocationData(11110xxx, f"DE: Domhnall of Zena", f"Domhnall of Zena Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110865, f"Domhnall of Zena: Gold Pine Resin", f"Gold Pine Resin", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110823, f"Domhnall of Zena: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110886, f"Domhnall of Zena: Master Key", f"Master Key", DSRLocationCategory.SHOP_ITEM),
+],
+"Depths - Domhnall of Zena - Post Iron Golem": [
+    DSRLocationData(11110866, f"Domhnall of Zena: Golem Helm", f"Golem Helm", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110867, f"Domhnall of Zena: Golem Armor", f"Golem Armor", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110868, f"Domhnall of Zena: Golem Gauntlets", f"Golem Gauntlets", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110869, f"Domhnall of Zena: Golem Leggings", f"Golem Leggings", DSRLocationCategory.SHOP_ITEM),
+],
+"Depths - Domhnall of Zena - Post O+S": [
+    DSRLocationData(11110870, f"Domhnall of Zena: Smough's Helm", f"Smough's Helm", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110871, f"Domhnall of Zena: Smough's Armor", f"Smough's Armor", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110872, f"Domhnall of Zena: Smough's Gauntlets", f"Smough's Gauntlets", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110873, f"Domhnall of Zena: Smough's Leggings", f"Smough's Leggings", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110874, f"Domhnall of Zena: Ornstein's Helm", f"Ornstein's Helm", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110875, f"Domhnall of Zena: Ornstein's Armor", f"Ornstein's Armor", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110876, f"Domhnall of Zena: Ornstein's Gauntlets", f"Ornstein's Gauntlets", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110877, f"Domhnall of Zena: Ornstein's Leggings", f"Ornstein's Leggings", DSRLocationCategory.SHOP_ITEM),
+],
+"Depths - Domhnall of Zena - Post Gwyndolin": [
+    DSRLocationData(11110878, f"Domhnall of Zena: Crown of the Dark Sun", f"Crown of the Dark Sun", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110879, f"Domhnall of Zena: Moonlight Robe", f"Moonlight Robe", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110880, f"Domhnall of Zena: Moonlight Gloves", f"Moonlight Gloves", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110881, f"Domhnall of Zena: Moonlight Waistcloth", f"Moonlight Waistcloth", DSRLocationCategory.SHOP_ITEM),
+],
+# "Depths - Domhnall of Zena - Post Gwyn": [
+#     DSRLocationData(11110882, f"Domhnall of Zena: Crown of the Great Lord", f"Crown of the Great Lord", DSRLocationCategory.SHOP_ITEM),
+#     DSRLocationData(11110883, f"Domhnall of Zena: Robe of the Great Lord", f"Robe of the Great Lord", DSRLocationCategory.SHOP_ITEM),
+#     DSRLocationData(11110884, f"Domhnall of Zena: Bracelet of the Great Lord", f"Bracelet of the Great Lord", DSRLocationCategory.SHOP_ITEM),
+#     DSRLocationData(11110885, f"Domhnall of Zena: Anklet of the Great Lord", f"Anklet of the Great Lord", DSRLocationCategory.SHOP_ITEM),
+# ],
+"Depths - Domhnall of Zena - Post Artorias": [
+    DSRLocationData(11110887, f"Domhnall of Zena: Helm of Artorias", f"Helm of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110888, f"Domhnall of Zena: Armor of Artorias", f"Armor of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110889, f"Domhnall of Zena: Gauntlets of Artorias", f"Gauntlets of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110890, f"Domhnall of Zena: Leggings of Artorias", f"Leggings of Artorias", DSRLocationCategory.SHOP_ITEM),
 ],
 "Depths - Gaping Dragon": [
     DSRLocationData(11110801, f"DE: Boss Fog Wall - Gaping Dragon", f"Boss Fog Wall Key - Gaping Dragon", DSRLocationCategory.BOSS_FOG_WALL),
@@ -501,6 +674,21 @@ location_tables = {
     DSRLocationData(11110161, f"BT: Plank Shield", f"Plank Shield", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110162, f"BT: Twin Humanities - Great Hallow Entrance", f"Twin Humanities", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110163, f"BT: Large Titanite Shard - Near Quelana", f"Large Titanite Shard", DSRLocationCategory.ITEM_LOT),
+],  
+"Lower Blighttown - Shiva of the East": [
+    # DSRLocationData(11110xxx, f"BT: Shiva of the East", f"Shiva of the East Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110898, f"Shiva of the East: East Wood Grain Ring", f"East Wood Grain Ring", DSRLocationCategory.SHOP_ITEM),
+],
+"Lower Blighttown - Quelana of Izalith": [
+    # DSRLocationData(11110xxx, f"BT: Quelana of Izalith", f"Quelana of Izalith Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110922, f"Quelana of Izalith: Pyromancy: Fireball", f"Pyromancy: Fireball", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110923, f"Quelana of Izalith: Pyromancy: Fire Orb", f"Pyromancy: Fire Orb", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110924, f"Quelana of Izalith: Pyromancy: Great Fireball", f"Pyromancy: Great Fireball", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110925, f"Quelana of Izalith: Pyromancy: Firestorm", f"Pyromancy: Firestorm", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110926, f"Quelana of Izalith: Pyromancy: Fire Whip", f"Pyromancy: Fire Whip", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110927, f"Quelana of Izalith: Pyromancy: Combustion", f"Pyromancy: Combustion", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110928, f"Quelana of Izalith: Pyromancy: Great Combustion", f"Pyromancy: Great Combustion", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110929, f"Quelana of Izalith: Pyromancy: Undead Rapport", f"Pyromancy: Undead Rapport", DSRLocationCategory.SHOP_ITEM),
 ],
 "Lower Blighttown - Quelaag": [
     DSRLocationData(11110802, f"BT: Boss Fog Wall - Quelaag", f"Boss Fog Wall Key - Quelaag", DSRLocationCategory.BOSS_FOG_WALL),
@@ -511,6 +699,12 @@ location_tables = {
     DSRLocationData(11110980, f"BT: Twin Humanities - Quelaag Drop", f"Twin Humanities",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110835, f"BT: Daughter of Chaos Bonfire", f"Bonfire Warp Unlock - Daughter of Chaos", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110556, f"BT: Bell of Awakening #2 rung", f"Bell of Awakening #2", DSRLocationCategory.EVENT),
+],
+"Lower Blighttown - Eingyi": [
+    # DSRLocationData(11110xxx, f"BT: Eingyi", f"Eingyi Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110919, f"Eingyi: Servant Roster", f"Servant Roster", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110920, f"Eingyi: Pyromancy: Poison Mist", f"Pyromancy: Poison Mist", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110921, f"Eingyi: Pyromancy: Toxic Mist", f"Pyromancy: Toxic Mist", DSRLocationCategory.SHOP_ITEM),
 ],
 "Upper Blighttown VotD Side": [
     DSRLocationData(11110166, f"BT: Soul of a Proud Knight - Blighttown Fire Keeper Soul", f"Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
@@ -571,6 +765,14 @@ location_tables = {
     #DSRLocationData(11110646, f"DB: Antiquated Dress", f"Antiquated Dress", DSRLocationCategory.ITEM_LOT), #Commented out for now, since it's a missable NPC Interaction
     #DSRLocationData(11110647, f"DB: Antiquated Gloves", f"Antiquated Gloves", DSRLocationCategory.ITEM_LOT),#Commented out for now, since it's a missable NPC Interaction
     #DSRLocationData(11110648, f"DB: Antiquated Skirt", f"Antiquated Skirt", DSRLocationCategory.ITEM_LOT), #Commented out for now, since it's a missable NPC Interaction
+],
+"Darkroot Basin - Princess Dusk": [
+    # DSRLocationData(11110xxx, f"DG: Princess Dusk", f"Princess Dusk Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110853, f"Princess Dusk: Sorcery: Hidden Weapon", f"Sorcery: Hidden Weapon", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110854, f"Princess Dusk: Sorcery: Hidden Body", f"Sorcery: Hidden Body", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110855, f"Princess Dusk: Sorcery: Cast Light", f"Sorcery: Cast Light", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110856, f"Princess Dusk: Sorcery: Repair", f"Sorcery: Repair", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110857, f"Princess Dusk: Sorcery: Chameleon", f"Sorcery: Chameleon", DSRLocationCategory.SHOP_ITEM),
 ],
 "Darkroot Garden - Before Fog": [
     DSRLocationData(11110192, f"DG: Titanite Demon below Andre", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
@@ -707,6 +909,11 @@ location_tables = {
     DSRLocationData(11110661, f"SF: Sniper Bolt", f"Sniper Bolt x12", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110257, f"SF: Cage Key", f"Cage Key", DSRLocationCategory.ITEM_LOT),
 ],
+"Sen's Fortress - Crestfallen Merchant": [
+    # DSRLocationData(11110xxx, f"UB: Crestfallen Merchant", f"Crestfallen Merchant Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110862, f"Crestfallen Merchant: Thunder Stoneplate Ring", f"Thunder Stoneplate Ring", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110863, f"Crestfallen Merchant: Spell Stoneplate Ring", f"Spell Stoneplate Ring", DSRLocationCategory.SHOP_ITEM),
+],
 "Sen's Fortress - Iron Golem": [
     DSRLocationData(11110804, f"SF: Boss Fog Wall - Iron Golem", f"Boss Fog Wall Key - Iron Golem", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110258, f"SF: Iron Golem Defeated", f"Iron Golem Defeated", DSRLocationCategory.BOSS),
@@ -768,6 +975,12 @@ location_tables = {
     DSRLocationData(11110290, f"AL: Hawk Ring", f"Hawk Ring", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110291, f"AL: Anor Londo Giant Blacksmith Shortcut opened", f"Door Filler", DSRLocationCategory.DOOR),
     DSRLocationData(11110292, f"AL: Anor Londo Main Hall Door opened", f"Door Filler", DSRLocationCategory.DOOR),
+],
+"Anor Londo - Giant Blacksmith": [
+    # DSRLocationData(11110xxx, f"AL: Giant Blacksmith", f"Giant Blacksmith Access", DSRLocationCategory.EVENT),
+    # DSRLocationData(11110826, f"Giant Blacksmith: Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110961, f"Giant Blacksmith: Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110824, f"Giant Blacksmith: Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
 ],
 "Anor Londo - Ornstein and Smough": [
     DSRLocationData(11110805, f"AL: Boss Fog Wall - Ornstein and Smough", f"Boss Fog Wall Key - Ornstein and Smough", DSRLocationCategory.BOSS_FOG_WALL),
@@ -861,6 +1074,11 @@ location_tables = {
     DSRLocationData(11110337, f"NL: Parrying Dagger", f"Parrying Dagger", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110338, f"NL: Transient Curse - Banshee", f"Transient Curse x2", DSRLocationCategory.ITEM_LOT),
 ],
+"Upper New Londo Ruins - Rickert of Vinheim": [
+    # DSRLocationData(11110xxx, f"FS: Rickert of Vinheim", f"Rickert of Vinheim Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110911, f"Rickert of Vinheim: Sorcery: Soul Arrow", f"Sorcery: Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110912, f"Rickert of Vinheim: Sorcery: Heavy Soul Arrow", f"Sorcery: Heavy Soul Arrow", DSRLocationCategory.SHOP_ITEM),
+],
 "Upper New Londo Ruins - After Fog": [
     DSRLocationData(11110796, f"NL: Fog Wall - New Londo (Upper)", f"Fog Wall Key - New Londo (Upper)", DSRLocationCategory.FOG_WALL),
     DSRLocationData(11110339, f"NL: Large Soul of a Nameless Soldier - Near Ladder Shortcut", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
@@ -873,6 +1091,10 @@ location_tables = {
     DSRLocationData(11110346, f"NL: Rare Ring of Sacrifice - New Londo Roof", f"Rare Ring of Sacrifice", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110347, f"NL: Composite Bow", f"Composite Bow", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110678, f"NL: Large Arrow", f"Large Arrow x16", DSRLocationCategory.ITEM_LOT),
+],
+"Upper New Londo Ruins - Ingward": [
+    # DSRLocationData(11110xxx, f"FS: Ingward", f"Ingward Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110913, f"Ingward: Sorcery: Resist Curse", f"Sorcery: Resist Curse", DSRLocationCategory.SHOP_ITEM),
 ],
 "New Londo Ruins Door to the Seal": [
     DSRLocationData(11110348, f"NL: New Londo Ruins Door to the Seal opened", f"Door Filler", DSRLocationCategory.DOOR),
@@ -1100,6 +1322,12 @@ location_tables = {
     DSRLocationData(11110696, f"TC: Holy Trousers", f"Holy Trousers", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110552, f"TC: Mace", f"Mace", DSRLocationCategory.ITEM_LOT),
 ],
+"The Catacombs - Vamos": [
+    # DSRLocationData(11110xxx, f"TC: Vamos", f"Vamos Access", DSRLocationCategory.EVENT),
+    # DSRLocationData(11110826, f"Vamos: Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110962, f"Vamos: Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110824, f"Vamos: Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
+],
 "The Catacombs - Pinwheel": [
     DSRLocationData(11110807, f"TC: Boss Fog Wall - Pinwheel", f"Boss Fog Wall Key - Pinwheel", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110470, f"TC: Pinwheel Defeated", f"Pinwheel Defeated", DSRLocationCategory.BOSS),
@@ -1187,6 +1415,16 @@ location_tables = {
     DSRLocationData(11110848, f"OS: Oolacile Sanctuary Bonfire", f"Bonfire Warp Unlock - Oolacile Sanctuary", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110725, f"OS: Humanity - Corpse Near Bonfire", f"Humanity", DSRLocationCategory.ITEM_LOT),
 ],
+"Oolacile Sanctuary - Elizabeth": [
+    # DSRLocationData(11110xxx, f"OS: Elizabeth", f"Elizabeth Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110964, f"Elizabeth: Gold Pine Resin", f"Gold Pine Resin x6", DSRLocationCategory.SHOP_ITEM),
+    # All 5 items below are in Dusk's shop as well, and use the same flag.
+    # DSRLocationData(11110853, f"Elizabeth: Sorcery: Hidden Weapon", f"Sorcery: Hidden Weapon", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110854, f"Elizabeth: Sorcery: Hidden Body", f"Sorcery: Hidden Body", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110855, f"Elizabeth: Sorcery: Cast Light", f"Sorcery: Cast Light", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110856, f"Elizabeth: Sorcery: Repair", f"Sorcery: Repair", DSRLocationCategory.SHOP_ITEM),
+    # DSRLocationData(11110857, f"Elizabeth: Sorcery: Chameleon", f"Sorcery: Chameleon", DSRLocationCategory.SHOP_ITEM),
+],
 "Royal Wood": [
     DSRLocationData(11110726, f"RW: Soul of a Proud Knight - Behind Tower", f"Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110727, f"RW: Gold Coin - Down the Slope", f"Gold Coin", DSRLocationCategory.ITEM_LOT),
@@ -1211,13 +1449,16 @@ location_tables = {
     DSRLocationData(11110746, f"RW: Twinkling Titanite - Crystal Lizard Drop, Entry To Kalameet's Arena", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11111037, f"RW: Extra Titanite - Crystal Lizard Drop, Entry To Kalameet's Arena", f"Extra Red Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
 ],
+"Royal Wood - Marvelous Chester": [
+    # DSRLocationData(11110xxx, f"RW: Marvelous Chester", f"Marvelous Chester Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110963, f"Marvelous Chester: Humanity", f"Humanity x13", DSRLocationCategory.SHOP_ITEM),
+],
 "Royal Wood - Artorias": [
     DSRLocationData(11110816, f"RW: Boss Fog Wall - Artorias", f"Boss Fog Wall Key - Artorias", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110742, f"RW: Knight Artorias Defeated", f"Artorias the Abysswalker Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110743, f"RW: Soul of Artorias", f"Soul of Artorias", DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11111042, f"RW: Dark Silver Tracer - Lord's Blade Ciaran", f"Dark Silver Tracer", DSRLocationCategory.MISSABLE_DROP), # loot or trade, but she can leave
     DSRLocationData(11111043, f"RW: Gold Tracer - Lord's Blade Ciaran", f"Gold Tracer", DSRLocationCategory.MISSABLE_DROP), # loot or trade, but she can leave
-
 ],
 "Royal Wood - After Hawkeye Gough": [
     DSRLocationData(11110747, f"RW: Black Dragon Kalameet Defeated", f"Black Dragon Kalameet Defeated", DSRLocationCategory.BOSS),
@@ -1249,8 +1490,13 @@ location_tables = {
     DSRLocationData(11110757, f"OT: Silver Pendant", f"Silver Pendant", DSRLocationCategory.ITEM_LOT), 
     DSRLocationData(11110763, f"OT: Red Titanite Chunk - In Chest behind Illusory Wall", f"Red Titanite Chunk", DSRLocationCategory.ITEM_LOT),    
 ],
-"Oolacile Township - After Crest Key": [
-    DSRLocationData(11110781, f"Oolacile Crest Key Door opened", f"Door Filler", DSRLocationCategory.DOOR), 
+# "Oolacile Township - After Crest Key": [
+#     DSRLocationData(11110781, f"Oolacile Crest Key Door opened", f"Door Filler", DSRLocationCategory.DOOR), 
+# ],
+"Royal Wood - Hawkeye Gough": [
+    # DSRLocationData(11110xxx, f"RW: Hawkeye Gough", f"Hawkeye Gough Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110965, f"Hawkeye Gough: Carving: HELLO!", f"Carving: HELLO!", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110966, f"Hawkeye Gough: Carving: Carving: THANK YOU!", f"Carving: THANK YOU!", DSRLocationCategory.SHOP_ITEM),
 ],
 "Chasm of the Abyss": [   
     DSRLocationData(11110771, f"CotA: Twinkling Titanite - Crystal Lizard Drop, Entrance", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),

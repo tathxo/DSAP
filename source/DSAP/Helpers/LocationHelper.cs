@@ -238,6 +238,12 @@ namespace DSAP.Helpers
             ).ToList();
             return newlist;
         }
+        public static List<ShopLineupEntry> GetShopLineupFlags()
+        {
+            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.ShopLineups.json");
+            var list = JsonSerializer.Deserialize<List<ShopLineupEntry>>(json, MiscHelper.GetJsonOptions());
+            return list;
+        }
         public static List<EventFlag> GetMiscFlags()
         {
             var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.MiscFlags.json");

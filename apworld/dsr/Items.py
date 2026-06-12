@@ -166,7 +166,7 @@ _all_items_base = [
     ("Lordvessel Placed", 1099, DSRItemCategory.EVENT),
     ("Undead Merchant Access", 1100, DSRItemCategory.EVENT),
     ("Andre Access", 1101, DSRItemCategory.EVENT),
-
+    
 
 
 
@@ -364,10 +364,15 @@ _all_items_base = [
     ("Prism Stone x20", 2114, DSRItemCategory.CONSUMABLE),
     ("Eye of Death x3", 2115, DSRItemCategory.CONSUMABLE),
     ("Humanity x2", 2116, DSRItemCategory.CONSUMABLE),
+    ("Transient Curse x4", 2117, DSRItemCategory.CONSUMABLE),
+    ("Gold Pine Resin x6", 2118, DSRItemCategory.CONSUMABLE),
+    ("Humanity x13", 2119, DSRItemCategory.CONSUMABLE),
+    ("Purging Stone x5", 2120, DSRItemCategory.CONSUMABLE),
+    ("Ring of Sacrifice x10", 2121, DSRItemCategory.CONSUMABLE),
     # 2117 - 2121 reserved for shop sanity
     ("Humanity x4", 2122, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Humanity x10", 2123, DSRItemCategory.USEFUL_CONSUMABLE),
-    
+
 
     ("Peculiar Doll", 3000, DSRItemCategory.KEY_ITEM),
     ("Basement Key", 3001, DSRItemCategory.KEY_ITEM),

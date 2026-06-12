@@ -1919,13 +1919,14 @@ public partial class App : Application
         ParamHelper.UpdateSoulMultiplier(); // setup soul multiplier for npcs + bosses
         ParamHelper.ModifyNpcParams();
         ParamHelper.ModifyGameAreaParams();
-        ParamHelper.ModifyShopLineupParams();
+        ParamHelper.ModifyShopLineupParams(scoutedLocationInfo);
 
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
         /* Set to only receive remote items and starting inventory */
         ParamHelper.UpdateItemLots(ItemLotReplacementMap);
+
         watch.Stop();
         Log.Logger.Information($"Finished setup, took {watch.ElapsedMilliseconds}ms total");
         Client.AddOverlayMessage($"Finished setup, took {watch.ElapsedMilliseconds}ms total");

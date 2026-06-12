@@ -326,5 +326,14 @@
     "UpgradeType": "None",
     "Category": "Rings",
     "ApId": 11114040
+  },
+  {
+    "Name": "Ring of Sacrifice x10",
+    "Id": 126,
+    "StackLimit": 1,
+    "Quantity": 10,
+    "UpgradeType": "None",
+    "Category": "Rings",
+    "ApId": 11112121
   }
 ]

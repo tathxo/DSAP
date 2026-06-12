@@ -20,17 +20,22 @@ namespace DSAP.Helpers
             List<KeyValuePair<long, ScoutedItemInfo>> addedEntries = scoutedLocationInfo.ToList();
             //addedEntries.Sort((a, b) => a.Key.CompareTo(b.Key));
 
+            // adds a lot of key items
+            // 11110000 to 1111**** - location items
             var added_names = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, $"{x.Value.Player}'s {x.Value.ItemDisplayName}\0")).ToList();
             var added_captions = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemCaption(x))).ToList();
             var added_descriptions = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemCaption(x))).ToList();
 
+            // 11109961 to 11109999 - fog walls
             var added_emk_names = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
             var added_emk_captions = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrEventItemCaption()));
             var added_emk_descriptions = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrEventItemCaption()));
 
+            // 11109959 to 11109960 - keychains
             var keychain_names = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
             var keychain_captions = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrKeychainCaption(x.Name)));
             var keychain_descriptions = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrKeychainDescription(x)));
+
 
 
             added_names.AddRange(added_emk_names);
@@ -263,6 +268,11 @@ namespace DSAP.Helpers
             parambytes[0x3e] = 0; // use animation = 0
             parambytes[0x44] = 0x00; // all 'enable_<mp>' and is equip flags = 0
             parambytes[0x45] = 0x30; // only isDrop and isDeposit = 1, is only one = 0
+
+            parambytes[0x10] = 0; // sell value byte 0
+            parambytes[0x11] = 0; // sell value byte 1
+            parambytes[0x12] = 0; // sell value byte 2
+            parambytes[0x13] = 0; // sell value byte 3
 
             // For each new item, "Add Item" to ParamSt
             for (uint i = 0; i < new_entries; i++)

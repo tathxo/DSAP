@@ -1,5 +1,7 @@
 ﻿using Archipelago.Core.Models;
 using Archipelago.Core.Util;
+using Archipelago.MultiClient.Net.Models;
+using Avalonia.Media.TextFormatting;
 using DSAP.Models;
 using Serilog;
 using System;
@@ -466,7 +468,7 @@ namespace DSAP.Helpers
             }
             Log.Logger.Verbose($"Updated Boss soul drops with multiplier {multiplier}%");
         }
-        internal static bool ModifyShopLineupParams()
+        internal static bool ModifyShopLineupParams(Dictionary<long, ScoutedItemInfo> scoutedLocationInfo)
         {
             // Read in the Param Structure
             // Modify it,
@@ -479,7 +481,81 @@ namespace DSAP.Helpers
                 Log.Logger.Warning("Skipping reload of Shop Lineup Params");
                 return false;
             }
-            // if we are here, we are updating the params.
+
+            Log.Logger.Verbose("Reloading Shop Lineup Params");
+
+            //if (App.DSOptions.ShopSanity == true)
+            {
+                // if we are here, we are updating the params.
+                var shopflags = LocationHelper.GetShopLineupFlags();
+
+                // for flags in the list of known shop flags
+                foreach (var shopFlag in shopflags)
+                {
+                    int id = shopFlag.Id;
+                    Log.Logger.Information($"shop locid = {id}");
+                    if (scoutedLocationInfo.TryGetValue(id, out var resultItem)) // get the matching scouted item
+                    {
+                        Log.Logger.Information($"scout item = {resultItem.ItemName}");
+                        foreach (var entry in shopLineupParamStruct.ParamEntries.Where(x => x.id == shopFlag.ParamId))
+                        {
+                            Log.Logger.Information($"item replaced");
+                            // for now, write the scouted item location id. For this we didn't really need the scouted item itself, but it may be nice to have for the future (especially filling in own item info)
+                            Array.Copy(BitConverter.GetBytes((int)resultItem.LocationId), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EQUIP_ID, sizeof(int));
+                            Array.Copy(BitConverter.GetBytes((short)1), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.SELL_QUANTITY, sizeof(short));
+
+                            //Array.Copy(BitConverter.GetBytes(312), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
+                            shopLineupParamStruct.ParamBytes[entry.paramOffset + ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
+                            //Array.Copy(BitConverter.GetBytes(1500), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
+
+                        }
+                    }
+                }
+            }
+
+
+
+            // print shop lineup params
+            
+            var armors = MiscHelper.GetArmor();
+            var weapons = MiscHelper.GetMeleeWeapons();
+            weapons.AddRange(MiscHelper.GetRangedWeapons());
+            var rings = MiscHelper.GetRings();
+            var goods = MiscHelper.GetConsumables();
+            goods.AddRange(MiscHelper.GetKeyItems());
+            goods.AddRange(MiscHelper.GetUsableItems());
+            goods.AddRange(MiscHelper.GetUpgradeMaterials());
+            goods.AddRange(MiscHelper.GetSpells());
+            var spells = MiscHelper.GetSpells();
+
+            foreach (var shopitem in shopLineupParamStruct.ParamEntries)
+            {
+                byte[] itembytes = new byte[ShopLineupParam.Size];
+                Array.Copy(shopLineupParamStruct.ParamBytes, shopitem.paramOffset, itembytes, 0, itembytes.Length);
+                uint id = shopitem.id;
+                int itemid = BitConverter.ToInt32(itembytes, 0);
+                int val = BitConverter.ToInt32(itembytes, 4);
+                int matcost = BitConverter.ToInt32(itembytes, 8);
+                int flag = BitConverter.ToInt32(itembytes, 0xc);
+                int qwc = BitConverter.ToInt32(itembytes, 0x10);
+                short quant = BitConverter.ToInt16(itembytes, 0x14);
+                short shoptype = itembytes[0x16];
+                short equiptype = itembytes[0x17];
+                var name = "";
+                if (equiptype == 0)
+                    name = weapons.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 1)
+                    name = armors.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 2)
+                    name = rings.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 3)
+                    name = goods.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 4)
+                    name = spells.Find(x => x.Id == itemid)?.Name;
+                //Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equipttype}");
+                if (flag != -1)
+                    Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, name={name}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equiptype}");
+            }
 
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)
@@ -501,15 +577,17 @@ namespace DSAP.Helpers
 
             return true;
         }
+
+
         internal static bool AddRickertCurses(ParamStruct<ShopLineupParam> shopLineupParamStruct)
         {
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             byte[] parambytes = new byte[ShopLineupParam.Size];
             var copyentry = shopLineupParamStruct.ParamEntries.Find((x) => x.id == 2102);
             Array.Copy(shopLineupParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
-            Array.Copy(BitConverter.GetBytes(312), 0, parambytes, 0, sizeof(int)); // equip id for transient curse
-            parambytes[0x17] = (byte)3; // equip type = "good"
-            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, 0x4, sizeof(int)); // value = 1500 souls
+            Array.Copy(BitConverter.GetBytes(312), 0, parambytes, ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
+            parambytes[ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
+            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
 
             shopLineupParamStruct.AddParam(2103, parambytes, Encoding.ASCII.GetBytes("[AP]+transient curses"));
             Log.Logger.Information("Added transient curses to Rickert's shop");

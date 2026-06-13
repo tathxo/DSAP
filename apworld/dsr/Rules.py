@@ -249,7 +249,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Anor Londo", Has("Fog Wall Key - Anor Londo #1 (Rafters)") | fogwall_sanity_off),
   ],  
   "Anor Londo - Painting Room": [
-    DsrEntranceRule("Anor Londo - After First Fog", Has("Fog Wall Key - Anor Londo #1 (Rafters)") | fogwall_sanity_off),
+    DsrEntranceRule("Anor Londo - After First Fog", True_()),
   ],
   "Anor Londo - After Second Fog": [
     DsrEntranceRule("Anor Londo - After First Fog", Has("Fog Wall Key - Anor Londo #2 (Archers)") | fogwall_sanity_off),
@@ -294,7 +294,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("New Londo Ruins Door to the Seal", True_()),
   ],
   "The Abyss": [
-    DsrEntranceRule("Lower New Londo Ruins", (Has("Covenant of Artorias") & Has("Boss Fog Wall Key - Crossbreed Priscilla") | bossfogwall_sanity_off)),
+    DsrEntranceRule("Lower New Londo Ruins", (Has("Covenant of Artorias") & Has("Boss Fog Wall Key - Four Kings") | bossfogwall_sanity_off)),
   ],
   "The Abyss - After Four Kings": [
     DsrEntranceRule("The Abyss", Has("Four Kings Defeated")),
@@ -343,7 +343,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Demon Ruins - Early", Has("Ceaseless Discharge Defeated")),
   ],
   "Demon Ruins - Demon Firesage": [
-    DsrEntranceRule("Demon Ruins", Has("Lordvessel Placed") & Has("Boss Fog Wall Key - Ceaseless Discharge") | bossfogwall_sanity_off),
+    DsrEntranceRule("Demon Ruins", Has("Lordvessel Placed") & Has("Boss Fog Wall Key - Demon Firesage") | bossfogwall_sanity_off),
   ],
   "Demon Ruins - After Demon Firesage": [
     DsrEntranceRule("Demon Ruins - Demon Firesage", Has("Demon Firesage Defeated")),

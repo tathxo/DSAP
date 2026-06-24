@@ -3,7 +3,7 @@ from typing import Optional, NamedTuple, Dict
 from dataclasses import dataclass
 
 from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter, And, HasGroup, CanReachRegion, Or
-from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs
+from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs, LogicToAccessTotG
 
 @dataclass
 class DsrEntranceRule():
@@ -382,7 +382,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("The Catacombs - Pinwheel", Has("Pinwheel Defeated")),
   ],
   "Tomb of the Giants": [
-    DsrEntranceRule("The Catacombs - After Pinwheel", Has("Skull Lantern")),
+    DsrEntranceRule("The Catacombs - After Pinwheel",
+      Has("Skull Lantern", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_skull_lantern)], filtered_resolution=True)
+    )
   ],
   "Tomb of the Giants - After White Fog": [
     DsrEntranceRule("Tomb of the Giants", Has("Fog Wall Key - Tomb of the Giants") | fogwall_sanity_off),

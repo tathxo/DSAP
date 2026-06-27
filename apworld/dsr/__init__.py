@@ -597,6 +597,7 @@ class DSRWorld(World):
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
                 # Logic
                 "logic_to_access_catacombs": self.options.logic_to_access_catacombs.current_key, # text of the option
+                "logic_to_access_totg": self.options.logic_to_access_totg.current_key, # text of the option
                 # Equipment
                 "randomize_starting_loadouts": self.options.randomize_starting_loadouts.value,
                 "randomize_starting_gifts": self.options.randomize_starting_gifts.value,

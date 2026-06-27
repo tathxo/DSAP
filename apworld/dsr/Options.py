@@ -200,6 +200,18 @@ class LogicToAccessCatacombs(Choice):
     option_ornstein_and_smough = 4
     default = 3
 
+class LogicToAccessTotG(Choice):
+    """Artificial logic for Tomb of the Giants (TotG) access.
+     Before the chosen condition, TotG will be considered "out of logic".
+
+    - **no_logic:** TotG is in-logic as soon as you defeat Pinwheel.
+    - **skull_lantern:** Receiving a Skull Lantern as an AP item puts TotG in-logic.
+    """
+    display_name = "Logic Requirement to Access Tomb of the Giants"
+    option_no_logic = 0
+    option_skull_lantern = 1
+    default = 1
+
 class RandomizeStartingLoadouts(DefaultOnToggle):
     """Randomize each class's starting weapons, shields, and armors.
     This will also replace the thief's master key, which would break logic.
@@ -355,6 +367,7 @@ option_groups = [
         ]),
     OptionGroup("Logic", [
         LogicToAccessCatacombs,
+        LogicToAccessTotG,
         SkipLogicEasy,
         SkipLogicMedium,
         SkipLogicHard,
@@ -412,6 +425,7 @@ class DSROption(PerGameCommonOptions):
 
     # Logic
     logic_to_access_catacombs: LogicToAccessCatacombs
+    logic_to_access_totg: LogicToAccessTotG
     skip_logic_easy: SkipLogicEasy
     skip_logic_medium: SkipLogicMedium
     skip_logic_hard: SkipLogicHard

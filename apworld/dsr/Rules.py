@@ -3,7 +3,7 @@ from typing import Optional, NamedTuple, Dict
 from dataclasses import dataclass
 
 from rule_builder.rules import Rule, True_, Has, HasAll, HasAny, OptionFilter, And, HasGroup, CanReachRegion, Or
-from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs, LogicToAccessTotG
+from .Options import FogwallSanity, BossFogwallSanity, CanWarpWithoutLordvessel, LogicToAccessCatacombs, LogicToAccessTotG, LogicToAccessFirelinkAltar
 
 @dataclass
 class DsrEntranceRule():
@@ -399,8 +399,13 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Tomb of the Giants - Nito", Has("Gravelord Nito Defeated")),
   ],
   "Firelink Altar": [
-    DsrEntranceRule("The Abyss - After Four Kings", True_()),
-    DsrEntranceRule("Firelink Shrine", HasAll("Bell of Awakening #1", "Bell of Awakening #2")),
+    # Access via kaathe if it's "kaathe" or "either"
+    DsrEntranceRule("The Abyss - After Four Kings", True_(options=[OptionFilter(LogicToAccessFirelinkAltar, [LogicToAccessFirelinkAltar.option_kaathe, LogicToAccessFirelinkAltar.option_either], operator="in")])),
+    # Access via frampt if it's "frampt", or "either", or ["both" and also has kaathe access]
+    DsrEntranceRule("Firelink Shrine", HasAll("Bell of Awakening #1", "Bell of Awakening #2") & (
+      CanReachRegion("The Abyss - After Four Kings",options=[OptionFilter(LogicToAccessFirelinkAltar, LogicToAccessFirelinkAltar.option_both)]) |
+      True_(options=[OptionFilter(LogicToAccessFirelinkAltar, [LogicToAccessFirelinkAltar.option_frampt, LogicToAccessFirelinkAltar.option_either], operator="in")])
+      )),
   ],
   "Kiln of the First Flame": [
     DsrEntranceRule("Firelink Altar", HasAll("Lord Soul (Bed of Chaos)", "Lord Soul (Nito)", "Bequeathed Lord Soul Shard (Four Kings)", "Bequeathed Lord Soul Shard (Seath)", "Lordvessel")),

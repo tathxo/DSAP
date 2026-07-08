@@ -12,7 +12,7 @@ from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, it
 from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
-from .Options import DSROption, option_groups, LogicToAccessCatacombs, GoalConditionOption
+from .Options import DSROption, option_groups, GoalConditionOption
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
 from .Skips import get_all_skips
 
@@ -596,8 +596,11 @@ class DSRWorld(World):
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
                 # Logic
+                "logic_to_access_firelink_altar": self.options.logic_to_access_firelink_altar.current_key, # text of the option
                 "logic_to_access_catacombs": self.options.logic_to_access_catacombs.current_key, # text of the option
                 "logic_to_access_totg": self.options.logic_to_access_totg.current_key, # text of the option
+                # Skips?
+                
                 # Equipment
                 "randomize_starting_loadouts": self.options.randomize_starting_loadouts.value,
                 "randomize_starting_gifts": self.options.randomize_starting_gifts.value,

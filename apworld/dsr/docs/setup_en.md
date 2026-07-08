@@ -5,11 +5,13 @@
 - [Dark Souls: Remastered](https://store.steampowered.com/app/570940/DARK_SOULS_REMASTERED/)
 - [dsr.apworld - Dark Souls: Remastered Apworld](https://github.com/ArsonAssassin/DSAP/releases/latest)
 - [DSAP - Dark Souls: Remastered AP client](https://github.com/ArsonAssassin/DSAP/releases/latest)
-- [Archipelago Launcher](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+- [Archipelago Launcher (v0.6.7 or above REQUIRED)](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
 ## Optional Software
+- [PopTracker](https://poptracker.github.io/)
+- [DSR PopTracker Pack with maps](https://github.com/routhken/Dark_Souls_Remastered_tracker/releases)
+- [Matt's DS1 Enemy Randomizer](https://www.nexusmods.com/darksoulsremastered/mods/922)
 
-- [Poptracker pack with maps](https://github.com/routhken/Dark_Souls_Remastered_tracker/releases)
 
 ## Setting Up
 
@@ -79,9 +81,11 @@ See [the Game Page](./en_Dark%20Souls%20Remastered.md).
 Linux has preliminary support via Proton as of release v0.1.0 of the Client.
 There are two primary ways of running under Linux. 
 1. First method: Add `PROTON_REMOTE_DEBUG_CMD="/full/path/to/DSAP.Desktop.exe" %command%` to your steam Launch Options to run both DSAP and DS:R in the same environment.
-* The path should include `\` (backslash) escape character before any spaces.
-2. Second method: Download the `launch_dsr.sh` batch file from the main directory of the repo. Put it and `DSAP.Desktop.exe` into the same folder as the `DarkSoulsRemastered.exe`. Then, add it to steam as a non-steam game, using `Proton GE Latest`, and run it.
-**Whichever method you use, please test before running this in a public or group multiworld!**
+  * The path may require `\` (backslash) escape character before any spaces.  
+  **Yes, even though it is wrapped in quotation marks.** It seems to be distro-specific on whether it is required or not.
+2. Second method: Download the `launch_dsr.sh` batch file from the main directory of the repo. Put it and `DSAP.Desktop.exe` into the same folder as the `DarkSoulsRemastered.exe`. Then, add it to steam as a non-steam game, using `Proton GE Latest`, and run it.  
+
+**Whichever method you use, please test before running this in a public or group multiworld!**  
 * For unknown reasons, for some players the first method does not work, but the second does.
 * The overlay probably will not work, and instead show a solid black box. It is recommended to toggle it off before connecting.
 * Because the support has not been thoroughly tested, you should 1) consider it unstable, 2) let us know how it plays/runs (whether well or badly), and 3) Please report any issues.
@@ -90,10 +94,15 @@ There are two primary ways of running under Linux.
 No, The current release only works with Dark Souls Remastered. There may be potential to make it compatible with PTDE but not until we are feature-complete on _Remastered_, as there isn't a way to legally obtain a new copy of PTDE anymore.
 
 ### Can I use this to randomize enemies?
-This mod will not randomize enemies, but some players have had success with external enemy and boss randomizers. That said, we cannot guarantee they will continue to work, and that future updates won't break compatibility.
+This mod will **not** randomize enemies.  
+However, many players have had success with external enemy and boss randomizers. That said, we cannot guarantee they will continue to work, and that future updates won't break compatibility, though we do want to support it.  
+Instructions for using Matt's DS1 Enemy Randomizer (linked above in Optional Software):
+1. Follow Matt's DS1 Enemy Randomizer's instructions (in its README.txt file) for randomizing and launching the game.
+2. Follow DSAP's ["Running and Connecting the Game" instructions above](#Running-and-Connecting-the-Game). This mod does not modify the game files, so it does not need to be run before Matt's DS1 Enemy Randomizer.
 
 ### Can I use this with seamless co-op?
-Toleration has been added for multiple players, but not thoroughly tested. 
+Toleration has been added for multiple players, but not thoroughly tested. There are some known issues (see [the README](../../../README.md#Current-Known-Issues)).
+
 As of v0.0.22.0, using the Seamless Co-op mod may work with DSAP. It has not been very thoroughly tested, and if there are any crashes or instability caused by the Seamless Co-op mod itself, we cannot do much about it. Please read the information below.
 * Q: How to set it up?
   * A: **Both players should always connect with the DSAP client to the same slot** once they load into the game after creating their characters.

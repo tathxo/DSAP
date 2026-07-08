@@ -7,7 +7,8 @@
 
 #### Table of Contents
 [Compatibility](#Compatibility)  
-[Known issues](#Known-issues)  
+[Current Known issues](#Current-Known-issues)  
+[Old Known issues](#Old-Known-issues)  
 [Changelog](#Changelog)  
 [Roadmap](#Roadmap)  
 [Contributors](#Contributors)  
@@ -16,12 +17,16 @@
 * This version has been tested with Dark Souls: Remastered, Steam version (App ver. 1.03.1 & Regulation ver. 1.04) on Windows 11, with Archipelago Launcher version 0.6.7. Using incorrect versions of Dark Souls: Remastered may result in a crash upon connecting.
 * Linux has preliminary support via Proton with v0.1.0. See the Setup Guide for more information.
 
-# Known issues
+# Current Known issues
+* Upon receiving a Fog Wall Key, the related Fog Wall sometimes does not unlock. To work around this, completely close both the game and client (DSR and DSAP), then relaunch them and reconnect.
 * Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively.
 * If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
-* Placing Lord Souls at Firelink Altar may not open the door - This seems to be due to not having received some number of the Lord Souls or Lordvessel. We could use information for this - If you see this, please run the /lordvessel command, which will both provide diagnostic information & the missing items. Please provide a screenshot of the output with any additional context you can provide about the missing items to the dark-souls-1 channel in the AP discord (such as, if you know it, did the items come in while you were offline, was it with other items, etc).
+* Placing Lord Souls at Firelink Altar may not open the door - This seems to be due to not having received some number of the Lord Souls or Lordvessel. We could use information for this - If you see this, please run the /lordvessel command, which will both provide diagnostic information & the missing items. Please provide a screenshot of the output with any additional context you can provide about the missing items to the dark-souls-1 channel in the Archipelago discord (such as, if you know it, did the items come in while you were offline, was it with other items, etc).
+* v0.1.2+ with Seamless Co-op: Warping crashes the game, potentially both for host and client.
 * Using "Can Warp Without Lordvessel" option results in two unintended behaviors when the player does not have the Lordvessel: Frampt takes you into the Firelink Altar (expecting you to place it), and Ingward in New Londo will grant you the "Key to the Seal" location check. As workarounds: the first can be escaped by using the "unstuck" button (or homeward, a homeward bone, or dark sign), and the second is just an unintended "out of logic" check.
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
+
+# Old Known Issues
 * v0.1.2 - v0.1.0: Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. This is fixed in v0.1.3 with the implementation of "fogwall keychains"
 * v0.1.0 and above: /help function doesn't provide useful output.
 * v0.0.22.0 and v0.0.21.0: Hard lock / infinite loop of receiving Rubbish if player has been /send'd a valid AP item that the client doesn't know about (Estus flask, Event items, etc). Resolved in v0.1.0 with an error message instead.
@@ -42,6 +47,13 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+## Version 0.1.5
+* Version update -> 0.1.4. Both apworld and client have updated. **Client should be backward compatible with all 0.1.x generated apworlds**.
+* Feature: Add PopTracker Auto Tabbing.
+  * Note: for full tracker support in PopTracker, ensure your DSR PopTracker pack is up to date.  
+  For full tracker support in Universal Tracker, ensure both your `dsr.apworld` and DSR PopTracker pack are up to date.
+* Fix: For map tracking, Andre's now detected as being in Undead Parish instead of Upper Undead Burg.
+
 ## Version 0.1.4
 * Version update -> 0.1.4. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**.
 * Feature: Add `Soul Multiplier` and `Weight Multiplier` options - configurable via yaml option to be either be a static multiplier or require an option-defined number of "progressive" items to increase souls or reduce weight. Min/Max soul multipler is 20% to 500%, weight multiplier is 300% to 0%. Defaults are 100% for both and no such "progressive items". Soul multiplier changes via progressive item may not take effect until enemies are reloaded.

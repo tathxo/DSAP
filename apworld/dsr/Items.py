@@ -1012,35 +1012,5 @@ _all_items = [DSRItemData(row[0], row[1], row[2]) for row in _all_items_base]
 item_descriptions = {
 }
 
-# Type, id, max level
-infusion_types = [
-    ("Normal", 0, 15, 0),
-    ("Crystal", 1, 5, 10),
-    ("Lightning", 2, 5, 10),
-    ("Raw", 3, 5, 5),
-    ("Magic", 4, 10, 5),
-    ("Enchanted", 5, 5, 10),
-    ("Divine", 6, 10, 5),
-    ("Occult", 7, 5, 10),
-    ("Fire", 8, 10, 5),
-    ("Chaos", 9, 5, 10)
-    ]
-
-# No raw, occult, enchanted, or chaos (for shields, crossbow, etc)
-restricted_infusion_types = [
-    ("Normal", 0, 15, 0),
-    ("Crystal", 1, 5, 10),
-    ("Lightning", 2, 5, 10),
-    ("Magic", 4, 10, 5),
-    ("Divine", 6, 10, 5),
-    ("Fire", 8, 10, 5),
-    ]
-
-# Unique only
-unique_infusion_types = [
-        ("Normal", 0, 5, 0)
-    ]
-
-
 item_dictionary = {item_data.name: item_data for item_data in _all_items}
 

@@ -180,8 +180,23 @@ class SkipLogicVeryHard(OptionCounter):
     difficulty=SkipDifficulty.VERY_HARD
     valid_keys, default = skip_logic_helper(difficulty)
 
+class LogicToAccessFirelinkAltar(Choice):
+    """Firelink Altar logical Access requirement.
+     Before the chosen condition, Firelink Altar will be considered "out of logic".
+     This will also restrict logical access to areas behind golden fog walls, since Firelink Altar access is required for placing the lordvessel.
+     This will not actually prevent you from accessing the Altar from either Serpent.
 
+    - **Either:** As soon as you can reach either Serpent (Kaathe or Frampt), Firelink Altar in-logic. It is left up to chance (the generate process) which one is expected by the logic.
+    - **Both:** Only when both Serpents are accessible is Firelink Altar considered in-logic. This is the "safest" option.
+    - **Frampt:** (default) Frampt being accessible puts Firelink Altar in-logic (both bells can be rung)
+    - **Kaathe:** Kaathe being accessible puts Firelink Altar in-logic (via defeating the Four Kings in the Abyss under New Londo).
 
+    If you accidentally dismiss or anger Kaathe, and this option is "Either" or "Kaathe", thus making you unable to get to the altar, you can use the /warp FA command in the client to warp to the altar."""
+    display_name = "Logic Requirement to Access Firelink Altar"
+    option_either = 0
+    option_both = 1
+    option_frampt = 2
+    option_kaathe = 3
 
 class LogicToAccessCatacombs(Choice):
     """Artificial logic for The Catacombs access. 
@@ -360,12 +375,16 @@ option_groups = [
         SoulMultiplierBase,
         SoulMultiplierMax,
         SoulMultiplierSteps,
+        WeightMultiplierBase,
+        WeightMultiplierMin,
+        WeightMultiplierSteps,
         ]),
     OptionGroup("Sanity", [
         FogwallSanity,
         BossFogwallSanity,
         ]),
     OptionGroup("Logic", [
+        LogicToAccessFirelinkAltar,
         LogicToAccessCatacombs,
         LogicToAccessTotG,
         SkipLogicEasy,
@@ -424,6 +443,7 @@ class DSROption(PerGameCommonOptions):
     boss_fogwall_sanity: BossFogwallSanity
 
     # Logic
+    logic_to_access_firelink_altar: LogicToAccessFirelinkAltar
     logic_to_access_catacombs: LogicToAccessCatacombs
     logic_to_access_totg: LogicToAccessTotG
     skip_logic_easy: SkipLogicEasy

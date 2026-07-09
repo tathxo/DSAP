@@ -25,6 +25,14 @@
   },
   {
     "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg After Merchant, Stairs",
+    "RoomId": 0,
+    "X": -26.8,
+    "Y": -21.216,
+    "Z": -58.97
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
     "PoiName": "Upper Burg Bonfire",
     "RoomId": 0,
     "X": -7.8,
@@ -72,6 +80,15 @@
     "X": -0.1,
     "Y": -31.3,
     "Z": -77.8
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Lower Burg Descent",
+    "RoomId": 0,
+    "SubMapId": 2,
+    "X": -47.24,
+    "Y": -38.77,
+    "Z": -49.62
   },
   {
     "MapName": "* Undead Burg / Undead Parish",

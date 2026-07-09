@@ -43,7 +43,7 @@ namespace DSAP.Helpers
                 (1700100, 13), // "* Duke's Archives / Crystal Cave"), -> Big Room
                 (1700200, 7),  // "* Duke's Archives / Crystal Cave"), -> Crystal Cave
                 (1800000, 16), // "Kiln of the First Flame"), 
-                (1801000, 25)  // "Northern Undead Asylum")]]
+                (1801000, 25)  // "Undead Asylum")]]
             ]).ToDictionary();
         const int REPEAT_TIMER_MS = 1000;
         private static MapInfo cached_mapInfo { get; set; } = new MapInfo();
@@ -123,7 +123,7 @@ namespace DSAP.Helpers
                             (1600000, "* New Londo Ruins / Valley of Drakes"), // +1
                             (1700000, "* Duke's Archives / Crystal Cave"), // +2
                             (1800000, "Kiln of the First Flame"),
-                            (1801000, "Northern Undead Asylum")
+                            (1801000, "Undead Asylum")
                             ]).ToDictionary();
 
                         MapInfo.X = xyzPos.x;
@@ -156,7 +156,7 @@ namespace DSAP.Helpers
                                     if (best_poi.SubMapId > 0)
                                         MapInfo.MapId += 100 * best_poi.SubMapId;
                                     
-                                    Log.Logger.Verbose($"Best Poi: {best_poi.PoiName}, distance={min_distance}, submap={best_poi.SubMapId}");
+                                    Log.Logger.Verbose($"Best Poi: {best_poi.PoiName}, distance={min_distance:F2}, submap={best_poi.SubMapId}");
                                 }
                             }
                             else
@@ -164,7 +164,7 @@ namespace DSAP.Helpers
 
 
                             
-                            Log.Logger.Debug($"Map: {MapInfo.MapId}, {mapName}, \nx={xyzPos.x}, \ny={xyzPos.y}, \nz={xyzPos.z}");
+                            Log.Logger.Verbose($"Map: {MapInfo.MapId}, {mapName}, \nx={xyzPos.x:F2}, \ny={xyzPos.y:F2}, \nz={xyzPos.z:F2}");
                         }
                         return MapInfo;
                     }

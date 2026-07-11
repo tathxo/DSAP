@@ -1154,9 +1154,9 @@ location_tables = {
     DSRLocationData(11110758, f"OT: Sorcery: Dark Orb", f"Sorcery: Dark Orb", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110759, f"OT: I'm Sorry Carving - Lone Sorceress", f"Carving: I'M SORRY!", DSRLocationCategory.ENEMY_DROP), # item lot instead? guaranteed drop
     DSRLocationData(11110760, f"OT: Soul of a Brave Warrior - Wooden Platform", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110761, f"OT: Very Good! Carving - Mimic", f"Carving: VERY GOOD!", DSRLocationCategory.ENEMY_DROP), # mimic
+    DSRLocationData(11110761, f"OT: Very Good! Carving - Mimic", f"Carving: VERY GOOD!", DSRLocationCategory.ITEM_LOT), # outside platform mimic -> Guaranteed drop
     DSRLocationData(11110762, f"OT: Soul of a Hero - Stair Ledge", f"Soul of a Hero", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110764, f"OT: Crest Key (Mimic)", f"Crest Key", DSRLocationCategory.ENEMY_DROP), # fireplace mimic
+    DSRLocationData(11110764, f"OT: Crest Key (Mimic)", f"Crest Key", DSRLocationCategory.ITEM_LOT), # fireplace mimic -> Guaranteed drop
     DSRLocationData(11110765, f"OT: Sorcery: Dark Fog", f"Sorcery: Dark Fog", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110766, f"OT: Twin Humanities - Drop onto Roof", f"Twin Humanities", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110767, f"OT: Soul of a Brave Warrior - Corpse in Corner of Statue Hallway", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),

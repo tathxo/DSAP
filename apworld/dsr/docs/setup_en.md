@@ -81,8 +81,8 @@ See [the Game Page](./en_Dark%20Souls%20Remastered.md).
 Linux has preliminary support via Proton as of release v0.1.0 of the Client.
 There are two primary ways of running under Linux. 
 1. First method: Add `PROTON_REMOTE_DEBUG_CMD="/full/path/to/DSAP.Desktop.exe" %command%` to your steam Launch Options to run both DSAP and DS:R in the same environment.
-* The path should include `\` (backslash) escape character before any spaces.
-*   **Yes, even though it is wrapped in quotation marks.** It seems to be distro-specific on whether it is required or not.
+  * The path may require `\` (backslash) escape character before any spaces.
+  **Yes, even though it is wrapped in quotation marks.** It seems to be distro-specific on whether it is required or not.
 2. Second method: Download the `launch_dsr.sh` batch file from the main directory of the repo. Put it and `DSAP.Desktop.exe` into the same folder as the `DarkSoulsRemastered.exe`. Then, add it to steam as a non-steam game, using `Proton GE Latest`, and run it.
 * If launching it from Steam with ProtonGE doesn't work, disable the "Force the use of a specific Steam Play compatibility tool" option and run it again.
 

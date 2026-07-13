@@ -180,13 +180,13 @@ namespace DSAP.Helpers
 
             if (new_multiplier == old_multiplier)
             {
-                Log.Logger.Information($"Setting weight multiplier to {new_multiplier}%");
-                App.Client.AddOverlayMessage($"Setting weight multiplier to {new_multiplier}%");
+                Log.Logger.Information($"Setting weight multiplier to {(new_multiplier / 100.0):P0}");
+                App.Client.AddOverlayMessage($"Setting weight multiplier to {(new_multiplier / 100.0):P0}");
             }
             else
             {
-                Log.Logger.Information($"Updating weight multiplier from {old_multiplier}% to {new_multiplier}%");
-                App.Client.AddOverlayMessage($"Updating weight multiplier from {old_multiplier}% to {new_multiplier}%");
+                Log.Logger.Information($"Updating weight multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
+                App.Client.AddOverlayMessage($"Updating weight multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
             }
                 
         }
@@ -339,13 +339,13 @@ namespace DSAP.Helpers
 
             if (new_multiplier == old_multiplier)
             {
-                Log.Logger.Information($"Setting soul multiplier to {new_multiplier}%");
-                App.Client.AddOverlayMessage($"Setting soul multiplier to {new_multiplier}%");
+                Log.Logger.Information($"Setting soul multiplier to {(new_multiplier / 100.0):P0}");
+                App.Client.AddOverlayMessage($"Setting soul multiplier to {(new_multiplier / 100.0):P0}");
             }
             else
             {
-                Log.Logger.Information($"Updating soul multiplier from {old_multiplier}% to {new_multiplier}%");
-                App.Client.AddOverlayMessage($"Updating soul multiplier from {old_multiplier}% to {new_multiplier}%");
+                Log.Logger.Information($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100):P0}");
+                App.Client.AddOverlayMessage($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
             }
         }
         internal static uint CalculateSoulMultiplier()

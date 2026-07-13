@@ -198,19 +198,24 @@ namespace DSAP.Helpers
             // replace +11 with (ulong)stub
             Array.Copy(BitConverter.GetBytes(bonfire_stub_area), 0, new_instructions_3, 11, sizeof(ulong));
 
-            // build hook4
+            // build hook4b
             //Push rcx
             //Push rax
             //Push rdx
             //Push r14
             //MOV RAX, QWORD PTR[0x0102030405060708]
+            //add    rax,0xb34
             //add rdx, 1980
             //mov    DWORD PTR [rax],edx
-            //mov edx,0x1
-            //movabs r14,0x1404867e0
-            //sub rsp,0x38
+            //* mov edx,-1
+            //* movabs r14,0x1404aeb00 // Setup call into LUA_SetDefaultMapUid
+            //sub rsp,0x40
             //call r14
-            // add rsp,0x38
+
+            //movabs r14,0x14048684b  // Setup Call into the jmp to LUA_WarpNextStageKick
+            //call r14
+            // add rsp,0x40
+
             //Pop r14
             //Pop rdx
             //POP RAX
@@ -224,20 +229,19 @@ namespace DSAP.Helpers
                 0x48, 0xa1, 0x08, 0x07, 0x06, 0x05, 0x04,    // movabs rax,ds:0x102030405060708
                 0x03, 0x02, 0x01,
                 0x48, 0x05, 0x34, 0x0b, 0x00, 0x00,          // add    rax,0xb34
-                //0x50,                                        // push rax -> backup "target bonfire address"
-                //0x8b, 0x38,                                  // mov edi,DWORD PTR [rax]  
-                //0x57,                                        // push rdi -> backup old bonfire address
                 0x48, 0x81, 0xc2, 0xbc, 0x07, 0x00, 0x00,    // add    rdx,0x7bc / 1980
                 0x89, 0x10,                                  // mov    DWORD PTR [rax],edx
-                0xba, 0x01, 0x00, 0x00, 0x00,          		 // mov    edx,0x1
-                0x49, 0xbe, 0xe0, 0x67, 0x48, 0x40, 0x01,    // movabs r14,0x1404867e0
+                0xba, 0x01, 0x00, 0x00, 0x00,          		 // mov    edx,-0x1
+                0x49, 0xbe, 0x00, 0xeb, 0x4a, 0x40, 0x01,    // movabs r14,0x1404aeb00
                 0x00, 0x00, 0x00,
-                0x48, 0x83, 0xec, 0x38,             		 // sub    rsp,0x38
+                0x48, 0x83, 0xec, 0x40,             		 // sub    rsp,0x40
                 0x41, 0xff, 0xd6,                		     // call   r14
-                0x48, 0x83, 0xc4, 0x38,           		     // add    rsp,0x38
-                //0x5f,                                        // pop    rdi
-                //0x58,                      					 // pop    rax
-                //0x89, 0x38,                                  // mov    DWORD PTR [rax],edi
+                
+                0x49, 0xbe, 0x4b, 0x68, 0x48, 0x40, 0x01,    // movabs r14,0x14048684b
+                0x00, 0x00, 0x00,
+                0x41, 0xff, 0xd6,                		     // call   r14
+                0x48, 0x83, 0xc4, 0x40,           		     // add    rsp,0x40
+                
                 0x41, 0x5e,                   				 // pop    r14
                 0x5a,                      					 // pop    rdx
                 0x58,                      					 // pop    rax

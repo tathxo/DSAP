@@ -450,13 +450,19 @@ public partial class App : Application
                 }
             }
         }
+        else if (command.StartsWith("/maefs")) // monitor all event flags
+        {
+            AddressHelper.MonitorAllEventFlags();
+        }
+
         //else if (command.StartsWith("/get")) // for debugging
         //{
         //    AddItemWithMessage((int)DSItemCategory.KeyItems, 11100970, 1);
         //}
         else /* send any not-specifically-handled message to normal processing */
         {
-            Client?.SendMessage(a.Command);
+            if (Client?.CurrentSession?.Socket != null)
+                Client.SendMessage(a.Command);
         }
 
     }
@@ -491,8 +497,8 @@ public partial class App : Application
         var baseAddress = AddressHelper.GetEventFlagsOffset();
         Location newloc = new Location()
         {
-            Address = baseAddress + AddressHelper.GetEventFlagOffset(flagnum).Item1,
-            AddressBit = AddressHelper.GetEventFlagOffset(flagnum).Item2
+            Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item1,
+            AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item2
         };
         Memory.WriteBit(newloc.Address, newloc.AddressBit, newValue);
         return 1;
@@ -502,8 +508,8 @@ public partial class App : Application
         var baseAddress = AddressHelper.GetEventFlagsOffset();
         Location newloc = new Location()
         {
-            Address = baseAddress + AddressHelper.GetEventFlagOffset(flagnum).Item1,
-            AddressBit = AddressHelper.GetEventFlagOffset(flagnum).Item2
+            Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item1,
+            AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item2
         };
         int result = newloc.Check() ? 1 : 0;
         return result;
@@ -1016,6 +1022,7 @@ public partial class App : Application
         }
         else
         {
+            MapHelper.StartDisconnectedMapAutoTracking();
             //ItemLotHelper.SetItemLot();
             //ApItemInjectorHelper.ChangePrismStoneText();
             //StartEventWatcher();
@@ -1329,8 +1336,8 @@ public partial class App : Application
             Location loc = new Location
             {
                 Name = dsrevent.Locname,
-                Address = baseAddress + AddressHelper.GetEventFlagOffset(dsrevent.Flag).Item1,
-                AddressBit = AddressHelper.GetEventFlagOffset(dsrevent.Flag).Item2,
+                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item1,
+                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item2,
                 Id = dsrevent.Locid,
             };
             if (!loc.Check())

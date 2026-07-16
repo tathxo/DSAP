@@ -88,6 +88,39 @@ namespace DSAP.Helpers
                 }
             });
         }
+        internal static void StartDisconnectedMapAutoTracking()
+        {
+            // Every second, if player is in game. If so, validate that they are in the same save 
+            Task.Run(async () =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        bool isInGame = MiscHelper.IsInGame();
+                        if (App.ControlsContext.TrackerMapTabSwitching && isInGame)
+                        {
+                            var mapInfo = GetPosition();
+                            if (mapInfo.MapId != 0 && mapInfo.MapId != cached_mapInfo.MapId)
+                            {
+                                int mapindex = MapToIndex[mapInfo.MapId];
+                                cached_mapInfo.MapId = mapInfo.MapId;
+                                Log.Logger.Debug($"written map: {mapindex}");
+                            }
+                            else
+                            {
+                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapId} from {cached_mapInfo.MapId}");
+                            }
+                        }
+                        await Task.Delay(REPEAT_TIMER_MS);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error($"Exception in ingame listener: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
+                }
+            });
+        }
         public static MapInfo GetPosition()
         {
             Log.Logger.Verbose("Getting position");

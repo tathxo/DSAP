@@ -366,8 +366,8 @@ namespace DSAP.Helpers
             {
                 var canwarp_eventflag = 710; // 710 is the lordvessel warp flag. Future: maybe turn on 717 (emergency warp) instead, until player has lordvessel, to prevent Frampt nomming & Ingward granting Key To the Seal?
                 var baseAddress = AddressHelper.GetEventFlagsOffset();
-                var canwarp_address = baseAddress + AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item1;
-                var canwarp_bit = AddressHelper.GetEventFlagOffset(canwarp_eventflag).Item2;
+                var canwarp_address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(canwarp_eventflag).Item1;
+                var canwarp_bit = AddressHelper.GetEventFlagAddrAndByteOffset(canwarp_eventflag).Item2;
                 if (!Memory.ReadBit(canwarp_address, canwarp_bit)) // if it's not already set
                 {
                     // change "By the power of the Lordvessel, [etc]" -> "By the power of Archipelago"

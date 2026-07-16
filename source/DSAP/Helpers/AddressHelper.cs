@@ -1,8 +1,8 @@
 ﻿using Archipelago.Core.Util;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace DSAP.Helpers
 {
@@ -99,17 +99,6 @@ namespace DSAP.Helpers
 
             return (ulong)chrBaseClassAddress;
         }
-        public static ulong GetSoloParamOffset()
-        {
-            var baseAddress = GetBaseAddress();
-            byte[] pattern = { 0x4C, 0x8B, 0x05, 0x00, 0x00, 0x00, 0x00, 0x48, 0x63, 0xC9, 0x48, 0x8D, 0x04, 0xC9 };
-            var mask = "xxx????xxxxxxx";
-            IntPtr getSPAddress = Memory.FindSignature((nint)baseAddress, 0x1000000, pattern, mask);
-
-            int offset = BitConverter.ToInt32(Memory.ReadByteArray((ulong)(getSPAddress + 3), 4), 0);
-            IntPtr soloParamFlagsAddress = getSPAddress + offset + 7;
-            return (ulong)soloParamFlagsAddress;
-        }
         public static ulong GetEventFlagsOffset()
         {
             IntPtr baseAddr = EventFlagsAoB.Address;
@@ -119,7 +108,7 @@ namespace DSAP.Helpers
             }
             return (ulong)(BitConverter.ToInt32(Memory.ReadFromPointer((ulong)baseAddr, 4, 1)));
         }
-        public static (ulong, int) GetEventFlagOffset(int eventFlag)
+        public static (ulong, int) GetEventFlagAddrAndByteOffset(int eventFlag)
         {
             string idString = eventFlag.ToString("D8");
             int tail = Int32.Parse(idString.Substring(5, 3));
@@ -154,6 +143,24 @@ namespace DSAP.Helpers
                 _ => throw new ArgumentException("Cannot get primary offset for GetItemFlagId: " + eventFlag),
             };
         }
+        private static string GetFlagId1DigitFromSlice(int slice)
+        {
+            if (slice < 0)
+                throw new ArgumentException($"Cannot get flag id digit 1 for offset: {slice}");
+            else if (slice == 0)
+                return "0";
+            else if (slice <= 18)
+                return "1";
+            else if (slice <= 2 * 18)
+                return "5";
+            else if (slice <= 3 * 18)
+                return "6";
+            else if (slice <= 4 * 18)
+                return "7";
+            else
+                throw new ArgumentException($"Cannot get flag id digit 1 for offset: {slice}");
+            return "?";
+        }
 
         private static int GetSecondaryOffsetFromFlagId(string eventFlag)
         {
@@ -181,36 +188,133 @@ namespace DSAP.Helpers
             };
             return num * 1280;
         }
-        public static List<int> GetStarterGearIds()
+        private static string GetFlagId234DigitFromSlice(int slice)
         {
-            return new List<int>
+            if (slice < 0)
+                throw new ArgumentException($"Cannot get flag id digit 234 for offset: {slice}");
+            else if (slice == 0)
+                return "000";
+            slice = ((slice - 1) % 18);
+            var result = slice switch
             {
-                51810100,
-                51810110,
-                51810120,
-                51810130,
-                51810140,
-                51810150,
-                51810160,
-                51810170,
-                51810180,
-                51810190,
-                51810200,
-                51810210,
-                51810220,
-                51810220,
-                51810230,
-                51810240,
-                51810250,
-                51810260,
-                51810270,
-                51810280,
-                51810290,
-                51810300,
-                51810310,
-                51810320,
-                51810330,
+                00 => "000",
+                01 => "100",
+                02 => "101",
+                03 => "102",
+                04 => "110",
+                05 => "120",
+                06 => "121",
+                07 => "130",
+                08 => "131",
+                09 => "132",
+                10 => "140",
+                11 => "141",
+                12 => "150",
+                13 => "151",
+                14 => "160",
+                15 => "170",
+                16 => "180",
+                17 => "181",
+                _ => throw new ArgumentException("Cannot get flag id digit 234 for offset: {slice}"),
             };
+            return result;
+        }
+
+        private static string GetFlagId234DigitFromByteAndBit(int bytenum, int bitnum)
+        {
+            int significantByte = bytenum % 4;
+            int sigbit = (3 - significantByte) * 8 + bitnum;
+            int fours = bytenum / 4;
+            int flagnum = fours * 32 + sigbit;
+            return (flagnum.ToString("D4"));
+        }
+
+        internal static byte[] ReadAllEventFlags()
+        {
+            if (!MiscHelper.IsInGame())
+            {
+                return [];
+            }
+            byte[] flagsArray = new byte[0x500 + (0x500 * 18 * 4)]; // 0x500 * 18 = 0x5a00...aka the size of 1,5,6,7-prefixed flag zones
+            var baseAddress = GetEventFlagsOffset();
+            flagsArray = Memory.ReadByteArray(baseAddress, flagsArray.Length);
+            if (!MiscHelper.IsInGame())
+            {
+                return [];
+            }
+
+            return flagsArray;
+        }
+        internal static void MonitorAllEventFlags()
+        {
+            Log.Logger.Information("Monitoring Event Flags");
+            Task.Run(async () =>
+            {
+                try
+                {
+                    byte[] oldFlags = [];
+                    while (true)
+                    {
+                        byte[] flags = ReadAllEventFlags();
+                        if (flags.Length != 0 && oldFlags.Length != 0)
+                        {
+                            DetectEventFlagDifferences(oldFlags, flags);
+                        }
+                        oldFlags = flags;
+                        await Task.Delay(1000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error($"Exception in event flags watcher: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
+                }
+            });
+        }
+        private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
+        {
+            for (int i = 0; i < (1 + 18 * 4); i++)
+            {
+                // each chunk is 10 "x000-x999" sets of flags, across 128 or 0x80 
+                // compare in 0x500 sized chunks
+                var oldSlice = oldFlags.AsSpan().Slice(i * 0x500, 0x500);
+                var newSlice = newFlags.AsSpan().Slice(i * 0x500, 0x500);
+                if (!oldSlice.SequenceEqual(newSlice))
+                {
+                    //Log.Logger.Information($"event flag slices changed at slice {i}");
+                    for (int j = 0; j < 0x500; j++)
+                    {   
+                        if (oldSlice[j] != newSlice[j])
+                        {
+                            //Log.Logger.Information($"byte changed at byte {j}");
+                            byte oldbyte = oldSlice[j];
+                            byte newbyte = newSlice[j];
+                            int changebyte = ((int)oldbyte ^ (int)newbyte) & 0x000000FF;
+                            for (int k = 0; k < 8; k++)
+                            {
+                                int changebit = (changebyte >> (7 - k)) & 0x01;
+                                if (changebit != 0)
+                                {
+                                    int oldbit = (oldbyte >> (7 - k)) & 0x01;
+                                    int newbit = (newbyte >> (7 - k)) & 0x01;
+                                    var flag = GetFlagIdFromOffset(i, j, k);
+                                    var currtime = DateTime.Now;
+                                    Log.Logger.Information($"{currtime.TimeOfDay}: Flag {flag} changed: {oldbit} -> {newbit}");
+                                    //Log.Logger.Information($"Slice {i}, byte {j}, bit {k}, flag {flag} changed: {oldbit} -> {newbit}");
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        internal static string GetFlagIdFromOffset(int slice, int bytenum, int bitnum)
+        {
+            var d1 = GetFlagId1DigitFromSlice(slice);
+            var d234 = GetFlagId234DigitFromSlice(slice);
+            var d5678 = GetFlagId234DigitFromByteAndBit(bytenum, bitnum);
+
+            return $"{d1}{d234}{d5678}";
         }
         internal static ulong GetPlayerHPAddress()
         {
@@ -272,7 +376,7 @@ namespace DSAP.Helpers
         {
             var initoff = AddressHelper.GetEventFlagsOffset();
             int flag = 960;
-            var off = AddressHelper.GetEventFlagOffset(flag).Item1 + 3; // 3rd byte after this one
+            var off = AddressHelper.GetEventFlagAddrAndByteOffset(flag).Item1 + 3; // 3rd byte after this one
             // here we have 3 bytes of memory available.
             Log.Logger.Debug($"saveid address = {(off + initoff):X}");
             return off + initoff;
@@ -281,7 +385,7 @@ namespace DSAP.Helpers
         {
             var initoff = AddressHelper.GetEventFlagsOffset();
             int flag = 960;
-            var off = AddressHelper.GetEventFlagOffset(flag).Item1 + 1; // 1st and 2nd byte after this one
+            var off = AddressHelper.GetEventFlagAddrAndByteOffset(flag).Item1 + 1; // 1st and 2nd byte after this one
             // here we have 3 bytes of memory available.
             Log.Logger.Debug($"Seed address = {(off + initoff):X}");
             return off + initoff;
@@ -290,7 +394,7 @@ namespace DSAP.Helpers
         {
             var initoff = AddressHelper.GetEventFlagsOffset();
             int flag = 1960;
-            var off = AddressHelper.GetEventFlagOffset(flag).Item1 + 1; // Up to 3 bytes
+            var off = AddressHelper.GetEventFlagAddrAndByteOffset(flag).Item1 + 1; // Up to 3 bytes
             // here we have 3 bytes of memory available.
             Log.Logger.Debug($"Slot address = {(off + initoff):X}");
             return off + initoff;

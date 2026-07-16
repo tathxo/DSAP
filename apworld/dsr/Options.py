@@ -193,10 +193,11 @@ class LogicToAccessFirelinkAltar(Choice):
 
     If you accidentally dismiss or anger Kaathe, and this option is "Either" or "Kaathe", thus making you unable to get to the altar, you can use the /warp FA command in the client to warp to the altar."""
     display_name = "Logic Requirement to Access Firelink Altar"
-    option_either = 0
-    option_both = 1
+    option_either_serpent = 0
+    option_both_serpents = 1
     option_frampt = 2
     option_kaathe = 3
+    default = 2
 
 class LogicToAccessCatacombs(Choice):
     """Artificial logic for The Catacombs access. 

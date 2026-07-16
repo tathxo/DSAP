@@ -399,12 +399,12 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Tomb of the Giants - Nito", True_()), # Has("Gravelord Nito Defeated")),
   ],
   "Firelink Altar": [
-    # Access via kaathe if it's "kaathe" or "either"
-    DsrEntranceRule("The Abyss - After Four Kings", True_(options=[OptionFilter(LogicToAccessFirelinkAltar, [LogicToAccessFirelinkAltar.option_kaathe, LogicToAccessFirelinkAltar.option_either], operator="in")])),
-    # Access via frampt if it's "frampt", or "either", or ["both" and also has kaathe access]
+    # Access via kaathe if it's "kaathe" or "either_serpent"
+    DsrEntranceRule("The Abyss - After Four Kings", True_(options=[OptionFilter(LogicToAccessFirelinkAltar, [LogicToAccessFirelinkAltar.option_kaathe, LogicToAccessFirelinkAltar.option_either_serpent], operator="in")])),
+    # Access via frampt if it's "frampt", or "either_serpent", or ["both_serpents" and also has kaathe access]
     DsrEntranceRule("Firelink Shrine", HasAll("Bell of Awakening #1", "Bell of Awakening #2") & (
-      CanReachRegion("The Abyss - After Four Kings",options=[OptionFilter(LogicToAccessFirelinkAltar, LogicToAccessFirelinkAltar.option_both)]) |
-      True_(options=[OptionFilter(LogicToAccessFirelinkAltar, [LogicToAccessFirelinkAltar.option_frampt, LogicToAccessFirelinkAltar.option_either], operator="in")])
+      CanReachRegion("The Abyss - After Four Kings",options=[OptionFilter(LogicToAccessFirelinkAltar, LogicToAccessFirelinkAltar.option_both_serpents)]) |
+      True_(options=[OptionFilter(LogicToAccessFirelinkAltar, [LogicToAccessFirelinkAltar.option_frampt, LogicToAccessFirelinkAltar.option_either_serpent], operator="in")])
       )),
   ],
   "Kiln of the First Flame": [

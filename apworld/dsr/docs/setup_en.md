@@ -120,12 +120,16 @@ Check your DS:R version on the title menu. It should show the text "App ver. 1.0
 If it does not, update your game; you can force Steam to do so by Verifying Game files:
 Right click game in library -> Properties -> Installed Files -> Verify integrity of game files
 
+### DSAP client crashes on connect
+Try running DSAP.Desktop.exe as Administrator. If it still crashes, try disabling your antivirus.  
+If disabling antivirus fixes it, you can reduce security risk by adding an exception for DSAP specifically, instead.
+
 ### Not receiving items, or receiving double items.
 Try running DSAP.Desktop.exe as Administrator.
 
 ### Save Corrupted (usually upon quitting to menu), and progress lost
 Because DSAP modifies DS:R memory and code directly, some antivirus software may see it or DS:R as malware when running in this mode. As a result, they restrict the ability of DS:R to make its save.
-We have not had the opportunity to communicate directly with players who encountered this issue, but expect that adding DSAP, DS:R, or the .sl2 save file extension type to the antivirus' exceptions list may help to resolve the issue. If this works for you, please let us know in the dark-souls-1 channel in the AP discord.
+Adding DSAP, DS:R, or the .sl2 save file extension type to the antivirus' exceptions list resolved the issue for at least one user who saw this issue. If this works for you, please let us know in the dark-souls-1 channel in the AP discord.
 
 ### Placing Lord Souls at Firelink Altar does not open the door
 This seems to be due to not having received some number of the Lord Souls or Lordvessel. If you see this, please run the /lordvessel command, which will both provide diagnostic information & the missing items. To help us debug this issue, please provide a screenshot of the output with any additional context you can provide about the missing items to the dark-souls-1 channel in the AP discord. Additional context that would be useful includes: did the items come in while you were offline, was it with other items, etc.

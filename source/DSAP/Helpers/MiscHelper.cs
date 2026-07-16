@@ -1,5 +1,4 @@
 ﻿using Archipelago.Core.Util;
-using Archipelago.Core.Util.GPS;
 using DSAP.Models;
 using Serilog;
 using System;
@@ -800,8 +799,8 @@ namespace DSAP.Helpers
             var bossLoc = new Location
             {
                 Name = bossFlag.Name,
-                Address = baseAddress + AddressHelper.GetEventFlagOffset(bossFlag.Flag).Item1,
-                AddressBit = AddressHelper.GetEventFlagOffset(bossFlag.Flag).Item2,
+                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(bossFlag.Flag).Item1,
+                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(bossFlag.Flag).Item2,
                 Id = bossFlag.Id,
             };
             if (bossLoc.Check())

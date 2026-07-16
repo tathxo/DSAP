@@ -25,8 +25,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
@@ -43,8 +43,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
@@ -63,8 +63,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = bonfire.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(bonfire.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(bonfire.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(bonfire.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(bonfire.Flag).Item2,
                     Id = bonfire.Id
                 });
             }
@@ -80,8 +80,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
@@ -97,8 +97,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
@@ -114,8 +114,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
@@ -187,7 +187,7 @@ namespace DSAP.Helpers
 
         public static ulong FlagToOffset(EventFlag flag)
         {
-            var offset = AddressHelper.GetEventFlagOffset(flag.Flag).Item1;
+            var offset = AddressHelper.GetEventFlagAddrAndByteOffset(flag.Flag).Item1;
             return offset;
         }
 
@@ -196,8 +196,8 @@ namespace DSAP.Helpers
             var baseAddress = AddressHelper.GetEventFlagsOffset();
             Location newloc = new Location()
             {
-                Address = baseAddress + AddressHelper.GetEventFlagOffset(flagnum).Item1,
-                AddressBit = AddressHelper.GetEventFlagOffset(flagnum).Item2
+                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item1,
+                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item2
             };
             Memory.WriteBit(newloc.Address, newloc.AddressBit, newvalue == 0 ? false : true);
             return;

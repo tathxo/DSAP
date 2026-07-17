@@ -119,13 +119,15 @@
     "Name": "Soul of Ornstein",
     "Flag": 50001610,
     "ItemLotParamId": 2610,
-    "Id": 11110561
+    "Id": 11110561,
+    "IsEnabled": false
   },
   {
     "Name": "Soul of Smough",
     "Flag": 50001620,
     "ItemLotParamId": 2620,
-    "Id": 11110562
+    "Id": 11110562,
+    "IsEnabled": false
   },
   {
     "Name": "Bequeathed Lord Soul Shard (Four Kings)",

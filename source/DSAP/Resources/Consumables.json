@@ -656,4 +656,22 @@
     "Category": "Consumables",
     "ApId": 11112116
   }
+  {
+    "Name": "Humanity x4",
+    "Id": 500,
+    "StackLimit": 99,
+    "Quantity": 4,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112122
+  }
+  {
+    "Name": "Humanity x10",
+    "Id": 500,
+    "StackLimit": 99,
+    "Quantity": 10,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112123
+  }
 ]

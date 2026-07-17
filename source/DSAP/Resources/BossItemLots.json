@@ -1,0 +1,212 @@
+﻿[
+  {
+    "Name": "UA: Humanity - Asylum Demon Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 16,
+    "Id": 11110967
+  },
+  {
+    "Name": "UB: Humanity - Taurus Demon Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11010901,
+    "Id": 11110968
+  },
+  {
+    "Name": "UB: Homeward Bone - Taurus Demon Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 11010901,
+    "Id": 11110969
+  },
+  {
+    "Name": "UP: Twin Humanities - Bell Gargoyles Drop",
+    "ItemLotParamId": 9020,
+    "Flag": 3,
+    "Id": 11110970
+  },
+  {
+    "Name": "DB: Dragon Scale - Hydra Drop",
+    "ItemLotParamId": 35300100,
+    "Flag": 11200801,
+    "Id": 11110971
+  },
+  {
+    "Name": "DB: Dusk Crown Ring - Hydra Drop",
+    "ItemLotParamId": 35300101,
+    "Flag": 11200801,
+    "Id": 11110972
+  },
+  {
+    "Name": "DG: Humanity - Sif Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 5,
+    "Id": 11110973
+  },
+  {
+    "Name": "DG: Homeward Bone - Sif Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 5,
+    "Id": 11110974
+  },
+  {
+    "Name": "DG: Humanity - Moonlight Butterfly Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11200900,
+    "Id": 11110975
+  },
+  {
+    "Name": "UB: Humanity - Capra Demon Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11010902,
+    "Id": 11110976
+  },
+  {
+    "Name": "UB: Homeward Bone - Capra Demon Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 11010902,
+    "Id": 11110977
+  },
+  {
+    "Name": "DE: Twin Humanities - Gaping Dragon Drop",
+    "ItemLotParamId": 9020,
+    "Flag": 2,
+    "Id": 11110978
+  },
+  {
+    "Name": "DE: Homeward Bone - Gaping Dragon Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 11010902,
+    "Id": 11110979
+  },
+  {
+    "Name": "BT: Twin Humanities - Quelaag Drop",
+    "ItemLotParamId": 9020,
+    "Flag": 9,
+    "Id": 11110980
+  },
+  {
+    "Name": "DR: Humanity - Ceaseless Discharge Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11410900,
+    "Id": 11110981
+  },
+  {
+    "Name": "DR: Homeward Bone - Ceaseless Discharge Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 11410900,
+    "Id": 11110982
+  },
+  {
+    "Name": "DR: Humanity - Demon Firesage Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11410410,
+    "Id": 11110983
+  },
+  {
+    "Name": "DR: Demon's Catalyst - Demon Firesage Drop",
+    "ItemLotParamId": 22310000,
+    "Flag": 11410410,
+    "Id": 11110984
+  },
+  {
+    "Name": "DR: Humanity - Centipede Demon Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11410901,
+    "Id": 11110985
+  },
+  {
+    "Name": "DR: Homeward Bone - Centipede Demon Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 11410901,
+    "Id": 11110986
+  },
+  {
+    "Name": "SF: Humanity - Iron Golem Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11,
+    "Id": 11110987
+  },
+  {
+    "Name": "CC: Humanity - Seath Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 14,
+    "Id": 11110988
+  },
+  {
+    "Name": "AL: Soul of Ornstein",
+    "ItemLotParamId": 9610,
+    "Flag": 11510903,
+    "Id": 11110989
+  },
+  {
+    "Name": "AL: Soul of Smough",
+    "ItemLotParamId": 9620,
+    "Flag": 11510903,
+    "Id": 11110990
+  },
+  {
+    "Name": "AL: Humanity - O+S Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11510903,
+    "Id": 11110991
+  },
+  {
+    "Name": "TA: Humanity x4 - Four Kings Drop",
+    "ItemLotParamId": 9010,
+    "Flag": 13,
+    "Id": 11110992
+  },
+  {
+    "Name": "UA2: Humanity - Stray Demon Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11810900,
+    "Id": 11110993
+  },
+  {
+    "Name": "UA2: Homeward Bone - Stray Demon Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 11810900,
+    "Id": 11110994
+  },
+  {
+    "Name": "UA2: Titanite Slab - Stray Demon Drop",
+    "ItemLotParamId": 22300000,
+    "Flag": 11810900,
+    "Id": 11110995
+  },
+  {
+    "Name": "TC: Humanity - Pinwheel Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 6,
+    "Id": 11110996
+  },
+  {
+    "Name": "TC: Homeward Bone - Pinwheel Drop",
+    "ItemLotParamId": 9030,
+    "Flag": 6,
+    "Id": 11110997
+  },
+  {
+    "Name": "TotG: Humanity - Nito Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 7,
+    "Id": 11110998
+  },
+  {
+    "Name": "PW: Twin Humanities - Crossbreed Priscilla Drop",
+    "ItemLotParamId": 9020,
+    "Flag": 4,
+    "Id": 11110999
+  },
+  {
+    "Name": "SG: Humanity - Sanctuary Guardian Drop",
+    "ItemLotParamId": 9000,
+    "Flag": 11210000,
+    "Id": 11111000
+  },
+  {
+    "Name": "CotA: Humanity x10 - Manus Drop",
+    "ItemLotParamId": 9040,
+    "Flag": 17,
+    "Id": 11111001
+  }
+]

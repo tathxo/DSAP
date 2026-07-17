@@ -361,6 +361,9 @@ _all_items_base = [
     ("Prism Stone x20", 2114, DSRItemCategory.CONSUMABLE),
     ("Eye of Death x3", 2115, DSRItemCategory.CONSUMABLE),
     ("Humanity x2", 2116, DSRItemCategory.CONSUMABLE),
+    # 2117 - 2121 reserved for shop sanity
+    ("Humanity x4", 2122, DSRItemCategory.CONSUMABLE),
+    ("Humanity x10", 2123, DSRItemCategory.CONSUMABLE),
     
 
     ("Peculiar Doll", 3000, DSRItemCategory.KEY_ITEM),

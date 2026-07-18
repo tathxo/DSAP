@@ -19,7 +19,6 @@
     <None Remove="Resources\Bonfires.json" />
     <None Remove="Resources\Bosses.json" />
     <None Remove="Resources\BossFlags.json" />
-    <None Remove="Resources\BossItemLots.json" />
     <None Remove="Resources\Loadouts.json" />
     <None Remove="Resources\Consumables.json" />
     <None Remove="Resources\Doors.json" />
@@ -50,7 +49,8 @@
     <EmbeddedResource Include="Resources\Armor.json" />
     <EmbeddedResource Include="Resources\Bonfires.json" />
     <EmbeddedResource Include="Resources\BossFlags.json" />
-    <EmbeddedResource Include="Resources\BossItemLots.json" />
+    <EmbeddedResource Include="Resources\ExtraItemLots.json" />
+    <EmbeddedResource Include="Resources\BossExtraItemLots.json" />
     <EmbeddedResource Include="Resources\MapPois.json" />
     <EmbeddedResource Include="Resources\ProgressiveItems.json" />
     <EmbeddedResource Include="Resources\Keychains.json" />

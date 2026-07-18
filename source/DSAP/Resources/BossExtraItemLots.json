@@ -28,7 +28,7 @@
     "ItemLotParamId": 35300100,
     "Flag": 11200801,
     "Id": 11110971
-  },  
+  },
   {
     "Name": "DB: Dusk Crown Ring - Hydra Drop",
     "ItemLotParamId": 35300101,
@@ -148,6 +148,12 @@
     "ItemLotParamId": 9000,
     "Flag": 12,
     "Id": 11110991
+  },
+  {
+    "Name": "AL: Leo Ring - O+S Drop",
+    "ItemLotParamId": 52710000,
+    "Flag": 12,
+    "Id": 11111003
   },
   {
     "Name": "TA: Humanity x4 - Four Kings Drop",

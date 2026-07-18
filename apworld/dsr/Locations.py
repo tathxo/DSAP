@@ -19,7 +19,8 @@ class DSRLocationCategory(IntEnum):
     BOSS_HUMANITY = 11,
     BOSS_BONE = 12,
     BOSS_DROP = 13,
-    LORD_SOUL = 14
+    LORD_SOUL = 14,
+    MIMIC_DROP = 15
 
 
 class DSRLocationData(NamedTuple):
@@ -198,7 +199,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Next Available ID = 11111003
+# Next Available ID = 11111004
 # reserved for shop sanity = 11110[853-966]
 location_tables = {
 "Undead Asylum Cell": [
@@ -662,7 +663,7 @@ location_tables = {
 "Sen's Fortress - After First Fog": [
     DSRLocationData(11110789, f"SF: Fog Wall - Sen's Fortress #1 (Outside Stairs)", f"Fog Wall Key - Sen's Fortress #1 (Outside Stairs)", DSRLocationCategory.FOG_WALL),
     DSRLocationData(11110243, f"SF: Covetous Gold Serpent Ring", f"Covetous Gold Serpent Ring", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110244, f"SF: Lightning Spear", f"Lightning Spear", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110244, f"SF: Lightning Spear", f"Lightning Spear", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110246, f"SF: Large Soul of a Proud Knight - Sen's Fortress Ball Dropdown", f"Large Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110247, f"SF: Black Sorcerer Hat", f"Black Sorcerer Hat", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110658, f"SF: Black Sorcerer Cloak", f"Black Sorcerer Cloak", DSRLocationCategory.ITEM_LOT),
@@ -699,7 +700,7 @@ location_tables = {
 "Anor Londo": [
     DSRLocationData(11110837, f"AL: Anor Londo Bonfire", f"Bonfire Warp Unlock - Anor Londo", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110262, f"AL: Demon Titanite - Anor Londo Giants", f"Demon Titanite", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110263, f"AL: Crystal Halberd", f"Crystal Halberd", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110263, f"AL: Crystal Halberd - Mimic Drop, Toward Archives", f"Crystal Halberd", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110264, f"AL: Twinkling Titanite - Anor Londo", f"Twinkling Titanite", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110265, f"AL: Demon Titanite - Anor Londo Elevator", f"Demon Titanite", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110266, f"AL: Divine Blessing - Anor Londo Rafters", f"Divine Blessing", DSRLocationCategory.ITEM_LOT),
@@ -729,11 +730,11 @@ location_tables = {
     DSRLocationData(11110666, f"AL: Havel's Leggings", f"Havel's Leggings", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110277, f"AL: Dragon Tooth", f"Dragon Tooth", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110278, f"AL: Havel's Greatshield", f"Havel's Greatshield", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110279, f"AL: Occult Club", f"Occult Club", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110279, f"AL: Occult Club - Basement Mimic Drop", f"Occult Club", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110280, f"AL: Soul of a Hero - Anor Londo Rooms", f"Soul of a Hero", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110281, f"AL: Titanite Demon below Balcony", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
-    DSRLocationData(11110282, f"AL: Gold Coin - Anor Londo Mimic", f"Gold Coin", DSRLocationCategory.ENEMY_DROP),
-    DSRLocationData(11110283, f"AL: Silver Coin - Anor Londo Mimic", f"Silver Coin x5", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110282, f"AL: Gold Coin - Mimic Drop", f"Gold Coin", DSRLocationCategory.MIMIC_DROP),
+    DSRLocationData(11110283, f"AL: Silver Coin - Mimic Drop", f"Silver Coin x5", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110284, f"AL: Demon Titanite - Anor Londo Bedroom", f"Demon Titanite x2", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110285, f"AL: Silver Knight Helm", f"Silver Knight Helm", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110667, f"AL: Silver Knight Armor", f"Silver Knight Armor", DSRLocationCategory.ITEM_LOT),
@@ -755,6 +756,7 @@ location_tables = {
     DSRLocationData(11110989, f"AL: Soul of Ornstein", f"Soul of Ornstein",  DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110990, f"AL: Soul of Smough", f"Soul of Smough",  DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110991, f"AL: Humanity - O+S Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
+    DSRLocationData(11111003, f"AL: Leo Ring - O+S Drop", f"Leo Ring",  DSRLocationCategory.BOSS_DROP),
 ],
 "Anor Londo - Gwynevere": [    
     DSRLocationData(11110294, f"AL: Lordvessel", f"Lordvessel", DSRLocationCategory.ITEM_LOT),                           
@@ -883,7 +885,7 @@ location_tables = {
     DSRLocationData(11110362, f"DA: Soul of a Brave Warrior - Archives Under Stairs", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110363, f"DA: Twinkling Titanite - Archives Chest", f"Twinkling Titanite", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110364, f"DA: Twinkling Titanite - Archives Balcony", f"Twinkling Titanite", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110365, f"DA: Crystal Knight Shield", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11110365, f"DA: Crystal Knight Shield - Mimic Drop, 2nd Floor", f"Crystal Knight Shield", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110366, f"DA: Twinkling Titanite - Drop from Crystal Lizard in Tunnel", f"Firebomb", DSRLocationCategory.ENEMY_DROP),
 ],
 "The Duke's Archives - After First Seath Encounter": [
@@ -917,7 +919,7 @@ location_tables = {
     DSRLocationData(11110841, f"DA: Duke's Archives Balcony Bonfire", f"Bonfire Warp Unlock - Duke's Archives", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110383, f"DA: Duke's Archives Bookshelf Door opened", f"Door Filler", DSRLocationCategory.DOOR),
     DSRLocationData(11110384, f"DA: Blue Titanite Chunk - Archives Chest", f"Blue Titanite Chunk", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110385, f"DA: Enchanted Falchion", f"Enchanted Falchion", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11110385, f"DA: Enchanted Falchion - Mimic Drop, Behind Bookcase Door", f"Enchanted Falchion", DSRLocationCategory.MIMIC_DROP), 
     DSRLocationData(11110386, f"DA: Archive Tower Giant Cell Key", f"Archive Tower Giant Cell Key", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110387, f"DA: Crystal Ember", f"Crystal Ember", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110388, f"DA: Six-Eyed Helm of the Channelers", f"Six-Eyed Helm of the Channelers", DSRLocationCategory.ITEM_LOT),
@@ -1196,9 +1198,9 @@ location_tables = {
     DSRLocationData(11110758, f"OT: Sorcery: Dark Orb", f"Sorcery: Dark Orb", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110759, f"OT: I'm Sorry Carving - Lone Sorceress", f"Carving: I'M SORRY!", DSRLocationCategory.ENEMY_DROP), # item lot instead? guaranteed drop
     DSRLocationData(11110760, f"OT: Soul of a Brave Warrior - Wooden Platform", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110761, f"OT: Very Good! Carving - Mimic", f"Carving: VERY GOOD!", DSRLocationCategory.ITEM_LOT), # outside platform mimic -> Guaranteed drop
+    DSRLocationData(11110761, f"OT: Carving: VERY GOOD! - Mimic, Outside Platform", f"Carving: VERY GOOD!", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110762, f"OT: Soul of a Hero - Stair Ledge", f"Soul of a Hero", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110764, f"OT: Crest Key (Mimic)", f"Crest Key", DSRLocationCategory.ITEM_LOT), # fireplace mimic -> Guaranteed drop
+    DSRLocationData(11110764, f"OT: Crest Key - Mimic Drop, By Fireplace", f"Crest Key", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11110765, f"OT: Sorcery: Dark Fog", f"Sorcery: Dark Fog", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110766, f"OT: Twin Humanities - Drop onto Roof", f"Twin Humanities", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110767, f"OT: Soul of a Brave Warrior - Corpse in Corner of Statue Hallway", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),

@@ -12,7 +12,9 @@ namespace DSAP.Helpers
     {
         #region Location Helpers
         private static List<ILocation> CachedItemLotLocations = null;
-        private static List<ILocation> CachedBossItemLotLocations = null;
+        private static List<ILocation> CachedExtraBossItemLotLocations = null;
+        private static List<ILocation> CachedExtraItemLotLocations = null;
+        
         public static List<ILocation> GetItemLotLocations()
         {
             if (CachedItemLotLocations != null)
@@ -36,8 +38,8 @@ namespace DSAP.Helpers
         }
         public static List<ILocation> GetBossExtraItemLotLocations()
         {
-            if (CachedBossItemLotLocations != null)
-                return CachedBossItemLotLocations;
+            if (CachedExtraBossItemLotLocations != null)
+                return CachedExtraBossItemLotLocations;
 
             List<ILocation> locations = new List<ILocation>();
             var lotFlags = GetBossExtraItemLotFlags();
@@ -52,9 +54,31 @@ namespace DSAP.Helpers
                     Id = lot.Id,
                 });
             }
-            CachedBossItemLotLocations = locations;
+            CachedExtraBossItemLotLocations = locations;
             return locations;
         }
+        public static List<ILocation> GetExtraItemLotLocations()
+        {
+            if (CachedExtraItemLotLocations != null)
+                return CachedExtraItemLotLocations;
+
+            List<ILocation> locations = new List<ILocation>();
+            var lotFlags = GetExtraItemLotFlags();
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            foreach (var lot in lotFlags)
+            {
+                locations.Add(new Location
+                {
+                    Name = lot.Name,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                    Id = lot.Id,
+                });
+            }
+            CachedExtraItemLotLocations = locations;
+            return locations;
+        }
+        
         public static List<ILocation> GetBossFlagLocations()
         {
             List<ILocation> locations = new List<ILocation>();
@@ -171,10 +195,17 @@ namespace DSAP.Helpers
 
         public static List<ItemLotFlag> GetBossExtraItemLotFlags()
         {
-            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.BossItemLots.json");
+            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.BossExtraItemLots.json");
             var list = JsonSerializer.Deserialize<List<ItemLotFlag>>(json, MiscHelper.GetJsonOptions());
             return list;
         }
+        public static List<ItemLotFlag> GetExtraItemLotFlags()
+        {
+            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.ExtraItemLots.json");
+            var list = JsonSerializer.Deserialize<List<ItemLotFlag>>(json, MiscHelper.GetJsonOptions());
+            return list;
+        }
+        
         public static List<BossFlag> GetBossFlags()
         {
             var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.BossFlags.json");

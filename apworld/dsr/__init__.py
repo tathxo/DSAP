@@ -160,11 +160,11 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS_DROP)
         
-        if (self.options.boss_soul_shuffle == True):
+        if (self.options.boss_soul_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_SOUL)
-        if (self.options.boss_humanity_shuffle == True):
+        if (self.options.boss_humanity_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_HUMANITY)
-        if (self.options.boss_bone_shuffle == True):
+        if (self.options.boss_bone_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_BONE)
 
 

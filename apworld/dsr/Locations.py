@@ -196,7 +196,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Next Available ID = 11111003
+# Next Available ID = 11111004
 # reserved for shop sanity = 11110[853-966]
 location_tables = {
 "Undead Asylum Cell": [
@@ -751,6 +751,7 @@ location_tables = {
     DSRLocationData(11110989, f"AL: Soul of Ornstein", f"Soul of Ornstein",  DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110990, f"AL: Soul of Smough", f"Soul of Smough",  DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110991, f"AL: Humanity - O+S Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
+    DSRLocationData(11111003, f"AL: Leo Ring - O+S Drop", f"Leo Ring",  DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110294, f"AL: Lordvessel", f"Lordvessel", DSRLocationCategory.ITEM_LOT),
 ],
 "Anor Londo - Gwyndolin": [

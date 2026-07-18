@@ -1014,7 +1014,9 @@ namespace DSAP.Helpers
 
         internal static void AddExtraItemLots(ParamStruct<ItemLotParam> paramStruct)
         {
-            var boss_item_lots = LocationHelper.GetBossExtraItemLotFlags().Where(x => x.IsEnabled);
+            var boss_extra_item_lots = LocationHelper.GetBossExtraItemLotFlags().Where(x => x.IsEnabled);
+            var extra_item_lots = LocationHelper.GetExtraItemLotFlags().Where(x => x.IsEnabled);
+            var all_extra_lots = boss_extra_item_lots.Union(extra_item_lots);
             var scouts = App.scoutedLocationInfo;
             var overwritten_items = new HashSet<int>();
             var blankLot = new ItemLot
@@ -1026,7 +1028,7 @@ namespace DSAP.Helpers
                 Items = [blankLotItem]
             };
 
-            foreach (var lot in boss_item_lots)
+            foreach (var lot in all_extra_lots)
             {
                 if (scouts.TryGetValue(lot.Id, out var scout))
                 {

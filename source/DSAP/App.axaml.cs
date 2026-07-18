@@ -1009,12 +1009,21 @@ public partial class App : Application
             var bossLocations = LocationHelper.GetBossFlagLocations();
             var itemLocations = LocationHelper.GetItemLotLocations();
             var bossExtraItemLocations = LocationHelper.GetBossExtraItemLotLocations();
+            var extraItemLocations = LocationHelper.GetExtraItemLotLocations();
             var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
             var doorLocations = LocationHelper.GetDoorFlagLocations();
             var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
             var miscLocations = LocationHelper.GetMiscFlagLocations();
 
-            var fullLocationsList = bossLocations.Union(itemLocations).Union(bossExtraItemLocations).Union(bonfireLocations).Union(doorLocations).Union(fogWallLocations).Union(miscLocations).ToList();
+            var fullLocationsList = bossLocations
+                .Union(itemLocations)
+                .Union(bossExtraItemLocations)
+                .Union(extraItemLocations)
+                .Union(bonfireLocations)
+                .Union(doorLocations)
+                .Union(fogWallLocations)
+                .Union(miscLocations)
+                .ToList();
             Client.MonitorLocationsAsync(fullLocationsList);
 
             StartEmkWatchers(EmkControllers);

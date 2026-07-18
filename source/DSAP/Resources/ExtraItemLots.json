@@ -19,44 +19,50 @@
   },
   {
     "Name": "SF: Lightning Spear - Mimic Drop",
-    "ItemLotParamId": "27800001",
-    "Flag": "11500900",
+    "ItemLotParamId": 27800001,
+    "Flag": 11500900,
     "Id": 11110244
   },
   {
     "Name": "AL: Crystal Halberd - Mimic Drop",
-    "ItemLotParamId": "27801011",
-    "Flag": "11510851",
+    "ItemLotParamId": 27801011,
+    "Flag": 11510851,
     "Id": 11110263
   },
   {
     "Name": "AL: Occult Club - Mimic Drop",
-    "ItemLotParamId": "27801001",
-    "Flag": "11510850",
+    "ItemLotParamId": 27801001,
+    "Flag": 11510850,
     "Id": 11110279
   },
   {
     "Name": "AL: Gold Coin - Anor Londo Mimic - Mimic Drop",
-    "ItemLotParamId": "27801031",
-    "Flag": "11510853",
+    "ItemLotParamId": 27801031,
+    "Flag": 11510853,
     "Id": 11110282
   },
   {
     "Name": "AL: Silver Coin - Anor Londo Mimic - Mimic Drop",
-    "ItemLotParamId": "27801021",
-    "Flag": "11510852",
+    "ItemLotParamId": 27801021,
+    "Flag": 11510852,
     "Id": 11110283
   },
   {
     "Name": "DA: Crystal Knight Shield - Mimic Drop",
-    "ItemLotParamId": "27802011",
-    "Flag": "11700901",
+    "ItemLotParamId": 27802011,
+    "Flag": 11700901,
     "Id": 11110365
   },
   {
     "Name": "DA: Enchanted Falchion - Mimic Drop",
-    "ItemLotParamId": "27802001",
-    "Flag": "11700900",
+    "ItemLotParamId": 27802001,
+    "Flag": 11700900,
     "Id": 11110385
+  },
+  {
+    "Name": "DA: Broken Pendant",
+    "ItemLotParamId": 27100200,
+    "Flag": 11700700,
+    "Id": 11110361
   }
 ]

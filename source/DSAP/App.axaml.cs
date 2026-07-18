@@ -1895,6 +1895,7 @@ public partial class App : Application
             scoutedLocationInfo = await Client.CurrentSession.Locations.ScoutLocationsAsync(false, locids);
 
             await ApItemInjectorHelper.AddAPItems(scoutedLocationInfo);
+            await BonfireInjectorHelper.InitBonfireStorage();
             await BonfireInjectorHelper.UpdateBonfires();
 
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);

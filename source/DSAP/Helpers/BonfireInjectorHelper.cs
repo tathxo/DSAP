@@ -80,6 +80,14 @@ namespace DSAP.Helpers
                 Memory.FreeMemory((nint)old_bonfire_struct); // free old struct
             }
         }
+        internal static async Task InitBonfireStorage()
+        {
+            if (App.Client?.CurrentSession?.ConnectionInfo == null)
+                return;
+
+            StorageKey = $"bonfires_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
+            App.Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
+        }
         /// <summary>
         /// Build a new bonfire area structure and stub zone, and insert hooks
         /// </summary>
@@ -88,10 +96,6 @@ namespace DSAP.Helpers
         {
             if (App.Client?.CurrentSession?.ConnectionInfo == null)
                 return;
-
-            StorageKey = $"bonfires_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
-            App.Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
-
 
             // if not loaded from settings, set some defaults
             if (!SaveLoadHelper.SettingsLoaded) 

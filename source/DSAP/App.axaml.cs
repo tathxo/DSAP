@@ -49,8 +49,8 @@ public partial class App : Application
     public static Dictionary<int, DarkSoulsItem> EventsByApId { get; set; }
     public static List<BonfireWarp> AllowedBonfireWarps { get; set; } = [];
     // 
-    private static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
-    internal static Dictionary<int, ItemLot> ItemLotReplacementMap = new Dictionary<int, ItemLot>();
+    internal static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
+    internal static Dictionary<int, ItemLot> ItemLotReplacementMap = [];
     private static Dictionary<string, Tuple<int, string>> SlotLocToItemUpgMap = [];
     // Logging
     private static readonly object _lockObject = new object();
@@ -1008,12 +1008,13 @@ public partial class App : Application
 
             var bossLocations = LocationHelper.GetBossFlagLocations();
             var itemLocations = LocationHelper.GetItemLotLocations();
+            var bossExtraItemLocations = LocationHelper.GetBossExtraItemLotLocations();
             var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
             var doorLocations = LocationHelper.GetDoorFlagLocations();
             var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
             var miscLocations = LocationHelper.GetMiscFlagLocations();
 
-            var fullLocationsList = bossLocations.Union(itemLocations).Union(bonfireLocations).Union(doorLocations).Union(fogWallLocations).Union(miscLocations).ToList();
+            var fullLocationsList = bossLocations.Union(itemLocations).Union(bossExtraItemLocations).Union(bonfireLocations).Union(doorLocations).Union(fogWallLocations).Union(miscLocations).ToList();
             Client.MonitorLocationsAsync(fullLocationsList);
 
             StartEmkWatchers(EmkControllers);
@@ -1896,7 +1897,7 @@ public partial class App : Application
             await ApItemInjectorHelper.AddAPItems(scoutedLocationInfo);
             await BonfireInjectorHelper.UpdateBonfires();
 
-            ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, SlotLocToItemUpgMap, scoutedLocationInfo);
+            ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 

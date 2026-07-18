@@ -28,7 +28,7 @@
     "ItemLotParamId": 35300100,
     "Flag": 11200801,
     "Id": 11110971
-  },
+  },  
   {
     "Name": "DB: Dusk Crown Ring - Hydra Drop",
     "ItemLotParamId": 35300101,
@@ -74,7 +74,7 @@
   {
     "Name": "DE: Homeward Bone - Gaping Dragon Drop",
     "ItemLotParamId": 9030,
-    "Flag": 11010902,
+    "Flag": 2,
     "Id": 11110979
   },
   {
@@ -133,20 +133,20 @@
   },
   {
     "Name": "AL: Soul of Ornstein",
-    "ItemLotParamId": 9610,
-    "Flag": 11510903,
+    "ItemLotParamId": 2610,
+    "Flag": 12,
     "Id": 11110989
   },
   {
     "Name": "AL: Soul of Smough",
-    "ItemLotParamId": 9620,
-    "Flag": 11510903,
+    "ItemLotParamId": 2620,
+    "Flag": 12,
     "Id": 11110990
   },
   {
     "Name": "AL: Humanity - O+S Drop",
     "ItemLotParamId": 9000,
-    "Flag": 11510903,
+    "Flag": 12,
     "Id": 11110991
   },
   {
@@ -208,5 +208,11 @@
     "ItemLotParamId": 9040,
     "Flag": 17,
     "Id": 11111001
+  },
+  {
+    "Name": "ASH: Dragon Scales - Hydra Drop",
+    "ItemLotParamId": 35300000,
+    "Flag": 11320100,
+    "Id": 11111002
   }
 ]

@@ -196,8 +196,8 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Last id used = 1001
-# reserved for shop sanity = 853-966 
+# Next Available ID = 11111003
+# reserved for shop sanity = 11110[853-966]
 location_tables = {
 "Undead Asylum Cell": [
     DSRLocationData(11110000, f"UA: Dungeon Cell Key", f"Dungeon Cell Key", DSRLocationCategory.SKIP),
@@ -386,7 +386,7 @@ location_tables = {
     DSRLocationData(11110108, f"UB: Capra Demon Defeated", f"Capra Demon Defeated", DSRLocationCategory.BOSS),
 ],
 "Lower Undead Burg - After Capra Demon": [
-    DSRLocationData(11110109, f"UB: Key to Depths", f"Key to Depths", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110109, f"UB: Key to Depths", f"Key to Depths", DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110976, f"UB: Humanity - Capra Demon Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110977, f"UB: Homeward Bone - Capra Demon Drop", f"Homeward Bone",  DSRLocationCategory.BOSS_BONE),
 ],
@@ -431,7 +431,7 @@ location_tables = {
     DSRLocationData(11110713, f"DE: Hard Leather Boots", f"Hard Leather Boots", DSRLocationCategory.ITEM_LOT),
 ],
 "Depths - After Gaping Dragon": [
-    DSRLocationData(11110128, f"DE: Blighttown Key", f"Blighttown Key", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110128, f"DE: Blighttown Key", f"Blighttown Key", DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110978, f"DE: Twin Humanities - Gaping Dragon Drop", f"Twin Humanities",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110979, f"DE: Homeward Bone - Gaping Dragon Drop", f"Homeward Bone",  DSRLocationCategory.BOSS_BONE),
 ],
@@ -541,8 +541,8 @@ location_tables = {
     DSRLocationData(11110705, f"DB: Leather Gloves", f"Leather Gloves", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110706, f"DB: Leather Boots", f"Leather Boots", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110577, f"DB: Large Soul of a Nameless Soldier - Darkroot Hydra", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110971, f"DB: Dragon Scale - Hydra Drop", f"Dragon Scale",  DSRLocationCategory.BOSS_DROP),
-    DSRLocationData(11110972, f"DB: Dusk Crown Ring - Hydra Drop", f"Dusk Crown Ring",  DSRLocationCategory.BOSS_DROP),
+    DSRLocationData(11110971, f"DB: Dragon Scale - Hydra Drop", f"Dragon Scale",  DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110972, f"DB: Dusk Crown Ring - Hydra Drop", f"Dusk Crown Ring",  DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110186, f"DB: Longbow", f"Longbow", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110707, f"DB: Feather Arrow", f"Feather Arrow x16", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110187, f"DB: Grass Crest Shield", f"Grass Crest Shield", DSRLocationCategory.ITEM_LOT),
@@ -602,7 +602,7 @@ location_tables = {
     DSRLocationData(11110209, f"DG: Soul of a Brave Warrior - Down Ladder before Stone Bridge", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110210, f"DG: Enchanted Ember", f"Enchanted Ember", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110211, f"DG: Great Grey Wolf Sif Defeated", f"Great Grey Wolf Sif Defeated", DSRLocationCategory.BOSS),
-    DSRLocationData(11110212, f"DG: Covenant of Artorias - Sif Drop", f"Covenant of Artorias", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110212, f"DG: Covenant of Artorias - Sif Drop", f"Covenant of Artorias", DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110559, f"DG: Soul of Sif", f"Soul of Sif", DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110973, f"DG: Humanity - Sif Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110974, f"DG: Homeward Bone - Sif Drop", f"Homeward Bone",  DSRLocationCategory.BOSS_BONE),
@@ -634,6 +634,7 @@ location_tables = {
 "Ash Lake": [
     DSRLocationData(11110788, f"ASH: Fog Wall - Ash Lake Entrance", f"Fog Wall Key - Ash Lake Entrance", DSRLocationCategory.FOG_WALL),
     DSRLocationData(11110226, f"ASH: Ash Lake Bonfire", f"Bonfire Warp Unlock - Ash Lake - Entrance", DSRLocationCategory.BONFIRE),
+    DSRLocationData(11111002, f"ASH: Dragon Scale x2 - Hydra Drop", f"Dragon Scale x2", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110227, f"ASH: Dragon Scale - Ash Lake Start", f"Dragon Scale", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110228, f"ASH: Dragon Scale - Ash Lake Water", f"Dragon Scale", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110229, f"ASH: Dragon Scale - Ash Lake Log", f"Dragon Scale", DSRLocationCategory.ITEM_LOT),
@@ -866,13 +867,13 @@ location_tables = {
     DSRLocationData(11110357, f"TA: Four Kings Defeated", f"Four Kings Defeated", DSRLocationCategory.BOSS),
 ],
 "The Abyss - After Four Kings": [
-    DSRLocationData(11110358, f"TA: Bequeathed Lord Soul Shard (Four Kings)", f"Bequeathed Lord Soul Shard (Four Kings)", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110358, f"TA: Bequeathed Lord Soul Shard (Four Kings)", f"Bequeathed Lord Soul Shard (Four Kings)", DSRLocationCategory.LORD_SOUL),
     DSRLocationData(11110992, f"TA: Humanity x4 - Four Kings Drop", f"Humanity x4",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110846, f"TA: The Abyss Bonfire", f"Bonfire Warp Unlock - The Abyss", DSRLocationCategory.BONFIRE),
 ],
 "The Duke's Archives": [
     DSRLocationData(11110360, f"DA: Duke's Archives - Entrance Bonfire", f"Bonfire Warp Unlock - Duke's Archives - Entrance", DSRLocationCategory.BONFIRE),
-    DSRLocationData(11110361, f"DA: Broken Pendant", f"Broken Pendant", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110361, f"DA: Broken Pendant", f"Broken Pendant", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110362, f"DA: Soul of a Brave Warrior - Archives Under Stairs", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110363, f"DA: Twinkling Titanite - Archives Chest", f"Twinkling Titanite", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110364, f"DA: Twinkling Titanite - Archives Balcony", f"Twinkling Titanite", DSRLocationCategory.ITEM_LOT),
@@ -941,7 +942,7 @@ location_tables = {
     DSRLocationData(11110400, f"CC: Seath the Scaleless Defeated", f"Seath the Scaleless Defeated", DSRLocationCategory.BOSS),
 ],
 "Crystal Cave - After Seath": [
-    DSRLocationData(11110401, f"CC: Bequeathed Lord Soul Shard (Seath)", f"Bequeathed Lord Soul Shard (Seath)", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110401, f"CC: Bequeathed Lord Soul Shard (Seath)", f"Bequeathed Lord Soul Shard (Seath)", DSRLocationCategory.LORD_SOUL),
     DSRLocationData(11110988, f"CC: Humanity - Seath Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110842, f"CC: Crystal Cave Bonfire", f"Bonfire Warp Unlock - Crystal Cave", DSRLocationCategory.BONFIRE),
 ],
@@ -988,7 +989,7 @@ location_tables = {
 "Demon Ruins - Centipede Demon": [
     DSRLocationData(11110812, f"DR: Boss Fog Wall - Centipede Demon", f"Boss Fog Wall Key - Centipede Demon", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110422, f"DR: Centipede Demon Defeated", f"Centipede Demon Defeated", DSRLocationCategory.BOSS),
-    DSRLocationData(11110423, f"DR: Orange Charred Ring", f"Orange Charred Ring", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110423, f"DR: Orange Charred Ring", f"Orange Charred Ring", DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110985, f"DR: Humanity - Centipede Demon Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110986, f"DR: Homeward Bone - Centipede Demon Drop", f"Homeward Bone",  DSRLocationCategory.BOSS_BONE),
     DSRLocationData(11110424, f"DR: Green Titanite Shard - Centipede Demon", f"Green Titanite Shard x2", DSRLocationCategory.ITEM_LOT),
@@ -1025,7 +1026,7 @@ location_tables = {
 "Lost Izalith - Bed of Chaos": [
     DSRLocationData(11110813, f"LI: Boss Fog Wall - Bed of Chaos", f"Boss Fog Wall Key - Bed of Chaos", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110445, f"LI: Bed of Chaos Defeated", f"Bed of Chaos Defeated", DSRLocationCategory.BOSS),
-    DSRLocationData(11110446, f"LI: Lord Soul (Bed of Chaos)", f"Lord Soul (Bed of Chaos)", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110446, f"LI: Lord Soul (Bed of Chaos)", f"Lord Soul (Bed of Chaos)", DSRLocationCategory.LORD_SOUL),
     DSRLocationData(11110447, f"LI: Lost Izalith - Heart of Chaos Bonfire", f"Bonfire Warp Unlock - Lost Izalith - Heart of Chaos", DSRLocationCategory.BONFIRE),
 ],
 "The Catacombs": [
@@ -1115,7 +1116,7 @@ location_tables = {
     DSRLocationData(11110494, f"TotG: Gravelord Nito Defeated", f"Gravelord Nito Defeated", DSRLocationCategory.BOSS),
 ],                    
 "Tomb of the Giants - After Nito": [
-    DSRLocationData(11110495, f"TotG: Lord Soul (Nito)", f"Lord Soul (Nito)", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110495, f"TotG: Lord Soul (Nito)", f"Lord Soul (Nito)", DSRLocationCategory.LORD_SOUL),
     DSRLocationData(11110998, f"TotG: Humanity - Nito Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110845, f"TotG: Altar of the Gravelord Bonfire", f"Bonfire Warp Unlock - Altar of the Gravelord", DSRLocationCategory.BONFIRE),
 ],
@@ -1132,7 +1133,7 @@ location_tables = {
 "Kiln of the First Flame - Gwyn": [ 
     DSRLocationData(11110814, f"KoFF: Boss Fog Wall - Gwyn", f"Boss Fog Wall Key - Gwyn", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110499, f"KoFF: Gwyn, Lord of Cinder Defeated", f"Gwyn, Lord of Cinder Defeated", DSRLocationCategory.BOSS),
-    DSRLocationData(11110500, f"KoFF: Soul of Gwyn", f"Soul of Gwyn, Lord of Cinder", DSRLocationCategory.BOSS_SOUL),
+    DSRLocationData(11110500, f"KoFF: Soul of Gwyn", f"Soul of Gwyn, Lord of Cinder", DSRLocationCategory.ENEMY_DROP),
 ],
 "Sanctuary Garden": [     
     DSRLocationData(11110847, f"SG: Sanctuary Garden Bonfire", f"Bonfire Warp Unlock - Sanctuary Garden", DSRLocationCategory.BONFIRE),
@@ -1172,12 +1173,10 @@ location_tables = {
     DSRLocationData(11110816, f"RW: Boss Fog Wall - Artorias", f"Boss Fog Wall Key - Artorias", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110742, f"RW: Knight Artorias Defeated", f"Artorias the Abysswalker Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110743, f"RW: Soul of Artorias", f"Soul of Artorias", DSRLocationCategory.BOSS_SOUL),   
-],                        
-
-
+],
 "Royal Wood - After Hawkeye Gough": [
     DSRLocationData(11110747, f"RW: Black Dragon Kalameet Defeated", f"Black Dragon Kalameet Defeated", DSRLocationCategory.BOSS),
-    DSRLocationData(11110748, f"RW: Calamity Ring", f"Calamity Ring", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110748, f"RW: Calamity Ring", f"Calamity Ring", DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110749, f"RW: Gough's Great Arrow - Kalemeet's Arena", f"Gough's Great Arrow x3", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110750, f"RW: Titanite Slab - Kalameet's Arena Behind Waterfall", f"Titanite Slab", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110751, f"RW: Gough's Greatbow - Kalameet reward", f"Gough's Greatbow", DSRLocationCategory.ENEMY_DROP), # Actually a reward from Gough after killing Kalameet

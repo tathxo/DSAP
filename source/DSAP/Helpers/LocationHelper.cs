@@ -12,6 +12,7 @@ namespace DSAP.Helpers
     {
         #region Location Helpers
         private static List<ILocation> CachedItemLotLocations = null;
+        private static List<ILocation> CachedBossItemLotLocations = null;
         public static List<ILocation> GetItemLotLocations()
         {
             if (CachedItemLotLocations != null)
@@ -31,6 +32,27 @@ namespace DSAP.Helpers
                 });
             }
             CachedItemLotLocations = locations;
+            return locations;
+        }
+        public static List<ILocation> GetBossExtraItemLotLocations()
+        {
+            if (CachedBossItemLotLocations != null)
+                return CachedBossItemLotLocations;
+
+            List<ILocation> locations = new List<ILocation>();
+            var lotFlags = GetBossExtraItemLotFlags();
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            foreach (var lot in lotFlags)
+            {
+                locations.Add(new Location
+                {
+                    Name = lot.Name,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                    Id = lot.Id,
+                });
+            }
+            CachedBossItemLotLocations = locations;
             return locations;
         }
         public static List<ILocation> GetBossFlagLocations()
@@ -143,6 +165,13 @@ namespace DSAP.Helpers
         public static List<ItemLotFlag> GetItemLotFlags()
         {
             var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.ItemLots.json");
+            var list = JsonSerializer.Deserialize<List<ItemLotFlag>>(json, MiscHelper.GetJsonOptions());
+            return list;
+        }
+
+        public static List<ItemLotFlag> GetBossExtraItemLotFlags()
+        {
+            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.BossItemLots.json");
             var list = JsonSerializer.Deserialize<List<ItemLotFlag>>(json, MiscHelper.GetJsonOptions());
             return list;
         }

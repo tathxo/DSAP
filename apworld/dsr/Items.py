@@ -474,6 +474,7 @@ _all_items_base = [
     ("Large Titanite Shard x2", 5100, DSRItemCategory.UPGRADE_MATERIAL),
     ("Demon Titanite x2", 5101, DSRItemCategory.UPGRADE_MATERIAL),
     ("Green Titanite Shard x2", 5102, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Dragon Scale x2", 5103, DSRItemCategory.UPGRADE_MATERIAL),
 
 
     ("Sorcery: Soul Arrow", 6000, DSRItemCategory.SPELL),

@@ -44,6 +44,7 @@ namespace DSAP.Helpers
             int new_entries = 0;
             ItemLotHelper.AddInitItemLots(paramStruct, ref new_entries);
             ItemLotHelper.OverwriteItemLots(paramStruct, itemLotReplacementMap);
+            ItemLotHelper.AddExtraItemLots(paramStruct);
             //bool success = ItemLotHelper.AddInitItemLots();
 
             // add a dummy item at 99999998 so that we can know we've been here.

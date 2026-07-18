@@ -142,6 +142,18 @@ class BossFogwallSanity(Toggle):
       Kalameet."""
     display_name = "Boss Fogwall Sanity" 
 
+class BossSoulShuffle(DefaultOnToggle):
+    """Makes boss soul drops be shuffled into the multiworld item pool.
+    Does not affect the Lord Souls, which are always shuffled in."""
+    display_name = "Boss Soul Shuffle"
+
+class BossHumanityShuffle(DefaultOnToggle):
+    """Makes boss humanity and twin humanity drops be shuffled into the multiworld item pool."""
+    display_name = "Boss Humanity Shuffle"
+
+class BossBoneShuffle(Toggle):
+    """Makes boss homeward bone drops be shuffled into the multiworld item pool."""
+    display_name = "Boss Bone Shuffle"
 
 
 def skip_logic_helper(difficulty: SkipDifficulty): 
@@ -442,6 +454,11 @@ class DSROption(PerGameCommonOptions):
     # Sanity
     fogwall_sanity: FogwallSanity
     boss_fogwall_sanity: BossFogwallSanity
+
+    # Shuffling
+    boss_soul_shuffle: BossSoulShuffle
+    boss_humanity_shuffle: BossHumanityShuffle
+    boss_bone_shuffle: BossBoneShuffle
 
     # Logic
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar

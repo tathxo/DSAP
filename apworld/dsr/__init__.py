@@ -156,9 +156,13 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
-        self.enabled_location_categories.add(DSRLocationCategory.BOSS_SOUL)
-        self.enabled_location_categories.add(DSRLocationCategory.BOSS_HUMANITY)
-        self.enabled_location_categories.add(DSRLocationCategory.BOSS_BONE)
+        if (self.options.boss_soul_shuffle == True):
+            self.enabled_location_categories.add(DSRLocationCategory.BOSS_SOUL)
+        if (self.options.boss_humanity_shuffle == True):
+            self.enabled_location_categories.add(DSRLocationCategory.BOSS_HUMANITY)
+        if (self.options.boss_bone_shuffle == True):
+            self.enabled_location_categories.add(DSRLocationCategory.BOSS_BONE)
+
         self.enabled_location_categories.add(DSRLocationCategory.BOSS_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
 
@@ -601,6 +605,11 @@ class DSRWorld(World):
                 # Sanity
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
+                # Shuffle
+                "boss_soul_shuffle": self.options.boss_soul_shuffle.value,
+                "boss_humanity_shuffle": self.options.boss_humanity_shuffle.value,
+                "boss_bone_shuffle": self.options.boss_bone_shuffle.value,
+                
                 # Logic
                 "logic_to_access_firelink_altar": self.options.logic_to_access_firelink_altar.current_key, # text of the option
                 "logic_to_access_catacombs": self.options.logic_to_access_catacombs.current_key, # text of the option

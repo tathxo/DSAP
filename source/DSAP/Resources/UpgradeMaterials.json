@@ -114,6 +114,7 @@
   {
     "Name": "Large Titanite Shard x2",
     "Id": 1010,
+    "Quantity": 2,
     "StackLimit": 99,
     "UpgradeType": "None",
     "Category": "UpgradeMaterials",
@@ -130,9 +131,19 @@
   {
     "Name": "Green Titanite Shard x2",
     "Id": 1020,
+    "Quantity": 2,
     "StackLimit": 99,
     "UpgradeType": "None",
     "Category": "UpgradeMaterials",
     "ApId": 11115102
+  },
+  {
+    "Name": "Dragon Scale x2",
+    "Id": 1120,
+    "Quantity": 2,
+    "StackLimit": 99,
+    "UpgradeType": "None",
+    "Category": "UpgradeMaterials",
+    "ApId": 11115103
   }
 ]

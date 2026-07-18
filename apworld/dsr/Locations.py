@@ -400,7 +400,7 @@ location_tables = {
 ],
 "Watchtower Basement": [
     DSRLocationData(11110051, f"UB: Undead Burg Watchtower Upper opened", f"Door Filler", DSRLocationCategory.DOOR),
-    DSRLocationData(11110049, f"UB: Havel's Ring", f"Havel's Ring", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110049, f"UB: Havel's Ring", f"Havel's Ring", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110052, f"UB: Undead Burg Watchtower Lower opened", f"Door Filler", DSRLocationCategory.DOOR),
 ],
 "Depths": [
@@ -1023,7 +1023,7 @@ location_tables = {
     DSRLocationData(11110443, f"LI: Red Titanite Slab - Chaos Eater Pit", f"Red Titanite Slab", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110596, f"LI: Red Titanite Chunk - After Chaos Eater Pit", f"Red Titanite Chunk", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110444, f"LI: Pyromancy: Chaos Fire Whip", f"Pyromancy: Chaos Fire Whip", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110563, f"LI: Izalith Catalyst", f"Izalith Catalyst", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110563, f"LI: Izalith Catalyst", f"Izalith Catalyst", DSRLocationCategory.ITEM_LOT),
 ],
 "Lost Izalith - Bed of Chaos": [
     DSRLocationData(11110813, f"LI: Boss Fog Wall - Bed of Chaos", f"Boss Fog Wall Key - Bed of Chaos", DSRLocationCategory.BOSS_FOG_WALL),

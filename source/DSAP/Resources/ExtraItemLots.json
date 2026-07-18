@@ -1,5 +1,11 @@
 ﻿[
   {
+    "Name": "DB: Dragon Scale - Hydra Drop",
+    "ItemLotParamId": 35300100,
+    "Flag": 11200801,
+    "Id": 11110971
+  },
+  {
     "Name": "DB: Dusk Crown Ring - Hydra Drop",
     "ItemLotParamId": 35300101,
     "Flag": 11200801,
@@ -7,12 +13,6 @@
   },
   {
     "Name": "ASH: Dragon Scales - Hydra Drop",
-    "ItemLotParamId": 35300000,
-    "Flag": 11320100,
-    "Id": 11111002
-  },
-  {
-    "Name": "SF: Dragon Scales - Hydra Drop",
     "ItemLotParamId": 35300000,
     "Flag": 11320100,
     "Id": 11111002
@@ -64,5 +64,17 @@
     "ItemLotParamId": 27100200,
     "Flag": 11700700,
     "Id": 11110361
+  },
+  {
+    "Name": "UB: Havel's Ring",
+    "Flag": 11010860,
+    "ItemLotParamId": 6580,
+    "Id": 11110049
+  },
+  {
+    "Name": "LI: Izalith Catalyst",
+    "Flag": 11410106,
+    "ItemLotParamId": 6620,
+    "Id": 11110563
   }
 ]

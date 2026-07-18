@@ -8,6 +8,15 @@
     "ApId": 11118075
   },
   {
+    "Name": "Crystal Knight Shield",
+    "Id": 1451100,
+    "StackSize": 1,
+    "UpgradeType": "None",
+    "Category": "Shields",
+    "Strength": 10,
+    "ApId": 11118304
+  },
+  {
     "Name": "Skull Lantern",
     "Id": 1396000,
     "StackSize": 1,

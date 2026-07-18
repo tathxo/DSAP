@@ -899,6 +899,7 @@ _all_items_base = [
     ("Enchanted Falchion", 8301, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.NotUpgradable),
     ("Occult Club", 8302, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.NotUpgradable),
     ("Crystal Halberd", 8303, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.NotUpgradable),
+    ("Crystal Knight Shield", 8304, DSRItemCategory.SHIELD, DSRWeaponType.Shield, DSRUpgradeType.NotUpgradable),
 
     ("Short Bow", 8096, DSRItemCategory.WEAPON, DSRWeaponType.Ranged, DSRUpgradeType.Infusable),
     ("Longbow", 8097, DSRItemCategory.WEAPON, DSRWeaponType.Ranged, DSRUpgradeType.Infusable),

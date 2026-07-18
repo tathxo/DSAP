@@ -171,7 +171,7 @@ namespace DSAP.Helpers
 
         public static List<ItemLotFlag> GetBossExtraItemLotFlags()
         {
-            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.BossItemLots.json");
+            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.BossExtraItemLots.json");
             var list = JsonSerializer.Deserialize<List<ItemLotFlag>>(json, MiscHelper.GetJsonOptions());
             return list;
         }

@@ -99,7 +99,8 @@ class DSRLocation(Location):
             "Door between Upper New Londo and Valley of the Drakes",
             "Darkroot Basin", 
             "Darkroot Garden - Before Fog",
-            "Darkroot Garden", 
+            "Darkroot Garden",
+            "Darkroot Garden - Sif",
             "Darkroot Garden - Behind Artorias Door", 
             "Darkroot Garden - Moonlight Butterfly",
             "Darkroot Garden - After Moonlight Butterfly",
@@ -117,6 +118,7 @@ class DSRLocation(Location):
             "Anor Londo - After Second Fog",
             "Anor Londo - Ornstein and Smough",
             "Anor Londo - After Ornstein and Smough",
+            "Anor Londo - Gwynevere",
             "Anor Londo - Gwyndolin",
             "Anor Londo - After Gwyndolin",
             "Painted World of Ariamis",
@@ -602,6 +604,8 @@ location_tables = {
     DSRLocationData(11110208, f"DG: Twin Humanities - Pharis", f"Twin Humanities", DSRLocationCategory.ENEMY_DROP),
     DSRLocationData(11110209, f"DG: Soul of a Brave Warrior - Down Ladder before Stone Bridge", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110210, f"DG: Enchanted Ember", f"Enchanted Ember", DSRLocationCategory.ITEM_LOT),
+],
+"Darkroot Garden - Sif": [
     DSRLocationData(11110211, f"DG: Great Grey Wolf Sif Defeated", f"Great Grey Wolf Sif Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110212, f"DG: Covenant of Artorias - Sif Drop", f"Covenant of Artorias", DSRLocationCategory.BOSS_DROP),
     DSRLocationData(11110559, f"DG: Soul of Sif", f"Soul of Sif", DSRLocationCategory.BOSS_SOUL),
@@ -753,7 +757,9 @@ location_tables = {
     DSRLocationData(11110990, f"AL: Soul of Smough", f"Soul of Smough",  DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110991, f"AL: Humanity - O+S Drop", f"Humanity",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11111003, f"AL: Leo Ring - O+S Drop", f"Leo Ring",  DSRLocationCategory.BOSS_DROP),
-    DSRLocationData(11110294, f"AL: Lordvessel", f"Lordvessel", DSRLocationCategory.ITEM_LOT),
+],
+"Anor Londo - Gwynevere": [    
+    DSRLocationData(11110294, f"AL: Lordvessel", f"Lordvessel", DSRLocationCategory.ITEM_LOT),                           
 ],
 "Anor Londo - Gwyndolin": [
     DSRLocationData(11110818, f"AL: Boss Fog Wall - Gwyndolin", f"Boss Fog Wall Key - Gwyndolin", DSRLocationCategory.BOSS_FOG_WALL),

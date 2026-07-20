@@ -20,7 +20,9 @@ class DSRLocationCategory(IntEnum):
     BOSS_BONE = 12,
     BOSS_DROP = 13,
     LORD_SOUL = 14,
-    MIMIC_DROP = 15
+    MIMIC_DROP = 15,
+    BK_DROP = 16,
+    BK_WEAPON = 17
 
 
 class DSRLocationData(NamedTuple):
@@ -276,7 +278,8 @@ location_tables = {
     DSRLocationData(11110617, f"UB: Standard Bolt", f"Standard Bolt x16", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110045, f"UB: Black Firebomb - Side House Chest", f"Black Firebomb x5", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110046, f"UB: Soul of a Lost Undead - Firebomb Throwers", f"Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110047, f"UB: Black Knight guarding Blue Tearstone Ring", f"Firebomb", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110047, f"UB: Titanite Chunk - Black Knight Drop", f"Titanite Chunk", DSRLocationCategory.BK_DROP),
+    DSRLocationData(11111004, f"UB: Black Knight Sword - Black Knight Drop", f"Black Knight Sword", DSRLocationCategory.BK_WEAPON),
     DSRLocationData(11110048, f"UB: Blue Tearstone Ring", f"Blue Tearstone Ring", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110050, f"UB: Crystal Lizard hidden in Barrel", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
 ],
@@ -298,7 +301,8 @@ location_tables = {
     DSRLocationData(11110060, f"UB: Gold Pine Resin - 3x Gold Pine Resin in Chest behind Locked Door", f"Gold Pine Resin x3", DSRLocationCategory.ITEM_LOT),
 ],
 "Undead Parish - Before Fog": [
-    DSRLocationData(11110061, f"UP: Black Knight in Tower", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11111005, f"UP: Black Knight Greatsword - Black Knight Drop, in Tower", f"Black Knight Greatsword", DSRLocationCategory.BK_WEAPON),
+    DSRLocationData(11110061, f"UP: Titanite Chunk - Black Knight Drop, in Tower", f"Titanite Chunk", DSRLocationCategory.BK_DROP),
     DSRLocationData(11110062, f"UP: Alluring Skull", f"Alluring Skull x4", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110063, f"UP: Mystery Key", f"Mystery Key", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110064, f"UP: Large Soul of a Lost Undead - Hollow Room Rafters", f"Large Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),
@@ -331,6 +335,10 @@ location_tables = {
     DSRLocationData(11110075, f"FS: Undead Asylum F2 West Key", f"Undead Asylum F2 West Key", DSRLocationCategory.ITEM_LOT),
 ],
 "Northern Undead Asylum Second Visit": [
+    DSRLocationData(11111009, f"UA2: Black Knight Sword - Black Knight Drop, Hallway Before Fog", f"Black Knight Sword", DSRLocationCategory.BK_WEAPON),
+    DSRLocationData(11111010, f"UA2: Red Titanite Chunk - Black Knight Drop, Hallway Before Fog", f"Red Titanite Chunk", DSRLocationCategory.BK_DROP),
+    DSRLocationData(11111011, f"UA2: Black Knight Shield - Black Knight Drop, By Starting Cell", f"Black Knight Shield", DSRLocationCategory.BK_WEAPON),
+    DSRLocationData(11111012, f"UA2: Red Titanite Chunk - Black Knight Drop, By Starting Cell", f"Red Titanite Chunk", DSRLocationCategory.BK_DROP),
     DSRLocationData(11110077, f"UA2: Crest Shield", f"Crest Shield", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110079, f"UA2: Peculiar Doll", f"Peculiar Doll", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110080, f"UA2: Stray Demon Defeated", f"Stray Demon Defeated", DSRLocationCategory.BOSS),
@@ -547,7 +555,8 @@ location_tables = {
     DSRLocationData(11110186, f"DB: Longbow", f"Longbow", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110707, f"DB: Feather Arrow", f"Feather Arrow x16", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110187, f"DB: Grass Crest Shield", f"Grass Crest Shield", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110188, f"DB: Black Knight near Bonfire", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11111006, f"DB: Black Knight Halberd - Black Knight Drop", f"Black Knight Halberd", DSRLocationCategory.BK_WEAPON),
+    DSRLocationData(11110188, f"DB: Blue Titanite Chunk - Black Knight Drop", f"Blue Titanite Chunk", DSRLocationCategory.BK_DROP),
     DSRLocationData(11110189, f"DB: Darkroot Basin Bonfire", f"Bonfire Warp Unlock - Darkroot Basin", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110190, f"DB: Knight Helm", f"Knight Helm", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110643, f"DB: Knight Armor", f"Knight Armor", DSRLocationCategory.ITEM_LOT),
@@ -1057,7 +1066,8 @@ location_tables = {
     DSRLocationData(11110464, f"TC: Eye of Death - Catacombs Titanite Demon", f"Eye of Death x3", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110465, f"TC: Large Soul of a Nameless Soldier - Above Black Knight", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110466, f"TC: Soul of a Proud Knight - Black Knight Ledge", f"Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110467, f"TC: White Titanite Chunk - Drop from Axe-wielding Black Knight", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11111007, f"TC: Black Knight Greataxe - Black Knight Drop", f"Black Knight Greataxe", DSRLocationCategory.BK_WEAPON),
+    DSRLocationData(11110467, f"TC: White Titanite Chunk - Black Knight Drop", f"White Titanite Chunk", DSRLocationCategory.BK_DROP),
     DSRLocationData(11110468, f"TC: Large Soul of a Nameless Soldier - Catacombs Above Bonewheels", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110469, f"TC: Priest's Hat", f"Priest's Hat", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110694, f"TC: Holy Robe", f"Holy Robe", DSRLocationCategory.ITEM_LOT),
@@ -1095,7 +1105,8 @@ location_tables = {
     DSRLocationData(11110482, f"TotG: Effigy Shield", f"Effigy Shield", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110483, f"TotG: Tomb of the Giants Bonfire", f"Bonfire Warp Unlock - Tomb of the Giants", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110484, f"TotG: Covetous Silver Serpent Ring", f"Covetous Silver Serpent Ring", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110485, f"TotG: White Titanite Chunk - Drop from Halberd-wielding Black Knight", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11111008, f"TotG: Black Knight Halberd - Black Knight Drop", f"Black Knight Halberd", DSRLocationCategory.BK_WEAPON),
+    DSRLocationData(11110485, f"TotG: White Titanite Chunk - Black Knight Drop", f"White Titanite Chunk", DSRLocationCategory.BK_DROP),
     DSRLocationData(11110486, f"TotG: Soul of a Brave Warrior - Behind Bone Archer", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110582, f"TotG: Soul of a Brave Warrior - Lower Tomb of the Giants", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110487, f"TotG: Twinkling Titanite - Drop from Crystal Lizard near Paladin", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 

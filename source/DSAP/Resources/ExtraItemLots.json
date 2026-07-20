@@ -76,5 +76,89 @@
     "Flag": 11410106,
     "ItemLotParamId": 6620,
     "Id": 11110563
+  },
+  {
+    "Name": "UB: Black Knight Sword - Black Knight Drop",
+    "Flag": 11010861,
+    "ItemLotParamId": 27900000,
+    "Id": 11111004
+  },
+  {
+    "Name": "UB: Titanite Chunk - Black Knight Drop",
+    "Flag": 11010861,
+    "ItemLotParamId": 27900001,
+    "Id": 11110047
+  },
+  {
+    "Name": "UP: Black Knight Greatsword - Black Knight Drop, in Tower",
+    "Flag": 11010862,
+    "ItemLotParamId": 27900100,
+    "Id": 11111005
+  },
+  {
+    "Name": "UP: Titanite Chunk - Black Knight Drop, in Tower",
+    "Flag": 11010862,
+    "ItemLotParamId": 27900101,
+    "Id": 11110061
+  },
+  {
+    "Name": "DB: Black Knight Halberd - Black Knight Drop",
+    "Flag": 11200816,
+    "ItemLotParamId": 27901000,
+    "Id": 11111006
+  },
+  {
+    "Name": "DB: Blue Titanite Chunk - Black Knight Drop",
+    "Flag": 11200816,
+    "ItemLotParamId": 27901001,
+    "Id": 11110188
+  },
+  {
+    "Name": "TC: Black Knight Greataxe - Black Knight Drop",
+    "Flag": 11300859,
+    "ItemLotParamId": 27902000,
+    "Id": 11111007
+  },
+  {
+    "Name": "TC: White Titanite Chunk - Black Knight Drop",
+    "Flag": 11300859,
+    "ItemLotParamId": 27902001,
+    "Id": 11110467
+  },
+  {
+    "Name": "TotG: Black Knight Halberd - Black Knight Drop",
+    "Flag": 11310820,
+    "ItemLotParamId": 27903000,
+    "Id": 11111008
+  },
+  {
+    "Name": "TotG: White Titanite Chunk - Black Knight Drop",
+    "Flag": 11310820,
+    "ItemLotParamId": 27903001,
+    "Id": 11110485
+  },
+  {
+    "Name": "UA2: Black Knight Sword - Black Knight Drop, Hallway Before Fog",
+    "Flag": 11810851,
+    "ItemLotParamId": 27907000,
+    "Id": 11111009
+  },
+  {
+    "Name": "UA2: Red Titanite Chunk - Black Knight Drop, Hallway Before Fog",
+    "Flag": 11810851,
+    "ItemLotParamId": 27907001,
+    "Id": 11111010
+  },
+  {
+    "Name": "UA2: Black Knight Shield - Black Knight Drop, By Starting Cell",
+    "Flag": 11810850,
+    "ItemLotParamId": 27907000,
+    "Id": 11111011
+  },
+  {
+    "Name": "UA2: Red Titanite Chunk - Black Knight Drop, By Starting Cell",
+    "Flag": 11810850,
+    "ItemLotParamId": 27907001,
+    "Id": 11111012
   }
 ]

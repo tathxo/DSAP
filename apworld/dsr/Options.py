@@ -155,6 +155,13 @@ class BossBoneShuffle(Toggle):
     """Makes boss homeward bone drops be shuffled into the multiworld item pool."""
     display_name = "Boss Bone Shuffle"
 
+class BlackKnightWeaponShuffle(DefaultOnToggle):
+    """Makes Black Knight weapon drop locations guaranteed, and adds their weapons to the multiworld item pool.
+    This only applies to the 7 non-respawning Black Knights in the game.
+    With this off, their Titanite Chunk drops are still added to the pool, and the weapon drops are left to chance.
+
+    These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool."""
+    display_name = "Black Knight Weapon Shuffle"
 
 def skip_logic_helper(difficulty: SkipDifficulty): 
     available_skips = get_all_skips()
@@ -396,6 +403,12 @@ option_groups = [
         FogwallSanity,
         BossFogwallSanity,
         ]),
+    OptionGroup("Shuffling", [
+        BossSoulShuffle,
+        BossHumanityShuffle,
+        BossBoneShuffle,
+        BlackKnightWeaponShuffle,
+        ]),
     OptionGroup("Logic", [
         LogicToAccessFirelinkAltar,
         LogicToAccessCatacombs,
@@ -459,6 +472,7 @@ class DSROption(PerGameCommonOptions):
     boss_soul_shuffle: BossSoulShuffle
     boss_humanity_shuffle: BossHumanityShuffle
     boss_bone_shuffle: BossBoneShuffle
+    bk_weapon_shuffle: BlackKnightWeaponShuffle
 
     # Logic
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar

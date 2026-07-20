@@ -167,6 +167,9 @@ class DSRWorld(World):
         if (self.options.boss_bone_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_BONE)
 
+        self.enabled_location_categories.add(DSRLocationCategory.BK_DROP)
+        if (self.options.bk_weapon_shuffle.value == True):
+            self.enabled_location_categories.add(DSRLocationCategory.BK_WEAPON)
 
         # self.enabled_location_categories.add(DSRLocationCategory.DOOR)
         if (self.options.fogwall_sanity.value == True):
@@ -611,6 +614,7 @@ class DSRWorld(World):
                 "boss_soul_shuffle": self.options.boss_soul_shuffle.value,
                 "boss_humanity_shuffle": self.options.boss_humanity_shuffle.value,
                 "boss_bone_shuffle": self.options.boss_bone_shuffle.value,
+                "bk_weapon_shuffle": self.options.bk_weapon_shuffle.value,
                 
                 # Logic
                 "logic_to_access_firelink_altar": self.options.logic_to_access_firelink_altar.current_key, # text of the option

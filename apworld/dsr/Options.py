@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter, StartInventoryPool
 from Options import OptionGroup
 from .Skips import get_all_skips, SkipDifficulty
 
@@ -449,6 +449,7 @@ class DSROption(PerGameCommonOptions):
     goal_condition: GoalConditionOption
     guaranteed_items: GuaranteedItemsOption
     excluded_location_behavior: ExcludedLocationBehaviorOption
+    start_inventory_from_pool: StartInventoryPool
 
     # QoL
     can_warp_without_lordvessel: CanWarpWithoutLordvessel

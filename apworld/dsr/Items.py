@@ -4,7 +4,6 @@ from BaseClasses import Item
 
 
 class DSRItemCategory(IntEnum):
-    SKIP = 0,
     EVENT = 1,
     CONSUMABLE = 2,
     KEY_ITEM = 3,
@@ -23,7 +22,8 @@ class DSRItemCategory(IntEnum):
     NOTHING = 16,
     BONFIREWARP = 17,
     PROGRESSIVE_MULTIPLIER = 18,
-    FIRE_KEEPER_SOUL = 19
+    FIRE_KEEPER_SOUL = 19,
+    NEEDS_REPLACEMENT = 20
 
 class DSRWeaponType(IntEnum):
     Melee = 1,
@@ -475,7 +475,17 @@ _all_items_base = [
     ("Demon Titanite x2", 5101, DSRItemCategory.UPGRADE_MATERIAL),
     ("Green Titanite Shard x2", 5102, DSRItemCategory.UPGRADE_MATERIAL),
     ("Dragon Scale x2", 5103, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Twinkling Titanite x2", 5104, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Titanite Chunk x2", 5105, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Blue Titanite Chunk x2", 5106, DSRItemCategory.UPGRADE_MATERIAL),
+    ("White Titanite Chunk x2", 5107, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Red Titanite Chunk x2", 5108, DSRItemCategory.UPGRADE_MATERIAL),
 
+    ("Extra Titanite", 5200, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra Red Titanite", 5201, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra Blue Titanite", 5202, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra White Titanite", 5203, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra GH Titanite", 5204, DSRItemCategory.NEEDS_REPLACEMENT),
 
     ("Sorcery: Soul Arrow", 6000, DSRItemCategory.SPELL),
     ("Sorcery: Great Soul Arrow", 6001, DSRItemCategory.SPELL),

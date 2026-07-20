@@ -192,3 +192,31 @@ def UpgradeEquipment(itemcode, options, world):
                 return upg
             break;
     return upg
+
+titanite_replacements = {
+    # 25% 2 large, 41.67% chunk, 8.33% 2 chunk
+    "Extra Titanite" : ["Large Titanite Shard x2", "Titanite Chunk", "Titanite Chunk x2"],
+    # 25% 2 green, 41.67% red chunk, 8.33% 2 red chunk
+    "Extra Red Titanite" : ["Green Titanite Shard x2", "Red Titanite Chunk", "Red Titanite Chunk x2"],
+    # 25% 2 green, 41.67% blue chunk, 8.33% 2 blue chunk
+    "Extra Blue Titanite" : ["Green Titanite Shard x2", "Blue Titanite Chunk", "Blue Titanite Chunk x2"],
+    # 25% 2 green, 41.67% white chunk, 8.33% 2 white chunk
+    "Extra White Titanite" : ["Green Titanite Shard x2", "White Titanite Chunk", "White Titanite Chunk x2"],
+    # 20% 2 large, 20% 2 green, 10% chunk, 10% blue chunk, 10% red chunk, 10% white chunk, 10% titanite slab
+    "Extra GH Titanite" : ["Large Titanite Shard x2", "Green Titanite Shard x2", "Titanite Chunk", "Blue Titanite Chunk", "Red Titanite Chunk", "White Titanite Chunk", "Titanite Slab"],
+}
+titanite_replacement_weights = {
+    "Extra Titanite" : [3, 5, 1],
+    "Extra Red Titanite" : [3, 5, 1],
+    "Extra Blue Titanite" : [3, 5, 1],
+    "Extra White Titanite" : [3, 5, 1],
+    "Extra GH Titanite" : [2, 2, 1, 1, 1, 1, 1],
+}
+def ReplaceItem(name, world):
+    if (name in titanite_replacements):
+        replacements = titanite_replacements[name]
+        weights = titanite_replacement_weights[name]
+        newname = world.random.choices(replacements, weights=weights)[0]
+        return newname
+
+    return name

@@ -163,6 +163,15 @@ class BlackKnightWeaponShuffle(DefaultOnToggle):
     These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool."""
     display_name = "Black Knight Weapon Shuffle"
 
+class CrystalLizardShuffle(Toggle):
+    """Adds Crystal Lizard drop locations to the multiworld item pool.
+    This adds 2 locations per lizard: 1 for their Twinkling Titanite, and 1 for an additional drop - which is made guaranteed.
+    
+    There are 25 total crystal lizards, 10 of which are in the Great Hollow, and 5 of which are in the DLC.
+    If one escapes, typically you can quit out and reload to respawn it.
+    Great Hollow lizards may each require several reloads, because they only have a 1 in 3 chance to activate each time."""
+    display_name = "Crystal Lizard Shuffle"
+
 def skip_logic_helper(difficulty: SkipDifficulty): 
     available_skips = get_all_skips()
     valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
@@ -408,6 +417,7 @@ option_groups = [
         BossHumanityShuffle,
         BossBoneShuffle,
         BlackKnightWeaponShuffle,
+        CrystalLizardShuffle,
         ]),
     OptionGroup("Logic", [
         LogicToAccessFirelinkAltar,
@@ -474,6 +484,7 @@ class DSROption(PerGameCommonOptions):
     boss_humanity_shuffle: BossHumanityShuffle
     boss_bone_shuffle: BossBoneShuffle
     bk_weapon_shuffle: BlackKnightWeaponShuffle
+    lizard_shuffle: CrystalLizardShuffle
 
     # Logic
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar

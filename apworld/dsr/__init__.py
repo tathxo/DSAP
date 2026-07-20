@@ -9,7 +9,7 @@ from worlds.generic.Rules import add_rule, add_item_rule
 from rule_builder.rules import Rule, True_, Has, HasAll
 
 from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
-from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
+from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment, ReplaceItem
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, GoalConditionOption
@@ -170,6 +170,9 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.BK_DROP)
         if (self.options.bk_weapon_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BK_WEAPON)
+
+        if (self.options.lizard_shuffle.value == True):
+            self.enabled_location_categories.add(DSRLocationCategory.CRYSTAL_LIZARD)
 
         # self.enabled_location_categories.add(DSRLocationCategory.DOOR)
         if (self.options.fogwall_sanity.value == True):
@@ -403,22 +406,22 @@ class DSRWorld(World):
         
         # print("Creating items")
         for location in self.multiworld.get_locations(self.player):            
-            item_data = item_dictionary[location.default_item_name]
-            if (item_data.category in [DSRItemCategory.SKIP] 
-             or location.category in location_skip_categories 
+            citem = self.create_item(location.default_item_name)
+            
+            if (location.category in location_skip_categories 
              or location.category in location_locked_categories): # [DSRLocationCategory.EVENT]:
                 # print("Adding skip item: " + location.default_item_name + " for location: " + location.name)
-                skip_itemlocs.append((self.create_item(location.default_item_name), location))
-                skipitempool.append(self.create_item(location.default_item_name))
+                skip_itemlocs.append((citem, location))
+                skipitempool.append(citem)
             elif location.category in self.enabled_location_categories:
                 if self.options.excluded_location_behavior == "do_not_randomize" and location.name in self.all_excluded_locations:
                     # print("Adding skip item: " + location.default_item_name + " for location: " + location.name)
-                    skip_itemlocs.append((self.create_item(location.default_item_name), location))
-                    skipitempool.append(self.create_item(location.default_item_name))
+                    skip_itemlocs.append((citem, location))
+                    skipitempool.append(citem)
                 else:
                     #print("Adding item: " + location.default_item_name)
                     itempoolSize += 1
-                    itempool.append(self.create_item(location.default_item_name))
+                    itempool.append(citem)
         
         # print("Requesting itempool size: " + str(itempoolSize))
         # foo = BuildItemPool(itempoolSize, self.options, self)
@@ -523,6 +526,9 @@ class DSRWorld(World):
             DSRItemCategory.FIRE_KEEPER_SOUL,
             DSRItemCategory.PROGRESSIVE_MULTIPLIER,
         ]
+        if (item_dictionary[name].category == DSRItemCategory.NEEDS_REPLACEMENT):
+            name = ReplaceItem(name, self)
+
         data = self.item_name_to_id[name]
 
         if name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT, DSRItemCategory.KEY_ITEM, DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]:

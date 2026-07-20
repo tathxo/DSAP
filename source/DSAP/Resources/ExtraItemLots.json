@@ -160,5 +160,305 @@
     "Flag": 11810850,
     "ItemLotParamId": 27907001,
     "Id": 11111012
+  },
+  {
+    "Name": "UB: Twinkling Titanite - Crystal Lizard Drop, In Barrel Before Taurus Demon",
+    "Flag": 11010710,
+    "ItemLotParamId": 33006000,
+    "Id": 11110050
+  },
+  {
+    "Name": "UB: Extra Titanite - Crystal Lizard Drop, In Barrel Before Taurus Demon",
+    "Flag": 11010710,
+    "ItemLotParamId": 33006001,
+    "Id": 11111013
+  },
+  {
+    "Name": "DB: Twinkling Titanite - Crystal Lizard Drop, Descending Toward Hunter Set",
+    "Flag": 11200812,
+    "ItemLotParamId": 33004000,
+    "Id": 11110184
+  },
+  {
+    "Name": "DB: Extra Titanite - Crystal Lizard Drop, Descending Toward Hunter Set",
+    "Flag": 11200812,
+    "ItemLotParamId": 33004001,
+    "Id": 11111014
+  },
+  {
+    "Name": "LI: Twinkling Titanite - Crystal Lizard Drop, Near DR Shortcut Door",
+    "Flag": 11410107,
+    "ItemLotParamId": 33002000,
+    "Id": 11111015
+  },
+  {
+    "Name": "LI: Extra Titanite - Crystal Lizard Drop, Near DR Shortcut Door",
+    "Flag": 11410107,
+    "ItemLotParamId": 33002001,
+    "Id": 11111016
+  },
+  {
+    "Name": "DA: Twinkling Titanite - Crystal Lizard Drop, Path To Seath's Study",
+    "Flag": 11700811,
+    "ItemLotParamId": 33001000,
+    "Id": 11110366
+  },
+  {
+    "Name": "DA: Extra Titanite - Crystal Lizard Drop, Path To Seath's Study",
+    "Flag": 11700811,
+    "ItemLotParamId": 33001001,
+    "Id": 11111017
+  },
+  {
+    "Name": "CC: Twinkling Titanite - Crystal Lizard Drop, 1st Under Gold Golem",
+    "Flag": 11700813,
+    "ItemLotParamId": 33001000,
+    "Id": 11110395
+  },
+  {
+    "Name": "CC: Extra Titanite - Crystal Lizard Drop, 1st Under Gold Golem",
+    "Flag": 11700813,
+    "ItemLotParamId": 33001001,
+    "Id": 11111018
+  },
+  {
+    "Name": "CC: Twinkling Titanite - Crystal Lizard Drop, 2nd Under Gold Golem",
+    "Flag": 11700814,
+    "ItemLotParamId": 33001000,
+    "Id": 11110396
+  },
+  {
+    "Name": "CC: Extra Titanite - Crystal Lizard Drop, 2nd Under Gold Golem",
+    "Flag": 11700814,
+    "ItemLotParamId": 33001001,
+    "Id": 11111019
+  },
+  {
+    "Name": "CC: Twinkling Titanite - Crystal Lizard Drop, 3rd Under Gold Golem",
+    "Flag": 11700812,
+    "ItemLotParamId": 33001000,
+    "Id": 11110397
+  },
+  {
+    "Name": "CC: Extra Titanite - Crystal Lizard Drop, 3rd Under Gold Golem",
+    "Flag": 11700812,
+    "ItemLotParamId": 33001001,
+    "Id": 11111020
+  },
+  {
+    "Name": "TC: Twinkling Titanite - Crystal Lizard Drop, Lower In Secret Statue Tunnel",
+    "Flag": 11300856,
+    "ItemLotParamId": 33003000,
+    "Id": 11110453
+  },
+  {
+    "Name": "TC: Extra Titanite - Crystal Lizard Drop, Lower In Secret Statue Tunnel",
+    "Flag": 11300856,
+    "ItemLotParamId": 33003001,
+    "Id": 11111021
+  },
+  {
+    "Name": "TC: Twinkling Titanite - Crystal Lizard Drop, Higher In Secret Statue Tunnel",
+    "Flag": 11300857,
+    "ItemLotParamId": 33003000,
+    "Id": 11110454
+  },
+  {
+    "Name": "TC: Extra Titanite - Crystal Lizard Drop, Higher In Secret Statue Tunnel",
+    "Flag": 11300857,
+    "ItemLotParamId": 33003001,
+    "Id": 11111022
+  },
+  {
+    "Name": "TotG: Twinkling Titanite - Crystal Lizard Drop, Start of Cave",
+    "Flag": 11310821,
+    "ItemLotParamId": 33005000,
+    "Id": 11110487
+  },
+  {
+    "Name": "TotG: Extra Titanite - Crystal Lizard Drop, Start of Cave",
+    "Flag": 11310821,
+    "ItemLotParamId": 33005001,
+    "Id": 11111023
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Near Top, Start Of Hallway To Dead End",
+    "Flag": 11320310,
+    "ItemLotParamId": 33000000,
+    "Id": 11110215
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Near Top, Start Of Hallway To Dead End",
+    "Flag": 11320310,
+    "ItemLotParamId": 33000001,
+    "Id": 11111024
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Near Top, End Of Hallway Dead End",
+    "Flag": 11320305,
+    "ItemLotParamId": 33000000,
+    "Id": 11110216
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Near Top, End Of Hallway Dead End",
+    "Flag": 11320305,
+    "ItemLotParamId": 33000001,
+    "Id": 11111025
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Start Of Hallway To Basilisk Overlook",
+    "Flag": 11320309,
+    "ItemLotParamId": 33000000,
+    "Id": 11110217
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Start Of Hallway To Basilisk Overlook",
+    "Flag": 11320309,
+    "ItemLotParamId": 33000001,
+    "Id": 11111026
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Near End Of Hallway To Basilisk Overlook",
+    "Flag": 11320304,
+    "ItemLotParamId": 33000000,
+    "Id": 11110218
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Near End Of Hallway To Basilisk Overlook",
+    "Flag": 11320304,
+    "ItemLotParamId": 33000001,
+    "Id": 11111027
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Basilisk Overlook, Right",
+    "Flag": 11320301,
+    "ItemLotParamId": 33000000,
+    "Id": 11110219
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Basilisk Overlook, Right",
+    "Flag": 11320301,
+    "ItemLotParamId": 33000001,
+    "Id": 11111028
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Basilisk Overlook, Middle",
+    "Flag": 11320302,
+    "ItemLotParamId": 33000000,
+    "Id": 11110220
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Basilisk Overlook, Middle",
+    "Flag": 11320302,
+    "ItemLotParamId": 33000001,
+    "Id": 11111029
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Basilisk Overlook, Left",
+    "Flag": 11320303,
+    "ItemLotParamId": 33000000,
+    "Id": 11110221
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Basilisk Overlook, Left",
+    "Flag": 11320303,
+    "ItemLotParamId": 33000001,
+    "Id": 11111030
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, Above Red Titanite Chunk Location, Behind Branch",
+    "Flag": 11320306,
+    "ItemLotParamId": 33000000,
+    "Id": 11110222
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, Above Red Titanite Chunk Location, Behind Branch",
+    "Flag": 11320306,
+    "ItemLotParamId": 33000001,
+    "Id": 11111031
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, 2nd Platform By Top Ladder, Right",
+    "Flag": 11320308,
+    "ItemLotParamId": 33000000,
+    "Id": 11110223
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, 2nd Platform By Top Ladder, Right",
+    "Flag": 11320308,
+    "ItemLotParamId": 33000001,
+    "Id": 11111032
+  },
+  {
+    "Name": "GH: Twinkling Titanite - Crystal Lizard Drop, 2nd Platform By Top Ladder, Left",
+    "Flag": 11320307,
+    "ItemLotParamId": 33000000,
+    "Id": 11111033
+  },
+  {
+    "Name": "GH: Extra Titanite - Crystal Lizard Drop, 2nd Platform By Top Ladder, Left",
+    "Flag": 11320307,
+    "ItemLotParamId": 33000001,
+    "Id": 11111034
+  },
+  {
+    "Name": "RW: Twinkling Titanite - Crystal Lizard Drop, After Bridge With Kalameet Jumpscare",
+    "Flag": 11210351,
+    "ItemLotParamId": 33007000,
+    "Id": 11110744
+  },
+  {
+    "Name": "RW: Extra Titanite - Crystal Lizard Drop, After Bridge With Kalameet Jumpscare",
+    "Flag": 11210351,
+    "ItemLotParamId": 33007001,
+    "Id": 11111035
+  },
+  {
+    "Name": "RW: Twinkling Titanite - Crystal Lizard Drop, Near Elevator Top",
+    "Flag": 11210354,
+    "ItemLotParamId": 33007100,
+    "Id": 11110745
+  },
+  {
+    "Name": "RW: Extra Titanite - Crystal Lizard Drop, Near Elevator Top",
+    "Flag": 11210354,
+    "ItemLotParamId": 33007101,
+    "Id": 11111036
+  },
+  {
+    "Name": "RW: Twinkling Titanite - Crystal Lizard Drop, Entry To Kalameet's Arena",
+    "Flag": 11210350,
+    "ItemLotParamId": 33007200,
+    "Id": 11110746
+  },
+  {
+    "Name": "RW: Extra Titanite - Crystal Lizard Drop, Entry To Kalameet's Arena",
+    "Flag": 11210350,
+    "ItemLotParamId": 33007201,
+    "Id": 11111037
+  },
+  {
+    "Name": "OT: Twinkling Titanite - Crystal Lizard Drop, Little Isolated Rooftop",
+    "Flag": 11210352,
+    "ItemLotParamId": 33007100,
+    "Id": 11111038
+  },
+  {
+    "Name": "OT: Extra Titanite - Crystal Lizard Drop, Little Isolated Rooftop",
+    "Flag": 11210352,
+    "ItemLotParamId": 33007101,
+    "Id": 11111039
+  },
+  {
+    "Name": "CotA: Twinkling Titanite - Crystal Lizard Drop, Entrance",
+    "Flag": 11210353,
+    "ItemLotParamId": 33007300,
+    "Id": 11110771
+  },
+  {
+    "Name": "CotA: Extra Titanite - Crystal Lizard Drop, Entrance",
+    "Flag": 11210353,
+    "ItemLotParamId": 33007301,
+    "Id": 11111040
   }
 ]

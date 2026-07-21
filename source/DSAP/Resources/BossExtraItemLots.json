@@ -192,6 +192,12 @@
     "Id": 11110999
   },
   {
+    "Name": "PW: Homeward Bone - Return to Anor Londo",
+    "Flag": 11100710,
+    "ItemLotParamId": 9030,
+    "Id": 11111045
+  },
+  {
     "Name": "SG: Humanity - Sanctuary Guardian Drop",
     "ItemLotParamId": 9000,
     "Flag": 11210000,

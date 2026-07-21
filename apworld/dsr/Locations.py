@@ -23,7 +23,8 @@ class DSRLocationCategory(IntEnum):
     MIMIC_DROP = 15,
     BK_DROP = 16,
     BK_WEAPON = 17,
-    CRYSTAL_LIZARD = 18
+    CRYSTAL_LIZARD = 18,
+    MISSABLE_DROP = 19
 
 
 class DSRLocationData(NamedTuple):
@@ -200,7 +201,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Next Available ID = 11111013
+# Next Available ID = 11111046
 # reserved for shop sanity = 11110[853-966]
 location_tables = {
 "Undead Asylum Cell": [
@@ -527,7 +528,7 @@ location_tables = {
     DSRLocationData(11110174, f"VotD: Astora's Straight Sword", f"Astora's Straight Sword", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110175, f"VotD: Dragon Crest Shield", f"Dragon Crest Shield", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110176, f"VotD: Soul of a Proud Knight - Undead Dragon", f"Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110177, f"VotD: Undead Dragon in Valley of the Drakes", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
+    DSRLocationData(11110177, f"VotD: Dragon Scale - Undead Dragon Drop", f"Dragon Scale", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110178, f"VotD: Humanity - Corpse in Small Cave", f"Humanity", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110179, f"VotD: Brigand Hood", f"Brigand Hood", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110637, f"VotD: Brigand Armor", f"Brigand Armor", DSRLocationCategory.ITEM_LOT),
@@ -610,8 +611,9 @@ location_tables = {
     DSRLocationData(11110578, f"DG: Large Soul of a Brave Warrior - Darkroot Garden Cats", f"Large Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     #DSRLocationData(11110205, f"DG: Shiva Loot", f"Firebomb", DSRLocationCategory.ENEMY_DROP), #Commented out for now, since it's a NPC
     #DSRLocationData(11110206, f"DG: Humanity - Shiva", f"Firebomb", DSRLocationCategory.ENEMY_DROP), #Commented out for now, since it's a NPC
-    #DSRLocationData(11110207, f"DG: Pharis Loot", f"Black Bow of Pharis", DSRLocationCategory.ENEMY_DROP), #Commented out for now, since it's a NPC
-    DSRLocationData(11110208, f"DG: Twin Humanities - Pharis", f"Twin Humanities", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110207, f"DG: Black Bow of Pharis - Pharis Drop", f"Black Bow of Pharis", DSRLocationCategory.MISSABLE_DROP), # loosely "missable" if you join forest hunter covenant
+    DSRLocationData(11111041, f"DG: Pharis's Hat - Pharis Drop", f"Pharis's Hat", DSRLocationCategory.MISSABLE_DROP), # loosely "missable" if you join forest hunter covenant
+    DSRLocationData(11110208, f"DG: Twin Humanities - Pharis Drop", f"Twin Humanities", DSRLocationCategory.MISSABLE_DROP), # loosely "missable" if you join forest hunter covenant
     DSRLocationData(11110209, f"DG: Soul of a Brave Warrior - Down Ladder before Stone Bridge", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110210, f"DG: Enchanted Ember", f"Enchanted Ember", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110211, f"DG: Great Grey Wolf Sif Defeated", f"Great Grey Wolf Sif Defeated", DSRLocationCategory.BOSS),
@@ -824,7 +826,7 @@ location_tables = {
     DSRLocationData(11110318, f"PW: Pyromancy: Acid Surge", f"Pyromancy: Acid Surge", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110319, f"PW: Notched Whip", f"Notched Whip", DSRLocationCategory.ENEMY_DROP),
     DSRLocationData(11110320, f"PW: Soul of a Brave Warrior - Painted World Bonewheels", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110321, f"PW: Pyromancy: Fire Surge", f"Pyromancy: Fire Surge", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110321, f"PW: Pyromancy: Fire Surge - Engorged Zombie Drop", f"Pyromancy: Fire Surge", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110322, f"PW: Annex Key", f"Annex Key", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110323, f"PW: Humanity - Painted World Courtyard", f"Humanity", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110324, f"PW: Large Titanite Shard", f"Firebomb", DSRLocationCategory.ENEMY_DROP),
@@ -835,6 +837,7 @@ location_tables = {
     DSRLocationData(11110325, f"PW: Crossbreed Priscilla Defeated", f"Crossbreed Priscilla Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110326, f"PW: Soul of Priscilla", f"Soul of Priscilla", DSRLocationCategory.BOSS_SOUL),
     DSRLocationData(11110999, f"PW: Twin Humanities - Crossbreed Priscilla Drop", f"Twin Humanities",  DSRLocationCategory.BOSS_HUMANITY),
+    DSRLocationData(11111045, f"PW: Homeward Bone - Return to Anor Londo", f"Homeward Bone", DSRLocationCategory.BOSS_BONE),
     DSRLocationData(11110327, f"PW: Xanthous Crown", f"Xanthous Crown", DSRLocationCategory.ENEMY_DROP),
     DSRLocationData(11110672, f"PW: Xanthous Overcoat", f"Xanthous Overcoat", DSRLocationCategory.ENEMY_DROP),
     DSRLocationData(11110673, f"PW: Xanthous Gloves", f"Xanthous Gloves", DSRLocationCategory.ENEMY_DROP),
@@ -927,8 +930,8 @@ location_tables = {
     DSRLocationData(11110681, f"DA: Maiden Skirt", f"Maiden Skirt", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110373, f"DA: White Seance Ring", f"White Seance Ring", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110376, f"DA: Archive Tower Giant Door Key", f"Archive Tower Giant Door Key", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110377, f"DA: Miracle: Soothing Sunlight", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
-    DSRLocationData(11110378, f"DA: Miracle: Bountiful Sunlight", f"Firebomb", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110377, f"DA: Miracle: Soothing Sunlight - Picasa Drop", f"Miracle: Soothing Sunlight", DSRLocationCategory.ITEM_LOT), 
+    DSRLocationData(11110378, f"DA: Miracle: Bountiful Sunlight - Picasa Drop", f"Miracle: Bountiful Sunlight", DSRLocationCategory.ITEM_LOT),
 ],
 "The Duke's Archives - After Archive Tower Giant Door Key": [    
     DSRLocationData(11110379, f"DA: Avelyn", f"Avelyn", DSRLocationCategory.ITEM_LOT),
@@ -1045,13 +1048,14 @@ location_tables = {
     DSRLocationData(11110437, f"LI: Titanite Demon near Shortcut", f"Firebomb", DSRLocationCategory.ENEMY_DROP), 
     DSRLocationData(11111015, f"LI: Twinkling Titanite - Crystal Lizard Drop, Near DR Shortcut Door", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11111016, f"LI: Extra Titanite - Crystal Lizard Drop, Near DR Shortcut Door", f"Extra Red Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11111044, f"LI: Sunlight Maggot - Red Eye Maggot Drop", f"Sunlight Maggot", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110440, f"LI: Red Titanite Chunk - Inside Chaos Eater Pit", f"Red Titanite Chunk", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110441, f"LI: Green Titanite Shard - Chaos Eater Pit", f"Green Titanite Shard x2", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110442, f"LI: Soul of a Brave Warrior - Inside Chaos Eater Pit", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110443, f"LI: Red Titanite Slab - Chaos Eater Pit", f"Red Titanite Slab", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110596, f"LI: Red Titanite Chunk - After Chaos Eater Pit", f"Red Titanite Chunk", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110444, f"LI: Pyromancy: Chaos Fire Whip", f"Pyromancy: Chaos Fire Whip", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110563, f"LI: Izalith Catalyst", f"Izalith Catalyst", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110563, f"LI: Izalith Catalyst - Grana Drop, Before Bed of Chaos", f"Izalith Catalyst", DSRLocationCategory.ITEM_LOT),
 ],
 "Lost Izalith - Bed of Chaos": [
     DSRLocationData(11110813, f"LI: Boss Fog Wall - Bed of Chaos", f"Boss Fog Wall Key - Bed of Chaos", DSRLocationCategory.BOSS_FOG_WALL),
@@ -1210,7 +1214,10 @@ location_tables = {
 "Royal Wood - Artorias": [
     DSRLocationData(11110816, f"RW: Boss Fog Wall - Artorias", f"Boss Fog Wall Key - Artorias", DSRLocationCategory.BOSS_FOG_WALL),
     DSRLocationData(11110742, f"RW: Knight Artorias Defeated", f"Artorias the Abysswalker Defeated", DSRLocationCategory.BOSS),
-    DSRLocationData(11110743, f"RW: Soul of Artorias", f"Soul of Artorias", DSRLocationCategory.BOSS_SOUL),   
+    DSRLocationData(11110743, f"RW: Soul of Artorias", f"Soul of Artorias", DSRLocationCategory.BOSS_SOUL),
+    DSRLocationData(11111042, f"RW: Dark Silver Tracer - Lord's Blade Ciaran", f"Dark Silver Tracer", DSRLocationCategory.MISSABLE_DROP), # loot or trade, but she can leave
+    DSRLocationData(11111043, f"RW: Gold Tracer - Lord's Blade Ciaran", f"Gold Tracer", DSRLocationCategory.MISSABLE_DROP), # loot or trade, but she can leave
+
 ],
 "Royal Wood - After Hawkeye Gough": [
     DSRLocationData(11110747, f"RW: Black Dragon Kalameet Defeated", f"Black Dragon Kalameet Defeated", DSRLocationCategory.BOSS),

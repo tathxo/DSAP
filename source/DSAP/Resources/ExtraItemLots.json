@@ -60,6 +60,18 @@
     "Id": 11110385
   },
   {
+    "Name": "DA: Soothing Sunlight - Picasa Drop",
+    "ItemLotParamId": 33300100,
+    "Flag": 11700822,
+    "Id": 11110377
+  },
+  {
+    "Name": "DA: Bountiful Sunlight - Picasa Drop",
+    "ItemLotParamId": 33300200,
+    "Flag": 11700823,
+    "Id": 11110378
+  },
+  {
     "Name": "DA: Broken Pendant",
     "ItemLotParamId": 27100200,
     "Flag": 11700700,
@@ -72,7 +84,7 @@
     "Id": 11110049
   },
   {
-    "Name": "LI: Izalith Catalyst",
+    "Name": "LI: Izalith Catalyst - Grana Drop, Before Bed of Chaos",
     "Flag": 11410106,
     "ItemLotParamId": 6620,
     "Id": 11110563
@@ -460,5 +472,17 @@
     "Flag": 11210353,
     "ItemLotParamId": 33007301,
     "Id": 11111040
+  },
+  {
+    "Name": "VotD: Dragon Scale - Undead Dragon Drop",
+    "Flag": 11600810,
+    "ItemLotParamId": 34200200,
+    "Id": 11110177
+  },
+  {
+    "Name": "UA2: Crest Shield",
+    "Flag": 11810532,
+    "ItemLotParamId": 7020,
+    "Id": 11110077
   }
 ]

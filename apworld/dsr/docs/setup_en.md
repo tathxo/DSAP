@@ -3,8 +3,8 @@
 ## Required Software
 
 - [Dark Souls: Remastered](https://store.steampowered.com/app/570940/DARK_SOULS_REMASTERED/)
-- [dsr.apworld - Dark Souls: Remastered Apworld](https://github.com/ArsonAssassin/DSAP/releases/latest)
-- [DSAP - Dark Souls: Remastered AP client](https://github.com/ArsonAssassin/DSAP/releases/latest)
+- [dsr.apworld - Dark Souls: Remastered Apworld](https://github.com/tathxo/DSAP/releases/latest)
+- [DSAP - Dark Souls: Remastered AP client](https://github.com/tathxo/DSAP/releases/latest)
 - [Archipelago Launcher (v0.6.7 or above REQUIRED)](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
 ## Optional Software

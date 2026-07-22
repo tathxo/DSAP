@@ -234,15 +234,15 @@ class LogicToAccessCatacombs(Choice):
     - **no_logic:** (not recommended) Catacombs is in-logic as soon as you get to Firelink Shrine.
     - **undead_merchant:** Access to Undead Merchant in the Upper Undead Burg puts Catacombs in-logic.
     - **andre:** Access to Andre puts Catacombs in-logic.
-    - **andre_or_undead_merchant:** (default) Access to either Andre or Undead Merchant puts Catacombs in-logic.
-    - **ornstein_and_smough:** Access to Ornstein and Smough puts Catcombs in-logic."""
+    - **andre_or_undead_merchant:** Access to either Andre or Undead Merchant puts Catacombs in-logic.
+    - **ornstein_and_smough:** (Default) Access to Ornstein and Smough puts Catcombs in-logic."""
     display_name = "Logic Requirement to Access Catacombs"
     option_no_logic = 0
     option_undead_merchant = 1
     option_andre = 2
     option_andre_or_undead_merchant = 3
     option_ornstein_and_smough = 4
-    default = 3
+    default = 4
 
 class LogicToAccessTotG(Choice):
     """Artificial logic for Tomb of the Giants (TotG) access.

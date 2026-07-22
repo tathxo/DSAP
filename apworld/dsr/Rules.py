@@ -407,7 +407,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("The Duke's Archives", CanReachRegion("Crystal Cave - After Seath")),
   ],
   "The Duke's Archives - Big Hat Logan": [ # Logan in book room = when he is guaranteed
-    DsrEntranceRule("The Duke's Archives - After Archive Tower Giant Door Key ",
+    DsrEntranceRule("The Duke's Archives - After Archive Tower Giant Door Key",
      CanReachRegion("Sen's Fortress - After Cage Key") & CanReachRegion("The Duke's Archives - Giant Cell") & CanReachRegion("Crystal Cave - After Seath"))
   ],
   "Demon Ruins - Early": [

@@ -1,7 +1,7 @@
 # world/dsr/__init__.py
 from typing import Dict, Set, List, ClassVar, TextIO, Any, Optional
 
-from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location
+from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location, LocationProgressType
 from Options import Toggle, OptionError, Option
 
 from worlds.AutoWorld import World, WebWorld
@@ -156,6 +156,7 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
+        self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.MIMIC_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS_DROP)
@@ -182,6 +183,7 @@ class DSRWorld(World):
         # if (self.options.shop_sanity.value == True):
         if (True):
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
+            self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_SHOP_ITEM)
 
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
@@ -319,10 +321,10 @@ class DSRWorld(World):
             "Firelink Shrine - Petrus of Thorolund",
             "Firelink Shrine - Rhea of Thorolund",
             "Firelink Shrine - Domhnall of Zena",
-            "Firelink Shrine - Domhnall of Zena - Post Iron Golem",
-            "Firelink Shrine - Domhnall of Zena - Post O+S",
-            "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
-            "Firelink Shrine - Domhnall of Zena - Post Artorias",
+            # "Firelink Shrine - Domhnall of Zena - Post Iron Golem",
+            # "Firelink Shrine - Domhnall of Zena - Post O+S",
+            # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
+            # "Firelink Shrine - Domhnall of Zena - Post Artorias",
             "Upper Undead Burg - Undead Merchant",
             "Undead Parish - Andre",
             "Undead Parish - Oswald of Carim",
@@ -386,6 +388,8 @@ class DSRWorld(World):
                     self.location_name_to_id[location.name],
                     new_region
                 )
+                if (location.category in [DSRLocationCategory.MISSABLE_DROP, DSRLocationCategory.MISSABLE_SHOP_ITEM]):
+                    new_location.progress_type = LocationProgressType.EXCLUDED
             # elif (location.category in self.enabled_location_categories and
             #       location.category in location_locked_categories): # DSRLocationCategory.BONFIRE_WARP
             #     self.bw = self.bw + 1

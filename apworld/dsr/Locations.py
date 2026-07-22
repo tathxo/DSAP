@@ -186,10 +186,10 @@ class DSRLocation(Location):
             "Firelink Shrine - Petrus of Thorolund",
             "Firelink Shrine - Rhea of Thorolund",
             "Firelink Shrine - Domhnall of Zena",
-            "Firelink Shrine - Domhnall of Zena - Post Iron Golem",
-            "Firelink Shrine - Domhnall of Zena - Post O+S",
-            "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
-            "Firelink Shrine - Domhnall of Zena - Post Artorias",
+            # "Firelink Shrine - Domhnall of Zena - Post Iron Golem",
+            # "Firelink Shrine - Domhnall of Zena - Post O+S",
+            # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
+            # "Firelink Shrine - Domhnall of Zena - Post Artorias",
             "Upper Undead Burg - Undead Merchant",
             "Undead Parish - Andre",
             "Undead Parish - Oswald of Carim",
@@ -210,7 +210,7 @@ class DSRLocation(Location):
             # start merchants' shared items
             "2 Merchants - Bottomless Box",
             "4 Merchants - Repairbox",
-            "3 Blacksmiths - Weapon Smithbox",
+            "3 Blacksmiths - Smithboxen",
         ]
 
         output = {}
@@ -410,7 +410,6 @@ location_tables = {
     DSRLocationData(11110039, f"UB: Undead Burg Bonfire", f"Bonfire Warp Unlock - Undead Burg", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110040, f"UB: Uchigatana", f"Uchigatana", DSRLocationCategory.ENEMY_DROP),
     DSRLocationData(11110041, f"UB: Orange Guidance Soapstone", f"Firebomb", DSRLocationCategory.ENEMY_DROP),
-    DSRLocationData(11110829, f"UB: Undead Merchant", f"Undead Merchant Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110043, f"UB: Throwing Knife", f"Throwing Knife x10", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110044, f"UB: Light Crossbow", f"Light Crossbow", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110617, f"UB: Standard Bolt", f"Standard Bolt x16", DSRLocationCategory.ITEM_LOT),

@@ -76,6 +76,10 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Firelink Shrine - Griggs of Vinheim": [
     DsrEntranceRule("Firelink Shrine", CanReachRegion("Lower Undead Burg - After Residence Key")), # vanilla
   ],
+  "Firelink Shrine - Griggs of Vinheim, After Logan Leaves": [
+    DsrEntranceRule("Firelink Shrine - Griggs of Vinheim", 
+      CanReachRegion("Sen's Fortress - After Cage Key") & CanReachRegion("The Duke's Archives - Out of Cell")), # Can rescue Logan, and easily get him to leave Firelink
+  ],
   "Firelink Shrine - Laurentius of the Great Swamp": [
     DsrEntranceRule("Firelink Shrine", CanReachRegion("Depths")), # vanilla
   ],
@@ -85,10 +89,6 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Firelink Shrine - Rhea of Thorolund": [ # need more info about her shop inventory and when each part becomes available
     DsrEntranceRule("Firelink Shrine", CanReachRegion("Tomb of the Giants")), # vanilla tomb rescue spot
   ],
-  "Firelink Shrine - Big Hat Logan": [
-    DsrEntranceRule("Firelink Shrine", Has("Iron Golem Defeated") | CanReachRegion("Sen's Fortress - After Cage Key")), # vanilla
-  ],
-
   "Upper Undead Burg - Before Fog": [
     DsrEntranceRule("Firelink Shrine", True_()),
     DsrEntranceRule("Upper Undead Burg - Fog", True_()),
@@ -188,21 +188,21 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Depths - After Gaping Dragon": [
     DsrEntranceRule("Depths - Gaping Dragon", True_()), # Has("Gaping Dragon Defeated")),
   ],
-  "Depths - Domhnall of Zena": [
-    DsrEntranceRule("Depths", True_()), #vanilla, but his inventory is more complicated due to flags
+  "Firelink Shrine - Domhnall of Zena": [
+    DsrEntranceRule("Firelink Shrine", CanReachRegion("Depths") & HasAll("Bell of Awakening #1", "Bell of Awakening #2")), # vanilla, but his inventory is more complicated due to flags
   ],
-  "Depths - Domhnall of Zena - Post Iron Golem": [
-    DsrEntranceRule("Depths - Domhnall of Zena", Has("Iron Golem Defeated")), 
-  ],
-  "Depths - Domhnall of Zena - Post O+S": [
-    DsrEntranceRule("Depths - Domhnall of Zena", Has("Ornstein and Smough Defeated")), #vanilla, but his inventory is more complicated due to flags
-  ],
-  "Depths - Domhnall of Zena - Post Gwyndolin": [
-    DsrEntranceRule("Depths - Domhnall of Zena", Has("Gwyndolin Defeated")), #vanilla, but his inventory is more complicated due to flags
-  ],
-  "Depths - Domhnall of Zena - Post Artorias": [
-    DsrEntranceRule("Depths - Domhnall of Zena", Has("Artorias the Abysswalker Defeated")), #vanilla, but his inventory is more complicated due to flags
-  ],
+  # "Firelink Shrine - Domhnall of Zena - Post Iron Golem": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Iron Golem Defeated")), 
+  # ],
+  # "Firelink Shrine - Domhnall of Zena - Post O+S": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Ornstein and Smough Defeated")), #vanilla, but his inventory is more complicated due to flags
+  # ],
+  # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Gwyndolin Defeated")), #vanilla, but his inventory is more complicated due to flags
+  # ],
+  # "Firelink Shrine - Domhnall of Zena - Post Artorias": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Artorias the Abysswalker Defeated")), #vanilla, but his inventory is more complicated due to flags
+  # ],
   "Depths to Blighttown Door": [
     DsrEntranceRule("Depths", Has("Blighttown Key")),
   ],
@@ -406,6 +406,10 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "The Duke's Archives - First Arena after Seath's Death": [
     DsrEntranceRule("The Duke's Archives", CanReachRegion("Crystal Cave - After Seath")),
   ],
+  "The Duke's Archives - Big Hat Logan": [ # Logan in book room = when he is guaranteed
+    DsrEntranceRule("The Duke's Archives - After Archive Tower Giant Door Key ",
+     CanReachRegion("Sen's Fortress - After Cage Key") & CanReachRegion("The Duke's Archives - Giant Cell") & CanReachRegion("Crystal Cave - After Seath"))
+  ],
   "Demon Ruins - Early": [
     DsrEntranceRule("Lower Blighttown - After Quelaag", True_()),
   ],
@@ -532,7 +536,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "2 Merchants - Bottomless Box": [
     DsrEntranceRule("Upper Undead Burg - Undead Merchant", True_()),
-    DsrEntranceRule("Depths - Domhnall of Zena", True_()),
+    DsrEntranceRule("Firelink Shrine - Domhnall of Zena", True_()),
   ],
   "4 Merchants - Repairbox": [
     DsrEntranceRule("Anor Londo - Giant Blacksmith", True_()),
@@ -540,7 +544,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Undead Parish - Andre", True_()),
     DsrEntranceRule("The Catacombs - Vamos", True_()),
   ],
-  "3 Blacksmiths - Weapon Smithbox": [
+  "3 Blacksmiths - Smithboxen": [
     DsrEntranceRule("Anor Londo - Giant Blacksmith", True_()),
     DsrEntranceRule("Undead Parish - Andre", True_()),
     DsrEntranceRule("The Catacombs - Vamos", True_()),

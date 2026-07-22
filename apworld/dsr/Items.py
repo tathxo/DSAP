@@ -166,7 +166,7 @@ _all_items_base = [
     ("Lordvessel Placed", 1099, DSRItemCategory.EVENT),
     ("Undead Merchant Access", 1100, DSRItemCategory.EVENT),
     ("Andre Access", 1101, DSRItemCategory.EVENT),
-    
+
 
 
 
@@ -369,7 +369,6 @@ _all_items_base = [
     ("Humanity x13", 2119, DSRItemCategory.CONSUMABLE),
     ("Purging Stone x5", 2120, DSRItemCategory.CONSUMABLE),
     ("Ring of Sacrifice x10", 2121, DSRItemCategory.CONSUMABLE),
-    # 2117 - 2121 reserved for shop sanity
     ("Humanity x4", 2122, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Humanity x10", 2123, DSRItemCategory.USEFUL_CONSUMABLE),
 

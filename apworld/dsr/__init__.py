@@ -525,6 +525,8 @@ class DSRWorld(World):
             DSRItemCategory.EMBER,
             DSRItemCategory.FIRE_KEEPER_SOUL,
             DSRItemCategory.PROGRESSIVE_MULTIPLIER,
+            DSRItemCategory.USEFUL_KEY_ITEM,
+            DSRItemCategory.USEFUL_CONSUMABLE,
         ]
         if (item_dictionary[name].category == DSRItemCategory.NEEDS_REPLACEMENT):
             name = ReplaceItem(name, self)

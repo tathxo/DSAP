@@ -212,6 +212,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Darkroot Garden - Behind Artorias Door": [
     DsrEntranceRule("Darkroot Garden - Before Fog", Has("Crest of Artorias")),
   ],
+  "Darkroot Garden - Sif": [
+    DsrEntranceRule("Darkroot Garden - Behind Artorias Door", True_()),
+  ],
   "Darkroot Garden - Moonlight Butterfly": [
     DsrEntranceRule("Darkroot Garden", Has("Boss Fog Wall Key - Moonlight Butterfly") | bossfogwall_sanity_off),
   ],
@@ -260,9 +263,12 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Anor Londo - After Ornstein and Smough": [
     DsrEntranceRule("Anor Londo - Ornstein and Smough", True_()), # Has("Ornstein and Smough Defeated")),
   ],
+  "Anor Londo - Gwynevere": [
+    DsrEntranceRule("Anor Londo - After Ornstein and Smough", True_()),
+  ],
   "Anor Londo - Gwyndolin": [
     # attacking the illusion -> no ring needed
-    DsrEntranceRule("Anor Londo - After Ornstein and Smough", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off), 
+    DsrEntranceRule("Anor Londo - After First Fog", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off & CanReachRegion("Anor Londo - Gwynevere")),
   ],
   "Anor Londo - After Gwyndolin": [
     DsrEntranceRule("Anor Londo - Gwyndolin", True_()), # Has("Gwyndolin Defeated")),

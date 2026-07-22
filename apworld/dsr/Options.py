@@ -254,6 +254,7 @@ class LogicToAccessTotG(Choice):
     display_name = "Logic Requirement to Access Tomb of the Giants"
     option_no_logic = 0
     option_skull_lantern = 1
+    option_sunlight_maggot = 2
     default = 1
 
 class RandomizeStartingLoadouts(DefaultOnToggle):

@@ -383,7 +383,8 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "Tomb of the Giants": [
     DsrEntranceRule("The Catacombs - After Pinwheel",
-      Has("Skull Lantern", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_skull_lantern)], filtered_resolution=True)
+      Has("Skull Lantern", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_skull_lantern)], filtered_resolution=True) &
+      Has("Sunlight Maggot", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_sunlight_maggot)], filtered_resolution=True)
     )
   ],
   "Tomb of the Giants - After White Fog": [
@@ -436,7 +437,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Chasm of the Abyss", True_()),
   ],
   "Oolacile Township - Behind Light-Dispelled Walls": [
-    DsrEntranceRule("Oolacile Township", Has("Skull Lantern")),
+    DsrEntranceRule("Oolacile Township", HasAny("Skull Lantern", "Sunlight Maggot")),
   ],
   "Oolacile Township - After Crest Key": [
     DsrEntranceRule("Oolacile Township", Has("Crest Key")),

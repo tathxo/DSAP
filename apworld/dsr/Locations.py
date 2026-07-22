@@ -448,8 +448,8 @@ location_tables = {
     DSRLocationData(11110979, f"DE: Homeward Bone - Gaping Dragon Drop", f"Homeward Bone",  DSRLocationCategory.BOSS_BONE),
 ],
 "Depths - After Sewer Chamber Key": [
-    DSRLocationData(11110131, f"DE: Depths Bonfire Room opened", f"Door Filler", DSRLocationCategory.DOOR),
-    DSRLocationData(11110834, f"DE: Depths Bonfire", f"Bonfire Warp Unlock - Depths", DSRLocationCategory.BONFIRE),
+    # DSRLocationData(11110131, f"DE: Depths Bonfire Room opened", f"Door Filler", DSRLocationCategory.DOOR),
+    # DSRLocationData(11110834, f"DE: Depths Bonfire", f"Bonfire Warp Unlock - Depths", DSRLocationCategory.BONFIRE),
 ],
 "Depths to Blighttown Door": [
     DSRLocationData(11110130, f"DE: Depths -> Blighttown opened", f"Door Filler", DSRLocationCategory.DOOR),

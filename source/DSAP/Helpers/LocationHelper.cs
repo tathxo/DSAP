@@ -160,8 +160,8 @@ namespace DSAP.Helpers
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagOffset(lot.Flag).Item2,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }

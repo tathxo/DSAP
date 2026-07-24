@@ -450,10 +450,7 @@ namespace DSAP.Helpers
                                                      CharaInitParam.spOffset,
                                                      (ps) => ps.ParamEntries.Last().id >= 99999990);
             if (!reloadRequired)
-            {
-                Log.Logger.Debug("Skipping reload of Chara Inits");
-                return false;
-            }
+                Log.Logger.Debug("There may be an error during reloading Chara Inits"); 
             // Read in system text FMGs
             bool reload2Required = MsgManHelper.ReadMsgManStruct(out MsgManStruct msgManStruct,
                                                      MsgManStruct.OFFSET_SYSTEM_TEXT,
@@ -720,6 +717,9 @@ namespace DSAP.Helpers
             msgManStruct.MsgEntries.Sort((x, y) => (x.id.CompareTo(y.id))); // sort for write
             MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_SYSTEM_TEXT); // write the gift names + system text updates
             Log.Logger.Debug($"Updated system text struct");
+
+            if (App.DSOptions.LimitedShopItemShuffle) // if shops are shuffled, immunify the npcs
+                ParamHelper.AddNpcResistance(charaParamStruct); // temp spot for this
 
             // add a dummy chara init at 99999998 to know we've updated them
             byte[] parambytes = new byte[CharaInitParam.Size];

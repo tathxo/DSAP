@@ -190,8 +190,8 @@ class DSRLocation(Location):
             # "Firelink Shrine - Domhnall of Zena - Post O+S",
             # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
             # "Firelink Shrine - Domhnall of Zena - Post Artorias",
-            "Upper Undead Burg - Undead Merchant",
-            "Undead Parish - Andre",
+            "Upper Undead Burg - Male Undead Merchant",
+            "Undead Parish - Andre of Astora",
             "Undead Parish - Oswald of Carim",
             "Lower Undead Burg - Female Undead Merchant",
             "Lower Blighttown - Shiva of the East",
@@ -300,13 +300,13 @@ location_tables = {
     DSRLocationData(11110896, f"Trusty Patches: Miracle: Great Heal Excerpt", f"Miracle: Great Heal Excerpt", DSRLocationCategory.MISSABLE_SHOP_ITEM),
     DSRLocationData(11110897, f"Trusty Patches: Crescent Axe", f"Crescent Axe", DSRLocationCategory.MISSABLE_SHOP_ITEM),
 ],
-"2 Merchants - Bottomless Box": [ # Undead Merchant or Domhnall of Zena
-    DSRLocationData(11110823, f"Undead Merchant or Domhnall of Zena: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
+"2 Merchants - Bottomless Box": [ # Male Undead Merchant or Domhnall of Zena
+    DSRLocationData(11110823, f"Male Undead Merchant or Domhnall of Zena: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
 ],
-"4 Merchants - Repairbox": [ # Giant blacksmith, Undead Merchant, Andre, or Vamos
+"4 Merchants - Repairbox": [ # Giant blacksmith, Male Undead Merchant, Andre of Astora, or Vamos
     DSRLocationData(11110824, f"Merchant: Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
 ],
-"3 Blacksmiths - Smithboxen": [ # Giant blacksmith, Andre, or Vamos
+"3 Blacksmiths - Smithboxen": [ # Giant blacksmith, Andre of Astora, or Vamos
     DSRLocationData(11110826, f"Blacksmith: Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110864, f"Blacksmith: Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
 ],
@@ -421,11 +421,11 @@ location_tables = {
     DSRLocationData(11110050, f"UB: Twinkling Titanite - Crystal Lizard Drop, In Barrel Before Taurus Demon", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11111013, f"UB: Extra Titanite - Crystal Lizard Drop, In Barrel Before Taurus Demon", f"Extra Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
 ],
-"Upper Undead Burg - Undead Merchant": [
-    DSRLocationData(11110829, f"UB: Undead Merchant", f"Undead Merchant Access", DSRLocationCategory.EVENT),
-    DSRLocationData(11110042, f"Undead Merchant: Residence Key", f"Residence Key", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110858, f"Undead Merchant: Orange Guidance Soapstone", f"Orange Guidance Soapstone", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110859, f"Undead Merchant: Dried Finger", f"Dried Finger", DSRLocationCategory.SHOP_ITEM),
+"Upper Undead Burg - Male Undead Merchant": [
+    DSRLocationData(11110829, f"UB: Male Undead Merchant", f"Male Undead Merchant Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110042, f"Male Undead Merchant: Residence Key", f"Residence Key", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110858, f"Male Undead Merchant: Orange Guidance Soapstone", f"Orange Guidance Soapstone", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110859, f"Male Undead Merchant: Dried Finger", f"Dried Finger", DSRLocationCategory.SHOP_ITEM),
 ],
 "Upper Undead Burg - Taurus Demon": [
     DSRLocationData(11110799, f"UB: Boss Fog Wall - Taurus Demon", f"Boss Fog Wall Key - Taurus Demon", DSRLocationCategory.BOSS_FOG_WALL),
@@ -464,9 +464,9 @@ location_tables = {
     DSRLocationData(11110071, f"UP: Large Soul of a Nameless Soldier - Parish Window", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110072, f"UP: Humanity - Parish Barrel", f"Humanity", DSRLocationCategory.ITEM_LOT),
 ],
-"Undead Parish - Andre": [
-    DSRLocationData(11110830, f"UP: Andre", f"Andre Access", DSRLocationCategory.EVENT),
-    DSRLocationData(11110822, f"UP: Andre - Crest of Artorias", f"Crest of Artorias", DSRLocationCategory.SHOP_ITEM),
+"Undead Parish - Andre of Astora": [
+    DSRLocationData(11110830, f"UP: Andre of Astora", f"Andre of Astora Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11110822, f"Andre of Astora: Crest of Artorias", f"Crest of Artorias", DSRLocationCategory.SHOP_ITEM),
 ],
 "Undead Parish - Bell Gargoyles": [
     DSRLocationData(11110803, f"UP: Boss Fog Wall - Bell Gargoyles", f"Boss Fog Wall Key - Bell Gargoyles", DSRLocationCategory.BOSS_FOG_WALL),
@@ -741,7 +741,7 @@ location_tables = {
     DSRLocationData(11110643, f"DB: Knight Armor", f"Knight Armor", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110644, f"DB: Knight Gauntlets", f"Knight Gauntlets", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110645, f"DB: Knight Leggings", f"Knight Leggings", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110821, f"DB: Dusk Rescued", f"Dusk Rescued", DSRLocationCategory.EVENT),
+    DSRLocationData(11110821, f"DB: Princess Dusk Rescued", f"Princess Dusk Rescued", DSRLocationCategory.EVENT),
     DSRLocationData(11110191, f"DB: Crown of Dusk", f"Crown of Dusk", DSRLocationCategory.MISSABLE_DROP),
     DSRLocationData(11110646, f"DB: Antiquated Dress", f"Antiquated Dress", DSRLocationCategory.MISSABLE_DROP),
     DSRLocationData(11110647, f"DB: Antiquated Gloves", f"Antiquated Gloves", DSRLocationCategory.MISSABLE_DROP),
@@ -814,14 +814,14 @@ location_tables = {
     DSRLocationData(11110589, f"GH: Red Titanite Chunk - Last Drop before Floor", f"Red Titanite Chunk", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110590, f"GH: Blue Titanite Chunk - Drop on Branch into Hole", f"Blue Titanite Chunk", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110591, f"GH: White Titanite Chunk - Drop below Floor", f"White Titanite Chunk", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110215, f"GH: Twinkling Titanite - Crystal Lizard Drop, Near Top, Start Of Hallway To Dead End", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11111024, f"GH: Extra Titanite - Crystal Lizard Drop, Near Top, Start Of Hallway To Dead End", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11110216, f"GH: Twinkling Titanite - Crystal Lizard Drop, Near Top, End Of Hallway Dead End", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11111025, f"GH: Extra Titanite - Crystal Lizard Drop, Near Top, End Of Hallway Dead End", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11110217, f"GH: Twinkling Titanite - Crystal Lizard Drop, Start Of Hallway To Basilisk Overlook", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11111026, f"GH: Extra Titanite - Crystal Lizard Drop, Start Of Hallway To Basilisk Overlook", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11110218, f"GH: Twinkling Titanite - Crystal Lizard Drop, Near End Of Hallway To Basilisk Overlook", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
-    DSRLocationData(11111027, f"GH: Extra Titanite - Crystal Lizard Drop, Near End Of Hallway To Basilisk Overlook", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11110215, f"GH: Twinkling Titanite - Crystal Lizard Drop, Near Top, Start of Hallway To Dead End", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11111024, f"GH: Extra Titanite - Crystal Lizard Drop, Near Top, Start of Hallway To Dead End", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11110216, f"GH: Twinkling Titanite - Crystal Lizard Drop, Near Top, End of Hallway Dead End", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11111025, f"GH: Extra Titanite - Crystal Lizard Drop, Near Top, End of Hallway Dead End", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11110217, f"GH: Twinkling Titanite - Crystal Lizard Drop, Start of Hallway To Basilisk Overlook", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11111026, f"GH: Extra Titanite - Crystal Lizard Drop, Start of Hallway To Basilisk Overlook", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11110218, f"GH: Twinkling Titanite - Crystal Lizard Drop, Near End of Hallway To Basilisk Overlook", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
+    DSRLocationData(11111027, f"GH: Extra Titanite - Crystal Lizard Drop, Near End of Hallway To Basilisk Overlook", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11110219, f"GH: Twinkling Titanite - Crystal Lizard Drop, Basilisk Overlook, Right", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11111028, f"GH: Extra Titanite - Crystal Lizard Drop, Basilisk Overlook, Right", f"Extra GH Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11110220, f"GH: Twinkling Titanite - Crystal Lizard Drop, Basilisk Overlook, Middle", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
@@ -1133,8 +1133,8 @@ location_tables = {
     DSRLocationData(11110681, f"DA: Maiden Skirt", f"Maiden Skirt", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110373, f"DA: White Seance Ring", f"White Seance Ring", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110376, f"DA: Archive Tower Giant Door Key", f"Archive Tower Giant Door Key", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110377, f"DA: Miracle: Soothing Sunlight - Picasa Drop", f"Miracle: Soothing Sunlight", DSRLocationCategory.ITEM_LOT), 
-    DSRLocationData(11110378, f"DA: Miracle: Bountiful Sunlight - Picasa Drop", f"Miracle: Bountiful Sunlight", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110377, f"DA: Miracle: Soothing Sunlight - Pisaca Drop", f"Miracle: Soothing Sunlight", DSRLocationCategory.ITEM_LOT), 
+    DSRLocationData(11110378, f"DA: Miracle: Bountiful Sunlight - Pisaca Drop", f"Miracle: Bountiful Sunlight", DSRLocationCategory.ITEM_LOT),
 ],
 "The Duke's Archives - After Archive Tower Giant Door Key": [    
     DSRLocationData(11110379, f"DA: Avelyn", f"Avelyn", DSRLocationCategory.ITEM_LOT),

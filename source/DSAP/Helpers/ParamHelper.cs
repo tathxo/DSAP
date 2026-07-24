@@ -5,6 +5,7 @@ using Avalonia.Media.TextFormatting;
 using DSAP.Models;
 using Serilog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -382,6 +383,8 @@ namespace DSAP.Helpers
                 RemoveGhostGhostliness(npcParamStruct);
             if (App.DSOptions.SoulMultiplierBase != 100 || App.DSOptions.SoulMultiplierSteps > 0)
                 MultiplyNpcSouls(npcParamStruct);
+            if (App.DSOptions.LimitedShopItemShuffle) // if shops are shuffled, immunify the npcs
+                MakeNpcsImmune(npcParamStruct);
 
             // Get first entry's Param (e.g. test npc), use it as basis for new params.
             byte[] parambytes = new byte[NpcParam.Size];
@@ -420,6 +423,53 @@ namespace DSAP.Helpers
                 Array.Copy(BitConverter.GetBytes(souls), 0, npcParamStruct.ParamBytes, enemy.paramOffset + 0x28, sizeof(int));
             }
             Log.Logger.Verbose($"Updated enemy soul drops with multiplier {multiplier}%");
+        }
+        static List<uint> npclist = [
+            264000, // Andre of Astora 
+            6030, 6031, // Big Hat Logan
+            6250, // Crestfallen Merchant
+            6260, // Domhnall of Zena (depths + firelink)
+            251000, // Female Undead Merchant
+            6040, // Griggs of Vilheim
+            411000, // Hawkeye Gough
+            251001, // Male Undead Merchant
+            409000, // Marvelous Chester
+            6370, // Oswald of Carim
+            6220, // Rickert of Vilheim
+            292000, // Vamos
+            286001, // Giant Blacksmith
+            // 6270, // crestfallen warrior
+            ];
+        internal static void MakeNpcsImmune(ParamStruct<NpcParam> npcParamStruct)
+        {
+            foreach (var npc in npcParamStruct.ParamEntries)
+            {
+
+                if (npclist.Contains(npc.id)) // set npc unnattackable
+                {
+                    //Array.Copy(BitConverter.GetBytes(ushort.MaxValue), 0, npcParamStruct.ParamBytes, npc.paramOffset + 0xf4, sizeof(ushort)); // defense stat - not sure if this does anything for chara npcs
+                    npcParamStruct.ParamBytes[npc.paramOffset + 0x12f] = 4; // 4 and 5...technically set the team type to 0 and chr type to 9?. I don't really get this, but it prevents the char being damagable.
+                    //npcParamStruct.ParamBytes[npc.paramOffset + 0x12d] = 1; // colorize them - setting this only affects non-chara npcs (e.g. id above 10000)
+                    Log.Logger.Information($"Made NPC friend: {npc.id}");
+                }
+            }
+        }
+        internal static void AddNpcResistance(ParamStruct<CharaInitParam> charaInitParam)
+        {
+            foreach (var npc in charaInitParam.ParamEntries)
+            {
+                if (npclist.Contains(npc.id)) // set vit and resist, just in case
+                {
+                    //for (int i = 0xc4; i < 0xe4; i++)
+                    //    charaInitParam.ParamBytes[npc.paramOffset + i] = 0;
+                    charaInitParam.ParamBytes[npc.paramOffset + 0xc2] = 0xff; // vit
+                    charaInitParam.ParamBytes[npc.paramOffset + 0xcb] = 0xff; // resistance
+                    
+                    //charaInitParam.ParamBytes[npc.paramOffset + 0xe3] = 2; // npc color for chara npcs. 1=white, 2=red
+
+                    Log.Logger.Information($"Made NPC resistant: {npc.id}");
+                }
+            }
         }
         // Updates Game Area Params
         internal static bool ModifyGameAreaParams()
@@ -493,10 +543,20 @@ namespace DSAP.Helpers
                 foreach (var shopFlag in shopflags)
                 {
                     int id = shopFlag.Id;
-                    Log.Logger.Information($"shop locid = {id}");
+                    //Log.Logger.Information($"shop locid = {id}");
                     if (scoutedLocationInfo.TryGetValue(id, out var resultItem)) // get the matching scouted item
                     {
-                        Log.Logger.Information($"scout item = {resultItem.ItemName}");
+                        if (shopFlag.OriginalItemId == 0)
+                        {
+
+                            byte[] new_param_bytes = new byte[ShopLineupParam.Size];
+                            Array.Copy(BitConverter.GetBytes((int)resultItem.LocationId), 0, new_param_bytes, ShopLineupParam.EQUIP_ID, sizeof(int));
+                            Array.Copy(BitConverter.GetBytes(shopFlag.Value), 0, new_param_bytes, ShopLineupParam.COST, sizeof(int));
+                            Array.Copy(BitConverter.GetBytes((short)1), 0, new_param_bytes, ShopLineupParam.SELL_QUANTITY, sizeof(short));
+
+                            shopLineupParamStruct.AddParam((uint)shopFlag.ParamId, new_param_bytes, Encoding.ASCII.GetBytes(shopFlag.Name));
+                        }
+                        //Log.Logger.Information($"scout item = {resultItem.ItemName}");
                         foreach (var entry in shopLineupParamStruct.ParamEntries.Where(x => x.id == shopFlag.ParamId))
                         {
                             Log.Logger.Information($"item replaced");

@@ -29,7 +29,7 @@ location_rules_table = [
   DsrLocationRule("NL: Key to the Seal", Has("Lordvessel")),
   DsrLocationRule("FA: Lordvessel Placed", Has("Lordvessel")),
   # DLC access
-  DsrLocationRule("DA: Broken Pendant", Has("Dusk Rescued")),
+  DsrLocationRule("DA: Broken Pendant", Has("Princess Dusk Rescued")),
   # Demon ruins checks that require the lava-walking ring
   DsrLocationRule("DR: Large Soul of a Proud Knight - First Jump over the Lava", Has("Orange Charred Ring")),
   DsrLocationRule("DR: Chaos Flame Ember", Has("Orange Charred Ring")),
@@ -102,7 +102,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Upper Undead Burg - Hellkite Bridge", True_()), # bonfire ladder
     DsrEntranceRule("Lower Undead Burg", True_())
   ],
-  "Upper Undead Burg - Undead Merchant": [
+  "Upper Undead Burg - Male Undead Merchant": [
     DsrEntranceRule("Upper Undead Burg", True_()), # vanilla
   ],
   "Upper Undead Burg - Pine Resin Chest": [
@@ -129,7 +129,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Undead Parish - Fog", True_()),
     DsrEntranceRule("Darkroot Garden - Before Fog", True_()),
   ],
-  "Undead Parish - Andre": [
+  "Undead Parish - Andre of Astora": [
     DsrEntranceRule("Undead Parish", True_()),
   ],
   "Undead Parish - Bell Gargoyles": [
@@ -260,7 +260,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Darkroot Garden - Before Fog", True_()),
   ],
   "Darkroot Basin - Princess Dusk": [
-    DsrEntranceRule("Darkroot Basin", Has("Dusk Rescued")),
+    DsrEntranceRule("Darkroot Basin", Has("Princess Dusk Rescued")),
     DsrEntranceRule("Oolacile Sanctuary - Elizabeth", True_()),
   ],
   "Darkroot Garden - Before Fog": [
@@ -440,9 +440,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "The Catacombs": [
     # Firelink access is either immediate (if option = "no logic"), or has one of the requirements below
     DsrEntranceRule("Firelink Shrine", 
-        Has("Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_undead_merchant)], filtered_resolution=True)
-      & Has("Andre Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre)], filtered_resolution=True)
-      & HasAny("Andre Access", "Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre_or_undead_merchant)], filtered_resolution=True)
+        Has("Male Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_undead_merchant)], filtered_resolution=True)
+      & Has("Andre of Astora Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre)], filtered_resolution=True)
+      & HasAny("Andre of Astora Access", "Male Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre_or_undead_merchant)], filtered_resolution=True)
       & CanReachRegion("Anor Londo - After Ornstein and Smough", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_ornstein_and_smough)], filtered_resolution=True)
       )
   ],
@@ -535,18 +535,18 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Chasm of the Abyss", Has("Boss Fog Wall Key - Manus") | bossfogwall_sanity_off),
   ],
   "2 Merchants - Bottomless Box": [
-    DsrEntranceRule("Upper Undead Burg - Undead Merchant", True_()),
+    DsrEntranceRule("Upper Undead Burg - Male Undead Merchant", True_()),
     DsrEntranceRule("Firelink Shrine - Domhnall of Zena", True_()),
   ],
   "4 Merchants - Repairbox": [
     DsrEntranceRule("Anor Londo - Giant Blacksmith", True_()),
-    DsrEntranceRule("Upper Undead Burg - Undead Merchant", True_()),
-    DsrEntranceRule("Undead Parish - Andre", True_()),
+    DsrEntranceRule("Upper Undead Burg - Male Undead Merchant", True_()),
+    DsrEntranceRule("Undead Parish - Andre of Astora", True_()),
     DsrEntranceRule("The Catacombs - Vamos", True_()),
   ],
   "3 Blacksmiths - Smithboxen": [
     DsrEntranceRule("Anor Londo - Giant Blacksmith", True_()),
-    DsrEntranceRule("Undead Parish - Andre", True_()),
+    DsrEntranceRule("Undead Parish - Andre of Astora", True_()),
     DsrEntranceRule("The Catacombs - Vamos", True_()),
   ],
 }

@@ -9,7 +9,8 @@ namespace DSAP.Models
     public class ShopLineupEntry : EventFlag
     {
         public int ParamId { get; set; }
-
+        public int OriginalItemId { get; set; } = 0;
+        public int Value { get; set; } = 0;
         public ShopLineupEntry() { }
 
     }

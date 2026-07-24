@@ -172,6 +172,28 @@ class CrystalLizardShuffle(Toggle):
     Great Hollow lizards may each require several reloads, because they only have a 1 in 3 chance to activate each time."""
     display_name = "Crystal Lizard Shuffle"
 
+class LimitedShopItemShuffle(DefaultOnToggle):
+    """Adds limited quantity shop slots from unmissable shopkeepers as locations, and shuffles their items into the multiworld.
+    Missable shopkeepers, who can be made unavailable based on progression or dialogue options, will not have their shops shuffled into the multiworld.
+    Shuffled Shops' keepers will be made immune to player attacks to make them unmissable, and their drops added as shuffled locations to their shop.
+    
+    Shops Shuffled by this option:
+    Andre of Astora
+    Big Hat Logan
+    Crestfallen Merchant
+    Domhnall of Zena (not including post-boss equipment yet)
+    Female Undead Merchant
+    Griggs of Vinheim
+    Hawkeye Gough
+    Male Undead Merchant
+    Marvelous Chester
+    Oswald of Carim
+    Rickert of Vinheim
+    Vamos (shared Repairbox + 2 drops only)
+    Giant Blacksmith (shared Repairbox and Blacksmith Giant Hammer)
+    """
+    display_name = "Limited Shop Item Shuffle"
+
 def skip_logic_helper(difficulty: SkipDifficulty): 
     available_skips = get_all_skips()
     valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
@@ -184,7 +206,7 @@ class SkipLogicEasy(OptionCounter):
         Numbers other than 0 put the skip into logic.
         Recommended to edit in the yaml. 
 
-        For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?usp=sharing
+        For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?gid=840526629#gid=840526629
     """
     display_name = "Enabled Easy Skips"
     available_skips = get_all_skips()
@@ -420,6 +442,9 @@ option_groups = [
         BlackKnightWeaponShuffle,
         CrystalLizardShuffle,
         ]),
+    OptionGroup("Shops", [
+        LimitedShopItemShuffle,
+        ]),
     OptionGroup("Logic", [
         LogicToAccessFirelinkAltar,
         LogicToAccessCatacombs,
@@ -486,6 +511,9 @@ class DSROption(PerGameCommonOptions):
     boss_bone_shuffle: BossBoneShuffle
     bk_weapon_shuffle: BlackKnightWeaponShuffle
     lizard_shuffle: CrystalLizardShuffle
+
+    # Shops
+    limited_shop_item_shuffle: LimitedShopItemShuffle
 
     # Logic
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar

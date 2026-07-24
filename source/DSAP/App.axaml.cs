@@ -1041,7 +1041,6 @@ public partial class App : Application
             //Helpers.ListItemLots();
         }
 
-        //ParamHelper.ModifyShopLineupParams();
         if (DEBUG_TXTLOG)
         {
             Log.CloseAndFlush();

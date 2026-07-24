@@ -156,7 +156,7 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
-        self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_DROP)
+        # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.MIMIC_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS_DROP)
@@ -181,9 +181,9 @@ class DSRWorld(World):
         if (self.options.boss_fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_FOG_WALL)
         # if (self.options.shop_sanity.value == True):
-        if (True):
+        if (self.options.limited_shop_item_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
-            self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_SHOP_ITEM)
+            # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_SHOP_ITEM)
 
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
@@ -325,8 +325,8 @@ class DSRWorld(World):
             # "Firelink Shrine - Domhnall of Zena - Post O+S",
             # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
             # "Firelink Shrine - Domhnall of Zena - Post Artorias",
-            "Upper Undead Burg - Undead Merchant",
-            "Undead Parish - Andre",
+            "Upper Undead Burg - Male Undead Merchant",
+            "Undead Parish - Andre of Astora",
             "Undead Parish - Oswald of Carim",
             "Lower Undead Burg - Female Undead Merchant",
             "Lower Blighttown - Shiva of the East",
@@ -663,6 +663,10 @@ class DSRWorld(World):
                 "boss_humanity_shuffle": self.options.boss_humanity_shuffle.value,
                 "boss_bone_shuffle": self.options.boss_bone_shuffle.value,
                 "bk_weapon_shuffle": self.options.bk_weapon_shuffle.value,
+                "lizard_shuffle": self.options.lizard_shuffle.value,
+
+                # Shops
+                "limited_shop_item_shuffle": self.options.limited_shop_item_shuffle.value,
                 
                 # Logic
                 "logic_to_access_firelink_altar": self.options.logic_to_access_firelink_altar.current_key, # text of the option
@@ -695,7 +699,7 @@ class DSRWorld(World):
             "itemsId": items_id,
             "itemsUpgrades": items_upgrades,
             "itemsAddress": items_address,
-            "apworld_api_version" : "0.1.5.0" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.2.0.0" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

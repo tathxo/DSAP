@@ -1,18 +1,18 @@
 ﻿[
   {
     "Name": "Progressive Soul Multiplier",
-    "Id": 0,
     "StackLimit": 0,
     "UpgradeType": "None",
     "Category": "Progressive",
-    "ApId": 11111400
+    "ApId": 11111400,
+    "Id": 11109001
   },
   {
     "Name": "Progressive Weight Reducer",
-    "Id": 0,
     "StackLimit": 0,
     "UpgradeType": "None",
     "Category": "Progressive",
-    "ApId": 11111401
+    "ApId": 11111401,
+    "Id": 11109002
   }
 ]

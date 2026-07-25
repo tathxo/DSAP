@@ -190,7 +190,6 @@ namespace DSAP.Helpers
                 Log.Logger.Information($"Updating weight multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
                 App.Client.AddOverlayMessage($"Updating weight multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
             }
-                
         }
         internal static uint CalculateWeightMultiplier()
         {
@@ -346,7 +345,7 @@ namespace DSAP.Helpers
             }
             else
             {
-                Log.Logger.Information($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100):P0}");
+                Log.Logger.Information($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
                 App.Client.AddOverlayMessage($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
             }
         }

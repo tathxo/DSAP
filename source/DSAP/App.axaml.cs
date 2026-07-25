@@ -455,6 +455,13 @@ public partial class App : Application
         {
             monitoringEventFlags = true;
         }
+        else if (command.StartsWith("/multipliers"))
+        {
+            var sm = ParamHelper.CalculateSoulMultiplier();
+            var wm = ParamHelper.CalculateWeightMultiplier();
+            Log.Logger.Information($"Soul multiplier is {(sm / 100.0):P0}");
+            Log.Logger.Information($"Weight multiplier is {(wm / 100.0):P0}");
+        }
 
         //else if (command.StartsWith("/get")) // for debugging
         //{
@@ -769,6 +776,10 @@ public partial class App : Application
                 ParamHelper.UpdateWeightMultiplier();
                 ParamHelper.ModifyWeaponParams();
                 ParamHelper.ModifyArmorParams();
+            }
+            if (doPopup)
+            {
+                AddItemWithMessage((int)DSItemCategory.KeyItems, item.Id, item.Quantity);
             }
         }
         else
@@ -1536,6 +1547,11 @@ public partial class App : Application
                     }
                 }
                 AddAbstractItem(itemToReceive, will_popup);
+                if (itemToReceive.Name == "Ring of Sacrifice x10") // handle this with an exception. Comes from Oswald's shop
+                {
+                    for (int i=0; i<9;i++)
+                        AddAbstractItem(itemToReceive, false);
+                }
 
                 /* If after receiving item (or trap), player is still in game, then it received successfully */
                 if (MiscHelper.IsInGame())

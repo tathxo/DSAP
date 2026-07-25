@@ -290,7 +290,6 @@ namespace DSAP.Helpers
         internal static List<(int, List<long>)> hintTriggers = [];
         internal static void BuildHintTriggers(Dictionary<long, Archipelago.MultiClient.Net.Models.ScoutedItemInfo> scoutedLocationInfo, Archipelago.MultiClient.Net.Models.Hint[] hints)
         {
-            var sw = Stopwatch.StartNew();
             // shopflags = missing locations
             var shopflags = LocationHelper.GetShopLineupFlags()
                 .Where(x => App.Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id) // location is not found yet
@@ -303,9 +302,6 @@ namespace DSAP.Helpers
                 shopflags = shopflags.Where(x => scoutedLocationInfo.ContainsKey(x.Id) && ((scoutedLocationInfo[x.Id].Flags & (ItemFlags.Advancement | ItemFlags.NeverExclude)) != 0));
             // else it's all, so don't modify the list.
 
-
-            sw.Stop();
-            Log.Logger.Information($"shopflags calc ran for {sw.ElapsedMilliseconds} ms");
             if (shopflags.Count() > 0)
             {
                 // check hint flags
@@ -324,6 +320,7 @@ namespace DSAP.Helpers
                     ( 71010070, shopflags.Where(x => x.Name.StartsWith("Male Undead Merchant")).Select(x =>  (long)x.Id).ToList() ), // Male Undead Merchant
                     ( 71210010, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say yes
                     ( 71210009, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say no
+                    ( 71800056, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim - if you're in the Way of White covenant
                     ( 71800057, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim
                     ( 71810001, shopflags.Where(x => x.Name.StartsWith("Rickert of Vinheim")).Select(x =>  (long)x.Id).ToList() ), // Rickert of Vinheim
                     ( 11300210, shopflags.Where(x => x.Name.StartsWith("Vamos")).Select(x =>  (long)x.Id).ToList() ), // Vamos - upon landing there

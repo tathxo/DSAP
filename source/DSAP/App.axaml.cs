@@ -453,7 +453,7 @@ public partial class App : Application
         }
         else if (command.StartsWith("/maefs")) // monitor all event flags
         {
-            AddressHelper.MonitorAllEventFlags();
+            monitoringEventFlags = true;
         }
 
         //else if (command.StartsWith("/get")) // for debugging
@@ -1031,6 +1031,7 @@ public partial class App : Application
 
             StartEmkWatchers(EmkControllers);
             StartInGameWatcher();
+            AddressHelper.StartEventFlagMonitor();
             MapHelper.StartMapAutoTracking();
         }
         else

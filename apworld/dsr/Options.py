@@ -194,6 +194,15 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     """
     display_name = "Limited Shop Item Shuffle"
 
+class ShopHints(Choice):
+    """When Shop items are shuffled, this options control what types of Archipelago Hints will be created upon talking to the relevant merchant (with the shop slots unlocked)."""
+    display_name = "Shop Hints"
+    option_off = 0
+    option_progression = 1
+    option_progression_and_useful = 2
+    option_all = 3
+    default = 1
+
 def skip_logic_helper(difficulty: SkipDifficulty): 
     available_skips = get_all_skips()
     valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
@@ -444,6 +453,7 @@ option_groups = [
         ]),
     OptionGroup("Shops", [
         LimitedShopItemShuffle,
+        ShopHints,
         ]),
     OptionGroup("Logic", [
         LogicToAccessFirelinkAltar,
@@ -514,6 +524,7 @@ class DSROption(PerGameCommonOptions):
 
     # Shops
     limited_shop_item_shuffle: LimitedShopItemShuffle
+    shop_hints: ShopHints
 
     # Logic
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar

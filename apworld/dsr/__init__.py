@@ -667,6 +667,7 @@ class DSRWorld(World):
 
                 # Shops
                 "limited_shop_item_shuffle": self.options.limited_shop_item_shuffle.value,
+                "shop_hints": self.options.shop_hints.value,
                 
                 # Logic
                 "logic_to_access_firelink_altar": self.options.logic_to_access_firelink_altar.current_key, # text of the option

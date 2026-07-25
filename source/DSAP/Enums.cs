@@ -24,6 +24,13 @@
             andre_or_undead_merchant = 3,
             ornstein_and_smough = 4,
         }
+        public enum DSShopHints
+        {
+            off = 0,
+            progression = 1,
+            progression_and_useful = 2,
+            all = 3,
+        }
         public enum DSItemCategory
         {
             AnyWeapon = 0x00000000,

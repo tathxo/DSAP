@@ -183,6 +183,7 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     Crestfallen Merchant
     Domhnall of Zena (not including post-boss equipment yet)
     Female Undead Merchant
+    Giant Blacksmith (shared Repairbox and Blacksmith Giant Hammer)
     Griggs of Vinheim
     Hawkeye Gough
     Male Undead Merchant
@@ -190,7 +191,6 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     Oswald of Carim
     Rickert of Vinheim
     Vamos (shared Repairbox + 2 drops only)
-    Giant Blacksmith (shared Repairbox and Blacksmith Giant Hammer)
     """
     display_name = "Limited Shop Item Shuffle"
 

@@ -1,7 +1,12 @@
 ﻿using Archipelago.Core.Util;
+using Archipelago.MultiClient.Net.Enums;
 using Serilog;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DSAP.Helpers
@@ -31,6 +36,7 @@ namespace DSAP.Helpers
         public static AoBHelper EventFlagsAoB = new AoBHelper("EventFlags",
                 [0x48, 0x8B, 0x0D, 0x00, 0x00, 0x00, 0x00, 0x99, 0x33, 0xC2, 0x45, 0x33, 0xC0, 0x2B, 0xC2, 0x8D, 0x50, 0xF6],
                 "xxx????xxxxxxxxxxx", 3, 4);
+
         public static ulong GetBaseAddress()
         {
             var address = Memory.GetBaseAddress("DarkSoulsRemastered");
@@ -258,7 +264,12 @@ namespace DSAP.Helpers
                         byte[] flags = ReadAllEventFlags();
                         if (flags.Length != 0 && oldFlags.Length != 0)
                         {
-                            DetectEventFlagDifferences(oldFlags, flags);
+                            if (App.DSOptions.LimitedShopItemShuffle)
+                            {
+                                CheckForHintTriggers(flags);
+                            }
+                            if (true || App.monitoringEventFlags)
+                                DetectEventFlagDifferences(oldFlags, flags);
                         }
                         oldFlags = flags;
                         await Task.Delay(1000);
@@ -270,6 +281,62 @@ namespace DSAP.Helpers
                 }
             });
         }
+        internal static List<(int, List<long>)> hintTriggers = [];
+        internal static void BuildHintTriggers(Dictionary<long, Archipelago.MultiClient.Net.Models.ScoutedItemInfo> scoutedLocationInfo, Archipelago.MultiClient.Net.Models.Hint[] hints)
+        {
+            var sw = Stopwatch.StartNew();
+            // shopflags = missing locations
+            var shopflags = LocationHelper.GetShopLineupFlags()
+                .Where(x => App.Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id) // location is not found yet
+                        && !hints.Select(y=>y.LocationId).Contains(x.Id)); // and location has not been hinted yet
+            sw.Stop();
+            Log.Logger.Information($"shopflags calc ran for {sw.ElapsedMilliseconds} ms");
+            if (shopflags.Count() > 0)
+            {
+                // check hint flags
+                hintTriggers = new List<(int, List<long>)>
+                {
+                    ( 71010000, shopflags.Where(x => x.Name.StartsWith("Andre")).Select(x => (long)x.Id).ToList() ), // Andre
+                    ( 71020045, shopflags.Where(x => x.Name.StartsWith("Big Hat Logan")).Select(x =>  (long)x.Id).ToList() ), // Andre
+                    ( 71500001, shopflags.Where(x => x.Name.StartsWith("Crestfallen Merchant")).Select(x =>  (long)x.Id).ToList() ), // Crestfallen Merchant
+                    ( 71320006, shopflags.Where(x => x.Name.StartsWith("Domhnall of Zena")).Select(x =>  (long)x.Id).ToList() ), // Domhnall of Zena
+                    ( 71000030, shopflags.Where(x => x.Name.StartsWith("Female Undead Merchant")).Select(x =>  (long)x.Id).ToList() ), // Female Undead Merchant
+                    ( 71510000, shopflags.Where(x => x.Name.StartsWith("Giant Blacksmith")).Select(x =>  (long)x.Id).ToList() ), // Giant Blacksmith
+                    ( 71020058, shopflags.Where(x => x.Name.StartsWith("Griggs of Vinheim")).Select(x =>  (long)x.Id).ToList() ), // Griggs of Vinheim
+                    ( 71210061, shopflags.Where(x => x.Name.StartsWith("Hawkeye Gough")).Select(x =>  (long)x.Id).ToList() ), // Hawkeye Gough
+                    ( 71010070, shopflags.Where(x => x.Name.StartsWith("Male Undead Merchant")).Select(x =>  (long)x.Id).ToList() ), // Male Undead Merchant
+                    ( 71210010, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester
+                    ( 71800057, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim
+                    ( 71810001, shopflags.Where(x => x.Name.StartsWith("Rickert of Vinheim")).Select(x =>  (long)x.Id).ToList() ), // Rickert of Vinheim
+                    ( 71300020, shopflags.Where(x => x.Name.StartsWith("Vamos")).Select(x =>  (long)x.Id).ToList() ), // Vamos
+                }.Where(x => x.Item2.Count > 0).ToList(); // trim already hinted
+            }
+            else
+                hintTriggers = [];
+        }
+
+        private static void CheckForHintTriggers(byte[] flags)
+        {
+            foreach (var trigger in hintTriggers)
+            {
+                if (trigger.Item2.Count > 0)
+                {
+                    var (shopbyte, shopbit) = AddressHelper.GetEventFlagAddrAndByteOffset(trigger.Item1);
+                    if (flags[shopbyte] != 0)
+                    {
+                        Log.Logger.Information($"flag byte for {trigger.Item1} at {shopbyte:x}:{shopbit} = {flags[shopbyte]:x}");
+                    }
+                    if (((flags[shopbyte] >> shopbit) & 0x01) == 0x01)
+                    {
+                        Log.Logger.Information($"flag {trigger.Item1} at {shopbyte}:{shopbit} detected nonzero");
+                        long[] plist = trigger.Item2.ToArray();
+                        App.Client.CurrentSession.Hints.CreateHints(HintStatus.Unspecified, plist);
+                        trigger.Item2.Clear();
+                    }
+                }
+            }
+        }
+
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {
             for (int i = 0; i < (1 + 18 * 4); i++)

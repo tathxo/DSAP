@@ -709,5 +709,14 @@
     "UpgradeType": "None",
     "Category": "Consumables",
     "ApId": 11112123
+  },
+  {
+    "Name": "Twin Humanities x2",
+    "Id": 501,
+    "StackLimit": 99,
+    "Quantity": 2,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112124
   }
 ]

@@ -726,7 +726,7 @@ namespace DSAP.Helpers
             charaParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
 
             charaParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 1 items to CharaInit struct and updated chars");
+            Log.Logger.Debug($"Added 1 items to CharaInit struct and updated chars");
 
             ParamHelper.WriteFromParamSt(charaParamStruct, CharaInitParam.spOffset); // write the chara init params
 
@@ -1045,7 +1045,7 @@ namespace DSAP.Helpers
                     }
                 }
             }
-            Log.Logger.Information($"Replaced {overwritten_items.Count} \"extra\" item lots.");
+            Log.Logger.Debug($"Replaced {overwritten_items.Count} \"extra\" item lots.");
         }
     }
 }

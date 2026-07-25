@@ -60,8 +60,8 @@ namespace DSAP.Helpers
             AddMsgs(MsgManStruct.OFFSET_ITEM_DESCRIPTIONS, added_descriptions, "Item Descriptions"); // info
             
             watch.Stop();
-            Log.Logger.Information($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
-            App.Client.AddOverlayMessage($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
+            Log.Logger.Debug($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
+            //App.Client.AddOverlayMessage($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
 
             var local_ap_keys = added_emk_names.ToList();
             local_ap_keys.Sort((a, b) => a.Key.CompareTo(b.Key));
@@ -293,7 +293,7 @@ namespace DSAP.Helpers
                 paramStruct.AddParam(newid, parambytes, stringbytes);
             }
 
-            Log.Logger.Information($"Added {new_entries} items to EquipParamGoods from {addedEntries.First().Key} to {addedEntries.Last().Key}");
+            Log.Logger.Debug($"Added {new_entries} items to EquipParamGoods from {addedEntries.First().Key} to {addedEntries.Last().Key}");
 
             ParamHelper.WriteFromParamSt(paramStruct, EquipParamGoods.spOffset);
 

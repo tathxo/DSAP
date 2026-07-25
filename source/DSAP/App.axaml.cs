@@ -73,6 +73,7 @@ public partial class App : Application
     private bool overlayInitialized = false;
     private static uint connect_command_step = 0;
     private bool firstConnectionStarted = false;
+    internal static bool monitoringEventFlags = false;
     private DsrControlsWindow dsrControlsWindow;
 
     public override void Initialize()
@@ -1910,6 +1911,8 @@ public partial class App : Application
             await BonfireInjectorHelper.UpdateBonfires();
 
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);
+            var hints = await App.Client.CurrentSession.Hints.GetHintsAsync();
+            AddressHelper.BuildHintTriggers(scoutedLocationInfo, hints);
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 

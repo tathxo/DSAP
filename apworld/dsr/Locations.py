@@ -235,8 +235,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Next Available ID = 11111046
-# reserved for shop sanity = 11110[853-966]
+# Next Available ID = 11111062
 location_tables = {
 "Undead Asylum Cell": [
     DSRLocationData(11110000, f"UA: Dungeon Cell Key", f"Dungeon Cell Key", DSRLocationCategory.SKIP),
@@ -426,6 +425,9 @@ location_tables = {
     DSRLocationData(11110042, f"Male Undead Merchant: Residence Key", f"Residence Key", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110858, f"Male Undead Merchant: Orange Guidance Soapstone", f"Orange Guidance Soapstone", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110859, f"Male Undead Merchant: Dried Finger", f"Dried Finger", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111052, f"Male Undead Merchant: Uchigatana - Drop Added To Shop", f"Uchigatana", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111053, f"Male Undead Merchant: Humanity - Drop Added To Shop", f"Humanity", DSRLocationCategory.SHOP_ITEM),
+    
 ],
 "Upper Undead Burg - Taurus Demon": [
     DSRLocationData(11110799, f"UB: Boss Fog Wall - Taurus Demon", f"Boss Fog Wall Key - Taurus Demon", DSRLocationCategory.BOSS_FOG_WALL),
@@ -467,6 +469,8 @@ location_tables = {
 "Undead Parish - Andre of Astora": [
     DSRLocationData(11110830, f"UP: Andre of Astora", f"Andre of Astora Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110822, f"Andre of Astora: Crest of Artorias", f"Crest of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111046, f"Andre of Astora: Humanity - Drop Added To Shop", f"Humanity x3", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111047, f"Andre of Astora: Blacksmith Hammer - Drop Added To Shop", f"Blacksmith Hammer", DSRLocationCategory.SHOP_ITEM),
 ],
 "Undead Parish - Bell Gargoyles": [
     DSRLocationData(11110803, f"UP: Boss Fog Wall - Bell Gargoyles", f"Boss Fog Wall Key - Bell Gargoyles", DSRLocationCategory.BOSS_FOG_WALL),
@@ -481,7 +485,8 @@ location_tables = {
     DSRLocationData(11110946, f"Oswald of Carim: Miracle: Karmic Justice", f"Miracle: Karmic Justice", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110947, f"Oswald of Carim: Bloodbite Ring", f"Bloodbite Ring", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110948, f"Oswald of Carim: Poisonbite Ring", f"Poisonbite Ring", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110949, f"Oswald of Carim: Ring of Sacrifice", f"Ring of Sacrifice x10", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110949, f"Oswald of Carim: Rings of Sacrifice", f"Ring of Sacrifice x10", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111058, f"Oswald of Carim: Twin Humanities - Drop Added To Shop", f"Twin Humanities x2", DSRLocationCategory.SHOP_ITEM),
 ],
 "Firelink Shrine - After Undead Parish Elevator": [
     DSRLocationData(11110075, f"FS: Undead Asylum F2 West Key", f"Undead Asylum F2 West Key", DSRLocationCategory.ITEM_LOT),
@@ -962,6 +967,7 @@ location_tables = {
     # DSRLocationData(11110826, f"Giant Blacksmith: Weapon Smithbox", f"Weapon Smithbox", DSRLocationCategory.SHOP_ITEM),
     # DSRLocationData(11110961, f"Giant Blacksmith: Armor Smithbox", f"Armor Smithbox", DSRLocationCategory.SHOP_ITEM),
     # DSRLocationData(11110824, f"Giant Blacksmith: Repairbox", f"Repairbox", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111061, f"Giant Blacksmith: Blacksmith Giant Hammer - Drop Added To Shop", f"Blacksmith Giant Hammer", DSRLocationCategory.SHOP_ITEM),
 ],
 "Anor Londo - Ornstein and Smough": [
     DSRLocationData(11110805, f"AL: Boss Fog Wall - Ornstein and Smough", f"Boss Fog Wall Key - Ornstein and Smough", DSRLocationCategory.BOSS_FOG_WALL),
@@ -1198,6 +1204,7 @@ location_tables = {
     DSRLocationData(11110958, f"Big Hat Logan: Sorcery: Homing Crystal Soulmass", f"Sorcery: Homing Crystal Soulmass", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110959, f"Big Hat Logan: Sorcery: Crystal Soul Spear", f"Sorcery: Crystal Soul Spear", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110960, f"Big Hat Logan: Sorcery: Crystal Magic Weapon", f"Sorcery: Crystal Magic Weapon", DSRLocationCategory.SHOP_ITEM),
+    # Not adding his other drops for now, because they aren't exactly shop items, and they require killing him after he hollows.
 ],
 "Demon Ruins - Early": [
     DSRLocationData(11110405, f"DR: Demon Ruins - Entrance Bonfire", f"Bonfire Warp Unlock - Demon Ruins - Entrance", DSRLocationCategory.BONFIRE),
@@ -1319,6 +1326,8 @@ location_tables = {
 ],
 "The Catacombs - Vamos": [
     # DSRLocationData(11110xxx, f"TC: Vamos", f"Vamos Access", DSRLocationCategory.EVENT),
+    DSRLocationData(11111059, f"Vamos: Hammer of Vamos - Drop Added To Shop", f"Hammer of Vamos", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111060, f"Vamos: Royal Helm - Drop Added To Shop", f"Royal Helm", DSRLocationCategory.SHOP_ITEM),
 ],
 "The Catacombs - Pinwheel": [
     DSRLocationData(11110807, f"TC: Boss Fog Wall - Pinwheel", f"Boss Fog Wall Key - Pinwheel", DSRLocationCategory.BOSS_FOG_WALL),
@@ -1444,6 +1453,10 @@ location_tables = {
 "Royal Wood - Marvelous Chester": [
     # DSRLocationData(11110xxx, f"RW: Marvelous Chester", f"Marvelous Chester Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110963, f"Marvelous Chester: Humanity", f"Humanity x13", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111054, f"Marvelous Chester: Snickering Top Hat - Drop Added To Shop", f"Snickering Top Hat", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111055, f"Marvelous Chester: Chester's Long Coat - Drop Added To Shop", f"Chester's Long Coat", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111056, f"Marvelous Chester: Chester's Gloves - Drop Added To Shop", f"Chester's Gloves", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111057, f"Marvelous Chester: Chester's Trousers - Drop Added To Shop", f"Chester's Trousers", DSRLocationCategory.SHOP_ITEM),
 ],
 "Royal Wood - Artorias": [
     DSRLocationData(11110816, f"RW: Boss Fog Wall - Artorias", f"Boss Fog Wall Key - Artorias", DSRLocationCategory.BOSS_FOG_WALL),
@@ -1489,6 +1502,10 @@ location_tables = {
     # DSRLocationData(11110xxx, f"RW: Hawkeye Gough", f"Hawkeye Gough Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110965, f"Hawkeye Gough: Carving: HELLO!", f"Carving: HELLO!", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110966, f"Hawkeye Gough: Carving: Carving: THANK YOU!", f"Carving: THANK YOU!", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111048, f"Hawkeye Gough: Gough's Helm - Drop Added To Shop", f"Gough's Helm", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111049, f"Hawkeye Gough: Gough's Armor - Drop Added To Shop", f"Gough's Armor", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111050, f"Hawkeye Gough: Gough's Gauntlets - Drop Added To Shop", f"Gough's Gauntlets", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111051, f"Hawkeye Gough: Gough's Leggings - Drop Added To Shop", f"Gough's Leggings", DSRLocationCategory.SHOP_ITEM),
 ],
 "Chasm of the Abyss": [   
     DSRLocationData(11110771, f"CotA: Twinkling Titanite - Crystal Lizard Drop, Entrance", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),

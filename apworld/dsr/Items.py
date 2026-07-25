@@ -371,6 +371,7 @@ _all_items_base = [
     ("Ring of Sacrifice x10", 2121, DSRItemCategory.CONSUMABLE),
     ("Humanity x4", 2122, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Humanity x10", 2123, DSRItemCategory.USEFUL_CONSUMABLE),
+    ("Twin Humanities x2", 2124, DSRItemCategory.USEFUL_CONSUMABLE),
 
 
     ("Peculiar Doll", 3000, DSRItemCategory.KEY_ITEM),

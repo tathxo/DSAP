@@ -3,8 +3,8 @@
     "ParamId": 1100,
     "OriginalItemId": 106,
     "Id": 11110858,
-    "OriginalItemName": "Undead Merchant: Orange Guidance Soapstone",
-    "Name": "Undead Merchant: Orange Guidance Soapstone",
+    "OriginalItemName": "Male Undead Merchant: Orange Guidance Soapstone",
+    "Name": "Male Undead Merchant: Orange Guidance Soapstone",
     "OriginalType": "Good",
     "OriginalQuantity": 1,
     "Value": 100,
@@ -14,8 +14,8 @@
     "ParamId": 1105,
     "OriginalItemId": 2021,
     "Id": 11110042,
-    "OriginalItemName": "Undead Merchant: Residence Key",
-    "Name": "Undead Merchant: Residence Key",
+    "OriginalItemName": "Male Undead Merchant: Residence Key",
+    "Name": "Male Undead Merchant: Residence Key",
     "OriginalType": "Good",
     "OriginalQuantity": 1,
     "Value": 1000,
@@ -25,8 +25,8 @@
     "ParamId": 1106,
     "OriginalItemId": 2602,
     "Id": 11110824,
-    "OriginalItemName": "Undead Merchant: Repairbox",
-    "Name": "Undead Merchant: Repairbox",
+    "OriginalItemName": "Male Undead Merchant: Repairbox",
+    "Name": "Male Undead Merchant: Repairbox",
     "OriginalType": "Good",
     "OriginalQuantity": 1,
     "Value": 3000,
@@ -36,8 +36,8 @@
     "ParamId": 1133,
     "OriginalItemId": 2608,
     "Id": 11110823,
-    "OriginalItemName": "Undead Merchant: Bottomless Box",
-    "Name": "Undead Merchant: Bottomless Box",
+    "OriginalItemName": "Male Undead Merchant: Bottomless Box",
+    "Name": "Male Undead Merchant: Bottomless Box",
     "OriginalType": "Good",
     "OriginalQuantity": 1,
     "Value": 1000,
@@ -47,12 +47,34 @@
     "ParamId": 1134,
     "OriginalItemId": 385,
     "Id": 11110859,
-    "OriginalItemName": "Undead Merchant: Dried Finger",
-    "Name": "Undead Merchant: Dried Finger",
+    "OriginalItemName": "Male Undead Merchant: Dried Finger",
+    "Name": "Male Undead Merchant: Dried Finger",
     "OriginalType": "Good",
     "OriginalQuantity": 1,
     "Value": 2000,
     "Flag": 11017210
+  },
+  {
+    "ParamId": 1135,
+    "OriginalItemId": 0,
+    "Id": 11111052,
+    "OriginalItemName": "Male Undead Merchant: Uchigatana - Drop Added To Shop",
+    "Name": "Male Undead Merchant: Humanity  - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323000
+  },
+  {
+    "ParamId": 1136,
+    "OriginalItemId": 0,
+    "Id": 11111053,
+    "OriginalItemName": "Male Undead Merchant: Humanity - Drop Added To Shop",
+    "Name": "Male Undead Merchant: Humanity  - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323010
   },
   {
     "ParamId": 1207,
@@ -141,6 +163,28 @@
     "OriginalQuantity": 1,
     "Value": 2000,
     "Flag": 11017170
+  },
+  {
+    "ParamId": 1421,
+    "OriginalItemId": 0,
+    "Id": 11111046,
+    "OriginalItemName": "Andre of Astora: Humanity",
+    "Name": "Andre of Astora: Humanity",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323020
+  },
+  {
+    "ParamId": 1422,
+    "OriginalItemId": 0,
+    "Id": 11111047,
+    "OriginalItemName": "Andre of Astora: Blacksmith Hammer",
+    "Name": "Andre of Astora: Blacksmith Hammer",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323030
   },
   {
     "ParamId": 1500,
@@ -1136,12 +1180,23 @@
     "ParamId": 4407,
     "OriginalItemId": 126,
     "Id": 11110949,
-    "OriginalItemName": "Oswald of Carim: Ring of Sacrifice",
-    "Name": "Oswald of Carim: Ring of Sacrifice",
+    "OriginalItemName": "Oswald of Carim: Rings of Sacrifice",
+    "Name": "Oswald of Carim: Rings of Sacrifice",
     "OriginalType": "Ring",
     "OriginalQuantity": 10,
     "Value": 5000,
     "Flag": 11607080
+  },
+  {
+    "ParamId": 4409,
+    "OriginalItemId": 0,
+    "Id": 11111058,
+    "OriginalItemName": "Oswald of Carim: Twin Humanities x2",
+    "Name": "Oswald of Carim: Twin Humanities x2",
+    "OriginalType": "Good",
+    "OriginalQuantity": 2,
+    "Value": 5000,
+    "Flag": 61323050
   },
   {
     "ParamId": 5000,
@@ -1298,6 +1353,17 @@
     "Flag": 11017170
   },
   {
+    "ParamId": 6222,
+    "OriginalItemId": 0,
+    "Id": 11111061,
+    "OriginalItemName": "Giant Blacksmith: Blacksmith Giant Hammer - Drop Added To Shop",
+    "Name": "Giant Blacksmith: Blacksmith Giant Hammer - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323060
+  },
+  {
     "ParamId": 6302,
     "OriginalItemId": 2600,
     "Id": 11110826,
@@ -1331,6 +1397,28 @@
     "Flag": 11017170
   },
   {
+    "ParamId": 6311,
+    "OriginalItemId": 0,
+    "Id": 11111059,
+    "OriginalItemName": "Vamos: Hammer of Vamos - Drop Added To Shop",
+    "Name": "Vamos: Hammer of Vamos - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323070
+  },
+  {
+    "ParamId": 6312,
+    "OriginalItemId": 0,
+    "Id": 11111060,
+    "OriginalItemName": "Vamos: Royal Helm - Drop Added To Shop",
+    "Name": "Vamos: Royal Helm - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323080
+  },
+  {
     "ParamId": 6420,
     "OriginalItemId": 500,
     "Id": 11110963,
@@ -1340,6 +1428,50 @@
     "OriginalQuantity": 13,
     "Value": 10000,
     "Flag": 11217100
+  },
+  {
+    "ParamId": 6427,
+    "OriginalItemId": 0,
+    "Id": 11111054,
+    "OriginalItemName": "Marvelous Chester: Snickering Top Hat - Drop Added To Shop",
+    "Name": "Marvelous Chester: Snickering Top Hat - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323090
+  },
+  {
+    "ParamId": 6428,
+    "OriginalItemId": 0,
+    "Id": 11111055,
+    "OriginalItemName": "Marvelous Chester: Chester's Long Coat - Drop Added To Shop",
+    "Name": "Marvelous Chester: Chester's Long Coat - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323100
+  },
+  {
+    "ParamId": 6429,
+    "OriginalItemId": 0,
+    "Id": 11111056,
+    "OriginalItemName": "Marvelous Chester: Chester's Gloves - Drop Added To Shop",
+    "Name": "Marvelous Chester: Chester's Gloves - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323110
+  },
+  {
+    "ParamId": 6430,
+    "OriginalItemId": 0,
+    "Id": 11111057,
+    "OriginalItemName": "Marvelous Chester: Chester's Trousers - Drop Added To Shop",
+    "Name": "Marvelous Chester: Chester's Trousers - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323120
   },
   {
     "ParamId": 6501,
@@ -1428,5 +1560,49 @@
     "OriginalQuantity": 1,
     "Value": 5,
     "Flag": 11217020
+  },
+  {
+    "ParamId": 6612,
+    "OriginalItemId": 0,
+    "Id": 11111048,
+    "OriginalItemName": "Hawkeye Gough: Gough's Helm - Drop Added To Shop",
+    "Name": "Hawkeye Gough: Gough's Helm - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323130
+  },
+  {
+    "ParamId": 6613,
+    "OriginalItemId": 0,
+    "Id": 11111049,
+    "OriginalItemName": "Hawkeye Gough: Gough's Armor - Drop Added To Shop",
+    "Name": "Hawkeye Gough: Gough's Armor - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323140
+  },
+  {
+    "ParamId": 6614,
+    "OriginalItemId": 0,
+    "Id": 11111050,
+    "OriginalItemName": "Hawkeye Gough: Gough's Gauntlets - Drop Added To Shop",
+    "Name": "Hawkeye Gough: Gough's Gauntlets - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323150
+  },
+  {
+    "ParamId": 6615,
+    "OriginalItemId": 0,
+    "Id": 11111051,
+    "OriginalItemName": "Hawkeye Gough: Gough's Leggings - Drop Added To Shop",
+    "Name": "Hawkeye Gough: Gough's Leggings - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323160
   }
 ]

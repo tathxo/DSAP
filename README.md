@@ -18,6 +18,7 @@
 * Linux has preliminary support via Proton with v0.1.0. See the Setup Guide for more information.
 
 # Current Known issues
+* Going to NG+ causes you to lose key items, and likely can result in a softlock. If playing without Release on Goal, or if playing with `goal_condition` of `all_bosses`, it is recommended to kill Gwyn only after doing everything else needed in your game.
 * Upon receiving a Fog Wall Key, the related Fog Wall sometimes does not unlock. To work around this, completely close both the game and client (DSR and DSAP), then relaunch them and reconnect.
 * Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively. A master key that comes from the multiworld (if shop shuffling is enabled), however, will put its available locations in-logic.
 * If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
@@ -48,7 +49,7 @@
 
 # Changelog
 ## Version 0.2.0
-* Version update -> 0.1.5. Both apworld and client have updated. **This release is not expected to be compatible with 0.1.x generated apworlds**.
+* Version update -> 0.2.0. Both apworld and client have updated. **This release is not expected to be compatible with 0.1.x generated apworlds**.
 * Update: Logic now uses Rule Builder. **As a result, v0.6.7+ of Archipelago is now a requirement.**
 * Feature: More guaranteed items! See location changes below.
 * New yaml options for shuffling items into the pool added: `boss_soul_shuffle`, `boss_humanity_shuffle`, `boss_bone_shuffle`, `bk_weapon_shuffle`, `lizard_shuffle`.
@@ -214,15 +215,14 @@
 * General: Better error mesaging (#50, #65, #68, etc)
 
 # Roadmap
-## v0.2.0 (planned)
-* Feature: Shop Items randomized
-
 ## v1.0.0 (planned)
 * Feature: Enemy drops randomized
 
 ## At some point
+* Rework region and location type selection
 * Traps
 * Option to consider certain in-game skips logical.
+* Fog randomizer
 
 # Contributors
 * tathxo (aka noka) - Maintainer (as of May 2026)

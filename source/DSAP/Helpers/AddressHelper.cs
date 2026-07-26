@@ -343,7 +343,6 @@ namespace DSAP.Helpers
                     }
                     if (((flags[shopbyte] >> shopbit) & 0x01) == 0x01)
                     {
-                        Log.Logger.Information($"flag {trigger.Item1} at {shopbyte}:{shopbit} detected nonzero");
                         long[] plist = trigger.Item2.ToArray();
                         App.Client.CurrentSession.Hints.CreateHints(HintStatus.Unspecified, plist);
                         trigger.Item2.Clear();

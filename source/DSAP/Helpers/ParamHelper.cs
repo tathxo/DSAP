@@ -1,8 +1,11 @@
 ﻿using Archipelago.Core.Models;
 using Archipelago.Core.Util;
+using Archipelago.MultiClient.Net.Models;
+using Avalonia.Media.TextFormatting;
 using DSAP.Models;
 using Serilog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,14 +56,14 @@ namespace DSAP.Helpers
             paramStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
 
             paramStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added {new_entries} items to ItemLotParams");
+            Log.Logger.Debug($"Added {new_entries} items to ItemLotParams");
 
             ParamHelper.WriteFromParamSt(paramStruct, ItemLotParam.spOffset);
 
             watch.Stop();
 
-            Log.Logger.Information($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
-            App.Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
+            Log.Logger.Debug($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
+            //App.Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
 
             Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
             Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
@@ -109,9 +112,9 @@ namespace DSAP.Helpers
             }
 
             if (App.DSOptions.NoSpellStatRequirements) // Remove int and faith requirements
-                Log.Logger.Information("Removed spell stat requirements.");
+                Log.Logger.Debug("Removed spell stat requirements.");
             if (App.DSOptions.NoMiracleCovenantRequirements) // Remove vow restrictions
-                Log.Logger.Information("Removed spell covenant requirements.");
+                Log.Logger.Debug("Removed spell covenant requirements.");
 
             // Get first entry's Param (e.g. White Sign Soapstone), use it as basis for new params.
             byte[] parambytes = new byte[MagicParam.Size];
@@ -187,7 +190,6 @@ namespace DSAP.Helpers
                 Log.Logger.Information($"Updating weight multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
                 App.Client.AddOverlayMessage($"Updating weight multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
             }
-                
         }
         internal static uint CalculateWeightMultiplier()
         {
@@ -255,7 +257,7 @@ namespace DSAP.Helpers
                 paramStruct.ParamBytes[ent.paramOffset + 0xf0] = 0; // faith
             }
 
-            Log.Logger.Information($"Remvoed stat requirements from all weapons and shields");
+            Log.Logger.Debug($"Remvoed stat requirements from all weapons and shields");
             return true;
         }
         // Updates Weapons
@@ -267,7 +269,7 @@ namespace DSAP.Helpers
                 var ent = weaponParamStruct.ParamEntries[i];
                 weaponParamStruct.ParamBytes[ent.paramOffset + 0x102] |= 0x80; // turn on 0x102 bit 7 - isVersusGhostWep
             }
-            Log.Logger.Information($"Added ghost-effectiveness to all weapons and shields");
+            Log.Logger.Debug($"Added ghost-effectiveness to all weapons and shields");
 
             return true;
         }
@@ -343,7 +345,7 @@ namespace DSAP.Helpers
             }
             else
             {
-                Log.Logger.Information($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100):P0}");
+                Log.Logger.Information($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
                 App.Client.AddOverlayMessage($"Updating soul multiplier from {(old_multiplier / 100.0):P0} to {(new_multiplier / 100.0):P0}");
             }
         }
@@ -380,6 +382,8 @@ namespace DSAP.Helpers
                 RemoveGhostGhostliness(npcParamStruct);
             if (App.DSOptions.SoulMultiplierBase != 100 || App.DSOptions.SoulMultiplierSteps > 0)
                 MultiplyNpcSouls(npcParamStruct);
+            if (App.DSOptions.LimitedShopItemShuffle) // if shops are shuffled, immunify the npcs
+                MakeNpcsImmune(npcParamStruct);
 
             // Get first entry's Param (e.g. test npc), use it as basis for new params.
             byte[] parambytes = new byte[NpcParam.Size];
@@ -405,7 +409,7 @@ namespace DSAP.Helpers
             {
                 npcParamStruct.ParamBytes[ghost.paramOffset + 0x145] &= 0xef;   // turn off bit 4, "isGhost"
             }
-            Log.Logger.Information($"Removed Ghostliness from ghosts");
+            Log.Logger.Debug($"Removed Ghostliness from ghosts");
         }
         internal static void MultiplyNpcSouls(ParamStruct<NpcParam> npcParamStruct)
         {
@@ -418,6 +422,53 @@ namespace DSAP.Helpers
                 Array.Copy(BitConverter.GetBytes(souls), 0, npcParamStruct.ParamBytes, enemy.paramOffset + 0x28, sizeof(int));
             }
             Log.Logger.Verbose($"Updated enemy soul drops with multiplier {multiplier}%");
+        }
+        static List<uint> npclist = [
+            264000, // Andre of Astora 
+            6030, 6031, // Big Hat Logan
+            6250, // Crestfallen Merchant
+            6260, // Domhnall of Zena (depths + firelink)
+            251000, // Female Undead Merchant
+            286001, // Giant Blacksmith
+            6040, // Griggs of Vilheim
+            411000, // Hawkeye Gough
+            251001, // Male Undead Merchant
+            409000, // Marvelous Chester
+            6370, // Oswald of Carim
+            6220, // Rickert of Vilheim
+            292000, // Vamos
+            // 6270, // crestfallen warrior
+            ];
+        internal static void MakeNpcsImmune(ParamStruct<NpcParam> npcParamStruct)
+        {
+            foreach (var npc in npcParamStruct.ParamEntries)
+            {
+
+                if (npclist.Contains(npc.id)) // set npc unnattackable
+                {
+                    //Array.Copy(BitConverter.GetBytes(ushort.MaxValue), 0, npcParamStruct.ParamBytes, npc.paramOffset + 0xf4, sizeof(ushort)); // defense stat - not sure if this does anything for chara npcs
+                    npcParamStruct.ParamBytes[npc.paramOffset + 0x12f] = 4; // 4 and 5...technically set the team type to 0 and chr type to 9?. I don't really get this, but it prevents the char being damagable.
+                    //npcParamStruct.ParamBytes[npc.paramOffset + 0x12d] = 1; // colorize them - setting this only affects non-chara npcs (e.g. id above 10000)
+                    Log.Logger.Verbose($"Made NPC friend: {npc.id}");
+                }
+            }
+        }
+        internal static void AddNpcResistance(ParamStruct<CharaInitParam> charaInitParam)
+        {
+            foreach (var npc in charaInitParam.ParamEntries)
+            {
+                if (npclist.Contains(npc.id)) // set vit and resist, just in case
+                {
+                    //for (int i = 0xc4; i < 0xe4; i++)
+                    //    charaInitParam.ParamBytes[npc.paramOffset + i] = 0;
+                    charaInitParam.ParamBytes[npc.paramOffset + 0xc2] = 0xff; // vit
+                    charaInitParam.ParamBytes[npc.paramOffset + 0xcb] = 0xff; // resistance
+                    
+                    //charaInitParam.ParamBytes[npc.paramOffset + 0xe3] = 2; // npc color for chara npcs. 1=white, 2=red
+
+                    Log.Logger.Verbose($"Made NPC resistant: {npc.id}");
+                }
+            }
         }
         // Updates Game Area Params
         internal static bool ModifyGameAreaParams()
@@ -466,7 +517,7 @@ namespace DSAP.Helpers
             }
             Log.Logger.Verbose($"Updated Boss soul drops with multiplier {multiplier}%");
         }
-        internal static bool ModifyShopLineupParams()
+        internal static bool ModifyShopLineupParams(Dictionary<long, ScoutedItemInfo> scoutedLocationInfo)
         {
             // Read in the Param Structure
             // Modify it,
@@ -479,7 +530,97 @@ namespace DSAP.Helpers
                 Log.Logger.Warning("Skipping reload of Shop Lineup Params");
                 return false;
             }
-            // if we are here, we are updating the params.
+
+            Log.Logger.Verbose("Reloading Shop Lineup Params");
+
+            //if (App.DSOptions.ShopSanity == true)
+            {
+                // if we are here, we are updating the params.
+                var shopflags = LocationHelper.GetShopLineupFlags();
+
+                // for flags in the list of known shop flags
+                foreach (var shopFlag in shopflags)
+                {
+                    int id = shopFlag.Id;
+                    //Log.Logger.Information($"shop locid = {id}");
+                    if (scoutedLocationInfo.TryGetValue(id, out var resultItem)) // get the matching scouted item
+                    {
+                        if (shopFlag.OriginalItemId == 0)
+                        {
+
+                            byte[] new_param_bytes = new byte[ShopLineupParam.Size];
+                            Array.Copy(BitConverter.GetBytes((int)resultItem.LocationId), 0, new_param_bytes, ShopLineupParam.EQUIP_ID, sizeof(int));
+                            Array.Copy(BitConverter.GetBytes(shopFlag.Value), 0, new_param_bytes, ShopLineupParam.COST, sizeof(int));
+                            Array.Copy(BitConverter.GetBytes((short)1), 0, new_param_bytes, ShopLineupParam.SELL_QUANTITY, sizeof(short));
+                            new_param_bytes[ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
+                            Array.Copy(BitConverter.GetBytes((int)shopFlag.Flag), 0, new_param_bytes, ShopLineupParam.EVENT_FLAG, sizeof(int));
+
+                            shopLineupParamStruct.AddParam((uint)shopFlag.ParamId, new_param_bytes, Encoding.ASCII.GetBytes(shopFlag.Name));
+
+                        }
+                        else
+                        {
+                            //Log.Logger.Information($"scout item = {resultItem.ItemName}");
+                            foreach (var entry in shopLineupParamStruct.ParamEntries.Where(x => x.id == shopFlag.ParamId))
+                            {
+                                // for now, write the scouted item location id. For this we didn't really need the scouted item itself, but it may be nice to have for the future (especially filling in own item info)
+                                Array.Copy(BitConverter.GetBytes((int)resultItem.LocationId), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EQUIP_ID, sizeof(int));
+                                Array.Copy(BitConverter.GetBytes((short)1), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.SELL_QUANTITY, sizeof(short));
+
+                                //Array.Copy(BitConverter.GetBytes(312), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
+                                shopLineupParamStruct.ParamBytes[entry.paramOffset + ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
+                                //Array.Copy(BitConverter.GetBytes(1500), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            // print shop lineup params
+            /*
+
+            var armors = MiscHelper.GetArmor();
+            var weapons = MiscHelper.GetMeleeWeapons();
+            weapons.AddRange(MiscHelper.GetRangedWeapons());
+            var rings = MiscHelper.GetRings();
+            var goods = MiscHelper.GetConsumables();
+            goods.AddRange(MiscHelper.GetKeyItems());
+            goods.AddRange(MiscHelper.GetUsableItems());
+            goods.AddRange(MiscHelper.GetUpgradeMaterials());
+            goods.AddRange(MiscHelper.GetSpells());
+            var spells = MiscHelper.GetSpells();
+
+            foreach (var shopitem in shopLineupParamStruct.ParamEntries)
+            {
+                byte[] itembytes = new byte[ShopLineupParam.Size];
+                Array.Copy(shopLineupParamStruct.ParamBytes, shopitem.paramOffset, itembytes, 0, itembytes.Length);
+                uint id = shopitem.id;
+                int itemid = BitConverter.ToInt32(itembytes, 0);
+                int val = BitConverter.ToInt32(itembytes, 4);
+                int matcost = BitConverter.ToInt32(itembytes, 8);
+                int flag = BitConverter.ToInt32(itembytes, 0xc);
+                int qwc = BitConverter.ToInt32(itembytes, 0x10);
+                short quant = BitConverter.ToInt16(itembytes, 0x14);
+                short shoptype = itembytes[0x16];
+                short equiptype = itembytes[0x17];
+                var name = "";
+                if (equiptype == 0)
+                    name = weapons.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 1)
+                    name = armors.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 2)
+                    name = rings.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 3)
+                    name = goods.Find(x => x.Id == itemid)?.Name;
+                if (equiptype == 4)
+                    name = spells.Find(x => x.Id == itemid)?.Name;
+                //Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equipttype}");
+                if (flag != -1)
+                    Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, name={name}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equiptype}");
+            }
+            */
 
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)
@@ -501,18 +642,20 @@ namespace DSAP.Helpers
 
             return true;
         }
+
+
         internal static bool AddRickertCurses(ParamStruct<ShopLineupParam> shopLineupParamStruct)
         {
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             byte[] parambytes = new byte[ShopLineupParam.Size];
             var copyentry = shopLineupParamStruct.ParamEntries.Find((x) => x.id == 2102);
             Array.Copy(shopLineupParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
-            Array.Copy(BitConverter.GetBytes(312), 0, parambytes, 0, sizeof(int)); // equip id for transient curse
-            parambytes[0x17] = (byte)3; // equip type = "good"
-            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, 0x4, sizeof(int)); // value = 1500 souls
+            Array.Copy(BitConverter.GetBytes(312), 0, parambytes, ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
+            parambytes[ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
+            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
 
             shopLineupParamStruct.AddParam(2103, parambytes, Encoding.ASCII.GetBytes("[AP]+transient curses"));
-            Log.Logger.Information("Added transient curses to Rickert's shop");
+            Log.Logger.Debug("Added transient curses to Rickert's shop");
 
             return true;
         }

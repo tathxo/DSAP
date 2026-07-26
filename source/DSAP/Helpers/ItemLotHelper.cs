@@ -165,6 +165,7 @@ namespace DSAP.Helpers
             resultMap = result;
             return;
         }
+        
         public static List<ItemLot> GetItemLots()
         {
             List<ItemLot> itemLots = new List<ItemLot>();
@@ -449,10 +450,7 @@ namespace DSAP.Helpers
                                                      CharaInitParam.spOffset,
                                                      (ps) => ps.ParamEntries.Last().id >= 99999990);
             if (!reloadRequired)
-            {
-                Log.Logger.Debug("Skipping reload of Chara Inits");
-                return false;
-            }
+                Log.Logger.Debug("There may be an error during reloading Chara Inits"); 
             // Read in system text FMGs
             bool reload2Required = MsgManHelper.ReadMsgManStruct(out MsgManStruct msgManStruct,
                                                      MsgManStruct.OFFSET_SYSTEM_TEXT,
@@ -720,12 +718,15 @@ namespace DSAP.Helpers
             MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_SYSTEM_TEXT); // write the gift names + system text updates
             Log.Logger.Debug($"Updated system text struct");
 
+            if (App.DSOptions.LimitedShopItemShuffle) // if shops are shuffled, immunify the npcs
+                ParamHelper.AddNpcResistance(charaParamStruct); // temp spot for this
+
             // add a dummy chara init at 99999998 to know we've updated them
             byte[] parambytes = new byte[CharaInitParam.Size];
             charaParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
 
             charaParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
-            Log.Logger.Information($"Added 1 items to CharaInit struct and updated chars");
+            Log.Logger.Debug($"Added 1 items to CharaInit struct and updated chars");
 
             ParamHelper.WriteFromParamSt(charaParamStruct, CharaInitParam.spOffset); // write the chara init params
 
@@ -1044,7 +1045,7 @@ namespace DSAP.Helpers
                     }
                 }
             }
-            Log.Logger.Information($"Replaced {overwritten_items.Count} \"extra\" item lots.");
+            Log.Logger.Debug($"Replaced {overwritten_items.Count} \"extra\" item lots.");
         }
     }
 }

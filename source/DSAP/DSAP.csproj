@@ -51,6 +51,7 @@
     <EmbeddedResource Include="Resources\BossFlags.json" />
     <EmbeddedResource Include="Resources\ExtraItemLots.json" />
     <EmbeddedResource Include="Resources\BossExtraItemLots.json" />
+    <EmbeddedResource Include="Resources\ShopLineups.json" />
     <EmbeddedResource Include="Resources\MapPois.json" />
     <EmbeddedResource Include="Resources\ProgressiveItems.json" />
     <EmbeddedResource Include="Resources\Keychains.json" />

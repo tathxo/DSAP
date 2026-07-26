@@ -31,6 +31,15 @@ namespace DSAP.Models
         // Sanity
         public bool FogwallSanity { get; set; }
         public bool BossFogwallSanity { get; set; }
+        // Shuffle
+        public bool BossSoulShuffle { get; set; }
+        public bool BossHumanityShuffle { get; set; }
+        public bool BossBoneShuffle { get; set; }
+        public bool BlackKnightWeaponShuffle { get; set; }
+        public bool LizardShuffle { get; set; }
+        // Shops
+        public bool LimitedShopItemShuffle { get; set; }
+        public uint ShopHints { get; set; }
         // Logic
         public Enums.DSLogicToAccessCatacombs LogicToAccessCatacombs { get; set; }
         // equipment
@@ -166,6 +175,19 @@ namespace DSAP.Models
 
             FogwallSanity = GetBool("fogwall_sanity");
             BossFogwallSanity = GetBool("boss_fogwall_sanity");
+
+            BossSoulShuffle = GetBool("boss_soul_shuffle");
+            BossHumanityShuffle = GetBool("boss_humanity_shuffle");
+            BossBoneShuffle = GetBool("boss_bone_shuffle");
+            BlackKnightWeaponShuffle = GetBool("bk_weapon_shuffle");
+            LizardShuffle = GetBool("lizard_shuffle");
+
+            LimitedShopItemShuffle = GetBool("limited_shop_item_shuffle");
+
+            if (App.Client.Options.ContainsKey("shop_hints"))
+                ShopHints = ((JsonElement)App.Client.Options["shop_hints"]).GetUInt32();
+            else
+                ShopHints = 0;
 
             if (App.Client.Options.ContainsKey("logic_to_access_catacombs") && Enum.TryParse(((JsonElement)App.Client.Options["logic_to_access_catacombs"]).ToString(), out Enums.DSLogicToAccessCatacombs ltac))
                 LogicToAccessCatacombs = ltac;

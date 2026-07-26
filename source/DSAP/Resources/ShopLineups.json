@@ -1,0 +1,1462 @@
+﻿[
+  {
+    "ParamId": 1100,
+    "OriginalItemId": 106,
+    "Id": 11110858,
+    "Name": "Male Undead Merchant: Orange Guidance Soapstone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 100,
+    "Flag": 11017020
+  },
+  {
+    "ParamId": 1105,
+    "OriginalItemId": 2021,
+    "Id": 11110042,
+    "Name": "Male Undead Merchant: Residence Key",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11017030
+  },
+  {
+    "ParamId": 1106,
+    "OriginalItemId": 2602,
+    "Id": 11110824,
+    "Name": "Male Undead Merchant: Repairbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11017040
+  },
+  {
+    "ParamId": 1133,
+    "OriginalItemId": 2608,
+    "Id": 11110823,
+    "Name": "Male Undead Merchant: Bottomless Box",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11007010
+  },
+  {
+    "ParamId": 1134,
+    "OriginalItemId": 385,
+    "Id": 11110859,
+    "Name": "Male Undead Merchant: Dried Finger",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017210
+  },
+  {
+    "ParamId": 1135,
+    "OriginalItemId": 0,
+    "Id": 11111052,
+    "Name": "Male Undead Merchant: Uchigatana - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323000
+  },
+  {
+    "ParamId": 1136,
+    "OriginalItemId": 0,
+    "Id": 11111053,
+    "Name": "Male Undead Merchant: Humanity - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323010
+  },
+  {
+    "ParamId": 1207,
+    "OriginalItemId": 312,
+    "Id": 11110860,
+    "Name": "Female Undead Merchant: Transient Curse",
+    "OriginalType": "Good",
+    "OriginalQuantity": 4,
+    "Value": 4000,
+    "Flag": 11017190
+  },
+  {
+    "ParamId": 1211,
+    "OriginalItemId": 500,
+    "Id": 11110861,
+    "Name": "Female Undead Merchant: Humanity",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11027020
+  },
+  {
+    "ParamId": 5306,
+    "OriginalItemId": 106,
+    "Id": 11110862,
+    "Name": "Crestfallen Merchant: Thunder Stoneplate Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 15000,
+    "Flag": 11507030
+  },
+  {
+    "ParamId": 5307,
+    "OriginalItemId": 107,
+    "Id": 11110863,
+    "Name": "Crestfallen Merchant: Spell Stoneplate Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 15000,
+    "Flag": 11507040
+  },
+  {
+    "ParamId": 1401,
+    "OriginalItemId": 2002,
+    "Id": 11110822,
+    "Name": "Andre: Crest of Artorias",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11017140
+  },
+  {
+    "ParamId": 1402,
+    "OriginalItemId": 2600,
+    "Id": 11110826,
+    "Name": "Andre: Weapon Smithbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017150
+  },
+  {
+    "ParamId": 1403,
+    "OriginalItemId": 2601,
+    "Id": 11110864,
+    "Name": "Andre: Armor Smithbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017160
+  },
+  {
+    "ParamId": 1404,
+    "OriginalItemId": 2602,
+    "Id": 11110824,
+    "Name": "Andre: Repairbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017170
+  },
+  {
+    "ParamId": 1421,
+    "OriginalItemId": 0,
+    "Id": 11111046,
+    "Name": "Andre of Astora: Humanity",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323020
+  },
+  {
+    "ParamId": 1422,
+    "OriginalItemId": 0,
+    "Id": 11111047,
+    "Name": "Andre of Astora: Blacksmith Hammer",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323030
+  },
+  {
+    "ParamId": 1500,
+    "OriginalItemId": 311,
+    "Id": 11110865,
+    "Name": "Domhnall of Zena: Gold Pine Resin",
+    "OriginalType": "Good",
+    "OriginalQuantity": 3,
+    "Value": 1000,
+    "Flag": 11007000
+  },
+  {
+    "ParamId": 1501,
+    "OriginalItemId": 2608,
+    "Id": 11110823,
+    "Name": "Domhnall of Zena: Bottomless Box",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11007010
+  },
+  {
+    "ParamId": 1550,
+    "OriginalItemId": 470000,
+    "Id": 11110866,
+    "Name": "Domhnall of Zena: Golem Helm",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11807020
+  },
+  {
+    "ParamId": 1551,
+    "OriginalItemId": 471000,
+    "Id": 11110867,
+    "Name": "Domhnall of Zena: Golem Armor",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 7000,
+    "Flag": 11807030
+  },
+  {
+    "ParamId": 1552,
+    "OriginalItemId": 472000,
+    "Id": 11110868,
+    "Name": "Domhnall of Zena: Golem Gauntlets",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11807040
+  },
+  {
+    "ParamId": 1553,
+    "OriginalItemId": 473000,
+    "Id": 11110869,
+    "Name": "Domhnall of Zena: Golem Leggings",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11807050
+  },
+  {
+    "ParamId": 1554,
+    "OriginalItemId": 80000,
+    "Id": 11110870,
+    "Name": "Domhnall of Zena: Smough's Helm",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 6000,
+    "Flag": 11807060
+  },
+  {
+    "ParamId": 1555,
+    "OriginalItemId": 81000,
+    "Id": 11110871,
+    "Name": "Domhnall of Zena: Smough's Armor",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 7000,
+    "Flag": 11807070
+  },
+  {
+    "ParamId": 1556,
+    "OriginalItemId": 82000,
+    "Id": 11110872,
+    "Name": "Domhnall of Zena: Smough's Gauntlets",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11807080
+  },
+  {
+    "ParamId": 1557,
+    "OriginalItemId": 83000,
+    "Id": 11110873,
+    "Name": "Domhnall of Zena: Smough's Leggings",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11807090
+  },
+  {
+    "ParamId": 1558,
+    "OriginalItemId": 270000,
+    "Id": 11110874,
+    "Name": "Domhnall of Zena: Ornstein's Helm",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 7000,
+    "Flag": 11807100
+  },
+  {
+    "ParamId": 1559,
+    "OriginalItemId": 271000,
+    "Id": 11110875,
+    "Name": "Domhnall of Zena: Ornstein's Armor",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 8000,
+    "Flag": 11807110
+  },
+  {
+    "ParamId": 1560,
+    "OriginalItemId": 272000,
+    "Id": 11110876,
+    "Name": "Domhnall of Zena: Ornstein's Gauntlets",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 6000,
+    "Flag": 11807120
+  },
+  {
+    "ParamId": 1561,
+    "OriginalItemId": 273000,
+    "Id": 11110877,
+    "Name": "Domhnall of Zena: Ornstein's Leggings",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 6000,
+    "Flag": 11807130
+  },
+  {
+    "ParamId": 1562,
+    "OriginalItemId": 540000,
+    "Id": 11110878,
+    "Name": "Domhnall of Zena: Crown of the Dark Sun",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11807230
+  },
+  {
+    "ParamId": 1563,
+    "OriginalItemId": 541000,
+    "Id": 11110879,
+    "Name": "Domhnall of Zena: Moonlight Robe",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11807170
+  },
+  {
+    "ParamId": 1564,
+    "OriginalItemId": 542000,
+    "Id": 11110880,
+    "Name": "Domhnall of Zena: Moonlight Gloves",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11807180
+  },
+  {
+    "ParamId": 1565,
+    "OriginalItemId": 543000,
+    "Id": 11110881,
+    "Name": "Domhnall of Zena: Moonlight Waistcloth",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11807190
+  },
+  {
+    "ParamId": 1566,
+    "OriginalItemId": 550000,
+    "Id": 11110882,
+    "Name": "Domhnall of Zena: Crown of the Great Lord",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11807240
+  },
+  {
+    "ParamId": 1567,
+    "OriginalItemId": 551000,
+    "Id": 11110883,
+    "Name": "Domhnall of Zena: Robe of the Great Lord",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11807200
+  },
+  {
+    "ParamId": 1568,
+    "OriginalItemId": 552000,
+    "Id": 11110884,
+    "Name": "Domhnall of Zena: Bracelet of the Great Lord",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11807210
+  },
+  {
+    "ParamId": 1569,
+    "OriginalItemId": 553000,
+    "Id": 11110885,
+    "Name": "Domhnall of Zena: Anklet of the Great Lord",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11807220
+  },
+  {
+    "ParamId": 1580,
+    "OriginalItemId": 2100,
+    "Id": 11110886,
+    "Name": "Domhnall of Zena Under Aqueduct: Master Key",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11007020
+  },
+  {
+    "ParamId": 1581,
+    "OriginalItemId": 660000,
+    "Id": 11110887,
+    "Name": "Domhnall of Zena: Helm of Artorias",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11217060
+  },
+  {
+    "ParamId": 1582,
+    "OriginalItemId": 661000,
+    "Id": 11110888,
+    "Name": "Domhnall of Zena: Armor of Artorias",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11217070
+  },
+  {
+    "ParamId": 1583,
+    "OriginalItemId": 662000,
+    "Id": 11110889,
+    "Name": "Domhnall of Zena: Gauntlets of Artorias",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11217080
+  },
+  {
+    "ParamId": 1584,
+    "OriginalItemId": 663000,
+    "Id": 11110890,
+    "Name": "Domhnall of Zena: Leggings of Artorias",
+    "OriginalType": "BossArmor",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11217090
+  },
+  {
+    "ParamId": 1600,
+    "OriginalItemId": 109,
+    "Id": 11110891,
+    "Name": "Trusty Patches: Eye of Death",
+    "OriginalType": "Good",
+    "OriginalQuantity": 3,
+    "Value": 3000,
+    "Flag": 11307000
+  },
+  {
+    "ParamId": 1601,
+    "OriginalItemId": 240,
+    "Id": 11110892,
+    "Name": "Trusty Patches: Divine Blessing",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11027040
+  },
+  {
+    "ParamId": 1603,
+    "OriginalItemId": 500,
+    "Id": 11110893,
+    "Name": "Trusty Patches: Humanity",
+    "OriginalType": "Good",
+    "OriginalQuantity": 3,
+    "Value": 10000,
+    "Flag": 11027050
+  },
+  {
+    "ParamId": 1604,
+    "OriginalItemId": 501,
+    "Id": 11110894,
+    "Name": "Trusty Patches: Twin Humanities",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11307010
+  },
+  {
+    "ParamId": 1605,
+    "OriginalItemId": 5000,
+    "Id": 11110895,
+    "Name": "Trusty Patches: Miracle: Heal",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11027090
+  },
+  {
+    "ParamId": 1606,
+    "OriginalItemId": 5020,
+    "Id": 11110896,
+    "Name": "Trusty Patches: Miracle: Great Heal Excerpt",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11027100
+  },
+  {
+    "ParamId": 1607,
+    "OriginalItemId": 702000,
+    "Id": 11110897,
+    "Name": "Trusty Patches: Crescent Axe",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11307020
+  },
+  {
+    "ParamId": 1700,
+    "OriginalItemId": 145,
+    "Id": 11110898,
+    "Name": "Shiva of the East: East Wood Grain Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11407000
+  },
+  {
+    "ParamId": 2000,
+    "OriginalItemId": 3000,
+    "Id": 11110899,
+    "Name": "Griggs of Vinheim: Sorcery: Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11027130
+  },
+  {
+    "ParamId": 2001,
+    "OriginalItemId": 3010,
+    "Id": 11110900,
+    "Name": "Griggs of Vinheim: Sorcery: Great Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 6000,
+    "Flag": 11027140
+  },
+  {
+    "ParamId": 2002,
+    "OriginalItemId": 3020,
+    "Id": 11110901,
+    "Name": "Griggs of Vinheim: Sorcery: Heavy Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11027150
+  },
+  {
+    "ParamId": 2003,
+    "OriginalItemId": 3030,
+    "Id": 11110902,
+    "Name": "Griggs of Vinheim: Sorcery: Great Heavy Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 8000,
+    "Flag": 11027160
+  },
+  {
+    "ParamId": 2004,
+    "OriginalItemId": 3100,
+    "Id": 11110903,
+    "Name": "Griggs of Vinheim: Sorcery: Magic Weapon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11027170
+  },
+  {
+    "ParamId": 2005,
+    "OriginalItemId": 3300,
+    "Id": 11110904,
+    "Name": "Griggs of Vinheim: Sorcery: Magic Shield",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11027180
+  },
+  {
+    "ParamId": 2006,
+    "OriginalItemId": 3520,
+    "Id": 11110905,
+    "Name": "Griggs of Vinheim: Sorcery: Aural Decoy",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11027190
+  },
+  {
+    "ParamId": 2007,
+    "OriginalItemId": 3540,
+    "Id": 11110906,
+    "Name": "Griggs of Vinheim: Sorcery: Fall Control",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1500,
+    "Flag": 11027200
+  },
+  {
+    "ParamId": 2008,
+    "OriginalItemId": 115,
+    "Id": 11110907,
+    "Name": "Griggs of Vinheim: Bellowing Dragoncrest Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11027210
+  },
+  {
+    "ParamId": 2009,
+    "OriginalItemId": 141,
+    "Id": 11110908,
+    "Name": "Griggs of Vinheim: Lingering Dragoncrest Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11027220
+  },
+  {
+    "ParamId": 2020,
+    "OriginalItemId": 3040,
+    "Id": 11110909,
+    "Name": "Griggs of Vinheim After Logan Leaves: Sorcery: Homing Soulmass",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11027230
+  },
+  {
+    "ParamId": 2021,
+    "OriginalItemId": 3060,
+    "Id": 11110910,
+    "Name": "Griggs of Vinheim After Logan Leaves: Sorcery: Soul Spear",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 40000,
+    "Flag": 11027240
+  },
+  {
+    "ParamId": 2100,
+    "OriginalItemId": 3000,
+    "Id": 11110911,
+    "Name": "Rickert of Vinheim: Sorcery: Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11607120
+  },
+  {
+    "ParamId": 2101,
+    "OriginalItemId": 3020,
+    "Id": 11110912,
+    "Name": "Rickert of Vinheim: Sorcery: Heavy Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 4000,
+    "Flag": 11607130
+  },
+  {
+    "ParamId": 2200,
+    "OriginalItemId": 3400,
+    "Id": 11110853,
+    "Name": "Princess Dusk: Sorcery: Hidden Weapon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11207000
+  },
+  {
+    "ParamId": 2201,
+    "OriginalItemId": 3410,
+    "Id": 11110854,
+    "Name": "Princess Dusk: Sorcery: Hidden Body",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11207010
+  },
+  {
+    "ParamId": 2202,
+    "OriginalItemId": 3500,
+    "Id": 11110855,
+    "Name": "Princess Dusk: Sorcery: Cast Light",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11207020
+  },
+  {
+    "ParamId": 2203,
+    "OriginalItemId": 3530,
+    "Id": 11110856,
+    "Name": "Princess Dusk: Sorcery: Repair",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11207030
+  },
+  {
+    "ParamId": 2204,
+    "OriginalItemId": 3550,
+    "Id": 11110857,
+    "Name": "Princess Dusk: Sorcery: Chameleon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11207040
+  },
+  {
+    "ParamId": 2400,
+    "OriginalItemId": 3600,
+    "Id": 11110913,
+    "Name": "Ingward: Sorcery: Resist Curse",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11607000
+  },
+  {
+    "ParamId": 3000,
+    "OriginalItemId": 4000,
+    "Id": 11110914,
+    "Name": "Laurentius of the Great Swamp: Pyromancy: Fireball",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 800,
+    "Flag": 11407030
+  },
+  {
+    "ParamId": 3001,
+    "OriginalItemId": 4010,
+    "Id": 11110915,
+    "Name": "Laurentius of the Great Swamp: Pyromancy: Fire Orb",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 8000,
+    "Flag": 11407040
+  },
+  {
+    "ParamId": 3002,
+    "OriginalItemId": 4100,
+    "Id": 11110916,
+    "Name": "Laurentius of the Great Swamp: Pyromancy: Combustion",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 500,
+    "Flag": 11407050
+  },
+  {
+    "ParamId": 3003,
+    "OriginalItemId": 4300,
+    "Id": 11110917,
+    "Name": "Laurentius of the Great Swamp: Pyromancy: Iron Flesh",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11407060
+  },
+  {
+    "ParamId": 3004,
+    "OriginalItemId": 4310,
+    "Id": 11110918,
+    "Name": "Laurentius of the Great Swamp: Pyromancy: Flash Sweat",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11407070
+  },
+  {
+    "ParamId": 3200,
+    "OriginalItemId": 112,
+    "Id": 11110919,
+    "Name": "Eingyi: Servant Roster",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 500,
+    "Flag": 11407080
+  },
+  {
+    "ParamId": 3211,
+    "OriginalItemId": 4200,
+    "Id": 11110920,
+    "Name": "Eingyi: Pyromancy: Poison Mist",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11407090
+  },
+  {
+    "ParamId": 3212,
+    "OriginalItemId": 4210,
+    "Id": 11110921,
+    "Name": "Eingyi: Pyromancy: Toxic Mist",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 25000,
+    "Flag": 11407100
+  },
+  {
+    "ParamId": 3400,
+    "OriginalItemId": 4000,
+    "Id": 11110922,
+    "Name": "Quelana of Izalith: Pyromancy: Fireball",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 800,
+    "Flag": 11407120
+  },
+  {
+    "ParamId": 3401,
+    "OriginalItemId": 4010,
+    "Id": 11110923,
+    "Name": "Quelana of Izalith: Pyromancy: Fire Orb",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 8000,
+    "Flag": 11407130
+  },
+  {
+    "ParamId": 3402,
+    "OriginalItemId": 4020,
+    "Id": 11110924,
+    "Name": "Quelana of Izalith: Pyromancy: Great Fireball",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11407150
+  },
+  {
+    "ParamId": 3403,
+    "OriginalItemId": 4030,
+    "Id": 11110925,
+    "Name": "Quelana of Izalith: Pyromancy: Firestorm",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 30000,
+    "Flag": 11407160
+  },
+  {
+    "ParamId": 3404,
+    "OriginalItemId": 4060,
+    "Id": 11110926,
+    "Name": "Quelana of Izalith: Pyromancy: Fire Whip",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11407170
+  },
+  {
+    "ParamId": 3405,
+    "OriginalItemId": 4100,
+    "Id": 11110927,
+    "Name": "Quelana of Izalith: Pyromancy: Combustion",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 500,
+    "Flag": 11407140
+  },
+  {
+    "ParamId": 3406,
+    "OriginalItemId": 4110,
+    "Id": 11110928,
+    "Name": "Quelana of Izalith: Pyromancy: Great Combustion",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 11407180
+  },
+  {
+    "ParamId": 3407,
+    "OriginalItemId": 4360,
+    "Id": 11110929,
+    "Name": "Quelana of Izalith: Pyromancy: Undead Rapport",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11407190
+  },
+  {
+    "ParamId": 4000,
+    "OriginalItemId": 5000,
+    "Id": 11110930,
+    "Name": "Petrus of Thorolund: Miracle: Heal",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 4000,
+    "Flag": 11027260
+  },
+  {
+    "ParamId": 4001,
+    "OriginalItemId": 5020,
+    "Id": 11110931,
+    "Name": "Petrus of Thorolund: Miracle: Great Heal Excerpt",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11027270
+  },
+  {
+    "ParamId": 4002,
+    "OriginalItemId": 5210,
+    "Id": 11110932,
+    "Name": "Petrus of Thorolund: Miracle: Homeward",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 8000,
+    "Flag": 11027280
+  },
+  {
+    "ParamId": 4003,
+    "OriginalItemId": 5300,
+    "Id": 11110933,
+    "Name": "Petrus of Thorolund: Miracle: Force",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 4000,
+    "Flag": 11027290
+  },
+  {
+    "ParamId": 4004,
+    "OriginalItemId": 5400,
+    "Id": 11110934,
+    "Name": "Petrus of Thorolund: Miracle: Seek Guidance",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017180
+  },
+  {
+    "ParamId": 4200,
+    "OriginalItemId": 240,
+    "Id": 11110935,
+    "Name": "Rhea of Thorolund: Divine Blessing",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11017050
+  },
+  {
+    "ParamId": 4201,
+    "OriginalItemId": 5000,
+    "Id": 11110936,
+    "Name": "Rhea of Thorolund: Miracle: Heal",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11017060
+  },
+  {
+    "ParamId": 4205,
+    "OriginalItemId": 5010,
+    "Id": 11110937,
+    "Name": "Rhea of Thorolund: Miracle: Great Heal",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11017100
+  },
+  {
+    "ParamId": 4202,
+    "OriginalItemId": 5020,
+    "Id": 11110938,
+    "Name": "Rhea of Thorolund: Miracle: Great Heal Excerpt",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017070
+  },
+  {
+    "ParamId": 4203,
+    "OriginalItemId": 5210,
+    "Id": 11110939,
+    "Name": "Rhea of Thorolund: Miracle: Homeward",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11017080
+  },
+  {
+    "ParamId": 4204,
+    "OriginalItemId": 5300,
+    "Id": 11110940,
+    "Name": "Rhea of Thorolund: Miracle: Force",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11017090
+  },
+  {
+    "ParamId": 4206,
+    "OriginalItemId": 5310,
+    "Id": 11110941,
+    "Name": "Rhea of Thorolund: Miracle: Wrath of the Gods",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11017110
+  },
+  {
+    "ParamId": 4207,
+    "OriginalItemId": 5400,
+    "Id": 11110942,
+    "Name": "Rhea of Thorolund: Miracle: Seek Guidance",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 500,
+    "Flag": 11017120
+  },
+  {
+    "ParamId": 4208,
+    "OriginalItemId": 5600,
+    "Id": 11110943,
+    "Name": "Rhea of Thorolund: Miracle: Magic Barrier",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 6000,
+    "Flag": 11017130
+  },
+  {
+    "ParamId": 4400,
+    "OriginalItemId": 108,
+    "Id": 11110944,
+    "Name": "Oswald of Carim: Book of the Guilty",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11607020
+  },
+  {
+    "ParamId": 4401,
+    "OriginalItemId": 274,
+    "Id": 11110945,
+    "Name": "Oswald of Carim: Purging Stone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 5,
+    "Value": 3000,
+    "Flag": 11607110
+  },
+  {
+    "ParamId": 4403,
+    "OriginalItemId": 5700,
+    "Id": 11110946,
+    "Name": "Oswald of Carim: Miracle: Karmic Justice",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 40000,
+    "Flag": 11607030
+  },
+  {
+    "ParamId": 4405,
+    "OriginalItemId": 109,
+    "Id": 11110947,
+    "Name": "Oswald of Carim: Bloodbite Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11607050
+  },
+  {
+    "ParamId": 4406,
+    "OriginalItemId": 110,
+    "Id": 11110948,
+    "Name": "Oswald of Carim: Poisonbite Ring",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 1,
+    "Value": 15000,
+    "Flag": 11607060
+  },
+  {
+    "ParamId": 4407,
+    "OriginalItemId": 126,
+    "Id": 11110949,
+    "Name": "Oswald of Carim: Rings of Sacrifice",
+    "OriginalType": "Ring",
+    "OriginalQuantity": 10,
+    "Value": 5000,
+    "Flag": 11607080
+  },
+  {
+    "ParamId": 4409,
+    "OriginalItemId": 0,
+    "Id": 11111058,
+    "Name": "Oswald of Carim: Twin Humanities x2",
+    "OriginalType": "Good",
+    "OriginalQuantity": 2,
+    "Value": 5000,
+    "Flag": 61323050
+  },
+  {
+    "ParamId": 5000,
+    "OriginalItemId": 3000,
+    "Id": 11110950,
+    "Name": "Big Hat Logan: Sorcery: Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11707000
+  },
+  {
+    "ParamId": 5001,
+    "OriginalItemId": 3010,
+    "Id": 11110951,
+    "Name": "Big Hat Logan: Sorcery: Great Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 6000,
+    "Flag": 11707010
+  },
+  {
+    "ParamId": 5002,
+    "OriginalItemId": 3020,
+    "Id": 11110952,
+    "Name": "Big Hat Logan: Sorcery: Heavy Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11707020
+  },
+  {
+    "ParamId": 5003,
+    "OriginalItemId": 3030,
+    "Id": 11110953,
+    "Name": "Big Hat Logan: Sorcery: Great Heavy Soul Arrow",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 8000,
+    "Flag": 11707030
+  },
+  {
+    "ParamId": 5004,
+    "OriginalItemId": 3040,
+    "Id": 11110954,
+    "Name": "Big Hat Logan: Sorcery: Homing Soulmass",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11707060
+  },
+  {
+    "ParamId": 5005,
+    "OriginalItemId": 3060,
+    "Id": 11110955,
+    "Name": "Big Hat Logan: Sorcery: Soul Spear",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 40000,
+    "Flag": 11707070
+  },
+  {
+    "ParamId": 5006,
+    "OriginalItemId": 3100,
+    "Id": 11110956,
+    "Name": "Big Hat Logan: Sorcery: Magic Weapon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11707040
+  },
+  {
+    "ParamId": 5007,
+    "OriginalItemId": 3300,
+    "Id": 11110957,
+    "Name": "Big Hat Logan: Sorcery: Magic Shield",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11707050
+  },
+  {
+    "ParamId": 5020,
+    "OriginalItemId": 3050,
+    "Id": 11110958,
+    "Name": "Big Hat Logan In Duke's Archives: Sorcery: Homing Crystal Soulmass",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 30000,
+    "Flag": 11707090
+  },
+  {
+    "ParamId": 5021,
+    "OriginalItemId": 3070,
+    "Id": 11110959,
+    "Name": "Big Hat Logan In Duke's Archives: Sorcery: Crystal Soul Spear",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 50000,
+    "Flag": 11707100
+  },
+  {
+    "ParamId": 5022,
+    "OriginalItemId": 3120,
+    "Id": 11110960,
+    "Name": "Big Hat Logan In Duke's Archives: Sorcery: Crystal Magic Weapon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 20000,
+    "Flag": 11707110
+  },
+  {
+    "ParamId": 6215,
+    "OriginalItemId": 2600,
+    "Id": 11110826,
+    "Name": "Giant Blacksmith: Weapon Smithbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017150
+  },
+  {
+    "ParamId": 6216,
+    "OriginalItemId": 2601,
+    "Id": 11110961,
+    "Name": "Giant Blacksmith: Armor Smithbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017160
+  },
+  {
+    "ParamId": 6217,
+    "OriginalItemId": 2602,
+    "Id": 11110824,
+    "Name": "Giant Blacksmith: Repairbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017170
+  },
+  {
+    "ParamId": 6222,
+    "OriginalItemId": 0,
+    "Id": 11111061,
+    "Name": "Giant Blacksmith: Blacksmith Giant Hammer - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323060
+  },
+  {
+    "ParamId": 6302,
+    "OriginalItemId": 2600,
+    "Id": 11110826,
+    "Name": "Vamos: Weapon Smithbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017150
+  },
+  {
+    "ParamId": 6303,
+    "OriginalItemId": 2601,
+    "Id": 11110864,
+    "Name": "Vamos: Armor Smithbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017160
+  },
+  {
+    "ParamId": 6304,
+    "OriginalItemId": 2602,
+    "Id": 11110824,
+    "Name": "Vamos: Repairbox",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11017170
+  },
+  {
+    "ParamId": 6311,
+    "OriginalItemId": 0,
+    "Id": 11111059,
+    "Name": "Vamos: Hammer of Vamos - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323070
+  },
+  {
+    "ParamId": 6312,
+    "OriginalItemId": 0,
+    "Id": 11111060,
+    "Name": "Vamos: Royal Helm - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323080
+  },
+  {
+    "ParamId": 6420,
+    "OriginalItemId": 500,
+    "Id": 11110963,
+    "Name": "Marvelous Chester: Humanity",
+    "OriginalType": "Good",
+    "OriginalQuantity": 13,
+    "Value": 10000,
+    "Flag": 11217100
+  },
+  {
+    "ParamId": 6427,
+    "OriginalItemId": 0,
+    "Id": 11111054,
+    "Name": "Marvelous Chester: Snickering Top Hat - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323090
+  },
+  {
+    "ParamId": 6428,
+    "OriginalItemId": 0,
+    "Id": 11111055,
+    "Name": "Marvelous Chester: Chester's Long Coat - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323100
+  },
+  {
+    "ParamId": 6429,
+    "OriginalItemId": 0,
+    "Id": 11111056,
+    "Name": "Marvelous Chester: Chester's Gloves - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323110
+  },
+  {
+    "ParamId": 6430,
+    "OriginalItemId": 0,
+    "Id": 11111057,
+    "Name": "Marvelous Chester: Chester's Trousers - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323120
+  },
+  {
+    "ParamId": 6501,
+    "OriginalItemId": 311,
+    "Id": 11110964,
+    "Name": "Elizabeth: Gold Pine Resin",
+    "OriginalType": "Good",
+    "OriginalQuantity": 6,
+    "Value": 1000,
+    "Flag": 11217000
+  },
+  {
+    "ParamId": 6502,
+    "OriginalItemId": 3400,
+    "Id": 11110853,
+    "Name": "Elizabeth: Sorcery: Hidden Weapon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11207000
+  },
+  {
+    "ParamId": 6503,
+    "OriginalItemId": 3410,
+    "Id": 11110854,
+    "Name": "Elizabeth: Sorcery: Hidden Body",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 2000,
+    "Flag": 11207010
+  },
+  {
+    "ParamId": 6504,
+    "OriginalItemId": 3500,
+    "Id": 11110855,
+    "Name": "Elizabeth: Sorcery: Cast Light",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 1000,
+    "Flag": 11207020
+  },
+  {
+    "ParamId": 6505,
+    "OriginalItemId": 3530,
+    "Id": 11110856,
+    "Name": "Elizabeth: Sorcery: Repair",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 10000,
+    "Flag": 11207030
+  },
+  {
+    "ParamId": 6506,
+    "OriginalItemId": 3550,
+    "Id": 11110857,
+    "Name": "Elizabeth: Sorcery: Chameleon",
+    "OriginalType": "Spell",
+    "OriginalQuantity": 1,
+    "Value": 3000,
+    "Flag": 11207040
+  },
+  {
+    "ParamId": 6603,
+    "OriginalItemId": 510,
+    "Id": 11110965,
+    "Name": "Hawkeye Gough: Carving: HELLO!",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5,
+    "Flag": 11217010
+  },
+  {
+    "ParamId": 6604,
+    "OriginalItemId": 511,
+    "Id": 11110966,
+    "Name": "Hawkeye Gough: Carving: THANK YOU!",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5,
+    "Flag": 11217020
+  },
+  {
+    "ParamId": 6612,
+    "OriginalItemId": 0,
+    "Id": 11111048,
+    "Name": "Hawkeye Gough: Gough's Helm - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323130
+  },
+  {
+    "ParamId": 6613,
+    "OriginalItemId": 0,
+    "Id": 11111049,
+    "Name": "Hawkeye Gough: Gough's Armor - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323140
+  },
+  {
+    "ParamId": 6614,
+    "OriginalItemId": 0,
+    "Id": 11111050,
+    "Name": "Hawkeye Gough: Gough's Gauntlets - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323150
+  },
+  {
+    "ParamId": 6615,
+    "OriginalItemId": 0,
+    "Id": 11111051,
+    "Name": "Hawkeye Gough: Gough's Leggings - Drop Added To Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323160
+  }
+]

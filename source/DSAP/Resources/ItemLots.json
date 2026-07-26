@@ -32,6 +32,18 @@
     "Id": 11110340
   },
   {
+    "Name": "RW: Gold Tracer - Lord's Blade Ciaran",
+    "Flag": 50000501,
+    "ItemLotParamId": 6744,
+    "Id": 11111042
+  },
+  {
+    "Name": "RW: Dark Silver Tracer - Lord's Blade Ciaran",
+    "Flag": 50000501,
+    "ItemLotParamId": 6745,
+    "Id": 11111043
+  },
+  {
     "Name": "RW: Gough's Greatbow - Kalameet reward",
     "Flag": 50000511,
     "ItemLotParamId": 1510,
@@ -365,19 +377,19 @@
     "Id": 11110077
   },
   {
-    "Name": "Black Bow of Pharis",
+    "Name": "DG: Black Bow of Pharis - Pharis Drop",
     "Flag": 50008000,
     "ItemLotParamId": 8000,
     "Id": 11110207
   },
   {
-    "Name": "Pharis's Hat",
+    "Name": "DG: Pharis's Hat - Pharis Drop",
     "Flag": 50008000,
     "ItemLotParamId": 8001,
-    "Id": 11119999
+    "Id": 11111041
   },
   {
-    "Name": "Twin Humanities - Pharis",
+    "Name": "DG: Twin Humanities - Pharis Drop",
     "Flag": 50008001,
     "ItemLotParamId": 8002,
     "Id": 11110208
@@ -2439,6 +2451,12 @@
     "Flag": 51410530,
     "ItemLotParamId": 1410530,
     "Id": 11110409
+  },
+  {
+    "Name": "LI: Sunlight Maggot",
+    "Flag": 51410990,
+    "ItemLotParamId": 34800100,
+    "Id": 11111044
   },
   {
     "Name": "Ring of Steel Protection",

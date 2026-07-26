@@ -4,7 +4,6 @@ from BaseClasses import Item
 
 
 class DSRItemCategory(IntEnum):
-    SKIP = 0,
     EVENT = 1,
     CONSUMABLE = 2,
     KEY_ITEM = 3,
@@ -23,7 +22,11 @@ class DSRItemCategory(IntEnum):
     NOTHING = 16,
     BONFIREWARP = 17,
     PROGRESSIVE_MULTIPLIER = 18,
-    FIRE_KEEPER_SOUL = 19
+    FIRE_KEEPER_SOUL = 19,
+    NEEDS_REPLACEMENT = 20, # items for lots that are rolled randomly, like some randomly determined drops (crystal lizards 2nd item)
+    USELESS_KEY = 21, # items that are in the "key items" tab but aren't progression or useful
+    USEFUL_KEY_ITEM = 22, # items that are "key items" but aren't progression, just useful
+    USEFUL_CONSUMABLE = 23
 
 class DSRWeaponType(IntEnum):
     Melee = 1,
@@ -56,7 +59,7 @@ class DSRItem(Item):
         return {item_data.name: (base_id + item_data.dsr_code if item_data.dsr_code is not None else None) for item_data in _all_items}
 
 key_item_names = {
-"Covenant of Artorias","Orange Charred Ring", "Skull Lantern"
+    "Covenant of Artorias","Orange Charred Ring", "Skull Lantern", "Sunlight Maggot"
 }
 
 _all_items_base = [    
@@ -159,10 +162,10 @@ _all_items_base = [
     ("Oolacile - Township lit", 1095, DSRItemCategory.EVENT),
     ("Bell of Awakening #1", 1096, DSRItemCategory.EVENT),
     ("Bell of Awakening #2", 1097, DSRItemCategory.EVENT),
-    ("Dusk Rescued", 1098, DSRItemCategory.EVENT),
+    ("Princess Dusk Rescued", 1098, DSRItemCategory.EVENT),
     ("Lordvessel Placed", 1099, DSRItemCategory.EVENT),
-    ("Undead Merchant Access", 1100, DSRItemCategory.EVENT),
-    ("Andre Access", 1101, DSRItemCategory.EVENT),
+    ("Male Undead Merchant Access", 1100, DSRItemCategory.EVENT),
+    ("Andre of Astora Access", 1101, DSRItemCategory.EVENT),
 
 
 
@@ -345,7 +348,7 @@ _all_items_base = [
     
     # Items with more than 1 quantity below
     ("Firebomb x6", 2100, DSRItemCategory.CONSUMABLE),
-    ("Humanity x3", 2101, DSRItemCategory.CONSUMABLE),
+    ("Humanity x3", 2101, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Cracked Red Eye Orb x4", 2102, DSRItemCategory.CONSUMABLE),
     ("Homeward Bone x6", 2103, DSRItemCategory.CONSUMABLE),
     ("Lloyd's Talisman x4", 2104, DSRItemCategory.CONSUMABLE),
@@ -361,10 +364,15 @@ _all_items_base = [
     ("Prism Stone x20", 2114, DSRItemCategory.CONSUMABLE),
     ("Eye of Death x3", 2115, DSRItemCategory.CONSUMABLE),
     ("Humanity x2", 2116, DSRItemCategory.CONSUMABLE),
-    # 2117 - 2121 reserved for shop sanity
-    ("Humanity x4", 2122, DSRItemCategory.CONSUMABLE),
-    ("Humanity x10", 2123, DSRItemCategory.CONSUMABLE),
-    
+    ("Transient Curse x4", 2117, DSRItemCategory.CONSUMABLE),
+    ("Gold Pine Resin x6", 2118, DSRItemCategory.CONSUMABLE),
+    ("Humanity x13", 2119, DSRItemCategory.CONSUMABLE),
+    ("Purging Stone x5", 2120, DSRItemCategory.CONSUMABLE),
+    ("Ring of Sacrifice x10", 2121, DSRItemCategory.USEFUL_CONSUMABLE),
+    ("Humanity x4", 2122, DSRItemCategory.USEFUL_CONSUMABLE),
+    ("Humanity x10", 2123, DSRItemCategory.USEFUL_CONSUMABLE),
+    ("Twin Humanities x2", 2124, DSRItemCategory.USEFUL_CONSUMABLE),
+
 
     ("Peculiar Doll", 3000, DSRItemCategory.KEY_ITEM),
     ("Basement Key", 3001, DSRItemCategory.KEY_ITEM),
@@ -382,8 +390,8 @@ _all_items_base = [
     ("Key to the Seal", 3013, DSRItemCategory.KEY_ITEM),
     ("Key to Depths", 3014, DSRItemCategory.KEY_ITEM),
     ("Undead Asylum F2 West Key", 3015, DSRItemCategory.KEY_ITEM),
-    ("Mystery Key", 3016, DSRItemCategory.KEY_ITEM),
-    ("Sewer Chamber Key", 3017, DSRItemCategory.KEY_ITEM),
+    ("Mystery Key", 3016, DSRItemCategory.USELESS_KEY),
+    ("Sewer Chamber Key", 3017, DSRItemCategory.USEFUL_KEY_ITEM), # Atm, only a bonfire. Change if we add checks behind it.
     ("Watchtower Basement Key", 3018, DSRItemCategory.KEY_ITEM),
     ("Archive Prison Extra Key", 3019, DSRItemCategory.KEY_ITEM),
     ("Residence Key", 3020, DSRItemCategory.KEY_ITEM),
@@ -395,11 +403,11 @@ _all_items_base = [
     ("Bequeathed Lord Soul Shard (Seath)", 3026, DSRItemCategory.KEY_ITEM),
     ("Lordvessel", 3027, DSRItemCategory.KEY_ITEM),
     ("Broken Pendant", 3028, DSRItemCategory.KEY_ITEM),
-    ("Weapon Smithbox", 3029, DSRItemCategory.KEY_ITEM),
-    ("Armor Smithbox", 3030, DSRItemCategory.KEY_ITEM),
-    ("Repairbox", 3031, DSRItemCategory.KEY_ITEM),
-    ("Rite of Kindling", 3032, DSRItemCategory.KEY_ITEM),
-    ("Bottomless Box", 3033, DSRItemCategory.KEY_ITEM),
+    ("Weapon Smithbox", 3029, DSRItemCategory.USEFUL_KEY_ITEM),
+    ("Armor Smithbox", 3030, DSRItemCategory.USEFUL_KEY_ITEM),
+    ("Repairbox", 3031, DSRItemCategory.USEFUL_KEY_ITEM),
+    ("Rite of Kindling", 3032, DSRItemCategory.USEFUL_KEY_ITEM),
+    ("Bottomless Box", 3033, DSRItemCategory.USEFUL_KEY_ITEM),
     ("Estus Flask", 3034, DSRItemCategory.KEY_ITEM),
     
 
@@ -475,7 +483,17 @@ _all_items_base = [
     ("Demon Titanite x2", 5101, DSRItemCategory.UPGRADE_MATERIAL),
     ("Green Titanite Shard x2", 5102, DSRItemCategory.UPGRADE_MATERIAL),
     ("Dragon Scale x2", 5103, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Twinkling Titanite x2", 5104, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Titanite Chunk x2", 5105, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Blue Titanite Chunk x2", 5106, DSRItemCategory.UPGRADE_MATERIAL),
+    ("White Titanite Chunk x2", 5107, DSRItemCategory.UPGRADE_MATERIAL),
+    ("Red Titanite Chunk x2", 5108, DSRItemCategory.UPGRADE_MATERIAL),
 
+    ("Extra Titanite", 5200, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra Red Titanite", 5201, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra Blue Titanite", 5202, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra White Titanite", 5203, DSRItemCategory.NEEDS_REPLACEMENT),
+    ("Extra GH Titanite", 5204, DSRItemCategory.NEEDS_REPLACEMENT),
 
     ("Sorcery: Soul Arrow", 6000, DSRItemCategory.SPELL),
     ("Sorcery: Great Soul Arrow", 6001, DSRItemCategory.SPELL),

@@ -150,6 +150,23 @@ namespace DSAP.Helpers
             }
             return locations;
         }
+        public static List<ILocation> GetShopLineupFlagLocations()
+        {
+            List<ILocation> locations = new List<ILocation>();
+            var lotFlags = GetShopLineupFlags();
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            foreach (var lot in lotFlags)
+            {
+                locations.Add(new Location
+                {
+                    Name = lot.Name,
+                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                    Id = lot.Id,
+                });
+            }
+            return locations;
+        }
         public static List<ILocation> GetMiscFlagLocations()
         {
             List<ILocation> locations = new List<ILocation>();
@@ -237,6 +254,12 @@ namespace DSAP.Helpers
             }
             ).ToList();
             return newlist;
+        }
+        public static List<ShopLineupEntry> GetShopLineupFlags()
+        {
+            var json = MiscHelper.OpenEmbeddedResource("DSAP.Resources.ShopLineups.json");
+            var list = JsonSerializer.Deserialize<List<ShopLineupEntry>>(json, MiscHelper.GetJsonOptions());
+            return list;
         }
         public static List<EventFlag> GetMiscFlags()
         {

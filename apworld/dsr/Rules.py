@@ -29,7 +29,7 @@ location_rules_table = [
   DsrLocationRule("NL: Key to the Seal", Has("Lordvessel")),
   DsrLocationRule("FA: Lordvessel Placed", Has("Lordvessel")),
   # DLC access
-  DsrLocationRule("DA: Broken Pendant", Has("Dusk Rescued")),
+  DsrLocationRule("DA: Broken Pendant", Has("Princess Dusk Rescued")),
   # Demon ruins checks that require the lava-walking ring
   DsrLocationRule("DR: Large Soul of a Proud Knight - First Jump over the Lava", Has("Orange Charred Ring")),
   DsrLocationRule("DR: Chaos Flame Ember", Has("Orange Charred Ring")),
@@ -69,6 +69,26 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Upper New Londo Ruins", True_()),
     DsrEntranceRule("Firelink Shrine - After Undead Parish Elevator", True_()),
   ],
+
+  "Firelink Shrine - Trusty Patches": [
+    DsrEntranceRule("Firelink Shrine", Has("Gravelord Nito Defeated")), # vanilla
+  ],
+  "Firelink Shrine - Griggs of Vinheim": [
+    DsrEntranceRule("Firelink Shrine", CanReachRegion("Lower Undead Burg - After Residence Key")), # vanilla
+  ],
+  "Firelink Shrine - Griggs of Vinheim, After Logan Leaves": [
+    DsrEntranceRule("Firelink Shrine - Griggs of Vinheim", 
+      CanReachRegion("Sen's Fortress - After Cage Key") & CanReachRegion("The Duke's Archives - Out of Cell")), # Can rescue Logan, and easily get him to leave Firelink
+  ],
+  "Firelink Shrine - Laurentius of the Great Swamp": [
+    DsrEntranceRule("Firelink Shrine", CanReachRegion("Depths")), # vanilla
+  ],
+  "Firelink Shrine - Petrus of Thorolund": [
+    DsrEntranceRule("Firelink Shrine", True_()), # vanilla
+  ],
+  "Firelink Shrine - Rhea of Thorolund": [ # need more info about her shop inventory and when each part becomes available
+    DsrEntranceRule("Firelink Shrine", CanReachRegion("Tomb of the Giants")), # vanilla tomb rescue spot
+  ],
   "Upper Undead Burg - Before Fog": [
     DsrEntranceRule("Firelink Shrine", True_()),
     DsrEntranceRule("Upper Undead Burg - Fog", True_()),
@@ -81,6 +101,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Upper Undead Burg - Fog", True_()),
     DsrEntranceRule("Upper Undead Burg - Hellkite Bridge", True_()), # bonfire ladder
     DsrEntranceRule("Lower Undead Burg", True_())
+  ],
+  "Upper Undead Burg - Male Undead Merchant": [
+    DsrEntranceRule("Upper Undead Burg", True_()), # vanilla
   ],
   "Upper Undead Burg - Pine Resin Chest": [
     DsrEntranceRule("Upper Undead Burg", HasAny("Residence Key", "Master Key")),
@@ -106,12 +129,19 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Undead Parish - Fog", True_()),
     DsrEntranceRule("Darkroot Garden - Before Fog", True_()),
   ],
+  "Undead Parish - Andre of Astora": [
+    DsrEntranceRule("Undead Parish", True_()),
+  ],
   "Undead Parish - Bell Gargoyles": [
     DsrEntranceRule("Undead Parish", Has("Boss Fog Wall Key - Bell Gargoyles") | bossfogwall_sanity_off),
+  ],
+  "Undead Parish - Oswald of Carim": [
+    DsrEntranceRule("Undead Parish - Bell Gargoyles", True_()),
   ],
   "Firelink Shrine - After Undead Parish Elevator": [
     DsrEntranceRule("Undead Parish", True_()),
   ],
+
   "Northern Undead Asylum Second Visit": [
     DsrEntranceRule("Firelink Shrine - After Undead Parish Elevator", True_()),
   ],
@@ -139,6 +169,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Lower Undead Burg - After Capra Demon": [
     DsrEntranceRule("Lower Undead Burg - Capra Demon", True_()), # Has("Capra Demon Defeated")),
   ],
+  "Lower Undead Burg - Female Undead Merchant": [
+    DsrEntranceRule("Lower Undead Burg", True_()),
+  ],
   "Watchtower Basement": [
     DsrEntranceRule("Upper Undead Burg", HasAny("Watchtower Basement Key", "Master Key")),
     DsrEntranceRule("Darkroot Basin", HasAny("Watchtower Basement Key", "Master Key")),
@@ -155,6 +188,21 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Depths - After Gaping Dragon": [
     DsrEntranceRule("Depths - Gaping Dragon", True_()), # Has("Gaping Dragon Defeated")),
   ],
+  "Firelink Shrine - Domhnall of Zena": [
+    DsrEntranceRule("Firelink Shrine", CanReachRegion("Depths") & HasAll("Bell of Awakening #1", "Bell of Awakening #2")), # vanilla, but his inventory is more complicated due to flags
+  ],
+  # "Firelink Shrine - Domhnall of Zena - Post Iron Golem": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Iron Golem Defeated")), 
+  # ],
+  # "Firelink Shrine - Domhnall of Zena - Post O+S": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Ornstein and Smough Defeated")), #vanilla, but his inventory is more complicated due to flags
+  # ],
+  # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Gwyndolin Defeated")), #vanilla, but his inventory is more complicated due to flags
+  # ],
+  # "Firelink Shrine - Domhnall of Zena - Post Artorias": [
+  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Artorias the Abysswalker Defeated")), #vanilla, but his inventory is more complicated due to flags
+  # ],
   "Depths to Blighttown Door": [
     DsrEntranceRule("Depths", Has("Blighttown Key")),
   ],
@@ -176,7 +224,13 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Lower Blighttown - Fog", True_()),
     # Don't expect player to jump down past fog if they can't teleport
     DsrEntranceRule("Upper Blighttown Depths Side", Has("Lordvessel", options=[OptionFilter(CanWarpWithoutLordvessel, CanWarpWithoutLordvessel.option_false)], filtered_resolution=True)),
-    DsrEntranceRule("Lower Blighttown - Quelaag", True_())
+    DsrEntranceRule("Lower Blighttown - Quelaag", True_()),
+  ],
+  "Lower Blighttown - Shiva of the East": [
+    DsrEntranceRule("Lower Blighttown", CanReachRegion("Darkroot Garden - Behind Artorias Door")),
+  ],
+  "Lower Blighttown - Quelana of Izalith": [
+    DsrEntranceRule("Lower Blighttown", CanReachRegion("Firelink Shrine - Laurentius of the Great Swamp")), # normal way to reach; could also reach via Eingyi
   ],
   "Lower Blighttown - Quelaag": [
     DsrEntranceRule("Lower Blighttown", Has("Boss Fog Wall Key - Quelaag") | bossfogwall_sanity_off),
@@ -184,6 +238,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Lower Blighttown - After Quelaag": [
     DsrEntranceRule("Lower Blighttown", True_()), # Has("Chaos Witch Quelaag Defeated")),
     DsrEntranceRule("Demon Ruins - Early", True_()),
+  ],
+  "Lower Blighttown - Eingyi": [
+    DsrEntranceRule("Lower Blighttown - After Quelaag",  True_()),
   ],
   "Valley of the Drakes": [
     DsrEntranceRule("Upper Blighttown VotD Side", True_()),
@@ -201,6 +258,10 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Darkroot Basin": [
     DsrEntranceRule("Valley of the Drakes", True_()),
     DsrEntranceRule("Darkroot Garden - Before Fog", True_()),
+  ],
+  "Darkroot Basin - Princess Dusk": [
+    DsrEntranceRule("Darkroot Basin", Has("Princess Dusk Rescued")),
+    DsrEntranceRule("Oolacile Sanctuary - Elizabeth", True_()),
   ],
   "Darkroot Garden - Before Fog": [
     DsrEntranceRule("Darkroot Basin", True_()),
@@ -236,6 +297,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Sen's Fortress - After Second Fog": [
     DsrEntranceRule("Sen's Fortress - After First Fog", Has("Fog Wall Key - Sen's Fortress #2 (Upper Entrance)") | fogwall_sanity_off),
   ],
+  "Sen's Fortress - Crestfallen Merchant": [
+    DsrEntranceRule("Sen's Fortress - After Second Fog", True_()),
+  ],
   "Sen's Fortress - After Cage Key": [
     DsrEntranceRule("Sen's Fortress - After First Fog", HasAny("Cage Key", "Master Key")),
   ],
@@ -259,6 +323,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "Anor Londo - Ornstein and Smough": [
     DsrEntranceRule("Anor Londo - After Second Fog", Has("Boss Fog Wall Key - Ornstein and Smough") | bossfogwall_sanity_off),
+  ],
+  "Anor Londo - Giant Blacksmith": [
+    DsrEntranceRule("Anor Londo - After Second Fog", True_()),
   ],
   "Anor Londo - After Ornstein and Smough": [
     DsrEntranceRule("Anor Londo - Ornstein and Smough", True_()), # Has("Ornstein and Smough Defeated")),
@@ -289,8 +356,14 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Firelink Shrine", True_()),
     DsrEntranceRule("Door between Upper New Londo and Valley of the Drakes", True_()),
   ],
+  "Upper New Londo Ruins - Rickert of Vinheim": [
+    DsrEntranceRule("Upper New Londo Ruins", True_()),
+  ],
   "Upper New Londo Ruins - After Fog": [
     DsrEntranceRule("Upper New Londo Ruins", Has("Fog Wall Key - New Londo (Upper)") | fogwall_sanity_off),
+  ],
+  "Upper New Londo Ruins - Ingward": [
+    DsrEntranceRule("Upper New Londo Ruins - After Fog", True_()),
   ],
   "New Londo Ruins Door to the Seal": [
     DsrEntranceRule("Upper New Londo Ruins - After Fog", Has("Key to the Seal") 
@@ -339,6 +412,10 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "The Duke's Archives - First Arena after Seath's Death": [
     DsrEntranceRule("The Duke's Archives", CanReachRegion("Crystal Cave - After Seath")),
   ],
+  "The Duke's Archives - Big Hat Logan": [ # Logan in book room = when he is guaranteed
+    DsrEntranceRule("The Duke's Archives - After Archive Tower Giant Door Key",
+     CanReachRegion("Sen's Fortress - After Cage Key") & CanReachRegion("The Duke's Archives - Giant Cell") & CanReachRegion("Crystal Cave - After Seath"))
+  ],
   "Demon Ruins - Early": [
     DsrEntranceRule("Lower Blighttown - After Quelaag", True_()),
   ],
@@ -369,9 +446,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "The Catacombs": [
     # Firelink access is either immediate (if option = "no logic"), or has one of the requirements below
     DsrEntranceRule("Firelink Shrine", 
-        Has("Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_undead_merchant)], filtered_resolution=True)
-      & Has("Andre Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre)], filtered_resolution=True)
-      & HasAny("Andre Access", "Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre_or_undead_merchant)], filtered_resolution=True)
+        Has("Male Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_undead_merchant)], filtered_resolution=True)
+      & Has("Andre of Astora Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre)], filtered_resolution=True)
+      & HasAny("Andre of Astora Access", "Male Undead Merchant Access", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_andre_or_undead_merchant)], filtered_resolution=True)
       & CanReachRegion("Anor Londo - After Ornstein and Smough", options=[OptionFilter(LogicToAccessCatacombs, LogicToAccessCatacombs.option_ornstein_and_smough)], filtered_resolution=True)
       )
   ],
@@ -381,6 +458,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "The Catacombs - After Door 1": [
     DsrEntranceRule("The Catacombs - Door 1", True_()),
   ],
+  "The Catacombs - Vamos": [
+    DsrEntranceRule("The Catacombs - After Door 1", True_()),
+  ],
   "The Catacombs - Pinwheel": [
     DsrEntranceRule("The Catacombs - After Door 1", Has("Boss Fog Wall Key - Pinwheel") | bossfogwall_sanity_off),
   ],
@@ -389,7 +469,8 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "Tomb of the Giants": [
     DsrEntranceRule("The Catacombs - After Pinwheel",
-      Has("Skull Lantern", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_skull_lantern)], filtered_resolution=True)
+      Has("Skull Lantern", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_skull_lantern)], filtered_resolution=True) &
+      Has("Sunlight Maggot", options=[OptionFilter(LogicToAccessTotG, LogicToAccessTotG.option_sunlight_maggot)], filtered_resolution=True)
     )
   ],
   "Tomb of the Giants - After White Fog": [
@@ -428,30 +509,51 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Oolacile Sanctuary": [
     DsrEntranceRule("Sanctuary Garden - Sanctuary Guardian", True_()), # Has("Sanctuary Guardian Defeated")),
   ],
+  "Oolacile Sanctuary - Elizabeth": [
+    DsrEntranceRule("Oolacile Sanctuary", True_()),
+  ],
   "Royal Wood": [
     DsrEntranceRule("Oolacile Sanctuary", True_()),
+  ],
+  "Royal Wood - Marvelous Chester": [
+    DsrEntranceRule("Royal Wood", True_()),
   ],
   "Royal Wood - Artorias": [
     DsrEntranceRule("Royal Wood", Has("Boss Fog Wall Key - Artorias") | bossfogwall_sanity_off),
   ],
+  "Royal Wood - Hawkeye Gough": [
+    DsrEntranceRule("Oolacile Township", Has("Crest Key")),
+  ],
   "Royal Wood - After Hawkeye Gough": [
-    DsrEntranceRule("Oolacile Township - After Crest Key", True_()),
+    DsrEntranceRule("Royal Wood - Hawkeye Gough", True_()), # depends on being able to reach kalameet arena, technically, but until fog rando that will always be in logic
   ],
   "Oolacile Township": [
     DsrEntranceRule("Royal Wood - Artorias", True_()), # Has("Artorias the Abysswalker Defeated")),
     DsrEntranceRule("Chasm of the Abyss", True_()),
   ],
   "Oolacile Township - Behind Light-Dispelled Walls": [
-    DsrEntranceRule("Oolacile Township", Has("Skull Lantern")),
-  ],
-  "Oolacile Township - After Crest Key": [
-    DsrEntranceRule("Oolacile Township", Has("Crest Key")),
+    DsrEntranceRule("Oolacile Township", HasAny("Skull Lantern", "Sunlight Maggot")),
   ],
   "Chasm of the Abyss": [
     DsrEntranceRule("Oolacile Township", True_()),
   ],
   "Chasm of the Abyss - Manus": [
     DsrEntranceRule("Chasm of the Abyss", Has("Boss Fog Wall Key - Manus") | bossfogwall_sanity_off),
+  ],
+  "2 Merchants - Bottomless Box": [
+    DsrEntranceRule("Upper Undead Burg - Male Undead Merchant", True_()),
+    DsrEntranceRule("Firelink Shrine - Domhnall of Zena", True_()),
+  ],
+  "4 Merchants - Repairbox": [
+    DsrEntranceRule("Anor Londo - Giant Blacksmith", True_()),
+    DsrEntranceRule("Upper Undead Burg - Male Undead Merchant", True_()),
+    DsrEntranceRule("Undead Parish - Andre of Astora", True_()),
+    DsrEntranceRule("The Catacombs - Vamos", True_()),
+  ],
+  "3 Blacksmiths - Smithboxen": [
+    DsrEntranceRule("Anor Londo - Giant Blacksmith", True_()),
+    DsrEntranceRule("Undead Parish - Andre of Astora", True_()),
+    DsrEntranceRule("The Catacombs - Vamos", True_()),
   ],
 }
 

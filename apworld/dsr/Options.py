@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter, StartInventoryPool
 from Options import OptionGroup
 from .Skips import get_all_skips, SkipDifficulty
 
@@ -155,6 +155,53 @@ class BossBoneShuffle(Toggle):
     """Makes boss homeward bone drops be shuffled into the multiworld item pool."""
     display_name = "Boss Bone Shuffle"
 
+class BlackKnightWeaponShuffle(DefaultOnToggle):
+    """Makes Black Knight weapon drop locations guaranteed, and adds their weapons to the multiworld item pool.
+    This only applies to the 7 non-respawning Black Knights in the game.
+    With this off, their Titanite Chunk drops are still added to the pool, and the weapon drops are left to chance.
+
+    These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool."""
+    display_name = "Black Knight Weapon Shuffle"
+
+class CrystalLizardShuffle(Toggle):
+    """Adds Crystal Lizard drop locations to the multiworld item pool.
+    This adds 2 locations per lizard: 1 for their Twinkling Titanite, and 1 for an additional drop - which is made guaranteed.
+    
+    There are 25 total crystal lizards, 10 of which are in the Great Hollow, and 5 of which are in the DLC.
+    If one escapes, typically you can quit out and reload to respawn it.
+    Great Hollow lizards may each require several reloads, because they only have a 1 in 3 chance to activate each time."""
+    display_name = "Crystal Lizard Shuffle"
+
+class LimitedShopItemShuffle(DefaultOnToggle):
+    """Adds limited quantity shop slots from unmissable shopkeepers as locations, and shuffles their items into the multiworld.
+    Missable shopkeepers, who can be made unavailable based on progression or dialogue options, will not have their shops shuffled into the multiworld.
+    Shuffled Shops' keepers will be made immune to player attacks to make them unmissable, and their drops added as shuffled locations to their shop.
+    
+    Shops Shuffled by this option:
+    Andre of Astora
+    Big Hat Logan
+    Crestfallen Merchant
+    Domhnall of Zena (not including post-boss equipment yet)
+    Female Undead Merchant
+    Giant Blacksmith (shared Repairbox and Blacksmith Giant Hammer)
+    Griggs of Vinheim
+    Hawkeye Gough
+    Male Undead Merchant
+    Marvelous Chester
+    Oswald of Carim
+    Rickert of Vinheim
+    Vamos (shared Repairbox + 2 drops only)
+    """
+    display_name = "Limited Shop Item Shuffle"
+
+class ShopHints(Choice):
+    """When Shop items are shuffled, this options control what types of Archipelago Hints will be created upon talking to the relevant merchant (with the shop slots unlocked)."""
+    display_name = "Shop Hints"
+    option_off = 0
+    option_progression = 1
+    option_progression_and_useful = 2
+    option_all = 3
+    default = 1
 
 def skip_logic_helper(difficulty: SkipDifficulty): 
     available_skips = get_all_skips()
@@ -166,9 +213,9 @@ def skip_logic_helper(difficulty: SkipDifficulty):
 class SkipLogicEasy(OptionCounter):
     """ In the following section you can enable specific skips to perform. The skips are losely categorized by their difficulty. 
         Numbers other than 0 put the skip into logic.
-        Recommended to edit in the yaml. 
+        Recommended to edit in the yaml, due to problems in Options Creator. 
 
-        For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?usp=sharing
+        For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?gid=840526629#gid=840526629
     """
     display_name = "Enabled Easy Skips"
     available_skips = get_all_skips()
@@ -218,15 +265,15 @@ class LogicToAccessCatacombs(Choice):
     - **no_logic:** (not recommended) Catacombs is in-logic as soon as you get to Firelink Shrine.
     - **undead_merchant:** Access to Undead Merchant in the Upper Undead Burg puts Catacombs in-logic.
     - **andre:** Access to Andre puts Catacombs in-logic.
-    - **andre_or_undead_merchant:** (default) Access to either Andre or Undead Merchant puts Catacombs in-logic.
-    - **ornstein_and_smough:** Access to Ornstein and Smough puts Catcombs in-logic."""
+    - **andre_or_undead_merchant:** Access to either Andre or Undead Merchant puts Catacombs in-logic.
+    - **ornstein_and_smough:** (Default) Access to Ornstein and Smough puts Catcombs in-logic."""
     display_name = "Logic Requirement to Access Catacombs"
     option_no_logic = 0
     option_undead_merchant = 1
     option_andre = 2
     option_andre_or_undead_merchant = 3
     option_ornstein_and_smough = 4
-    default = 3
+    default = 4
 
 class LogicToAccessTotG(Choice):
     """Artificial logic for Tomb of the Giants (TotG) access.
@@ -238,6 +285,7 @@ class LogicToAccessTotG(Choice):
     display_name = "Logic Requirement to Access Tomb of the Giants"
     option_no_logic = 0
     option_skull_lantern = 1
+    option_sunlight_maggot = 2
     default = 1
 
 class RandomizeStartingLoadouts(DefaultOnToggle):
@@ -396,15 +444,28 @@ option_groups = [
         FogwallSanity,
         BossFogwallSanity,
         ]),
+    OptionGroup("Shuffling", [
+        BossSoulShuffle,
+        BossHumanityShuffle,
+        BossBoneShuffle,
+        BlackKnightWeaponShuffle,
+        CrystalLizardShuffle,
+        ]),
+    OptionGroup("Shops", [
+        LimitedShopItemShuffle,
+        ShopHints,
+        ]),
     OptionGroup("Logic", [
         LogicToAccessFirelinkAltar,
         LogicToAccessCatacombs,
         LogicToAccessTotG,
-        SkipLogicEasy,
-        SkipLogicMedium,
-        SkipLogicHard,
-        SkipLogicVeryHard
         ]),
+    # OptionGroup("Skip Logic - Warning!", [
+    #     SkipLogicEasy,
+    #     SkipLogicMedium,
+    #     SkipLogicHard,
+    #     SkipLogicVeryHard
+    #     ]),
     OptionGroup("Equipment", [
         RandomizeStartingLoadouts,
         RandomizeStartingGifts,
@@ -436,6 +497,7 @@ class DSROption(PerGameCommonOptions):
     goal_condition: GoalConditionOption
     guaranteed_items: GuaranteedItemsOption
     excluded_location_behavior: ExcludedLocationBehaviorOption
+    start_inventory_from_pool: StartInventoryPool
 
     # QoL
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
@@ -459,15 +521,23 @@ class DSROption(PerGameCommonOptions):
     boss_soul_shuffle: BossSoulShuffle
     boss_humanity_shuffle: BossHumanityShuffle
     boss_bone_shuffle: BossBoneShuffle
+    bk_weapon_shuffle: BlackKnightWeaponShuffle
+    lizard_shuffle: CrystalLizardShuffle
+
+    # Shops
+    limited_shop_item_shuffle: LimitedShopItemShuffle
+    shop_hints: ShopHints
 
     # Logic
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar
     logic_to_access_catacombs: LogicToAccessCatacombs
     logic_to_access_totg: LogicToAccessTotG
-    skip_logic_easy: SkipLogicEasy
-    skip_logic_medium: SkipLogicMedium
-    skip_logic_hard: SkipLogicHard
-    skip_logic_very_hard: SkipLogicVeryHard
+
+    # Skip Logic
+    # skip_logic_easy: SkipLogicEasy
+    # skip_logic_medium: SkipLogicMedium
+    # skip_logic_hard: SkipLogicHard
+    # skip_logic_very_hard: SkipLogicVeryHard
 
     # Equipment
     randomize_starting_loadouts: RandomizeStartingLoadouts

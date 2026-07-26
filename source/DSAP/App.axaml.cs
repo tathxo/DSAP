@@ -73,6 +73,7 @@ public partial class App : Application
     private bool overlayInitialized = false;
     private static uint connect_command_step = 0;
     private bool firstConnectionStarted = false;
+    internal static bool monitoringEventFlags = false;
     private DsrControlsWindow dsrControlsWindow;
 
     public override void Initialize()
@@ -452,7 +453,14 @@ public partial class App : Application
         }
         else if (command.StartsWith("/maefs")) // monitor all event flags
         {
-            AddressHelper.MonitorAllEventFlags();
+            monitoringEventFlags = true;
+        }
+        else if (command.StartsWith("/multipliers"))
+        {
+            var sm = ParamHelper.CalculateSoulMultiplier();
+            var wm = ParamHelper.CalculateWeightMultiplier();
+            Log.Logger.Information($"Soul multiplier is {(sm / 100.0):P0}");
+            Log.Logger.Information($"Weight multiplier is {(wm / 100.0):P0}");
         }
 
         //else if (command.StartsWith("/get")) // for debugging
@@ -769,6 +777,10 @@ public partial class App : Application
                 ParamHelper.ModifyWeaponParams();
                 ParamHelper.ModifyArmorParams();
             }
+            if (doPopup)
+            {
+                AddItemWithMessage((int)DSItemCategory.KeyItems, item.Id, item.Quantity);
+            }
         }
         else
         {
@@ -1013,6 +1025,7 @@ public partial class App : Application
             var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
             var doorLocations = LocationHelper.GetDoorFlagLocations();
             var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
+            var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
             var miscLocations = LocationHelper.GetMiscFlagLocations();
 
             var fullLocationsList = bossLocations
@@ -1022,12 +1035,14 @@ public partial class App : Application
                 .Union(bonfireLocations)
                 .Union(doorLocations)
                 .Union(fogWallLocations)
+                .Union(shopLineupLocations)
                 .Union(miscLocations)
                 .ToList();
             Client.MonitorLocationsAsync(fullLocationsList);
 
             StartEmkWatchers(EmkControllers);
             StartInGameWatcher();
+            AddressHelper.StartEventFlagMonitor();
             MapHelper.StartMapAutoTracking();
         }
         else
@@ -1532,6 +1547,11 @@ public partial class App : Application
                     }
                 }
                 AddAbstractItem(itemToReceive, will_popup);
+                if (itemToReceive.Name == "Ring of Sacrifice x10") // handle this with an exception. Comes from Oswald's shop
+                {
+                    for (int i=0; i<9;i++)
+                        AddAbstractItem(itemToReceive, false);
+                }
 
                 /* If after receiving item (or trap), player is still in game, then it received successfully */
                 if (MiscHelper.IsInGame())
@@ -1908,6 +1928,8 @@ public partial class App : Application
             await BonfireInjectorHelper.UpdateBonfires();
 
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);
+            var hints = await App.Client.CurrentSession.Hints.GetHintsAsync();
+            AddressHelper.BuildHintTriggers(scoutedLocationInfo, hints);
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
@@ -1919,13 +1941,14 @@ public partial class App : Application
         ParamHelper.UpdateSoulMultiplier(); // setup soul multiplier for npcs + bosses
         ParamHelper.ModifyNpcParams();
         ParamHelper.ModifyGameAreaParams();
-        ParamHelper.ModifyShopLineupParams();
+        ParamHelper.ModifyShopLineupParams(scoutedLocationInfo);
 
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
         /* Set to only receive remote items and starting inventory */
         ParamHelper.UpdateItemLots(ItemLotReplacementMap);
+
         watch.Stop();
         Log.Logger.Information($"Finished setup, took {watch.ElapsedMilliseconds}ms total");
         Client.AddOverlayMessage($"Finished setup, took {watch.ElapsedMilliseconds}ms total");

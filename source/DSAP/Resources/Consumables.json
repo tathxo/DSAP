@@ -657,6 +657,42 @@
     "ApId": 11112116
   },
   {
+    "Name": "Transient Curse x4",
+    "Id": 312,
+    "StackLimit": 99,
+    "Quantity": 4,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112117
+  },
+  {
+    "Name": "Gold Pine Resin x6",
+    "Id": 311,
+    "StackLimit": 99,
+    "Quantity": 6,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112118
+  },
+  {
+    "Name": "Humanity x13",
+    "Id": 500,
+    "StackLimit": 99,
+    "Quantity": 13,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112119
+  },
+  {
+    "Name": "Purging Stone x5",
+    "Id": 274,
+    "StackLimit": 99,
+    "Quantity": 5,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112120
+  },
+  {
     "Name": "Humanity x4",
     "Id": 500,
     "StackLimit": 99,
@@ -673,5 +709,14 @@
     "UpgradeType": "None",
     "Category": "Consumables",
     "ApId": 11112123
+  },
+  {
+    "Name": "Twin Humanities x2",
+    "Id": 501,
+    "StackLimit": 99,
+    "Quantity": 2,
+    "UpgradeType": "None",
+    "Category": "Consumables",
+    "ApId": 11112124
   }
 ]

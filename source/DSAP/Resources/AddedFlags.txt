@@ -1,0 +1,24 @@
+﻿For added shop item lots.
+To try to avoid collisions as much as possible, I went as unused as possible:
+digit 1 = 6, unused but valid span of flags, as far as I can tell.
+digit 2-4 = 132, Ash Lake/Great Hollow
+digit 5-8 = offset to 3000, up to 3160.
+Shop item counts need 10 bytes per slot, to account for up to 2^10=1023 items in slot.
+We only use 1.
+"Flag": "61323000"
+"Flag": "61323010"
+"Flag": "61323020"
+"Flag": "61323030"
+"Flag": "61323040"
+"Flag": "61323050"
+"Flag": "61323060"
+"Flag": "61323070"
+"Flag": "61323080"
+"Flag": "61323090"
+"Flag": "61323100"
+"Flag": "61323110"
+"Flag": "61323120"
+"Flag": "61323130"
+"Flag": "61323140"
+"Flag": "61323150"
+"Flag": "61323160"

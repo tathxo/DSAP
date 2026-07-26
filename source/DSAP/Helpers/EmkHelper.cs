@@ -20,14 +20,16 @@ namespace DSAP.Helpers
             ulong eventhead_ptr = AddressHelper.GetEmkHeadAddress();
             int numevents = 0;
             if (eventhead_ptr != prevEventHeadPtr)
+            {
                 Log.Logger.Debug($"eventheadptr changed from {prevEventHeadPtr:X} to {eventhead_ptr:X}");
+                prevEventHeadPtr = eventhead_ptr;
+            }   
             if (eventhead_ptr != 0)
             {
                 ulong eventhead = Memory.ReadULong((ulong)eventhead_ptr);
                 if (eventhead != prevEventHead)
                     Log.Logger.Debug($"eventhead changed from {prevEventHead:X} to {eventhead:X}");
                 prevEventHead = eventhead;
-                prevEventHeadPtr = eventhead_ptr;
 
                 // read every event into the hashset
                 // detect number of differences => numevents

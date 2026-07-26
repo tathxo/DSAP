@@ -121,8 +121,9 @@
     "ApId": 11115100
   },
   {
-    "Name": "Demon Titanite",
+    "Name": "Demon Titanite x2",
     "Id": 1120,
+    "Quantity": 2,
     "StackLimit": 99,
     "UpgradeType": "None",
     "Category": "UpgradeMaterials",
@@ -139,11 +140,56 @@
   },
   {
     "Name": "Dragon Scale x2",
-    "Id": 1120,
+    "Id": 1110,
     "Quantity": 2,
     "StackLimit": 99,
     "UpgradeType": "None",
     "Category": "UpgradeMaterials",
     "ApId": 11115103
+  },
+  {
+    "Name": "Twinkling Titanite x2",
+    "Id": 1130,
+    "Quantity": 2,
+    "StackLimit": 99,
+    "UpgradeType": "None",
+    "Category": "UpgradeMaterials",
+    "ApId": 11115104
+  },
+  {
+    "Name": "Titanite Chunk x2",
+    "Id": 1030,
+    "Quantity": 2,
+    "StackLimit": 99,
+    "UpgradeType": "None",
+    "Category": "UpgradeMaterials",
+    "ApId": 11115105
+  },
+  {
+    "Name": "Blue Titanite Chunk x2",
+    "Id": 1040,
+    "Quantity": 2,
+    "StackLimit": 99,
+    "UpgradeType": "None",
+    "Category": "UpgradeMaterials",
+    "ApId": 11115106
+  },
+  {
+    "Name": "White Titanite Chunk x2",
+    "Id": 1050,
+    "Quantity": 2,
+    "StackLimit": 99,
+    "UpgradeType": "None",
+    "Category": "UpgradeMaterials",
+    "ApId": 11115107
+  },
+  {
+    "Name": "Red Titanite Chunk x2",
+    "Id": 1060,
+    "Quantity": 2,
+    "StackLimit": 99,
+    "UpgradeType": "None",
+    "Category": "UpgradeMaterials",
+    "ApId": 11115108
   }
 ]

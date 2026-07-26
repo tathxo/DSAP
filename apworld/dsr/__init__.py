@@ -1,7 +1,7 @@
 # world/dsr/__init__.py
 from typing import Dict, Set, List, ClassVar, TextIO, Any, Optional
 
-from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location
+from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location, LocationProgressType
 from Options import Toggle, OptionError, Option
 
 from worlds.AutoWorld import World, WebWorld
@@ -9,7 +9,7 @@ from worlds.generic.Rules import add_rule, add_item_rule
 from rule_builder.rules import Rule, True_, Has, HasAll
 
 from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
-from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment
+from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment, ReplaceItem
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
 from .Groups import location_name_groups, item_name_groups
 from .Options import DSROption, option_groups, GoalConditionOption
@@ -156,6 +156,7 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
+        # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.MIMIC_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS_DROP)
@@ -167,12 +168,22 @@ class DSRWorld(World):
         if (self.options.boss_bone_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_BONE)
 
+        self.enabled_location_categories.add(DSRLocationCategory.BK_DROP)
+        if (self.options.bk_weapon_shuffle.value == True):
+            self.enabled_location_categories.add(DSRLocationCategory.BK_WEAPON)
+
+        if (self.options.lizard_shuffle.value == True):
+            self.enabled_location_categories.add(DSRLocationCategory.CRYSTAL_LIZARD)
 
         # self.enabled_location_categories.add(DSRLocationCategory.DOOR)
         if (self.options.fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.FOG_WALL)
         if (self.options.boss_fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_FOG_WALL)
+        # if (self.options.shop_sanity.value == True):
+        if (self.options.limited_shop_item_shuffle.value == True):
+            self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
+            # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_SHOP_ITEM)
 
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
@@ -301,9 +312,42 @@ class DSRWorld(World):
             "Royal Wood - After Hawkeye Gough",
             "Oolacile Township", 
             "Oolacile Township - Behind Light-Dispelled Walls",
-            "Oolacile Township - After Crest Key",
+            # "Oolacile Township - After Crest Key",
             "Chasm of the Abyss",
-            "Chasm of the Abyss - Manus", 
+            "Chasm of the Abyss - Manus",
+            # start merchants
+            "Firelink Shrine - Trusty Patches",
+            "Firelink Shrine - Griggs of Vinheim",
+            "Firelink Shrine - Griggs of Vinheim, After Logan Leaves",
+            "Firelink Shrine - Laurentius of the Great Swamp",
+            "Firelink Shrine - Petrus of Thorolund",
+            "Firelink Shrine - Rhea of Thorolund",
+            "Firelink Shrine - Domhnall of Zena",
+            # "Firelink Shrine - Domhnall of Zena - Post Iron Golem",
+            # "Firelink Shrine - Domhnall of Zena - Post O+S",
+            # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin",
+            # "Firelink Shrine - Domhnall of Zena - Post Artorias",
+            "Upper Undead Burg - Male Undead Merchant",
+            "Undead Parish - Andre of Astora",
+            "Undead Parish - Oswald of Carim",
+            "Lower Undead Burg - Female Undead Merchant",
+            "Lower Blighttown - Shiva of the East",
+            "Lower Blighttown - Quelana of Izalith",
+            "Lower Blighttown - Eingyi",
+            "Darkroot Basin - Princess Dusk",
+            "Sen's Fortress - Crestfallen Merchant",
+            "Anor Londo - Giant Blacksmith",
+            "The Duke's Archives - Big Hat Logan",
+            "Upper New Londo Ruins - Rickert of Vinheim",
+            "Upper New Londo Ruins - Ingward",
+            "The Catacombs - Vamos",
+            "Oolacile Sanctuary - Elizabeth",
+            "Royal Wood - Marvelous Chester",
+            "Royal Wood - Hawkeye Gough",
+            # start merchants' shared items
+            "2 Merchants - Bottomless Box",
+            "4 Merchants - Repairbox",
+            "3 Blacksmiths - Smithboxen",
             ]
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in our_regions})
        
@@ -317,8 +361,8 @@ class DSRWorld(World):
             for entrance in region_rules_table[region]:
                 create_connection(entrance.source, region, rule=entrance.rule)
 
-        for skip in get_all_skips():
-            self.create_entrance(regions[skip.starting_location], regions[skip.ending_location], rule=skip.get_rule(self), name=f"SKIP {skip.name}", force_creation=True)
+        # for skip in get_all_skips():
+        #     self.create_entrance(regions[skip.starting_location], regions[skip.ending_location], rule=skip.get_rule(self), name=f"SKIP {skip.name}", force_creation=True)
         
 
     # For each region, add the associated locations retrieved from the corresponding location_table
@@ -346,6 +390,8 @@ class DSRWorld(World):
                     self.location_name_to_id[location.name],
                     new_region
                 )
+                if (location.category in [DSRLocationCategory.MISSABLE_DROP, DSRLocationCategory.MISSABLE_SHOP_ITEM]):
+                    new_location.progress_type = LocationProgressType.EXCLUDED
             # elif (location.category in self.enabled_location_categories and
             #       location.category in location_locked_categories): # DSRLocationCategory.BONFIRE_WARP
             #     self.bw = self.bw + 1
@@ -402,22 +448,22 @@ class DSRWorld(World):
         
         # print("Creating items")
         for location in self.multiworld.get_locations(self.player):            
-            item_data = item_dictionary[location.default_item_name]
-            if (item_data.category in [DSRItemCategory.SKIP] 
-             or location.category in location_skip_categories 
+            citem = self.create_item(location.default_item_name)
+            
+            if (location.category in location_skip_categories 
              or location.category in location_locked_categories): # [DSRLocationCategory.EVENT]:
                 # print("Adding skip item: " + location.default_item_name + " for location: " + location.name)
-                skip_itemlocs.append((self.create_item(location.default_item_name), location))
-                skipitempool.append(self.create_item(location.default_item_name))
+                skip_itemlocs.append((citem, location))
+                skipitempool.append(citem)
             elif location.category in self.enabled_location_categories:
                 if self.options.excluded_location_behavior == "do_not_randomize" and location.name in self.all_excluded_locations:
                     # print("Adding skip item: " + location.default_item_name + " for location: " + location.name)
-                    skip_itemlocs.append((self.create_item(location.default_item_name), location))
-                    skipitempool.append(self.create_item(location.default_item_name))
+                    skip_itemlocs.append((citem, location))
+                    skipitempool.append(citem)
                 else:
                     #print("Adding item: " + location.default_item_name)
                     itempoolSize += 1
-                    itempool.append(self.create_item(location.default_item_name))
+                    itempool.append(citem)
         
         # print("Requesting itempool size: " + str(itempoolSize))
         # foo = BuildItemPool(itempoolSize, self.options, self)
@@ -521,7 +567,12 @@ class DSRWorld(World):
             DSRItemCategory.EMBER,
             DSRItemCategory.FIRE_KEEPER_SOUL,
             DSRItemCategory.PROGRESSIVE_MULTIPLIER,
+            DSRItemCategory.USEFUL_KEY_ITEM,
+            DSRItemCategory.USEFUL_CONSUMABLE,
         ]
+        if (item_dictionary[name].category == DSRItemCategory.NEEDS_REPLACEMENT):
+            name = ReplaceItem(name, self)
+
         data = self.item_name_to_id[name]
 
         if name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT, DSRItemCategory.KEY_ITEM, DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]:
@@ -613,6 +664,12 @@ class DSRWorld(World):
                 "boss_soul_shuffle": self.options.boss_soul_shuffle.value,
                 "boss_humanity_shuffle": self.options.boss_humanity_shuffle.value,
                 "boss_bone_shuffle": self.options.boss_bone_shuffle.value,
+                "bk_weapon_shuffle": self.options.bk_weapon_shuffle.value,
+                "lizard_shuffle": self.options.lizard_shuffle.value,
+
+                # Shops
+                "limited_shop_item_shuffle": self.options.limited_shop_item_shuffle.value,
+                "shop_hints": self.options.shop_hints.value,
                 
                 # Logic
                 "logic_to_access_firelink_altar": self.options.logic_to_access_firelink_altar.current_key, # text of the option
@@ -645,7 +702,7 @@ class DSRWorld(World):
             "itemsId": items_id,
             "itemsUpgrades": items_upgrades,
             "itemsAddress": items_address,
-            "apworld_api_version" : "0.1.5.0" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.2.0" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

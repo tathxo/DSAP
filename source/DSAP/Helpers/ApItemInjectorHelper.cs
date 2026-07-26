@@ -20,22 +20,36 @@ namespace DSAP.Helpers
             List<KeyValuePair<long, ScoutedItemInfo>> addedEntries = scoutedLocationInfo.ToList();
             //addedEntries.Sort((a, b) => a.Key.CompareTo(b.Key));
 
-            var added_names = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, $"{x.Value.Player}'s {x.Value.ItemDisplayName}\0")).ToList();
+            // adds a lot of key items
+            // 11110000 to 1111**** - location items
+            var added_names = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemName(x))).ToList();
             var added_captions = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemCaption(x))).ToList();
             var added_descriptions = addedEntries.Select(x => new KeyValuePair<long, string>(x.Key, BuildItemCaption(x))).ToList();
 
+            // 11109961 to 11109999 - fog walls
             var added_emk_names = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
             var added_emk_captions = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrEventItemCaption()));
             var added_emk_descriptions = MiscHelper.GetDsrEventItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrEventItemCaption()));
 
+            // 11109001 to 11109002 - progressive items
+            var added_progressive_names = MiscHelper.GetProgressiveItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
+            var added_progressive_captions = MiscHelper.GetProgressiveItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrProgressivetemCaption()));
+            var added_progressive_descriptions = MiscHelper.GetProgressiveItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrProgressivetemCaption()));
+
+            // 11108001 to 11108002 - keychains
             var keychain_names = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, $"{x.Name}\0"));
             var keychain_captions = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrKeychainCaption(x.Name)));
             var keychain_descriptions = MiscHelper.GetKeychainItems().Select(x => new KeyValuePair<long, string>(x.Id, BuildDsrKeychainDescription(x)));
 
 
+
             added_names.AddRange(added_emk_names);
             added_captions.AddRange(added_emk_captions);
             added_descriptions.AddRange(added_emk_descriptions);
+
+            added_names.AddRange(added_progressive_names);
+            added_captions.AddRange(added_progressive_captions);
+            added_descriptions.AddRange(added_progressive_descriptions);
 
             added_names.AddRange(keychain_names);
             added_captions.AddRange(keychain_captions);
@@ -55,13 +69,13 @@ namespace DSAP.Helpers
             AddMsgs(MsgManStruct.OFFSET_ITEM_DESCRIPTIONS, added_descriptions, "Item Descriptions"); // info
             
             watch.Stop();
-            Log.Logger.Information($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
-            App.Client.AddOverlayMessage($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
+            Log.Logger.Debug($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
+            //App.Client.AddOverlayMessage($"Finished adding new items params + msg text, took {watch.ElapsedMilliseconds}ms");
 
             var local_ap_keys = added_emk_names.ToList();
             local_ap_keys.Sort((a, b) => a.Key.CompareTo(b.Key));
             // add item removal hook for all "location" items AND all fogwall key items - which are directly before the locations, by id.
-            AddAPItemHook(added_emk_names.Min(x => x.Key), scoutedLocationInfo.Max(x => x.Key));
+            AddAPItemHook(added_progressive_names.Min(x => x.Key), scoutedLocationInfo.Max(x => x.Key));
             // add item popup removal hook for all "location" items
             AddAPItemPopupHook(scoutedLocationInfo.Min(x => x.Key), scoutedLocationInfo.Max(x => x.Key));
         }
@@ -162,27 +176,40 @@ namespace DSAP.Helpers
             Memory.WriteByteArray(target_func_start, jmpstub); // write jmp stub (e.g. "create hook")
         }
 
+        internal static string BuildItemName(KeyValuePair<long, ScoutedItemInfo> item)
+        {
+            if (item.Value.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
+                return $"[AP] {item.Value.ItemDisplayName}\0";
+            return $"{item.Value.Player}'s {item.Value.ItemDisplayName}\0";
+        }
         internal static string BuildItemCaption(KeyValuePair<long, ScoutedItemInfo> item)
         {
             const byte progression = 0b001;
             const byte useful = 0b010;
             const byte trap = 0b100;
-            string item_type = "normal";
+            string item_type = "Filler";
             if (((byte)item.Value.Flags) == 0b001) item_type = "Progression";
-            if (((byte)item.Value.Flags) == 0b010) item_type = "Useful";
-            if (((byte)item.Value.Flags) == 0b100) item_type = "Trap";
-            return $"A {item_type} Archipelago item for {item.Value.Player}'s {item.Value.ItemGame}.\0";
+            else if (((byte)item.Value.Flags) == 0b010) item_type = "Useful";
+            else if (((byte)item.Value.Flags) == 0b100) item_type = "Trap";
+
+            if (item.Value.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
+                return $"{item_type} for you, in this game.\0";
+            return $"{item_type} for {item.Value.Player}'s {item.Value.ItemGame}.\0";
         }
         internal static string BuildDsrEventItemCaption()
         {
             return "A boon from another world. Makes a fog wall passable.\0";
         }
+        internal static string BuildDsrProgressivetemCaption()
+        {
+            return "A multiplier improver.\0";
+        }
         internal static string BuildDsrKeychainCaption(string name)
         {
             if (name.Contains("Boss"))
-                return "Tracks which boss fogwalls you've unlocked";
+                return "Tracks which boss fogwalls you've unlocked (see extended Description)";
             else
-                return "Tracks which fogwalls you've unlocked";
+                return "Tracks which fogwalls you've unlocked (see extended Description)";
         }
 
         internal static string BuildDsrKeychainDescription(DarkSoulsItem keychain)
@@ -264,6 +291,11 @@ namespace DSAP.Helpers
             parambytes[0x44] = 0x00; // all 'enable_<mp>' and is equip flags = 0
             parambytes[0x45] = 0x30; // only isDrop and isDeposit = 1, is only one = 0
 
+            parambytes[0x10] = 0; // sell value byte 0
+            parambytes[0x11] = 0; // sell value byte 1
+            parambytes[0x12] = 0; // sell value byte 2
+            parambytes[0x13] = 0; // sell value byte 3
+
             // For each new item, "Add Item" to ParamSt
             for (uint i = 0; i < new_entries; i++)
             {
@@ -283,7 +315,7 @@ namespace DSAP.Helpers
                 paramStruct.AddParam(newid, parambytes, stringbytes);
             }
 
-            Log.Logger.Information($"Added {new_entries} items to EquipParamGoods from {addedEntries.First().Key} to {addedEntries.Last().Key}");
+            Log.Logger.Debug($"Added {new_entries} items to EquipParamGoods from {addedEntries.First().Key} to {addedEntries.Last().Key}");
 
             ParamHelper.WriteFromParamSt(paramStruct, EquipParamGoods.spOffset);
 

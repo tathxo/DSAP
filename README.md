@@ -27,7 +27,8 @@
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
 
 # Old Known Issues
-* v0.1.2 - v0.1.5: with Seamless Co-op: Warping crashes the game, potentially both for host and client.
+* v0.2.0: Key to the Seal is in its vanilla location.
+* v0.1.5 - v0.1.2: with Seamless Co-op: Warping crashes the game, potentially both for host and client.
 * v0.1.2 - v0.1.0: Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. This is fixed in v0.1.3 with the implementation of "fogwall keychains"
 * v0.1.0 and above: /help function doesn't provide useful output.
 * v0.0.22.0 and v0.0.21.0: Hard lock / infinite loop of receiving Rubbish if player has been /send'd a valid AP item that the client doesn't know about (Estus flask, Event items, etc). Resolved in v0.1.0 with an error message instead.
@@ -48,11 +49,18 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
-## Version 0.2.0
+
+## Version 0.2.1 - hotfix
+* Version update -> 0.2.1. Both apworld and client have updated. **Client is compatible with 0.2.0 generated apworlds**.
+* Fix: Key to the Seal was accidentally left unrandomized
+* Fix: Remove debugging messages on shop hints
+* 
+
+## Version 0.2.0 - Shops and Drops
 * Version update -> 0.2.0. Both apworld and client have updated. **This release is not expected to be compatible with 0.1.x generated apworlds**.
 * Update: Logic now uses Rule Builder. **As a result, v0.6.7+ of Archipelago is now a requirement.**
 * Feature: More guaranteed items! See location changes below.
-* New yaml options for shuffling items into the pool added: `boss_soul_shuffle`, `boss_humanity_shuffle`, `boss_bone_shuffle`, `bk_weapon_shuffle`, `lizard_shuffle`.
+* Feature: New yaml options for shuffling items into the pool added: `boss_soul_shuffle`, `boss_humanity_shuffle`, `boss_bone_shuffle`, `bk_weapon_shuffle`, `lizard_shuffle`.
 * Feature: Shop shuffle (limited)! Option `limited_shop_item_shuffle` can be enabled to add unmissable merchants' shop locations to the pool. Those whose shops are added are made invulnerable to prevent them being missable. More merchants are planned to be added in the future.
 * Feature: Shop auto-hinting! Configurable with option `shop_hints`.
 * Feature: Added `logic_to_access_firelink_altar` (default=Frampt) to let you choose which serpent logic will expect you to use to access it.
@@ -90,7 +98,7 @@
 * Fix: Send boss fogwall checks if their respective boss is killed without passing through it. You can now safely cheese the bosses (or try weird fog wall skips)
 * Fix: Bonfire warp items (mainly used for debugging) weren't working and Catacombs and Chasm of the Abyss were swapped. Warning: these items are still not normally placed, nor considered for logic.
 
-## Version 0.1.3
+## Version 0.1.3 - "Keychains and Curses"
 * Version update -> 0.1.3. Both apworld and client have updated. **Client should be compatible with all 0.1.x generated apworlds**
 * Feature: Add `Fogwall Keychain` and `Boss Fogwall Keychain` key items - instead of the many Fog Wall Key items and Boss Fog Wall Key items, you now have 2 keychain items whose extended descriptions tell you which fog walls you have unlocked.
 * Feature: Add `ghost_difficulty` yaml options - with possible values of `normal`, `ghosts_are_not_ghostly`, or (default) `rickert_sells_curses`. Less death-runs in New Londo! See the template yaml file or option creator tooltips for more information.

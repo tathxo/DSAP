@@ -1069,7 +1069,7 @@ location_tables = {
 "Upper New Londo Ruins - After Fog": [
     DSRLocationData(11110796, f"NL: Fog Wall - New Londo (Upper)", f"Fog Wall Key - New Londo (Upper)", DSRLocationCategory.FOG_WALL),
     DSRLocationData(11110339, f"NL: Large Soul of a Nameless Soldier - Near Ladder Shortcut", f"Large Soul of a Nameless Soldier", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110340, f"NL: Key to the Seal", f"Key to the Seal", DSRLocationCategory.MISSABLE_DROP),
+    DSRLocationData(11110340, f"NL: Key to the Seal", f"Key to the Seal", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110341, f"NL: Soul of a Proud Knight - New Londo Back Corridor", f"Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110342, f"NL: Cursebite Ring", f"Cursebite Ring", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110343, f"NL: Green Titanite Shard - New Londo", f"Green Titanite Shard", DSRLocationCategory.ITEM_LOT),

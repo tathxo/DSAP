@@ -376,7 +376,7 @@ public partial class App : Application
                 var received = received_items.Find(x => x.ItemName == item.longItemName);
                 string received_text = "false";
                 if (received != null)
-                    received_text = $"True\n -> From {received.Player} in {received.ItemGame}, locid={received.LocationId}, locname={received.LocationName}, index={Client.CurrentSession.Items.AllItemsReceived.IndexOf(received)}";
+                    received_text = $"True\n -> From {received.Player} in {received.LocationGame}, locid={received.LocationId}, locname={received.LocationName}, index={Client.CurrentSession.Items.AllItemsReceived.IndexOf(received)}";
                 Log.Logger.Warning($"{item.shortItemName} placed = {placed}, received = {received_text}");
                 if (received != null && !placed) // received it but didn't place it
                 {

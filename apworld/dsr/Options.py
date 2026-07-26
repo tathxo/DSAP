@@ -281,6 +281,7 @@ class LogicToAccessTotG(Choice):
 
     - **no_logic:** TotG is in-logic as soon as you defeat Pinwheel.
     - **skull_lantern:** Receiving a Skull Lantern as an AP item puts TotG in-logic.
+    - **sunlight_maggot:** Receiving a Sunlight Maggot as an AP item puts TotG in-logic.
     """
     display_name = "Logic Requirement to Access Tomb of the Giants"
     option_no_logic = 0

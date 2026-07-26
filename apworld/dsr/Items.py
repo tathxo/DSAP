@@ -368,7 +368,7 @@ _all_items_base = [
     ("Gold Pine Resin x6", 2118, DSRItemCategory.CONSUMABLE),
     ("Humanity x13", 2119, DSRItemCategory.CONSUMABLE),
     ("Purging Stone x5", 2120, DSRItemCategory.CONSUMABLE),
-    ("Ring of Sacrifice x10", 2121, DSRItemCategory.CONSUMABLE),
+    ("Ring of Sacrifice x10", 2121, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Humanity x4", 2122, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Humanity x10", 2123, DSRItemCategory.USEFUL_CONSUMABLE),
     ("Twin Humanities x2", 2124, DSRItemCategory.USEFUL_CONSUMABLE),

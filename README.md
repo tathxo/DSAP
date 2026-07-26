@@ -19,14 +19,14 @@
 
 # Current Known issues
 * Upon receiving a Fog Wall Key, the related Fog Wall sometimes does not unlock. To work around this, completely close both the game and client (DSR and DSAP), then relaunch them and reconnect.
-* Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively.
+* Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively. A master key that comes from the multiworld (if shop shuffling is enabled), however, will put its available locations in-logic.
 * If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
 * Placing Lord Souls at Firelink Altar may not open the door - This seems to be due to not having received some number of the Lord Souls or Lordvessel. We could use information for this - If you see this, please run the /lordvessel command, which will both provide diagnostic information & the missing items. Please provide a screenshot of the output with any additional context you can provide about the missing items to the dark-souls-1 channel in the Archipelago discord (such as, if you know it, did the items come in while you were offline, was it with other items, etc).
-* v0.1.2+ with Seamless Co-op: Warping crashes the game, potentially both for host and client.
 * Using "Can Warp Without Lordvessel" option results in two unintended behaviors when the player does not have the Lordvessel: Frampt takes you into the Firelink Altar (expecting you to place it), and Ingward in New Londo will grant you the "Key to the Seal" location check. As workarounds: the first can be escaped by using the "unstuck" button (or homeward, a homeward bone, or dark sign), and the second is just an unintended "out of logic" check.
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
 
 # Old Known Issues
+* v0.1.2 - v0.1.5: with Seamless Co-op: Warping crashes the game, potentially both for host and client.
 * v0.1.2 - v0.1.0: Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. This is fixed in v0.1.3 with the implementation of "fogwall keychains"
 * v0.1.0 and above: /help function doesn't provide useful output.
 * v0.0.22.0 and v0.0.21.0: Hard lock / infinite loop of receiving Rubbish if player has been /send'd a valid AP item that the client doesn't know about (Estus flask, Event items, etc). Resolved in v0.1.0 with an error message instead.
@@ -47,6 +47,32 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+## Version 0.2.0
+* Version update -> 0.1.5. Both apworld and client have updated. **This release is not expected to be compatible with 0.1.x generated apworlds**.
+* Update: Logic now uses Rule Builder. **As a result, v0.6.7+ of Archipelago is now a requirement.**
+* Feature: More guaranteed items! See location changes below.
+* New yaml options for shuffling items into the pool added: `boss_soul_shuffle`, `boss_humanity_shuffle`, `boss_bone_shuffle`, `bk_weapon_shuffle`, `lizard_shuffle`.
+* Feature: Shop shuffle (limited)! Option `limited_shop_item_shuffle` can be enabled to add unmissable merchants' shop locations to the pool. Those whose shops are added are made invulnerable to prevent them being missable. More merchants are planned to be added in the future.
+* Feature: Shop auto-hinting! Configurable with option `shop_hints`.
+* Feature: Added `logic_to_access_firelink_altar` (default=Frampt) to let you choose which serpent logic will expect you to use to access it.
+* Feature: Added `logic_to_access_totg` (default skull lantern), to let players choose either lantern or sunlight maggot, or nothing, as required for TotG logical access.
+* Feature: Added `start_inventory_from_pool` - to allow players to remove items from the pool when adding them to their start inventory.
+* Adjustment: Reclassified Humanity drops of 3 or more as "Useful" instead of Filler.
+* Adjustment: Reclassified Boxes and Sewer Chamber key as "Useful" instead of Progression.
+* Adjustment: Reclassified Mystery Key as "Filler" instead of Progression.
+* Fix: Weight multiplier moved to Difficulty option group, and option groups updated.
+* Fix: Added some points to help Autotracking of UB/UP in some spots.
+* Fix: Updated early logic so Progression Balancing should no longer place almost all DSR progression items in extremely early spheres in multiworlds.
+* Fix: Progressive Multiplier notifications now use regional formatting for percentage formatting
+* Fix: Added Progressive Multiplier item popups in game.
+* Fix: Warp to all bonfires should no longer cause a crash in Seamless Co-op.
+
+### Location changes:
+* Boss drops now are added to the pool. This means you could exclude and spare Sif, with the right options.
+* Mimic drops now are added to the pool.
+* Hydra in DB, Undead Dragon in VoD, Sunlight Maggot, Havel, Broken Pendant Golem, PW Fire Surge Zombie, LI Witch of Chaos drops all added to the pool
+* With all sanities and shuffle options enabled, there are now about 710 checks.
+
 ## Version 0.1.5
 * Version update -> 0.1.4. Both apworld and client have updated. **Client should be backward compatible with all 0.1.x generated apworlds**.
 * Feature: Add PopTracker Auto Tabbing.

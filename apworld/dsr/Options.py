@@ -213,7 +213,7 @@ def skip_logic_helper(difficulty: SkipDifficulty):
 class SkipLogicEasy(OptionCounter):
     """ In the following section you can enable specific skips to perform. The skips are losely categorized by their difficulty. 
         Numbers other than 0 put the skip into logic.
-        Recommended to edit in the yaml. 
+        Recommended to edit in the yaml, due to problems in Options Creator. 
 
         For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?gid=840526629#gid=840526629
     """
@@ -459,11 +459,13 @@ option_groups = [
         LogicToAccessFirelinkAltar,
         LogicToAccessCatacombs,
         LogicToAccessTotG,
-        SkipLogicEasy,
-        SkipLogicMedium,
-        SkipLogicHard,
-        SkipLogicVeryHard
         ]),
+    # OptionGroup("Skip Logic - Warning!", [
+    #     SkipLogicEasy,
+    #     SkipLogicMedium,
+    #     SkipLogicHard,
+    #     SkipLogicVeryHard
+    #     ]),
     OptionGroup("Equipment", [
         RandomizeStartingLoadouts,
         RandomizeStartingGifts,
@@ -530,10 +532,12 @@ class DSROption(PerGameCommonOptions):
     logic_to_access_firelink_altar: LogicToAccessFirelinkAltar
     logic_to_access_catacombs: LogicToAccessCatacombs
     logic_to_access_totg: LogicToAccessTotG
-    skip_logic_easy: SkipLogicEasy
-    skip_logic_medium: SkipLogicMedium
-    skip_logic_hard: SkipLogicHard
-    skip_logic_very_hard: SkipLogicVeryHard
+
+    # Skip Logic
+    # skip_logic_easy: SkipLogicEasy
+    # skip_logic_medium: SkipLogicMedium
+    # skip_logic_hard: SkipLogicHard
+    # skip_logic_very_hard: SkipLogicVeryHard
 
     # Equipment
     randomize_starting_loadouts: RandomizeStartingLoadouts

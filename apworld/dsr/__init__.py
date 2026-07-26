@@ -359,8 +359,8 @@ class DSRWorld(World):
             for entrance in region_rules_table[region]:
                 create_connection(entrance.source, region, rule=entrance.rule)
 
-        for skip in get_all_skips():
-            self.create_entrance(regions[skip.starting_location], regions[skip.ending_location], rule=skip.get_rule(self), name=f"SKIP {skip.name}", force_creation=True)
+        # for skip in get_all_skips():
+        #     self.create_entrance(regions[skip.starting_location], regions[skip.ending_location], rule=skip.get_rule(self), name=f"SKIP {skip.name}", force_creation=True)
         
 
     # For each region, add the associated locations retrieved from the corresponding location_table

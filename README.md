@@ -27,6 +27,9 @@
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
 
 # Old Known Issues
+* v0.2.1 - v0.2.0: Logic - 4 kings not logically requiring Covenant of Artorias if boss fogwall sanity is off.
+* v0.2.1 - v0.2.0: Logic - Demon Firesage not logically requiring Lordvessel if boss fogwall sanity is off.
+* v0.2.1 - v0.2.0: Logic - After Quelaag (and therefore Early Demon Ruins) considered in logic without Quelaag boss fog wall even when boss fogwall sanity is on.
 * v0.2.0: Key to the Seal is in its vanilla location.
 * v0.1.5 - v0.1.2: with Seamless Co-op: Warping crashes the game, potentially both for host and client.
 * v0.1.2 - v0.1.0: Player no longer receives key items after getting 64 key items. In vanilla, there are With fogwall sanity and boss fogwall sanity on, there are 84 total "key items", vs the 64 slots available for key items. **If not using boss fogwall sanity, this limit will not be reached.** If you are using both fogwall sanities, you can work around the issue by dropping or depositing any fogwall key items into your bottomless box, handing in embers immediately, etc. The "fogwall key" items in DSR are not actually needed to pass through their corresponding fog walls. As soon as you have received the AP item, the fog wall should become passable, whether or not it is in your actual DSR inventory. This is fixed in v0.1.3 with the implementation of "fogwall keychains"
@@ -50,11 +53,16 @@
 
 # Changelog
 
+## Version 0.2.2 - hotfix (logic)
+* Version update -> 0.2.2. Both apworld and client have updated. **Client is compatible with 0.2.x generated apworlds**.
+* Fix: Fixed 4 kings, After Quelaag, and Demon Firesage access logic rules
+* Fix: Added watchtower basement exits
+
 ## Version 0.2.1 - hotfix
 * Version update -> 0.2.1. Both apworld and client have updated. **Client is compatible with 0.2.0 generated apworlds**.
 * Fix: Key to the Seal was accidentally left unrandomized
 * Fix: Remove debugging messages on shop hints
-* 
+* Fix: Overlay issue
 
 ## Version 0.2.0 - Shops and Drops
 * Version update -> 0.2.0. Both apworld and client have updated. **This release is not expected to be compatible with 0.1.x generated apworlds**.

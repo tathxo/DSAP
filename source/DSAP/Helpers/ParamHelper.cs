@@ -435,6 +435,7 @@ namespace DSAP.Helpers
             251001, // Male Undead Merchant
             409000, // Marvelous Chester
             6370, // Oswald of Carim
+            6080, // Petrus of Thorolund
             6220, // Rickert of Vilheim
             292000, // Vamos
             // 6270, // crestfallen warrior

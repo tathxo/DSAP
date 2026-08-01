@@ -32,6 +32,12 @@
     "Id": 11110340
   },
   {
+    "Name": "Copper Coin - Petrus of Thorolund",
+    "Flag": 50000140,
+    "ItemLotParamId": 1140,
+    "Id": 11111062
+  },
+  {
     "Name": "RW: Gold Tracer - Lord's Blade Ciaran",
     "Flag": 50000501,
     "ItemLotParamId": 6744,

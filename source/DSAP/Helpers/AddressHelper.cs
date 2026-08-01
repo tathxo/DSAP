@@ -322,6 +322,7 @@ namespace DSAP.Helpers
                     ( 71210009, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say no
                     ( 71800056, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim - if you're in the Way of White covenant
                     ( 71800057, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim
+                    ( 71300091, shopflags.Where(x => x.Name.StartsWith("Petrus of Thorolund")).Select(x =>  (long)x.Id).ToList() ), // Petrus of Thorolund
                     ( 71810001, shopflags.Where(x => x.Name.StartsWith("Rickert of Vinheim")).Select(x =>  (long)x.Id).ToList() ), // Rickert of Vinheim
                     ( 11300210, shopflags.Where(x => x.Name.StartsWith("Vamos")).Select(x =>  (long)x.Id).ToList() ), // Vamos - upon landing there
                 }.Where(x => x.Item2.Count > 0).ToList(); // trim already hinted

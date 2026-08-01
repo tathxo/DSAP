@@ -930,6 +930,16 @@
     "Flag": 11017180
   },
   {
+    "ParamId": 4007,
+    "OriginalItemId": 0,
+    "Id": 11111063,
+    "Name": "Petrus of Thorolund: Humanity - Drop Added to Shop",
+    "OriginalType": "Good",
+    "OriginalQuantity": 1,
+    "Value": 5000,
+    "Flag": 61323170
+  },
+  {
     "ParamId": 4200,
     "OriginalItemId": 240,
     "Id": 11110935,

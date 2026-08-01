@@ -235,7 +235,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Next Available ID = 11111062
+# Next Available ID = 11111064
 location_tables = {
 "Undead Asylum Cell": [
     DSRLocationData(11110000, f"UA: Dungeon Cell Key", f"Dungeon Cell Key", DSRLocationCategory.SKIP),
@@ -335,15 +335,15 @@ location_tables = {
     DSRLocationData(11110918, f"Laurentius of the Great Swamp: Pyromancy: Flash Sweat", f"Pyromancy: Flash Sweat", DSRLocationCategory.MISSABLE_SHOP_ITEM),
 ],
 "Firelink Shrine - Petrus of Thorolund": [
-    # DSRLocationData(11110xxx, f"FS: Petrus of Thorolund", f"Petrus of Thorolund Access", DSRLocationCategory.EVENT),
-    DSRLocationData(11110930, f"Petrus of Thorolund: Miracle: Heal", f"Miracle: Heal", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110931, f"Petrus of Thorolund: Miracle: Great Heal Excerpt", f"Miracle: Great Heal Excerpt", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110932, f"Petrus of Thorolund: Miracle: Homeward", f"Miracle: Homeward", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110933, f"Petrus of Thorolund: Miracle: Force", f"Miracle: Force", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110934, f"Petrus of Thorolund: Miracle: Seek Guidance", f"Miracle: Seek Guidance", DSRLocationCategory.MISSABLE_SHOP_ITEM),
+    DSRLocationData(11111062, f"Petrus of Thorolund: Copper Coin", f"Copper Coin", DSRLocationCategory.SHOP_ITEM), # Gift for talking to him
+    DSRLocationData(11110930, f"Petrus of Thorolund: Miracle: Heal", f"Miracle: Heal", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110931, f"Petrus of Thorolund: Miracle: Great Heal Excerpt", f"Miracle: Great Heal Excerpt", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110932, f"Petrus of Thorolund: Miracle: Homeward", f"Miracle: Homeward", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110933, f"Petrus of Thorolund: Miracle: Force", f"Miracle: Force", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110934, f"Petrus of Thorolund: Miracle: Seek Guidance", f"Miracle: Seek Guidance", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111063, f"Petrus of Thorolund: Humanity - Drop Added to Shop", f"Humanity", DSRLocationCategory.SHOP_ITEM),
 ],
 "Firelink Shrine - Rhea of Thorolund": [
-    # DSRLocationData(11110xxx, f"FS: Petrus of Thorolund", f"Petrus of Thorolund Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110935, f"Rhea of Thorolund: Divine Blessing", f"Divine Blessing", DSRLocationCategory.MISSABLE_SHOP_ITEM),
     DSRLocationData(11110936, f"Rhea of Thorolund: Miracle: Heal", f"Miracle: Heal", DSRLocationCategory.MISSABLE_SHOP_ITEM),
     DSRLocationData(11110937, f"Rhea of Thorolund: Miracle: Great Heal", f"Miracle: Great Heal", DSRLocationCategory.MISSABLE_SHOP_ITEM),

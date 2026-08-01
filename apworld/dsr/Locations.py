@@ -341,7 +341,7 @@ location_tables = {
     DSRLocationData(11110932, f"Petrus of Thorolund: Miracle: Homeward", f"Miracle: Homeward", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110933, f"Petrus of Thorolund: Miracle: Force", f"Miracle: Force", DSRLocationCategory.SHOP_ITEM),
     DSRLocationData(11110934, f"Petrus of Thorolund: Miracle: Seek Guidance", f"Miracle: Seek Guidance", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11111063, f"Petrus of Thorolund: Humanity - Drop Added to Shop", f"Humanity", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11111063, f"Petrus of Thorolund: Humanity - Drop Added to Shop", f"Humanity x2", DSRLocationCategory.SHOP_ITEM),
 ],
 "Firelink Shrine - Rhea of Thorolund": [
     DSRLocationData(11110935, f"Rhea of Thorolund: Divine Blessing", f"Divine Blessing", DSRLocationCategory.MISSABLE_SHOP_ITEM),

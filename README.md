@@ -19,6 +19,7 @@
 
 # Current Known issues
 * Going to NG+ causes you to lose key items, and likely can result in a softlock. If playing without Release on Goal, or if playing with `goal_condition` of `all_bosses`, it is recommended to kill Gwyn only after doing everything else needed in your game.
+* v0.1.2+, especially v0.2.0+ - Occasional client crash related (i think) to bonfire syncing code.
 * Upon receiving a Fog Wall Key, the related Fog Wall sometimes does not unlock. To work around this, completely close both the game and client (DSR and DSAP), then relaunch them and reconnect.
 * Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively. A master key that comes from the multiworld (if shop shuffling is enabled), however, will put its available locations in-logic.
 * If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
@@ -27,6 +28,7 @@
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
 
 # Old Known Issues
+* v0.2.2 - v0.2.0: Location Groups "All DLC regions" and "After O+S" did not include merchants, so even when excluding those groups you could end up with those merchants being randomized and/or having progression items.
 * v0.2.1 - v0.2.0: Logic - 4 kings not logically requiring Covenant of Artorias if boss fogwall sanity is off.
 * v0.2.1 - v0.2.0: Logic - Demon Firesage not logically requiring Lordvessel if boss fogwall sanity is off.
 * v0.2.1 - v0.2.0: Logic - After Quelaag (and therefore Early Demon Ruins) considered in logic without Quelaag boss fog wall even when boss fogwall sanity is on.
@@ -52,6 +54,12 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+
+## Version 0.2.3 - Petrus, Ricard, I'm Sorry, and Loc Group Fixes
+* Version update -> 0.2.3. Both apworld and client have updated. **Client is compatible with 0.2.x generated apworlds**. Latest client required if using updated apworld.
+* Feature: Added Petrus's shop to `limited_shop_item_shuffle`-enabled locations.
+* Feature: Added Ricard's Rapier and "I'm Sorry" Carving drops to the pool.
+
 
 ## Version 0.2.2 - hotfix (logic)
 * Version update -> 0.2.2. Both apworld and client have updated. **Client is compatible with 0.2.x generated apworlds**.

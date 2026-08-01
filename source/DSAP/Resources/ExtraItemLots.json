@@ -484,5 +484,11 @@
     "Flag": 11810532,
     "ItemLotParamId": 7020,
     "Id": 11110077
+  },
+  {
+    "Name": "Ricard's Rapier",
+    "Flag": 11500860,
+    "ItemLotParamId": 6600,
+    "Id": 11110255
   }
 ]

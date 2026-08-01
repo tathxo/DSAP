@@ -890,7 +890,7 @@ location_tables = {
     DSRLocationData(11110613, f"SF: Rare Ring of Sacrifice - Sen's Fortress", f"Rare Ring of Sacrifice", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110253, f"SF: Flame Stoneplate Ring", f"Flame Stoneplate Ring", DSRLocationCategory.ITEM_LOT),    
     DSRLocationData(11110254, f"SF: Large Titanite Shard - Corpse bombed by Giant", f"Large Titanite Shard x2", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110255, f"SF: Ricard's Rapier", f"Ricard's Rapier", DSRLocationCategory.ENEMY_DROP),
+    DSRLocationData(11110255, f"SF: Ricard's Rapier", f"Ricard's Rapier", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110256, f"SF: Sniper Crossbow", f"Sniper Crossbow", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110661, f"SF: Sniper Bolt", f"Sniper Bolt x12", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110257, f"SF: Cage Key", f"Cage Key", DSRLocationCategory.ITEM_LOT),
@@ -1479,7 +1479,7 @@ location_tables = {
     DSRLocationData(11110755, f"OT: Large Soul of a Proud Knight - Early Oolacile Rooftop", f"Large Soul of a Proud Knight", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110756, f"OT: Soul of a Brave Warrior - By First Sorceress", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110758, f"OT: Sorcery: Dark Orb", f"Sorcery: Dark Orb", DSRLocationCategory.ITEM_LOT),
-    DSRLocationData(11110759, f"OT: I'm Sorry Carving - Lone Sorceress", f"Carving: I'M SORRY!", DSRLocationCategory.ENEMY_DROP), # item lot instead? guaranteed drop
+    DSRLocationData(11110759, f"OT: I'm Sorry Carving - Lone Sorceress", f"Carving: I'M SORRY!", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110760, f"OT: Soul of a Brave Warrior - Wooden Platform", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110761, f"OT: Carving: VERY GOOD! - Mimic, Outside Platform", f"Carving: VERY GOOD!", DSRLocationCategory.MIMIC_DROP),
     DSRLocationData(11111038, f"OT: Twinkling Titanite - Crystal Lizard Drop, Little Isolated Rooftop", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),

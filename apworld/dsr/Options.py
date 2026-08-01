@@ -189,6 +189,7 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     Male Undead Merchant
     Marvelous Chester
     Oswald of Carim
+    Petrus of Thorolund
     Rickert of Vinheim
     Vamos (shared Repairbox + 2 drops only)
     """

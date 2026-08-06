@@ -216,7 +216,7 @@ class DSRWorld(World):
             "Northern Undead Asylum Second Visit",
             "Northern Undead Asylum Second Visit - F2 West Door",
             "Northern Undead Asylum Second Visit - Behind F2 West Door",
-            "Northern Undead Asylum Second Visit - Snuggly Trades",
+            # "Northern Undead Asylum Second Visit - Snuggly Trades",
             "Undead Burg Basement Door",
             "Lower Undead Burg", 
             "Lower Undead Burg - After Residence Key",
@@ -224,7 +224,7 @@ class DSRWorld(World):
             "Lower Undead Burg - After Capra Demon",
             "Watchtower Basement",
             "Depths", 
-            "Depths - After Sewer Chamber Key",
+            # "Depths - After Sewer Chamber Key",
             "Depths - Gaping Dragon",
             "Depths - After Gaping Dragon",
             "Depths to Blighttown Door",
@@ -700,7 +700,7 @@ class DSRWorld(World):
             "itemsId": items_id,
             "itemsUpgrades": items_upgrades,
             "itemsAddress": items_address,
-            "apworld_api_version" : "0.2.3" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.2.4" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

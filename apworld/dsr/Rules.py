@@ -151,8 +151,8 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Northern Undead Asylum Second Visit - Behind F2 West Door": [
     DsrEntranceRule("Northern Undead Asylum Second Visit - F2 West Door", True_()),
   ],
-  "Northern Undead Asylum Second Visit - Snuggly Trades": [ # none yet
-  ],
+  # "Northern Undead Asylum Second Visit - Snuggly Trades": [ # none yet
+  # ],
   "Undead Burg Basement Door": [
     DsrEntranceRule("Upper Undead Burg - Hellkite Bridge", Has("Basement Key")),
     # DsrEntranceRule("Lower Undead Burg", Has("Basement Key")),
@@ -179,9 +179,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Depths": [
     DsrEntranceRule("Lower Undead Burg", Has("Key to Depths")),
   ],
-  "Depths - After Sewer Chamber Key": [
-    DsrEntranceRule("Depths", Has("Sewer Chamber Key")), # temporarily ignored - no checks here
-  ],
+  # "Depths - After Sewer Chamber Key": [
+  #   DsrEntranceRule("Depths", Has("Sewer Chamber Key")), # temporarily ignored - no checks here
+  # ],
   "Depths - Gaping Dragon": [
     DsrEntranceRule("Depths", Has("Boss Fog Wall Key - Gaping Dragon") | bossfogwall_sanity_off),
   ],

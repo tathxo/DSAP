@@ -1,6 +1,7 @@
 from .Items import _all_items, key_item_names, DSRItemCategory, DSRItemData, item_dictionary, _all_items_base, DSRUpgradeType
 from .Skips import get_user_selected_skips
-from .Groups import item_name_groups
+from .Groups import item_name_groups, dlc_prog_items, pw_prog_items, gh_prog_items, post_os_prog_items
+from .Options import GoalConditionOption
 from .Locations import location_dictionary, DSRLocationCategory
 
 
@@ -33,27 +34,30 @@ unique_infusion_types = [
         ("Normal", 0, 5, 0)
 ]
 
-def BuildRequiredItemPool(world, count):
+def BuildRequiredItemPool(world, count, ignorable_items):
     item_pool = []
     remaining_count = count
 
     key_items = [item for item in _all_items if item.name in key_item_names or item.category == DSRItemCategory.KEY_ITEM]
+
     for item in key_items:
-        if item.name not in ["Dungeon Cell Key", "Estus Flask", "Undead Asylum F2 East Key", "Big Pilgrim's Key", "Master Key"]:
+        if item.name not in ignorable_items and item.name not in ["Dungeon Cell Key", "Estus Flask", "Undead Asylum F2 East Key", "Big Pilgrim's Key", "Master Key"]:
             item_pool.append(item)
             remaining_count = remaining_count - 1
 
     if(world.options.fogwall_sanity.value == True):
         fogwalls = [item for item in _all_items if item.category in [DSRItemCategory.FOGWALL] and item.name != "Fog Wall Key - Northern Undead Asylum"]
         for item in fogwalls:
-            item_pool.append(item)
-            remaining_count = remaining_count - 1
+            if item.name not in ignorable_items:
+                item_pool.append(item)
+                remaining_count = remaining_count - 1
 
     if (world.options.boss_fogwall_sanity.value == True):
         bossfogwalls = [item for item in _all_items if item.category in [DSRItemCategory.BOSSFOGWALL]]
         for item in bossfogwalls:
-            item_pool.append(item)
-            remaining_count = remaining_count - 1
+            if item.name not in ignorable_items:
+                item_pool.append(item)
+                remaining_count = remaining_count - 1
 
     useful_items = [item for item in _all_items if item.category in [DSRItemCategory.EMBER, DSRItemCategory.FIRE_KEEPER_SOUL] ]
     for item in useful_items:
@@ -72,6 +76,7 @@ def BuildRequiredItemPool(world, count):
             item_pool.append(item)
             remaining_count = remaining_count - 1
 
+    # print(f"item pool = [{item_pool}]")
 
     # Start commenting out of skips
     # allow_skips_options: list[OptionCounter] = [world.options.skip_logic_easy, 

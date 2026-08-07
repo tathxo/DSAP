@@ -8,11 +8,13 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, add_item_rule
 from rule_builder.rules import Rule, True_, Has, HasAll
 
-from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions 
+from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions, _all_items
 from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment, ReplaceItem, titanite_replacements
-from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, location_locked_categories
-from .Groups import location_name_groups, item_name_groups
-from .Options import DSROption, option_groups, GoalConditionOption
+from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, \
+    location_locked_categories, region_name_list
+from .Groups import location_name_groups, item_name_groups, \
+    dlc_prog_items, pw_prog_items, gh_prog_items, post_os_prog_items, post_os_cata_prog_items
+from .Options import DSROption, option_groups, GoalConditionOption, LogicToAccessCatacombs
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
 from .Skips import get_all_skips
 
@@ -94,6 +96,7 @@ class DSRWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
+        self.ignorable_items = set()
         self.locked_items = []
         self.locked_locations = []
         self.main_path_locations = []
@@ -151,6 +154,14 @@ class DSRWorld(World):
         if self.options.weight_multiplier_base.value < self.options.weight_multiplier_min.value:
             (self.options.weight_multiplier_base.value, self.options.weight_multiplier_min.value) = (self.options.weight_multiplier_min.value, self.options.weight_multiplier_base.value)
 
+        # If goal_condition is o+s, force no dlc
+        if self.options.include_dlc.value == True and self.options.goal_condition.value == GoalConditionOption.option_ornstein_and_smough:
+            self.options.include_dlc.value = False
+
+        # If goal_condition is manus, force dlc
+        if self.options.include_dlc.value == False and self.options.goal_condition.value == GoalConditionOption.option_manus:
+            self.options.include_dlc.value = True
+
 
 
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
@@ -188,168 +199,41 @@ class DSRWorld(World):
 
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
+        self.ignorable_items = [item.name for item in _all_items if
+                              ((self.options.include_dlc.value == False) and item.name in dlc_prog_items)
+                           or ((self.options.include_pw.value == False) and item.name in pw_prog_items)
+                           or ((self.options.include_gh.value == False) and item.name in gh_prog_items)
+                           or ((self.options.goal_condition.value == GoalConditionOption.option_ornstein_and_smough)
+                               and item.name in post_os_prog_items)
+                           or ((self.options.goal_condition.value == GoalConditionOption.option_ornstein_and_smough)
+                               and self.options.logic_to_access_catacombs == LogicToAccessCatacombs.option_ornstein_and_smough
+                                and item.name in post_os_cata_prog_items)]
+
 
     def create_regions(self):
         # Create Regions
         regions: Dict[str, Region] = {}
         regions["Menu"] = self.create_region("Menu", [])
 
-        our_regions = [
-            "Undead Asylum Cell",
-            "Undead Asylum Cell Door",
-            "Northern Undead Asylum - F2 East Door",
-            "Northern Undead Asylum", 
-            "Northern Undead Asylum - After Fog",
-            "Northern Undead Asylum - After F2 East Door",
-            "Northern Undead Asylum - Big Pilgrim Door",
-            "Firelink Shrine", 
-            "Upper Undead Burg - Before Fog", 
-            "Upper Undead Burg - Fog", 
-            "Upper Undead Burg", 
-            "Upper Undead Burg - Pine Resin Chest",
-            "Upper Undead Burg - Taurus Demon",
-            "Upper Undead Burg - Hellkite Bridge",
-            "Undead Parish - Before Fog", 
-            "Undead Parish - Fog", 
-            "Undead Parish", 
-            "Undead Parish - Bell Gargoyles",
-            "Firelink Shrine - After Undead Parish Elevator",
-            "Northern Undead Asylum Second Visit",
-            "Northern Undead Asylum Second Visit - F2 West Door",
-            "Northern Undead Asylum Second Visit - Behind F2 West Door",
-            # "Northern Undead Asylum Second Visit - Snuggly Trades",
-            "Undead Burg Basement Door",
-            "Lower Undead Burg", 
-            "Lower Undead Burg - After Residence Key",
-            "Lower Undead Burg - Capra Demon",
-            "Lower Undead Burg - After Capra Demon",
-            "Watchtower Basement",
-            "Depths", 
-            # "Depths - After Sewer Chamber Key",
-            "Depths - Gaping Dragon",
-            "Depths - After Gaping Dragon",
-            "Depths to Blighttown Door",
-            "Upper Blighttown Depths Side", 
-            "Upper Blighttown VotD Side", 
-            "Lower Blighttown - Fog", 
-            "Lower Blighttown", 
-            "Lower Blighttown - Quelaag", 
-            "Lower Blighttown - After Quelaag", 
-            "Valley of the Drakes", 
-            "Valley of the Drakes - After Defeating Four Kings", 
-            "Door between Upper New Londo and Valley of the Drakes",
-            "Darkroot Basin", 
-            "Darkroot Garden - Before Fog",
-            "Darkroot Garden", 
-            "Darkroot Garden - Behind Artorias Door", 
-            "Darkroot Garden - Moonlight Butterfly",
-            "Darkroot Garden - After Moonlight Butterfly",
-            "The Great Hollow", 
-            "Ash Lake",
-            "Sen's Fortress",
-            "Sen's Fortress - After First Fog",
-            "Sen's Fortress - After Second Fog",
-            "Sen's Fortress - After Cage Key",
-            "Sen's Fortress - Iron Golem",
-            "Sen's Fortress - After Iron Golem",
-            "Anor Londo",
-            "Anor Londo - After First Fog",
-            "Anor Londo - Painting Room",
-            "Anor Londo - After Second Fog",
-            "Anor Londo - Ornstein and Smough",
-            "Anor Londo - After Ornstein and Smough",
-            "Anor Londo - Gwyndolin",
-            "Anor Londo - After Gwyndolin",
-            "Painted World of Ariamis",
-            "Painted World of Ariamis - After Fog",
-            "Painted World of Ariamis - After Annex Key",
-            "Painted World of Ariamis - Crossbreed Priscilla",
-            "Upper New Londo Ruins",
-            "Upper New Londo Ruins - After Fog",
-            "New Londo Ruins Door to the Seal",
-            "Lower New Londo Ruins", 
-            "The Abyss", 
-            "The Abyss - After Four Kings", 
-            "The Duke's Archives", 
-            "The Duke's Archives - After First Seath Encounter",
-            "The Duke's Archives - After Archive Tower Cell Key",
-            "The Duke's Archives - After Archive Prison Extra Key",
-            "The Duke's Archives - Out of Cell",
-            "The Duke's Archives - After Archive Tower Giant Door Key", 
-            "The Duke's Archives - Courtyard",
-            "The Duke's Archives - Giant Cell", 
-            "Crystal Cave", 
-            "Crystal Cave - After Seath", 
-            "The Duke's Archives - First Arena after Seath's Death", 
-            "Demon Ruins - Early",
-            "Demon Ruins - Ceaseless Discharge",
-            "Demon Ruins", 
-            "Demon Ruins - Demon Firesage",
-            "Demon Ruins - After Demon Firesage",
-            "Demon Ruins - Centipede Demon",
-            "Demon Ruins Shortcut",
-            "Lost Izalith", 
-            "Lost Izalith - Bed of Chaos", 
-            "The Catacombs", 
-            "The Catacombs - Door 1",
-            "The Catacombs - After Door 1",
-            "The Catacombs - Pinwheel",
-            "The Catacombs - After Pinwheel",
-            "Tomb of the Giants", 
-            "Tomb of the Giants - After White Fog", 
-            "Tomb of the Giants - Behind Golden Fog Wall",
-            "Tomb of the Giants - Nito",
-            "Tomb of the Giants - After Nito",
-            "Firelink Altar",
-            "Kiln of the First Flame",
-            "Kiln of the First Flame - Gwyn",
-            "Sanctuary Garden", 
-            "Sanctuary Garden - Sanctuary Guardian",
-            "Oolacile Sanctuary", 
-            "Royal Wood", 
-            "Royal Wood - Artorias",
-            "Royal Wood - After Hawkeye Gough",
-            "Oolacile Township", 
-            "Oolacile Township - Behind Light-Dispelled Walls",
-            # "Oolacile Township - After Crest Key",
-            "Chasm of the Abyss",
-            "Chasm of the Abyss - Manus",
-            # start merchants
-            "Firelink Shrine - Trusty Patches",
-            "Firelink Shrine - Griggs of Vinheim",
-            "Firelink Shrine - Griggs of Vinheim, After Logan Leaves",
-            "Firelink Shrine - Laurentius of the Great Swamp",
-            "Firelink Shrine - Petrus of Thorolund",
-            "Firelink Shrine - Rhea of Thorolund",
-            "Firelink Shrine - Domhnall of Zena",
-            "Firelink Shrine - Domhnall of Zena After Iron Golem",
-            "Firelink Shrine - Domhnall of Zena After O+S",
-            "Firelink Shrine - Domhnall of Zena After Gwyndolin",
-            "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias",
-            "Upper Undead Burg - Male Undead Merchant",
-            "Undead Parish - Andre of Astora",
-            "Undead Parish - Oswald of Carim",
-            "Lower Undead Burg - Female Undead Merchant",
-            "Lower Blighttown - Shiva of the East",
-            "Lower Blighttown - Quelana of Izalith",
-            "Lower Blighttown - Eingyi",
-            "Darkroot Basin - Princess Dusk",
-            "Sen's Fortress - Crestfallen Merchant",
-            "Anor Londo - Giant Blacksmith",
-            "The Duke's Archives - Big Hat Logan",
-            "Upper New Londo Ruins - Rickert of Vinheim",
-            "Upper New Londo Ruins - Ingward",
-            "The Catacombs - Vamos",
-            "Oolacile Sanctuary - Elizabeth",
-            "Royal Wood - Marvelous Chester",
-            "Royal Wood - Hawkeye Gough",
-            # start merchants' shared items
-            "2 Merchants - Bottomless Box",
-            "4 Merchants - Repairbox",
-            "3 Blacksmiths - Smithboxen",
-            ]
-        regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in our_regions})
-       
+        valid_regions: List = []
+        valid_regions.extend(region_name_list.keys())
+
+        removable_regions: List = []
+        if not self.options.include_dlc.value:
+            removable_regions.extend([reg for reg,tags in region_name_list.items() if "dlc" in tags])
+        if not self.options.include_gh.value:
+            removable_regions.extend([reg for reg,tags in region_name_list.items() if "gh" in tags])
+        if not self.options.include_pw.value:
+            removable_regions.extend([reg for reg,tags in region_name_list.items() if "pw" in tags])
+        if self.options.goal_condition == GoalConditionOption.option_ornstein_and_smough:
+            removable_regions.extend([reg for reg,tags in region_name_list.items() if "postos" in tags])
+            if self.options.logic_to_access_catacombs == LogicToAccessCatacombs.option_ornstein_and_smough:
+                removable_regions.extend([reg for reg,tags in region_name_list.items() if "postos_cata" in tags])
+        for region in removable_regions:
+            if region in valid_regions:
+                valid_regions.remove(region)
+
+        regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in valid_regions})
         # print("DSR: created " + str(self.gc) + " real and "+ str(self.bc) + " fake locations")
 
         # Connect Regions
@@ -357,8 +241,12 @@ class DSRWorld(World):
             self.create_entrance(regions[from_region], regions[to_region], rule)
 
         for region in region_rules_table.keys():
-            for entrance in region_rules_table[region]:
-                create_connection(entrance.source, region, rule=entrance.rule)
+            if region in valid_regions:
+                # print(f"Creating region {region}")
+                for entrance in region_rules_table[region]:
+                    if entrance.source in valid_regions or entrance.source == "Menu":
+                        # print(f"Creating connection {entrance.source} -> {region}")
+                        create_connection(entrance.source, region, rule=entrance.rule)
 
         # for skip in get_all_skips():
         #     self.create_entrance(regions[skip.starting_location], regions[skip.ending_location], rule=skip.get_rule(self), name=f"SKIP {skip.name}", force_creation=True)
@@ -474,7 +362,7 @@ class DSRWorld(World):
         # print("Created item pool size: " + str(len(foo)))
 
         # Add any Key + useful items
-        rip, required_skip_item_names = BuildRequiredItemPool(self, itempoolSize)
+        rip, required_skip_item_names = BuildRequiredItemPool(self, itempoolSize, self.ignorable_items)
         crip = [self.create_item(item.name) for item in rip]
 
 
@@ -508,17 +396,23 @@ class DSRWorld(World):
         # for item in limited_pool:
         #     print("non-fogwall required item: " + str(item))
 
-        # Replace "Soul of a Lost Undead" if needed
+        # print(f"required pool = {StillRequiredPool}")
+        replacable_souls = [
+            "Soul of a Lost Undead",
+            "Large Soul of a Lost Undead",
+            "Soul of a Nameless Soldier",
+            "Large Soul of a Nameless Soldier",
+            "Soul of a Proud Knight",
+        ]
+        # Replace each of the above souls, in order, as needed
         if len(StillRequiredPool) + len(guaranteedpool) > len(removable_items):
-            print("Adding " + str(len([item for item in itempool if item.name == 'Soul of a Lost Undead'])) +" Souls of a Lost Undead to removable items")
-            removable_items += [item for item in itempool if item.name == 'Soul of a Lost Undead']
-            print("now " + str(len(removable_items)) + " are removable")
-
-        # Replace "Large Soul of a Lost Undead" if needed
-        if len(StillRequiredPool) > len(removable_items):
-            print("Adding " + str(len([item for item in itempool if item.name == 'Large Soul of a Lost Undead'])) +" Large Souls of a Lost Undead to removable items")
-            removable_items += [item for item in itempool if item.name == 'Large Soul of a Lost Undead']
-            print("now " + str(len(removable_items)) + " are removable")
+            for soul in replacable_souls:
+                print(f"DSR: Detected additional replacements required ({len(removable_items)}/{len(StillRequiredPool) + len(guaranteedpool)}).")
+                print(f"Adding " + str(len([item for item in itempool if item.name == soul])) + f" {soul} items to removable items.")
+                removable_items += [item for item in itempool if item.name == soul]
+                print("DSR: Now " + str(len(removable_items)) + " filler items are removable.")
+                if len(StillRequiredPool) + len(guaranteedpool) <= len(removable_items):
+                    break
 
         for item in removable_items:
             if len(StillRequiredPool) > 0:
@@ -537,6 +431,7 @@ class DSRWorld(World):
         # print("leftover removable items: " + str(len(removable_items)))
         # print("leftover filler items: " + str(len(filler_items)))
 
+        # convert leftover filler into 'Soul of a Proud Knight' items (2k souls)
         for item in removable_items:
             # print("removable item: " + item.name)
             itempool.remove(item)
@@ -573,13 +468,15 @@ class DSRWorld(World):
 
         data = self.item_name_to_id[name]
 
-        if name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT, DSRItemCategory.KEY_ITEM, DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]:
+        if (name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT, DSRItemCategory.KEY_ITEM, DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]
+                and name not in self.ignorable_items):
             item_classification = ItemClassification.progression
         elif item_dictionary[name].category in useful_categories:
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
-
+        # if (name in self.ignorable_items):
+        # print(f"item {name} created as {item_classification}")
         return DSRItem(name, item_classification, data, self.player)
 
 
@@ -599,7 +496,11 @@ class DSRWorld(World):
                     item.name
                     for item in item_dictionary.values()
                     if item.category == DSRItemCategory.EVENT and "Defeated" in item.name
+                    and item.name in [loc.item.name for loc in self.get_locations() if loc.player == self.player and loc.item is not None] # limit to active locations
                 ]
+                # Move this print to spoiler log, and add the boss list to slot data
+                # print(f"--\nRequired bosses:{boss_defeated_items}\n--")
+
                 self.set_completion_rule(HasAll(*boss_defeated_items))
                 
             case GoalConditionOption.option_ornstein_and_smough:
@@ -658,6 +559,10 @@ class DSRWorld(World):
                 # Sanity
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
+                # Optional Region Selection
+                "include_dlc": self.options.include_dlc.value,
+                "include_pw": self.options.include_pw.value,
+                "include_gh": self.options.include_gh.value,
                 # Shuffle
                 "boss_soul_shuffle": self.options.boss_soul_shuffle.value,
                 "boss_humanity_shuffle": self.options.boss_humanity_shuffle.value,

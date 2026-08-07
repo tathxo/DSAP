@@ -142,6 +142,21 @@ class BossFogwallSanity(Toggle):
       Kalameet."""
     display_name = "Boss Fogwall Sanity" 
 
+class IncludeDlc(DefaultOnToggle):
+    """Whether to randomize the Artorias of the Abyss DLC expansion content.
+    With this unselected, items from the expansion will not be included, and locations within it will not be randomized.
+
+    This option is forced off if goal_condition is set to ornstein_and_smough."""
+    display_name = "Include DLC"
+
+class IncludePaintedWorld(DefaultOnToggle):
+    """Whether to randomize Painted World of Ariamis locations and items."""
+    display_name = "Include Painted World"
+
+class IncludeGreatHollow(DefaultOnToggle):
+    """Whether to randomize  the Great Hollow and Ash Lake locations and items."""
+    display_name = "Include Great Hollow And Ash Lake"
+
 class BossSoulShuffle(DefaultOnToggle):
     """Makes boss soul drops be shuffled into the multiworld item pool.
     Does not affect the Lord Souls, which are always shuffled in."""
@@ -188,7 +203,7 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     
     Shops Shuffled by this option:
     Andre of Astora
-    Big Hat Logan
+    Big Hat Logan (considered in-logic once you can make his shop available at Duke's Archives)
     Crestfallen Merchant
     Domhnall of Zena (including post-boss equipment)
     Female Undead Merchant
@@ -277,7 +292,8 @@ class LogicToAccessCatacombs(Choice):
     - **undead_merchant:** Access to Undead Merchant in the Upper Undead Burg puts Catacombs in-logic.
     - **andre:** Access to Andre puts Catacombs in-logic.
     - **andre_or_undead_merchant:** Access to either Andre or Undead Merchant puts Catacombs in-logic.
-    - **ornstein_and_smough:** (Default) Access to Ornstein and Smough puts Catcombs in-logic."""
+    - **ornstein_and_smough:** (Default) Access to Ornstein and Smough puts Catcombs in-logic.
+      If both this option and goal_condition are set to ornstein_and_smough, The Catacombs and Tomb of the Giants are instead not randomized at all."""
     display_name = "Logic Requirement to Access Catacombs"
     option_no_logic = 0
     option_undead_merchant = 1
@@ -429,7 +445,7 @@ class GoalConditionOption(Choice):
     
     - **Gwyn:** Default option -Beat Gwyn, Lord of Cinder
     - **Bosses:** Defeat all bosses
-    - **Ornstein and Smough:** Kill Ornstein and Smough"""
+    - **Ornstein and Smough:** Kill Ornstein and Smough. Choosing this option also excludes all checks that would require the Lordvessel."""
     display_name = "Goal Condition"
     option_gwyn = 0
     option_all_bosses = 1
@@ -455,6 +471,11 @@ option_groups = [
     OptionGroup("Sanity", [
         FogwallSanity,
         BossFogwallSanity,
+        ]),
+    OptionGroup("Optional Region Selection", [
+        IncludeDlc,
+        IncludePaintedWorld,
+        IncludeGreatHollow,
         ]),
     OptionGroup("Shuffling", [
         BossSoulShuffle,
@@ -529,6 +550,11 @@ class DSROption(PerGameCommonOptions):
     # Sanity
     fogwall_sanity: FogwallSanity
     boss_fogwall_sanity: BossFogwallSanity
+
+    # Optional Region Selection
+    include_dlc: IncludeDlc
+    include_pw: IncludePaintedWorld
+    include_gh: IncludeGreatHollow
 
     # Shuffling
     boss_soul_shuffle: BossSoulShuffle

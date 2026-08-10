@@ -275,8 +275,12 @@ namespace DSAP.Helpers
                             if (App.DSOptions.LimitedShopItemShuffle)
                             {
                                 CheckForHintTriggers(flags);
-                                ShopSafetyTrigger(flags);
+                                ShopSafety(flags);
                             }
+                            if (App.DSOptions.LizardShuffle)
+                            {
+                                GhLizardSafety(flags);
+                            }   
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
@@ -304,7 +308,8 @@ namespace DSAP.Helpers
                         byte[] flags = ReadAllEventFlags();
                         if (flags.Length != 0 && oldFlags.Length != 0)
                         {
-                            ShopSafetyTrigger(flags);
+                            GhLizardSafety(flags);
+                            ShopSafety(flags);
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
@@ -392,7 +397,7 @@ namespace DSAP.Helpers
             }
             return false;
         }
-        private static void ShopSafetyTrigger(byte[] flags)
+        private static void ShopSafety(byte[] flags)
         {
             // shopflags = missing locations
             var shopflags = LocationHelper.GetShopLineupFlags()
@@ -404,10 +409,10 @@ namespace DSAP.Helpers
                 if (shopflags.Where(x => x.Name.StartsWith("Laurentius of the Great Swamp")).Count() > 0)
                 {
                     Log.Logger.Information("Shop locations still unchecked - Preventing Laurentius from moving on.");
-                    // delay this for 1 sec so that any events can finish running (in case we checked flags before event processing completed)
+                    // delay this for 500 ms so that any events can finish running (in case we checked flags before event processing completed)
                     Task.Run(() =>
                     {
-                        Task.Delay(1000);
+                        Task.Delay(500);
                         // order of the flag changes below is important - otherwise the event that resets the flags can just re-run.
                         App.SetEventFlag(11020103, false); // turn off "Laurentius was told about Quelana" flag
                         App.SetEventFlag(11020575, false); // turn off "Laurentius moves on event ran" flag 
@@ -415,6 +420,36 @@ namespace DSAP.Helpers
                         App.SetEventFlag(1252, true);  // turn back on "Laurentius should be in firelink"
                     });
                 }
+            }
+        }
+        private static void GhLizardSafety(byte[] flags) // based on 11320300 events
+        {
+            List<int> requiredLizardFlags = [];
+            // Check the flags for each lizard event. 1 of 3 flags are randomly turned on for each lizard.
+            // We could check "is the player in the GH map", instead.
+            for (int lizard = 0; lizard < 10; lizard++)
+            {
+                bool flag1 = isFlagOnInBuffer(flags, 11325203 + 3 * lizard);
+                bool flag2 = isFlagOnInBuffer(flags, 11325204 + 3 * lizard);
+                bool flag3 = isFlagOnInBuffer(flags, 11325205 + 3 * lizard);
+                if ((flag2 || flag3) && !(flag1))
+                {
+                    requiredLizardFlags.Add(11325203 + 3 * lizard); // lizard on flag
+                }
+            }
+            
+            if (requiredLizardFlags.Count() > 0)
+            {
+                Log.Logger.Information("Great Hollow Lizard spawning forced.");
+                // delay this for 500 ms so that any events can finish running (in case we checked flags before event processing completed)
+                Task.Run(() =>
+                {
+                    Task.Delay(500);
+                    for (int lizard = 0; lizard < 10; lizard++)
+                    {
+                        App.SetEventFlag(11325203 + 3 * lizard, true);
+                    }
+                });
             }
         }
 

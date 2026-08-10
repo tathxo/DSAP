@@ -226,12 +226,14 @@ namespace DSAP.Helpers
             return result;
         }
 
-        private static string GetFlagId234DigitFromByteAndBit(int bytenum, int bitnum)
+        private static string GetFlagId5678DigitFromByteAndBit(int bytenum, int bitnum)
         {
-            int significantByte = bytenum % 4;
+            int thous = bytenum / 128;
+            int rem_bytenum = bytenum % 128;
+            int significantByte = rem_bytenum % 4;
             int sigbit = (3 - significantByte) * 8 + bitnum;
-            int fours = bytenum / 4;
-            int flagnum = fours * 32 + sigbit;
+            int fours = rem_bytenum / 4;
+            int flagnum = (1000 * thous) + fours * 32 + sigbit;
             return (flagnum.ToString("D4"));
         }
 
@@ -273,7 +275,36 @@ namespace DSAP.Helpers
                             if (App.DSOptions.LimitedShopItemShuffle)
                             {
                                 CheckForHintTriggers(flags);
+                                ShopSafetyTrigger(flags);
                             }
+                            if (App.monitoringEventFlags)
+                                DetectEventFlagDifferences(oldFlags, flags);
+                        }
+                        oldFlags = flags;
+                        await Task.Delay(1000);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error($"Exception in event flags watcher: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
+                }
+            });
+        }
+        internal static void StartDisconnectedEventFlagMonitor()
+        {
+            Log.Logger.Information("Monitoring Event Flags");
+            Task.Run(async () =>
+            {
+                try
+                {
+                    App.SaveidSet = true;
+                    byte[] oldFlags = [];
+                    while (true)
+                    {
+                        byte[] flags = ReadAllEventFlags();
+                        if (flags.Length != 0 && oldFlags.Length != 0)
+                        {
+                            ShopSafetyTrigger(flags);
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
@@ -317,6 +348,7 @@ namespace DSAP.Helpers
                     ( 71020058, shopflags.Where(x => x.Name.StartsWith("Griggs of Vinheim:")).Select(x =>  (long)x.Id).ToList() ), // Griggs of Vinheim
                     ( 71020062, shopflags.Where(x => x.Name.StartsWith("Griggs of Vinheim After Logan Leaves:")).Select(x =>  (long)x.Id).ToList() ), // Griggs of Vinheim After Logan leaves
                     ( 71210061, shopflags.Where(x => x.Name.StartsWith("Hawkeye Gough")).Select(x =>  (long)x.Id).ToList() ), // Hawkeye Gough
+                    ( 71000022, shopflags.Where(x => x.Name.StartsWith("Laurentius of the Great Swamp")).Select(x =>  (long)x.Id).ToList() ), // Laurentius of the Great Swamp
                     ( 71010070, shopflags.Where(x => x.Name.StartsWith("Male Undead Merchant")).Select(x =>  (long)x.Id).ToList() ), // Male Undead Merchant
                     ( 71210010, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say yes
                     ( 71210009, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say no
@@ -348,6 +380,40 @@ namespace DSAP.Helpers
                         App.Client.CurrentSession.Hints.CreateHints(HintStatus.Unspecified, plist);
                         trigger.Item2.Clear();
                     }
+                }
+            }
+        }
+        private static bool isFlagOnInBuffer(byte[] flagsBuffer, int flagnum)
+        {
+            var (flagbyte, flagbit) = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum);
+            if (((flagsBuffer[flagbyte] >> flagbit) & 0x01) == 0x01)
+            {
+                return true;
+            }
+            return false;
+        }
+        private static void ShopSafetyTrigger(byte[] flags)
+        {
+            // shopflags = missing locations
+            var shopflags = LocationHelper.GetShopLineupFlags()
+                .Where(x => App.Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id)); // location is not found yet
+            //var shopflags = LocationHelper.GetShopLineupFlags(); // for debugging
+            if (isFlagOnInBuffer(flags, 11020103)) // laurentius "move on to BT" flag
+            {
+                // if there are still shop locs to buy from him, restore the flags
+                if (shopflags.Where(x => x.Name.StartsWith("Laurentius of the Great Swamp")).Count() > 0)
+                {
+                    Log.Logger.Information("Shop locations still unchecked - Preventing Laurentius from moving on.");
+                    // delay this for 1 sec so that any events can finish running (in case we checked flags before event processing completed)
+                    Task.Run(() =>
+                    {
+                        Task.Delay(1000);
+                        // order of the flag changes below is important - otherwise the event that resets the flags can just re-run.
+                        App.SetEventFlag(11020103, false); // turn off "Laurentius was told about Quelana" flag
+                        App.SetEventFlag(11020575, false); // turn off "Laurentius moves on event ran" flag 
+                        App.SetEventFlag(1256, false);  // turn off "Laurentius will go to blighttown"
+                        App.SetEventFlag(1252, true);  // turn back on "Laurentius should be in firelink"
+                    });
                 }
             }
         }
@@ -394,7 +460,7 @@ namespace DSAP.Helpers
         {
             var d1 = GetFlagId1DigitFromSlice(slice);
             var d234 = GetFlagId234DigitFromSlice(slice);
-            var d5678 = GetFlagId234DigitFromByteAndBit(bytenum, bitnum);
+            var d5678 = GetFlagId5678DigitFromByteAndBit(bytenum, bitnum);
 
             return $"{d1}{d234}{d5678}";
         }

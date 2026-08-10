@@ -328,11 +328,11 @@ location_tables = {
 ],
 "Firelink Shrine - Laurentius of the Great Swamp": [
     # DSRLocationData(11110xxx, f"FS: Laurentius of the Great Swamp", f"Laurentius of the Great Swamp Access", DSRLocationCategory.EVENT),
-    DSRLocationData(11110914, f"Laurentius of the Great Swamp: Pyromancy: Fireball", f"Pyromancy: Fireball", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110915, f"Laurentius of the Great Swamp: Pyromancy: Fire Orb", f"Pyromancy: Fire Orb", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110916, f"Laurentius of the Great Swamp: Pyromancy: Combustion", f"Pyromancy: Combustion", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110917, f"Laurentius of the Great Swamp: Pyromancy: Iron Flesh", f"Pyromancy: Iron Flesh", DSRLocationCategory.MISSABLE_SHOP_ITEM),
-    DSRLocationData(11110918, f"Laurentius of the Great Swamp: Pyromancy: Flash Sweat", f"Pyromancy: Flash Sweat", DSRLocationCategory.MISSABLE_SHOP_ITEM),
+    DSRLocationData(11110914, f"Laurentius of the Great Swamp: Pyromancy: Fireball", f"Pyromancy: Fireball", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110915, f"Laurentius of the Great Swamp: Pyromancy: Fire Orb", f"Pyromancy: Fire Orb", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110916, f"Laurentius of the Great Swamp: Pyromancy: Combustion", f"Pyromancy: Combustion", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110917, f"Laurentius of the Great Swamp: Pyromancy: Iron Flesh", f"Pyromancy: Iron Flesh", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110918, f"Laurentius of the Great Swamp: Pyromancy: Flash Sweat", f"Pyromancy: Flash Sweat", DSRLocationCategory.SHOP_ITEM),
 ],
 "Firelink Shrine - Petrus of Thorolund": [
     DSRLocationData(11111062, f"Petrus of Thorolund: Copper Coin", f"Copper Coin", DSRLocationCategory.SHOP_ITEM), # Gift for talking to him

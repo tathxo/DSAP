@@ -425,6 +425,11 @@ public partial class App : Application
                 int result = SetEventFlag(Int32.Parse(cmdparts[1]), true);
                 Log.Logger.Information($"{cmdparts[1]}={result}");
             }
+            if (cmdparts.Length == 3)
+            {
+                int result = SetEventFlag(Int32.Parse(cmdparts[1]), cmdparts[2] == "1" ? true : false);
+                Log.Logger.Information($"{cmdparts[1]}={result}");
+            }
         }
         else if (command.StartsWith("/cef")) // check event flag
         {
@@ -503,13 +508,15 @@ public partial class App : Application
     internal static int SetEventFlag(int flagnum, bool newValue)
     {
         var baseAddress = AddressHelper.GetEventFlagsOffset();
+        if (baseAddress == 0)
+            return -1;
         Location newloc = new Location()
         {
             Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item1,
             AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item2
         };
         Memory.WriteBit(newloc.Address, newloc.AddressBit, newValue);
-        return 1;
+        return newValue ? 1 : 0;
     }
     internal static int CheckEventFlag(int flagnum)
     {
@@ -1048,6 +1055,7 @@ public partial class App : Application
         else
         {
             MapHelper.StartDisconnectedMapAutoTracking();
+            AddressHelper.StartDisconnectedEventFlagMonitor();
             //ItemLotHelper.SetItemLot();
             //ApItemInjectorHelper.ChangePrismStoneText();
             //StartEventWatcher();

@@ -186,6 +186,7 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     Giant Blacksmith (shared Repairbox and Blacksmith Giant Hammer)
     Griggs of Vinheim
     Hawkeye Gough
+    Laurentius of the Great Swamp
     Male Undead Merchant
     Marvelous Chester
     Oswald of Carim

@@ -438,6 +438,7 @@ namespace DSAP.Helpers
             6080, // Petrus of Thorolund
             6220, // Rickert of Vilheim
             292000, // Vamos
+            6130, // Laurentius of the Great Swamp
             // 6270, // crestfallen warrior
             ];
         internal static void MakeNpcsImmune(ParamStruct<NpcParam> npcParamStruct)

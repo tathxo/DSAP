@@ -378,10 +378,10 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("The Duke's Archives", Has("Boss Fog Wall Key - Seath First Encounter") | bossfogwall_sanity_off),
   ],
   "The Duke's Archives - After Archive Tower Cell Key": [
-    DsrEntranceRule("The Duke's Archives", Has("Archive Tower Cell Key")),
+    DsrEntranceRule("The Duke's Archives - After First Seath Encounter", Has("Archive Tower Cell Key")),
   ],
   "The Duke's Archives - After Archive Prison Extra Key": [
-    DsrEntranceRule("The Duke's Archives", Has("Archive Prison Extra Key")),
+    DsrEntranceRule("The Duke's Archives - After First Seath Encounter", Has("Archive Prison Extra Key")),
   ],
   "The Duke's Archives - Out of Cell": [
     DsrEntranceRule("The Duke's Archives - After Archive Prison Extra Key", True_()),

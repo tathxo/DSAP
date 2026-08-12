@@ -305,7 +305,7 @@ namespace DSAP.Helpers
         // replaces loc_Start with a jmp to the given new_instructions array of bytes
         // Adds replaced_length bytes of instructions from loc_start before the new_instructions, and a jmp back.
         //  -> This means that the first jmp's code only will be actually processed, because a 2nd inserted jmp would simply jmp to the first one, which returns to the original position
-        private static void AddHook(ulong loc_start, int replaced_length, byte[] new_instructions, bool include_replaced_bytes)
+        internal static void AddHook(ulong loc_start, int replaced_length, byte[] new_instructions, bool include_replaced_bytes)
         {
             byte[] replaced_instructions = Memory.ReadByteArray(loc_start, replaced_length);
             ulong replacement_func_start_addr = (ulong)Memory.Allocate(1000, Memory.PAGE_EXECUTE_READWRITE);

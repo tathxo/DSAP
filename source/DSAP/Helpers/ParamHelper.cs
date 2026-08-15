@@ -400,6 +400,37 @@ namespace DSAP.Helpers
             return true;
 
         }
+        // Updates Npc Attack Params
+        internal static bool ModifyNpcAttackParams()
+        {
+            // Update the NPC Param Struct, and the Weapon Param struct passed in
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<NpcAttackParam> npcAttackParamStruct,
+                                                     NpcAttackParam.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+            if (!reloadRequired)
+            {
+                Log.Logger.Warning("Warning: reload of NPC Params");
+                //return false;
+            }
+            // if we are here, we are updating the params.
+            if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.ghosts_are_not_ghostly)
+                RemoveGhostShieldBypass(npcAttackParamStruct);
+
+            // Get first entry's Param (e.g. dummy bullets), use it as basis for new params.
+            byte[] parambytes = new byte[NpcAttackParam.Size];
+            var copyentry = npcAttackParamStruct.ParamEntries.Find((x) => x.id == 0);
+            Array.Copy(npcAttackParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
+
+            // add a dummy item at 99999998 so that we can know we've been here.
+            npcAttackParamStruct.AddParam(99999998, parambytes, Encoding.ASCII.GetBytes("")); // mark that we've been here
+
+            npcAttackParamStruct.ParamEntries.Sort((x, y) => (x.id.CompareTo(y.id)));
+            Log.Logger.Debug($"Added 1 items to NpcAttackParam struct");
+
+            ParamHelper.WriteFromParamSt(npcAttackParamStruct, NpcAttackParam.spOffset);
+            return true;
+
+        }
         internal static void RemoveGhostGhostliness(ParamStruct<NpcParam> npcParamStruct)
         {
             // find ghosts. Make them non-ghost
@@ -410,6 +441,18 @@ namespace DSAP.Helpers
                 npcParamStruct.ParamBytes[ghost.paramOffset + 0x145] &= 0xef;   // turn off bit 4, "isGhost"
             }
             Log.Logger.Debug($"Removed Ghostliness from ghosts");
+        }
+
+        internal static void RemoveGhostShieldBypass(ParamStruct<NpcAttackParam> npcAttackParamStruct)
+        {
+            // find ghosts. Make them non-ghost
+            var ghosts = npcAttackParamStruct.ParamEntries.Where(x => x.id >= 267000 && x.id < 269000);
+
+            foreach (var ghost in ghosts)
+            {
+                npcAttackParamStruct.ParamBytes[ghost.paramOffset + 0x7e] &= 0xcf;   // 0xcf = 0xff - 0x40; turn off bit 6, "isGhostAtk"
+            }
+            Log.Logger.Debug($"Removed Shield Bypass from Ghost attacks");
         }
         internal static void MultiplyNpcSouls(ParamStruct<NpcParam> npcParamStruct)
         {

@@ -1953,6 +1953,7 @@ public partial class App : Application
 
         ParamHelper.UpdateSoulMultiplier(); // setup soul multiplier for npcs + bosses
         ParamHelper.ModifyNpcParams();
+        ParamHelper.ModifyNpcAttackParams();
         ParamHelper.ModifyGameAreaParams();
         ParamHelper.ModifyShopLineupParams(scoutedLocationInfo);
 

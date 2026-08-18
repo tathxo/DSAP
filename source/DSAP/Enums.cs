@@ -65,6 +65,7 @@
             FOGWALL = 1,
             BOSSFOGWALL = 2,
             EARLYFOGWALL = 3,
+            GENERIC = 4,
         }
         public enum DsrLoadoutType
         {

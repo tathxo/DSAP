@@ -1,12 +1,11 @@
 ﻿using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Enums;
+using DSAP.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DSAP.Helpers
@@ -280,7 +279,9 @@ namespace DSAP.Helpers
                             if (App.DSOptions.LizardShuffle)
                             {
                                 GhLizardSafety(flags);
-                            }   
+                            }
+                            PisacaSafety(flags);
+                            PWDAWarpSafety(flags);
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
@@ -437,7 +438,7 @@ namespace DSAP.Helpers
                     requiredLizardFlags.Add(11325203 + 3 * lizard); // lizard on flag
                 }
             }
-            
+
             if (requiredLizardFlags.Count() > 0)
             {
                 Log.Logger.Information("Great Hollow Lizard spawning forced.");
@@ -452,7 +453,40 @@ namespace DSAP.Helpers
                 });
             }
         }
-
+        private static void PisacaSafety(byte[] flags) // based on 11705101 event
+        {
+            bool eventRan = isFlagOnInBuffer(flags, 11700133); // prison break event "ran" (persistent flag)
+            bool cutscenePlayed = isFlagOnInBuffer(flags, 11700002); // cutscene played and pisaca gate opened
+            bool cellKeyLooted = isFlagOnInBuffer(flags, 51700990); // cell key looted
+            if (eventRan && cellKeyLooted && (!cutscenePlayed))
+            {
+                Log.Logger.Information("Reseting DA Prison Jailbreak flags.");
+                // delay this for 500 ms so that any events can finish running (in case we checked flags before event processing completed)
+                Task.Run(() =>
+                {
+                    Task.Delay(500);
+                    App.SetEventFlag(11700133, false); // reset "prison break event ran" (persistent)
+                    App.SetEventFlag(11705101, false); // reset "prison break event ran" (temporary)
+                });
+            }
+        }
+        private static void PWDAWarpSafety(byte[] flags) // based on 11705101 event
+        {
+            bool hasLordvessel = isFlagOnInBuffer(flags, 710); // "got lordvessel" flag
+            bool canWarp = isFlagOnInBuffer(flags, 706); // "can warp" flag (turned off in PW / DA prison)
+            if (hasLordvessel && !canWarp)
+            {
+                Log.Logger.Information("Enabling warping in DA prison / Painted World");
+                // delay this for 500 ms so that any events can finish running (in case we checked flags before event processing completed)
+                Task.Run(() =>
+                {
+                    if (!App.EmkControllers.Any(x => x.Eventslot == 706)) // if not yet added, add the emk.
+                        App.EmkControllers.Add(new EmkController("Warping", "none", Enums.DsrEventType.GENERIC, 706, 0, 0));
+                    Task.Delay(500);
+                    App.SetEventFlag(706, true); // reset "can warp" to true
+                });
+            }
+        }
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {
             for (int i = 0; i < (1 + 18 * 4); i++)

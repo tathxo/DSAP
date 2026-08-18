@@ -43,7 +43,7 @@ public partial class App : Application
     DateTime lastDeathLinkTime = DateTime.MinValue;
     private const bool DEBUG_TXTLOG = false;
     private const bool DO_NOT_CONNECT = false;
-    public static ArchipelagoClient Client { get; set; }
+    public static ArchipelagoClient Client { get; set; } = null;
     public static List<DarkSoulsItem> AllItems { get; set; }
     public static Dictionary<int, DarkSoulsItem> AllItemsByApId { get; set; }
     public static Dictionary<int, DarkSoulsItem> EventsByApId { get; set; }
@@ -1975,10 +1975,11 @@ public partial class App : Application
         //int hook1_length = 0x26;
 
         // build hook1
-        var new_instructions_1 = new byte[]
+        var pause_on_start_menu = new byte[]
         {
+            // load MenuMan, check if the relevant byte is set for player to be "in menu". If so, turn on the "pause bytes" in the MoveMapStep
                 // push rax
-                // movabs rax,[0x141c88d98]
+                // movabs rax,[0x141c88d98] // MenuMan
                 // add rax,0x50
                 // cmp byte ptr [rax],0x01 // needed for going between menus
                 // je dowrite
@@ -2030,7 +2031,56 @@ public partial class App : Application
                 0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
         };
 
-        BonfireInjectorHelper.AddHook(hook1_loc, hook1_length, new_instructions_1, false);
+        // build hook1
+        var pause_on_gesture_menu = new byte[]
+        {
+            // load MenuMan, check if the relevant byte is set for player to be "in gesture menu". If so, turn on the "pause bytes" in the MoveMapStep
+                // push rax
+                // movabs rax,[0x141c88d98] // MenuMan
+                // add rax,0x100
+                // cmp byte ptr [rax],0x01 // main menu
+                // je dowrite
+                // cmp byte ptr [rax],0x02 // switch/sub menu
+                // je dowrite
+                // cmp byte ptr [rax],0x03 // switch/sub menu
+                // je dowrite
+                // jmp unwrite
+                // dowrite: 
+                // mov eax,0x0101
+                // mov word ptr [rsi+0x90],ax
+                // jmp done
+                // unwrite:
+                // mov eax,0x0000
+                // mov WORD PTR [rsi+0x90],ax
+                // done:
+                // pop rax
+                0x50,                                     // push   rax
+                0x48, 0xa1, 0x98, 0x8d, 0xc8, 0x41, 0x01, // movabs rax,ds:0x141c88d98
+                0x00, 0x00, 0x00,
+                0x48, 0x05, 0x00, 0x01, 0x00, 0x00,       // add    rax,0x100
+                0x80, 0x38, 0x01,                         // cmp    BYTE PTR [rax],0x1
+                0x74, 0x0c,                               // je     22 <dowrite>
+                0x80, 0x38, 0x02,                         // cmp    BYTE PTR [rax],0x2
+                0x74, 0x07,                               // je     22 <dowrite>
+                0x80, 0x38, 0x03,                         // cmp    BYTE PTR [rax],0x4
+                0x74, 0x02,                               // je     22 <dowrite>
+                0xeb, 0x0e,                               // jmp    30 <unwrite>
+                //// dowrite:
+                0xb8, 0x01, 0x01, 0x00, 0x00,               // mov eax,0x101
+                0x66, 0x89, 0x86, 0x90, 0x00, 0x00, 0x00,   // mov WORD PTR [rsi+0x90],ax
+                0xeb, 0x0c,                                 // jmp    3c < done >
+                //// unwrite:
+                0xb8, 0x00, 0x00, 0x00, 0x00,               // mov eax,0x000
+                0x66, 0x89, 0x86, 0x90, 0x00, 0x00, 0x00,   // mov WORD PTR [rsi+0x90],ax
+                //// done:
+                0x58,                                       // pop rax
+                // then add the code we overwrote which checks conditions
+                0x44, 0x38, 0xbe, 0xa1, 0x00, 0x00, 0x00,       // CMP        byte ptr [RSI + 0xa1],R15B
+                0x0f, 0x94, 0xc3,                               // SETZ       BL
+                0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
+        };
+
+        BonfireInjectorHelper.AddHook(hook1_loc, hook1_length, pause_on_gesture_menu, false);
     }
 
 

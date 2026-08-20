@@ -395,27 +395,31 @@ public partial class App : Application
             Log.Logger.Information("Settings file name:");
             Log.Logger.Information($"{SaveLoadHelper.SettingsFileName}");
         }
-        else if (command.StartsWith("/keys"))
-        {
-            //ulong GameDataMan = Memory.ReadULong(0x141c8a530);
-            //ulong playergamedata = Memory.ReadULong(GameDataMan + 0x10);
-            //ulong equipgamedata = playergamedata + 0x280;
-            //ulong slots = Memory.ReadULong(playergamedata+ 0x3b8);
+        //else if (command.StartsWith("/keys"))
+        //{
+        //    ulong GameDataMan = Memory.ReadULong(0x141c8a530);
+        //    ulong playergamedata = Memory.ReadULong(GameDataMan + 0x10);
+        //    ulong equipgamedata = playergamedata + 0x280;
+        //    ulong slots = Memory.ReadULong(playergamedata + 0x3b8);
 
 
 
-            // first slot at equipgamedata + 138?
-            //foreach (var keychain in MiscHelper.GetKeychainItems())
-            //{
-            //    Log.Logger.Information($"Adding item: {keychain.Name}, {keychain.Category}, {keychain.Id}, {keychain.Quantity}");
-            //    AddItemWithMessage((int)keychain.Category, keychain.Id, keychain.Quantity);
-            //}
+        //    first slot at equipgamedata +138 ?
+        //    foreach (var keychain in MiscHelper.GetKeychainItems())
+        //    {
+        //        Log.Logger.Information($"Adding item: {keychain.Name}, {keychain.Category}, {keychain.Id}, {keychain.Quantity}");
+        //        AddItemWithMessage((int)keychain.Category, keychain.Id, keychain.Quantity);
+        //    }
 
-        }
+        //}
         else if (command.StartsWith("/options")) // get options
         {
             if (DSOptions != null)
                 Log.Logger.Information($"Options={DSOptions.ToString()}");
+        }
+        else if (command.StartsWith("/loadsettings")) // get settings
+        {
+            SaveLoadHelper.LoadSavedSettings();
         }
         else if (command.StartsWith("/sef")) // set event flag
         {
@@ -1935,14 +1939,11 @@ public partial class App : Application
             await BonfireInjectorHelper.InitBonfireStorage();
             await BonfireInjectorHelper.UpdateBonfires();
 
+            InitPauseHook();
+            
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);
             var hints = await App.Client.CurrentSession.Hints.GetHintsAsync();
             AddressHelper.BuildHintTriggers(scoutedLocationInfo, hints);
-            bool pause_hook = true;
-            if (pause_hook)
-            {
-                MakePauseHook();
-            }
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
@@ -1968,11 +1969,29 @@ public partial class App : Application
         Client.AddOverlayMessage($"Finished setup, took {watch.ElapsedMilliseconds}ms total");
 
     }
-    private static void MakePauseHook()
+    internal static void InitPauseHook()
     {
+        if (!SaveLoadHelper.SettingsLoaded)
+            App.ControlsContext.PauseInGestureMenu = true; // default to true, will also run the hook if it hasn't yet
+        else
+            MakePauseHook(App.ControlsContext.PauseInGestureMenu);
+    }
+    static bool pauseHookActive = false;
+    internal static void MakePauseHook(bool pauseSettingOn)
+    {
+        if (App.dsrClient == null) // no client = nothing to hook
+            return;
+        Log.Logger.Information($"initing pause hook to {pauseSettingOn}");
         ulong hook1_loc = 0x14024f88a;
         int hook1_length = 17;
         //int hook1_length = 0x26;
+
+        var restoreBytes = new byte[]
+        {
+            0x44, 0x38, 0xbe, 0xa1, 0x00, 0x00, 0x00,       // CMP        byte ptr [RSI + 0xa1],R15B
+            0x0f, 0x94, 0xc3,                               // SETZ       BL
+            0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
+        };
 
         // build hook1
         var pause_on_start_menu = new byte[]
@@ -2080,7 +2099,16 @@ public partial class App : Application
                 0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
         };
 
-        BonfireInjectorHelper.AddHook(hook1_loc, hook1_length, pause_on_gesture_menu, false);
+        if (pauseSettingOn && !pauseHookActive)
+        {
+            BonfireInjectorHelper.AddHook(hook1_loc, hook1_length, pause_on_gesture_menu, false);
+            pauseHookActive = true;
+        }
+        else if (!pauseSettingOn && pauseHookActive)
+        {
+            Memory.WriteByteArray(hook1_loc, restoreBytes);
+            pauseHookActive = false;
+        }   
     }
 
 

@@ -123,6 +123,11 @@ namespace DSAP.Helpers
                 get => App.ControlsContext.TrackerMapTabSwitching;
                 set => App.ControlsContext.TrackerMapTabSwitching = value;
             }
+            public bool PauseInGestureMenu
+            {
+                get => App.ControlsContext.PauseInGestureMenu;
+                set => App.ControlsContext.PauseInGestureMenu = value;
+            }
             //public string ClientGUID
             //{
             //    get => ClientGUID;
@@ -148,7 +153,7 @@ namespace DSAP.Helpers
         /// <summary>
         /// Load settings from saved json file.
         /// </summary>
-        private static void LoadSavedSettings()
+        internal static void LoadSavedSettings()
         {
             if (!File.Exists(SettingsFileLocation))
             {
@@ -202,6 +207,7 @@ namespace DSAP.Helpers
                     return; // avoid saving to file every time the text in these fields changes, tracking these when the connection is established instead
             }
 
+            Log.Logger.Debug($"changed field: {e.PropertyName}");
             // Check if this property is configured to be saved (Property names need to match)
             if (typeof(DSAPSettings).GetProperty(e.PropertyName) != null)
             {

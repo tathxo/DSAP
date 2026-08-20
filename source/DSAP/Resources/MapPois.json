@@ -17,6 +17,14 @@
   },
   {
     "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Upper Burg 3",
+    "RoomId": 0,
+    "X": -58.7,
+    "Y": -29.7,
+    "Z": -47.7
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
     "PoiName": "Upper Burg Merchant",
     "RoomId": 0,
     "X": -39,

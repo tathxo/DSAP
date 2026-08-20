@@ -138,7 +138,7 @@ namespace DSAP.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _pauseInGestureMenu, value);
-                App.MakePauseHook(_pauseInGestureMenu);
+                HookHelper.MakePauseHook(_pauseInGestureMenu);
             }
         }
 

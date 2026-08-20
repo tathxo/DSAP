@@ -69,7 +69,7 @@ public partial class App : Application
     private static bool _goalSent = false;
     private static readonly SemaphoreSlim _goalSemaphore = new SemaphoreSlim(1, 1);
     public static List<EmkController> EmkControllers = [];
-    private static DarkSoulsClient dsrClient = null;
+    internal static DarkSoulsClient dsrClient = null;
     private bool overlayInitialized = false;
     private static uint connect_command_step = 0;
     private bool firstConnectionStarted = false;
@@ -417,7 +417,7 @@ public partial class App : Application
             if (DSOptions != null)
                 Log.Logger.Information($"Options={DSOptions.ToString()}");
         }
-        else if (command.StartsWith("/loadsettings")) // get settings
+        else if (command.StartsWith("/loadsettings")) // load settings (for debugging purposes)
         {
             SaveLoadHelper.LoadSavedSettings();
         }
@@ -1939,7 +1939,7 @@ public partial class App : Application
             await BonfireInjectorHelper.InitBonfireStorage();
             await BonfireInjectorHelper.UpdateBonfires();
 
-            InitPauseHook();
+            HookHelper.InitPauseHook();
             
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);
             var hints = await App.Client.CurrentSession.Hints.GetHintsAsync();
@@ -1969,148 +1969,6 @@ public partial class App : Application
         Client.AddOverlayMessage($"Finished setup, took {watch.ElapsedMilliseconds}ms total");
 
     }
-    internal static void InitPauseHook()
-    {
-        if (!SaveLoadHelper.SettingsLoaded)
-            App.ControlsContext.PauseInGestureMenu = true; // default to true, will also run the hook if it hasn't yet
-        else
-            MakePauseHook(App.ControlsContext.PauseInGestureMenu);
-    }
-    static bool pauseHookActive = false;
-    internal static void MakePauseHook(bool pauseSettingOn)
-    {
-        if (App.dsrClient == null) // no client = nothing to hook
-            return;
-        Log.Logger.Information($"initing pause hook to {pauseSettingOn}");
-        ulong hook1_loc = 0x14024f88a;
-        int hook1_length = 17;
-        //int hook1_length = 0x26;
-
-        var restoreBytes = new byte[]
-        {
-            0x44, 0x38, 0xbe, 0xa1, 0x00, 0x00, 0x00,       // CMP        byte ptr [RSI + 0xa1],R15B
-            0x0f, 0x94, 0xc3,                               // SETZ       BL
-            0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
-        };
-
-        // build hook1
-        var pause_on_start_menu = new byte[]
-        {
-            // load MenuMan, check if the relevant byte is set for player to be "in menu". If so, turn on the "pause bytes" in the MoveMapStep
-                // push rax
-                // movabs rax,[0x141c88d98] // MenuMan
-                // add rax,0x50
-                // cmp byte ptr [rax],0x01 // needed for going between menus
-                // je dowrite
-                // cmp byte ptr [rax],0x02
-                // je dowrite
-                // cmp byte ptr [rax],0x04 // needed for going between menus
-                // je dowrite
-                // cmp byte ptr [rax],0x05
-                // je dowrite
-                // cmp byte ptr [rax],0x08
-                // je dowrite
-                // jmp unwrite
-                // dowrite: 
-                // mov eax,0x0101
-                // mov word ptr [rsi+0x90],ax
-                // jmp done
-                // unwrite:
-                // mov eax,0x0000
-                // mov WORD PTR [rsi+0x90],ax
-                // done:
-                // pop rax
-                0x50,                                     // push   rax
-                0x48, 0xa1, 0x98, 0x8d, 0xc8, 0x41, 0x01, // movabs rax,ds:0x141c88d98
-                0x00, 0x00, 0x00,
-                0x48, 0x83, 0xc0, 0x50,                   // add    rax,0x50
-                0x80, 0x38, 0x01,                         // cmp    BYTE PTR [rax],0x1
-                0x74, 0x16,                               // je     2a <dowrite>
-                0x80, 0x38, 0x02,                         // cmp    BYTE PTR [rax],0x2
-                0x74, 0x11,                               // je     2a <dowrite>
-                0x80, 0x38, 0x04,                         // cmp    BYTE PTR [rax],0x4
-                0x74, 0x0c,                               // je     2a <dowrite>
-                0x80, 0x38, 0x05,                         // cmp    BYTE PTR [rax],0x5
-                0x74, 0x07,                               // je     2a <dowrite>
-                0x80, 0x38, 0x08,                         // cmp    BYTE PTR [rax],0x8
-                0x74, 0x02,                               // je     2a <dowrite>
-                0xeb, 0x0e,                               // jmp    38 <unwrite>
-                //// dowrite:
-                0xb8, 0x01, 0x01, 0x00, 0x00,               // mov eax,0x101
-                0x66, 0x89, 0x86, 0x90, 0x00, 0x00, 0x00,   // mov WORD PTR [rsi+0x90],ax
-                0xeb, 0x0c,                                 // jmp    44 < done >
-                //// unwrite:
-                0xb8, 0x00, 0x00, 0x00, 0x00,               // mov eax,0x000
-                0x66, 0x89, 0x86, 0x90, 0x00, 0x00, 0x00,   // mov WORD PTR [rsi+0x90],ax
-                //// done:
-                0x58,                                       // pop rax
-                // then add the code we overwrote which checks conditions
-                0x44, 0x38, 0xbe, 0xa1, 0x00, 0x00, 0x00,       // CMP        byte ptr [RSI + 0xa1],R15B
-                0x0f, 0x94, 0xc3,                               // SETZ       BL
-                0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
-        };
-
-        // build hook1
-        var pause_on_gesture_menu = new byte[]
-        {
-            // load MenuMan, check if the relevant byte is set for player to be "in gesture menu". If so, turn on the "pause bytes" in the MoveMapStep
-                // push rax
-                // movabs rax,[0x141c88d98] // MenuMan
-                // add rax,0x100
-                // cmp byte ptr [rax],0x01 // main menu
-                // je dowrite
-                // cmp byte ptr [rax],0x02 // switch/sub menu
-                // je dowrite
-                // cmp byte ptr [rax],0x03 // switch/sub menu
-                // je dowrite
-                // jmp unwrite
-                // dowrite: 
-                // mov eax,0x0101
-                // mov word ptr [rsi+0x90],ax
-                // jmp done
-                // unwrite:
-                // mov eax,0x0000
-                // mov WORD PTR [rsi+0x90],ax
-                // done:
-                // pop rax
-                0x50,                                     // push   rax
-                0x48, 0xa1, 0x98, 0x8d, 0xc8, 0x41, 0x01, // movabs rax,ds:0x141c88d98
-                0x00, 0x00, 0x00,
-                0x48, 0x05, 0x00, 0x01, 0x00, 0x00,       // add    rax,0x100
-                0x80, 0x38, 0x01,                         // cmp    BYTE PTR [rax],0x1
-                0x74, 0x0c,                               // je     22 <dowrite>
-                0x80, 0x38, 0x02,                         // cmp    BYTE PTR [rax],0x2
-                0x74, 0x07,                               // je     22 <dowrite>
-                0x80, 0x38, 0x03,                         // cmp    BYTE PTR [rax],0x4
-                0x74, 0x02,                               // je     22 <dowrite>
-                0xeb, 0x0e,                               // jmp    30 <unwrite>
-                //// dowrite:
-                0xb8, 0x01, 0x01, 0x00, 0x00,               // mov eax,0x101
-                0x66, 0x89, 0x86, 0x90, 0x00, 0x00, 0x00,   // mov WORD PTR [rsi+0x90],ax
-                0xeb, 0x0c,                                 // jmp    3c < done >
-                //// unwrite:
-                0xb8, 0x00, 0x00, 0x00, 0x00,               // mov eax,0x000
-                0x66, 0x89, 0x86, 0x90, 0x00, 0x00, 0x00,   // mov WORD PTR [rsi+0x90],ax
-                //// done:
-                0x58,                                       // pop rax
-                // then add the code we overwrote which checks conditions
-                0x44, 0x38, 0xbe, 0xa1, 0x00, 0x00, 0x00,       // CMP        byte ptr [RSI + 0xa1],R15B
-                0x0f, 0x94, 0xc3,                               // SETZ       BL
-                0x44, 0x38, 0xbe, 0x90, 0x00, 0x00, 0x00        // CMP        byte ptr [RSI + 0x90],R15B 
-        };
-
-        if (pauseSettingOn && !pauseHookActive)
-        {
-            BonfireInjectorHelper.AddHook(hook1_loc, hook1_length, pause_on_gesture_menu, false);
-            pauseHookActive = true;
-        }
-        else if (!pauseSettingOn && pauseHookActive)
-        {
-            Memory.WriteByteArray(hook1_loc, restoreBytes);
-            pauseHookActive = false;
-        }   
-    }
-
 
     private void OnDisconnected(object sender, EventArgs args)
     {
@@ -2125,6 +1983,7 @@ public partial class App : Application
         BonfireInjectorHelper.ResetKnownBonfires();
         SlotLocToItemUpgMap = [];
         EmkControllers = [];
+        AddressHelper.added_warping_emk = false;
         AllowedBonfireWarps = [];
         ItemLotReplacementMap = [];
         scoutedLocationInfo = [];
@@ -2135,5 +1994,6 @@ public partial class App : Application
         Client.AddOverlayMessage("Disconnected from DSR");
         EmkHelper.ReleaseEvents(EmkControllers); // pointers in emk list become invalid on game restart
         BonfireInjectorHelper.ClearHookArea();
+        HookHelper.pauseHookActive = false;
     }
 }

@@ -270,14 +270,14 @@ namespace DSAP.Helpers
             // replace +2 with (ulong)stub
             Array.Copy(BitConverter.GetBytes(bonfire_stub_area), 0, new_instructions_5, 2, sizeof(ulong));
 
-            AddHook(hook1_loc, hook1_length, new_instructions_1, false);
-            AddHook(hook2_loc, hook2_length, new_instructions_2, false);
+            HookHelper.AddHook(hook1_loc, hook1_length, new_instructions_1, false);
+            HookHelper.AddHook(hook2_loc, hook2_length, new_instructions_2, false);
 
-            AddHook(hook3_loc, hook3_length, new_instructions_3, false);
+            HookHelper.AddHook(hook3_loc, hook3_length, new_instructions_3, false);
             // only hook "warp" routine if player has setting on. Otherwise, leave vanilla behavior, so "last bonfire" stays as source of warp
             if (App.DSOptions.WarpToAllBonfires)
-                AddHook(hook4_loc, hook4_length, new_instructions_4, false);
-            AddHook(hook5_loc, hook5_length, new_instructions_5, false);
+                HookHelper.AddHook(hook4_loc, hook4_length, new_instructions_4, false);
+            HookHelper.AddHook(hook5_loc, hook5_length, new_instructions_5, false);
 
             // update messages
             bool updateRequired = MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BONFIRES, x => x.MsgEntries.Any(x => x.id >= 99999998));
@@ -299,48 +299,6 @@ namespace DSAP.Helpers
                 Log.Logger.Debug("Updated Bonfire text struct");
             }
             hooks_set = true;
-        }
-
-        // creates a hook at loc_start
-        // replaces loc_Start with a jmp to the given new_instructions array of bytes
-        // Adds replaced_length bytes of instructions from loc_start before the new_instructions, and a jmp back.
-        //  -> This means that the first jmp's code only will be actually processed, because a 2nd inserted jmp would simply jmp to the first one, which returns to the original position
-        internal static void AddHook(ulong loc_start, int replaced_length, byte[] new_instructions, bool include_replaced_bytes)
-        {
-            byte[] replaced_instructions = Memory.ReadByteArray(loc_start, replaced_length);
-            ulong replacement_func_start_addr = (ulong)Memory.Allocate(1000, Memory.PAGE_EXECUTE_READWRITE);
-
-            var jmpstub = new byte[]
-            {
-                0xff, 0x25, 0x00, 0x00, 0x00, 0x00,       //jmp    QWORD PTR [rip+0x0]        # 6 <_main+0x6>
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // target address
-                // then the address to jump to (8 bytes)
-            };
-            Array.Copy(BitConverter.GetBytes(replacement_func_start_addr), 0, jmpstub, 6, 8); // target address
-
-            var return_jmp = new byte[]
-            {
-                0xff, 0x25, 0x00, 0x00, 0x00, 0x00,          // jmp    QWORD PTR [rip+0x8]
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // jmp's target address
-            };
-
-            ulong next_write_pos = replacement_func_start_addr;
-            // write the replaced instructions if the bool is on
-            if (include_replaced_bytes)
-            {
-                Memory.WriteByteArray(next_write_pos, replaced_instructions); // write the replaced instructions
-                next_write_pos += (ulong)replaced_instructions.Length;
-            }
-
-            Memory.WriteByteArray(next_write_pos, new_instructions); // write new instructions into its hook area
-            next_write_pos += (ulong)new_instructions.Length;
-
-            Memory.WriteByteArray(next_write_pos, return_jmp); // write the return instruction
-            next_write_pos += (ulong)6; // point to return address
-            Memory.WriteByteArray(next_write_pos, BitConverter.GetBytes(loc_start + (ulong)replaced_length)); // write the return address
-
-            //Memory.WriteByteArray(replacement_func_start_addr + new_instructions.Length, return_jmp);
-            Memory.WriteByteArray(loc_start, jmpstub); // write jmp stub (e.g. "create hook")
         }
 
         public static void setBonfireByLoc(int locid)

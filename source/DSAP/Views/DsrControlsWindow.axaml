@@ -125,6 +125,10 @@
 				<Label>Tracker Map Tab Switching</Label>
 				<ToggleSwitch IsChecked="{Binding TrackerMapTabSwitching}"></ToggleSwitch>
             </StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Pause In Gesture Menu</Label>
+				<ToggleSwitch IsChecked="{Binding PauseInGestureMenu}"></ToggleSwitch>
+            </StackPanel>
         </StackPanel>
         <ToggleButton Grid.Row="2" 
                 Content="Deathlink" 

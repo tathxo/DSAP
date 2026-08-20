@@ -33,6 +33,7 @@ namespace DSAP.ViewModels
         private string _warpSortOrder = "";
         private bool _deathlink = false;
         private bool _trackerMapTabSwitching = true;
+        private bool _pauseInGestureMenu = true;
 
         public bool FoundItemProgressive
         {
@@ -130,6 +131,15 @@ namespace DSAP.ViewModels
         {
             get => _trackerMapTabSwitching;
             set => this.RaiseAndSetIfChanged(ref _trackerMapTabSwitching, value);
+        }
+        public bool PauseInGestureMenu
+        {
+            get => _pauseInGestureMenu;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _pauseInGestureMenu, value);
+                App.MakePauseHook(_pauseInGestureMenu);
+            }
         }
 
         public override void Dispose()

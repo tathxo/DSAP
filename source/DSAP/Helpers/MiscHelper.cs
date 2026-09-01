@@ -818,5 +818,55 @@ namespace DSAP.Helpers
                 App.Client.AddOverlayMessage($"{tpCommand} teleport failed - player has not killed {bossName}.");
             }
         }
+
+        /*  ----------Code To Emulate--------------
+            sub rsp,0x30
+            mov rcx,0
+            mov edx,[entity] (12345678)
+            mov r8d,[animation] (1234)
+            xor r9b,r9b
+            mov byte ptr [RSP + 20],0x0
+            movabs r14,0x1404867e0
+            call r14
+            add rsp,0x30
+            ret
+        */
+        /*  generated machine code/asm
+            0:  48 83 ec 30             sub    rsp,0x30
+            4:  48 c7 c1 00 00 00 00    mov    rcx,0x0
+            b:  ba 00 00 00 00          mov    edx,0x0
+            10: 41 b8 00 00 00 00       mov    r8d,0x0
+            16: 45 30 c9                xor    r9b,r9b
+            19: c6 44 24 14 00          mov    BYTE PTR [rsp+0x14],0x0
+            1e: 49 be e0 67 48 40 01    movabs r14,0x140480700
+            25: 00 00 00 
+            28: 41 ff d6                call   r14
+            2b: 48 83 c4 30             add    rsp,0x30
+            2f: c3                      ret
+         */
+        internal static byte[] PlayAnimation(int entity, int animation)
+        {
+            byte[] x = new byte[] {
+                0x48, 0x83, 0xec, 0x38,                   // sub    rsp,0x38
+                0x48, 0xc7, 0xc1, 0x00, 0x00, 0x00, 0x00, // mov    rcx,0x0
+                0xba, 0x00, 0x00, 0x00, 0x00,             // mov    edx,0x0 <- fill with entity
+                0x41, 0xb8, 0x00, 0x00, 0x00, 0x00,       // mov    r8d,0x0 < - fill with animation
+                0x45, 0x30, 0xc9,                         // xor    r9b,r9b
+                0xc6, 0x44, 0x24, 0x14, 0x00,             // mov    BYTE PTR [rsp+0x14],0x0
+                // experimental
+                0x48, 0xb9, 0xb0, 0xb1, 0xc7, 0x41, 0x01, 0x00, 0x00, 0x00, // movabs RCX,0x141c7b1b0 (DbgEvent_Global_obj)
+                0x48, 0x8b, 0x09,                                     // mov rcx, qword ptr [rcx]
+                //
+                0x49, 0xbe, 0x00, 0x07, 0x48, 0x40, 0x01, // movabs r14,0x140480700
+                0x00, 0x00, 0x00,
+                0x41, 0xff, 0xd6,                         // call   r14
+                0x48, 0x83, 0xc4, 0x38,                   // add    rsp,0x38
+                0xc3,                                     // ret
+            };
+            Array.Copy(BitConverter.GetBytes(entity), 0, x, 12, sizeof(int));
+            Array.Copy(BitConverter.GetBytes(animation), 0, x, 18, sizeof(int));
+
+            return x;
+        }
     }
 }

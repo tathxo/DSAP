@@ -1019,6 +1019,7 @@ _all_items_base = [
     ("Door Filler", 9900, DSRItemCategory.FILLER),
     ("Fogwall Filler", 9901, DSRItemCategory.FILLER),
     ("Nothing", 9902, DSRItemCategory.NOTHING),
+    ("Filler", 9903, DSRItemCategory.FILLER),
 
     ("Lag Trap", 10000, DSRItemCategory.TRAP),
 ]

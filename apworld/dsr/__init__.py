@@ -533,10 +533,6 @@ class DSRWorld(World):
         filler_items = [item for item in itempool if item_dictionary[item.name].category in [DSRItemCategory.FILLER]]
         junk_items = [item for item in itempool if item.name in item_name_groups["Junk"]]
         removable_items = filler_items + junk_items
-
-        filler_items = [item for item in itempool if item_dictionary[item.name].category in [DSRItemCategory.FILLER]]
-        junk_items = [item for item in itempool if item.name in item_name_groups["Junk"]]
-        removable_items = filler_items + junk_items
         # print("leftover removable items: " + str(len(removable_items)))
         # print("leftover filler items: " + str(len(filler_items)))
 
@@ -703,7 +699,7 @@ class DSRWorld(World):
             "itemsId": items_id,
             "itemsUpgrades": items_upgrades,
             "itemsAddress": items_address,
-            "apworld_api_version" : "0.2.5" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.2.6" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

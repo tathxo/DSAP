@@ -358,7 +358,7 @@ location_tables = {
     # DSRLocationData(11110xxx, f"DE: Domhnall of Zena", f"Domhnall of Zena Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110865, f"Domhnall of Zena: Gold Pine Resin", f"Gold Pine Resin", DSRLocationCategory.SHOP_ITEM),
     # DSRLocationData(11110823, f"Domhnall of Zena: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110886, f"Domhnall of Zena: Master Key", f"Master Key", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110886, f"Domhnall of Zena: Master Key", f"Filler", DSRLocationCategory.SHOP_ITEM), # Remove master key from pool
 ],
 # "Firelink Shrine - Domhnall of Zena - Post Iron Golem": [
 #     DSRLocationData(11110866, f"Domhnall of Zena: Golem Helm", f"Golem Helm", DSRLocationCategory.SHOP_ITEM),

@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -554,7 +555,6 @@ public partial class App : Application
         var result = Memory.ExecuteCommand(command);
 
         Log.Logger.Information($"Playing animation: {entity}:{animation}");
-
     }
 
     // Process the command which will list all of a specific type of lock that is active.

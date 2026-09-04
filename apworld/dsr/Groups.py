@@ -48,6 +48,7 @@ progression_items = [
     "Covenant of Artorias",
     "Crest Key",
     "Crest of Artorias",
+    "Darkmoon Seance Ring",
     "Dungeon Cell Key",
     "Key to Depths",
     "Key to New Londo Ruins",
@@ -63,7 +64,7 @@ progression_items = [
 ]
 
 item_name_groups = {
-    "Key items"         : [item.name for item in item_dictionary.values() if item.category in [DSRItemCategory.KEY_ITEM]] + ["Covenant of Artorias","Orange Charred Ring", "Skull Lantern"],
+    "Key items"         : [item.name for item in item_dictionary.values() if item.category in [DSRItemCategory.KEY_ITEM]] + ["Covenant of Artorias","Orange Charred Ring", "Skull Lantern", "Darkmoon Seance Ring"],
     "Fog Wall Keys"     : [item.name for item in item_dictionary.values() if item.category in [DSRItemCategory.FOGWALL]],
     "Boss Fog Wall Keys": [item.name for item in item_dictionary.values() if item.category in [DSRItemCategory.BOSSFOGWALL]],
     "Consumables"       : [item.name for item in item_dictionary.values() if item.category in [DSRItemCategory.CONSUMABLE] and "soul" not in item.name.lower() and "fire keeper" not in item.name.lower()],

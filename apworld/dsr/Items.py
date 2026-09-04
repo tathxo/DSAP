@@ -58,7 +58,7 @@ class DSRItem(Item):
         return {item_data.name: (base_id + item_data.dsr_code if item_data.dsr_code is not None else None) for item_data in _all_items}
 
 key_item_names = {
-    "Covenant of Artorias","Orange Charred Ring", "Skull Lantern", "Sunlight Maggot"
+    "Covenant of Artorias", "Darkmoon Seance Ring", "Orange Charred Ring", "Skull Lantern", "Sunlight Maggot"
 }
 
 _all_items_base = [    

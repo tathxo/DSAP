@@ -193,201 +193,221 @@
     "ParamId": 1550,
     "OriginalItemId": 470000,
     "Id": 11110866,
-    "Name": "Domhnall of Zena: Golem Helm",
+    "Name": "Domhnall of Zena After Iron Golem: Golem Helm",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 5000,
-    "Flag": 11807020
+    "Flag": 11807020,
+    "Preflag": 11500001
   },
   {
     "ParamId": 1551,
     "OriginalItemId": 471000,
     "Id": 11110867,
-    "Name": "Domhnall of Zena: Golem Armor",
+    "Name": "Domhnall of Zena After Iron Golem: Golem Armor",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 7000,
-    "Flag": 11807030
+    "Flag": 11807030,
+    "Preflag": 11500001
   },
   {
     "ParamId": 1552,
     "OriginalItemId": 472000,
     "Id": 11110868,
-    "Name": "Domhnall of Zena: Golem Gauntlets",
+    "Name": "Domhnall of Zena After Iron Golem: Golem Gauntlets",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 5000,
-    "Flag": 11807040
+    "Flag": 11807040,
+    "Preflag": 11500001
   },
   {
     "ParamId": 1553,
     "OriginalItemId": 473000,
     "Id": 11110869,
-    "Name": "Domhnall of Zena: Golem Leggings",
+    "Name": "Domhnall of Zena After Iron Golem: Golem Leggings",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 5000,
-    "Flag": 11807050
+    "Flag": 11807050,
+    "Preflag": 11500001
   },
   {
     "ParamId": 1554,
     "OriginalItemId": 80000,
     "Id": 11110870,
-    "Name": "Domhnall of Zena: Smough's Helm",
+    "Name": "Domhnall of Zena After Smough: Smough's Helm",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 6000,
-    "Flag": 11807060
+    "Flag": 11807060,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1555,
     "OriginalItemId": 81000,
     "Id": 11110871,
-    "Name": "Domhnall of Zena: Smough's Armor",
+    "Name": "Domhnall of Zena After O+S: Smough's Armor",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 7000,
-    "Flag": 11807070
+    "Flag": 11807070,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1556,
     "OriginalItemId": 82000,
     "Id": 11110872,
-    "Name": "Domhnall of Zena: Smough's Gauntlets",
+    "Name": "Domhnall of Zena After O+S: Smough's Gauntlets",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 5000,
-    "Flag": 11807080
+    "Flag": 11807080,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1557,
     "OriginalItemId": 83000,
     "Id": 11110873,
-    "Name": "Domhnall of Zena: Smough's Leggings",
+    "Name": "Domhnall of Zena After O+S: Smough's Leggings",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 5000,
-    "Flag": 11807090
+    "Flag": 11807090,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1558,
     "OriginalItemId": 270000,
     "Id": 11110874,
-    "Name": "Domhnall of Zena: Ornstein's Helm",
+    "Name": "Domhnall of Zena After O+S: Ornstein's Helm",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 7000,
-    "Flag": 11807100
+    "Flag": 11807100,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1559,
     "OriginalItemId": 271000,
     "Id": 11110875,
-    "Name": "Domhnall of Zena: Ornstein's Armor",
+    "Name": "Domhnall of Zena After O+S: Ornstein's Armor",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 8000,
-    "Flag": 11807110
+    "Flag": 11807110,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1560,
     "OriginalItemId": 272000,
     "Id": 11110876,
-    "Name": "Domhnall of Zena: Ornstein's Gauntlets",
+    "Name": "Domhnall of Zena After O+S: Ornstein's Gauntlets",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 6000,
-    "Flag": 11807120
+    "Flag": 11807120,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1561,
     "OriginalItemId": 273000,
     "Id": 11110877,
-    "Name": "Domhnall of Zena: Ornstein's Leggings",
+    "Name": "Domhnall of Zena After O+S: Ornstein's Leggings",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 6000,
-    "Flag": 11807130
+    "Flag": 11807130,
+    "Preflag": 11510001
   },
   {
     "ParamId": 1562,
     "OriginalItemId": 540000,
     "Id": 11110878,
-    "Name": "Domhnall of Zena: Crown of the Dark Sun",
+    "Name": "Domhnall of Zena After Gwyndolin: Crown of the Dark Sun",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 10000,
-    "Flag": 11807230
+    "Flag": 11807230,
+    "Preflag": 11510900
   },
   {
     "ParamId": 1563,
     "OriginalItemId": 541000,
     "Id": 11110879,
-    "Name": "Domhnall of Zena: Moonlight Robe",
+    "Name": "Domhnall of Zena After Gwyndolin: Moonlight Robe",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 10000,
-    "Flag": 11807170
+    "Flag": 11807170,
+    "Preflag": 11510900
   },
   {
     "ParamId": 1564,
     "OriginalItemId": 542000,
     "Id": 11110880,
-    "Name": "Domhnall of Zena: Moonlight Gloves",
+    "Name": "Domhnall of Zena After Gwyndolin: Moonlight Gloves",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 10000,
-    "Flag": 11807180
+    "Flag": 11807180,
+    "Preflag": 11510900
   },
   {
     "ParamId": 1565,
     "OriginalItemId": 543000,
     "Id": 11110881,
-    "Name": "Domhnall of Zena: Moonlight Waistcloth",
+    "Name": "Domhnall of Zena After Gwyndolin: Moonlight Waistcloth",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 10000,
-    "Flag": 11807190
+    "Flag": 11807190,
+    "Preflag": 11510900
   },
   {
     "ParamId": 1566,
     "OriginalItemId": 550000,
     "Id": 11110882,
-    "Name": "Domhnall of Zena: Crown of the Great Lord",
+    "Name": "Domhnall of Zena After Gwyn: Crown of the Great Lord",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11807240
+    "Flag": 11807240,
+    "Preflag": 61324999
   },
   {
     "ParamId": 1567,
     "OriginalItemId": 551000,
     "Id": 11110883,
-    "Name": "Domhnall of Zena: Robe of the Great Lord",
+    "Name": "Domhnall of Zena After Gwyn: Robe of the Great Lord",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11807200
+    "Flag": 11807200,
+    "Preflag": 61324999
   },
   {
     "ParamId": 1568,
     "OriginalItemId": 552000,
     "Id": 11110884,
-    "Name": "Domhnall of Zena: Bracelet of the Great Lord",
+    "Name": "Domhnall of Zena After Gwyn: Bracelet of the Great Lord",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11807210
+    "Flag": 11807210,
+    "Preflag": 61324999
   },
   {
     "ParamId": 1569,
     "OriginalItemId": 553000,
     "Id": 11110885,
-    "Name": "Domhnall of Zena: Anklet of the Great Lord",
+    "Name": "Domhnall of Zena After Gwyn: Anklet of the Great Lord",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11807220
+    "Flag": 11807220,
+    "Preflag": 61324999
   },
   {
     "ParamId": 1580,
@@ -403,41 +423,45 @@
     "ParamId": 1581,
     "OriginalItemId": 660000,
     "Id": 11110887,
-    "Name": "Domhnall of Zena: Helm of Artorias",
+    "Name": "Domhnall of Zena After Artorias: Helm of Artorias",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11217060
+    "Flag": 11217060,
+    "Preflag": 11210001
   },
   {
     "ParamId": 1582,
     "OriginalItemId": 661000,
     "Id": 11110888,
-    "Name": "Domhnall of Zena: Armor of Artorias",
+    "Name": "Domhnall of Zena After Artorias: Armor of Artorias",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11217070
+    "Flag": 11217070,
+    "Preflag": 11210001
   },
   {
     "ParamId": 1583,
     "OriginalItemId": 662000,
     "Id": 11110889,
-    "Name": "Domhnall of Zena: Gauntlets of Artorias",
+    "Name": "Domhnall of Zena After Artorias: Gauntlets of Artorias",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11217080
+    "Flag": 11217080,
+    "Preflag": 11210001
   },
   {
     "ParamId": 1584,
     "OriginalItemId": 663000,
     "Id": 11110890,
-    "Name": "Domhnall of Zena: Leggings of Artorias",
+    "Name": "Domhnall of Zena After Artorias: Leggings of Artorias",
     "OriginalType": "BossArmor",
     "OriginalQuantity": 1,
     "Value": 20000,
-    "Flag": 11217090
+    "Flag": 11217090,
+    "Preflag": 11210001
   },
   {
     "ParamId": 1600,

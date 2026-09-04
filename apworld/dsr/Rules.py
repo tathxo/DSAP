@@ -191,18 +191,18 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Firelink Shrine - Domhnall of Zena": [
     DsrEntranceRule("Firelink Shrine", CanReachRegion("Depths") & HasAll("Bell of Awakening #1", "Bell of Awakening #2")), # vanilla, but his inventory is more complicated due to flags
   ],
-  # "Firelink Shrine - Domhnall of Zena - Post Iron Golem": [
-  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Iron Golem Defeated")), 
-  # ],
-  # "Firelink Shrine - Domhnall of Zena - Post O+S": [
-  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Ornstein and Smough Defeated")), #vanilla, but his inventory is more complicated due to flags
-  # ],
-  # "Firelink Shrine - Domhnall of Zena - Post Gwyndolin": [
-  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Gwyndolin Defeated")), #vanilla, but his inventory is more complicated due to flags
-  # ],
-  # "Firelink Shrine - Domhnall of Zena - Post Artorias": [
-  #   DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Artorias the Abysswalker Defeated")), #vanilla, but his inventory is more complicated due to flags
-  # ],
+  "Firelink Shrine - Domhnall of Zena After Iron Golem": [
+    DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Iron Golem Defeated")),
+  ],
+  "Firelink Shrine - Domhnall of Zena After O+S": [
+    DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Ornstein and Smough Defeated")), #vanilla, but his inventory is more complicated due to flags
+  ],
+  "Firelink Shrine - Domhnall of Zena After Gwyndolin": [
+    DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Gwyndolin Defeated")), #vanilla, but his inventory is more complicated due to flags
+  ],
+  "Firelink Shrine - Domhnall of Zena After Artorias": [
+    DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Artorias the Abysswalker Defeated")), #vanilla, but his inventory is more complicated due to flags
+  ],
   "Depths to Blighttown Door": [
     DsrEntranceRule("Depths", Has("Blighttown Key")),
   ],

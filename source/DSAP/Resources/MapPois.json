@@ -152,6 +152,24 @@
     "Z": 106
   },
   {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Undead Parish Bull",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 13,
+    "Y": 23,
+    "Z": 24
+  },
+  {
+    "MapName": "* Undead Burg / Undead Parish",
+    "PoiName": "Undead Parish Black Knight",
+    "SubMapId": 1,
+    "RoomId": 0,
+    "X": 8,
+    "Y": 14,
+    "Z": -12
+  },
+  {
     "MapName": "* Darkroot Garden / Darkroot Basin",
     "PoiName": "Darkroot Garden Early Fork",
     "RoomId": 0,
@@ -602,6 +620,15 @@
   },
   {
     "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Demon Ruins Entrance Ramp Base",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 295,
+    "Y": -300,
+    "Z": 195
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
     "PoiName": "Taurus Demons",
     "RoomId": 0,
     "SubMapId": 0,
@@ -620,12 +647,21 @@
   },
   {
     "MapName": "* Demon Ruins / Lost Izalith",
-    "PoiName": "Shortcut Door - Demon Ruins Side",
+    "PoiName": "Shortcut Hall Door",
     "RoomId": 0,
     "SubMapId": 0,
-    "X": 215,
-    "Y": -367.7,
-    "Z": 137.7
+    "X": 238,
+    "Y": -368,
+    "Z": 158
+  },
+  {
+    "MapName": "* Demon Ruins / Lost Izalith",
+    "PoiName": "Shortcut Hall - Crystal Lizard",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 288.6,
+    "Y": -359,
+    "Z": 199
   },
   {
     "MapName": "* Demon Ruins / Lost Izalith",
@@ -656,12 +692,12 @@
   },
   {
     "MapName": "* Demon Ruins / Lost Izalith",
-    "PoiName": "Shortcut Door - Lost Izalith Side",
+    "PoiName": "Shortcut Hall - Lost Izalith Side",
     "RoomId": 0,
-    "SubMapId": 1,
-    "X": 264.5,
-    "Y": -367.7,
-    "Z": 178.8
+    "SubMapId": 0,
+    "X": 297,
+    "Y": -360,
+    "Z": 206.10
   },
   {
     "MapName": "* Demon Ruins / Lost Izalith",
@@ -953,6 +989,15 @@
   },
   {
     "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Seath 1st Encounter Fog",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 272,
+    "Y": 389,
+    "Z": 517
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
     "PoiName": "Archives Big Room By Secret Bookcase",
     "RoomId": 0,
     "SubMapId": 1,
@@ -995,6 +1040,15 @@
     "X": 416,
     "Y": 228,
     "Z": 562
+  },
+  {
+    "MapName": "* Duke's Archives / Crystal Cave",
+    "PoiName": "Archives Prison Exit",
+    "RoomId": 0,
+    "SubMapId": 0,
+    "X": 387,
+    "Y": 293,
+    "Z": 587
   },
   {
     "MapName": "* Duke's Archives / Crystal Cave",

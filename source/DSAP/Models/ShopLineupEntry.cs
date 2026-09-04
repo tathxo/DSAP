@@ -11,6 +11,7 @@ namespace DSAP.Models
         public int ParamId { get; set; }
         public int OriginalItemId { get; set; } = 0;
         public int Value { get; set; } = 0;
+        public int Preflag { get; set; } = 0;
         public ShopLineupEntry() { }
 
     }

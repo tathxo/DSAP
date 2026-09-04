@@ -2,7 +2,7 @@
 To try to avoid collisions as much as possible, I went as unused as possible:
 digit 1 = 6, unused but valid span of flags, as far as I can tell.
 digit 2-4 = 132, Ash Lake/Great Hollow
-digit 5-8 = offset to 3000, up to 3160.
+digit 5-8 = offset to 3000, up to 3999.
 Shop item counts need 10 bytes per slot, to account for up to 2^10=1023 items in slot.
 We only use 1.
 "Flag": "61323000"
@@ -23,3 +23,6 @@ We only use 1.
 "Flag": "61323150"
 "Flag": "61323160"
 "Flag": "61323170"
+
+"Flag": "61323998" Flag reserved for o+s armor set handling
+"Flag": "61323999" Flag reserved for gwyn armor set handling

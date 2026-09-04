@@ -153,11 +153,13 @@ dlc_regions = [
     "Oolacile Township - After Crest Key",
     "Chasm of the Abyss",
     "Chasm of the Abyss - Manus",
+    "Firelink Shrine - Domhnall of Zena After Artorias",
 ]
 
 #Post Ornstein And Smough
 post_os_regions  = [
     "Anor Londo - After Ornstein and Smough",
+    "Firelink Shrine - Domhnall of Zena After O+S",
     "The Duke's Archives",
     "The Duke's Archives - After First Seath Encounter",
     "The Duke's Archives - After Archive Tower Cell Key",
@@ -192,6 +194,7 @@ post_os_regions  = [
     "Oolacile Township - After Crest Key",
     "Chasm of the Abyss",
     "Chasm of the Abyss - Manus",
+    "Firelink Shrine - Domhnall of Zena After Artorias",
     "Firelink Altar",
     "Kiln of the First Flame",
     "Kiln of the First Flame - Gwyn"

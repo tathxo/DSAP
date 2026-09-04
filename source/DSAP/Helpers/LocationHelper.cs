@@ -4,6 +4,7 @@ using DSAP.Models;
 using Serilog;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 
 namespace DSAP.Helpers
@@ -157,13 +158,37 @@ namespace DSAP.Helpers
             var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                if (lot.Preflag == 0)
                 {
-                    Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
-                    AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
-                    Id = lot.Id,
-                });
+                    locations.Add(new Location
+                    {
+                        Name = lot.Name,
+                        Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                        AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                        Id = lot.Id,
+                    });
+                }
+                else
+                {
+                    locations.Add(new CompositeLocation
+                    {
+                        Name = lot.Name,
+                        Conditions = [
+                            new Location
+                            {
+                                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Preflag).Item1,
+                                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Preflag).Item2,
+                            },
+                            new Location
+                            {
+                                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                            }],
+                        Id = lot.Id,
+                        CheckType = LocationCheckType.AND
+                    });
+                }
+
             }
             return locations;
         }

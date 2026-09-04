@@ -328,7 +328,8 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   ],
   "Anor Londo - Gwyndolin": [
     # attacking the illusion -> no ring needed
-    DsrEntranceRule("Anor Londo - After Ornstein and Smough", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off), 
+    DsrEntranceRule("Anor Londo - After Ornstein and Smough", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off),
+    DsrEntranceRule("Anor Londo - After First Fog", Has("Darkmoon Seance Ring") & (Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off)),
   ],
   "Anor Londo - After Gwyndolin": [
     DsrEntranceRule("Anor Londo - Gwyndolin", True_()), # Has("Gwyndolin Defeated")),

@@ -422,6 +422,24 @@ namespace DSAP.Helpers
                     });
                 }
             }
+            // if O+S were killed, make both sets available for purchase, then set the "we've made both sets available" flag on.
+            if (!isFlagOnInBuffer(flags, 61323998) && isFlagOnInBuffer(flags, 11510001))
+            {
+                var os_shop_flags = shopflags.Where(x => x.Name.StartsWith("Domhnall of Zena After O+S")).Select(x => x.Flag);
+                if (os_shop_flags.Count() != 0)
+                {
+                    Log.Logger.Information("Making both O+S armor sets available for purchase at Domhnall.");
+                    Task.Run(() =>
+                    {
+                        Task.Delay(500);
+                        foreach (var flag in os_shop_flags)
+                        {
+                            App.SetEventFlag(flag, false);
+                        }
+                        App.SetEventFlag(61323998, true);
+                    });
+                }
+            }
         }
         private static void GhLizardSafety(byte[] flags) // based on 11320300 events
         {

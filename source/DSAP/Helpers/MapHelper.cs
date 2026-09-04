@@ -76,7 +76,7 @@ namespace DSAP.Helpers
                             }
                             else
                             {
-                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapId} from {cached_mapInfo.MapId}");
+                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapId}/idx{(mapInfo.MapId == 0 ? 0 : MapToIndex[mapInfo.MapId])} from {cached_mapInfo.MapId}/idx{(mapInfo.MapId == 0 ? 0 : MapToIndex[cached_mapInfo.MapId])}");
                             }
                         }
                         await Task.Delay(REPEAT_TIMER_MS);

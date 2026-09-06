@@ -804,7 +804,7 @@ _all_items_base = [
     ("Priscilla's Dagger", 8004, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Unique),
     ("Shortsword", 8005, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Infusable),
     ("Longsword", 8006, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Infusable),
-    ("BroadSword", 8007, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Infusable),
+    ("Broadsword", 8007, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Infusable),
     ("Broken Straight Sword", 8008, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Infusable),
     ("Balder Side Sword", 8009, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.Infusable),
     ("Crystal Straight Sword", 8010, DSRItemCategory.WEAPON, DSRWeaponType.Melee, DSRUpgradeType.NotUpgradable),

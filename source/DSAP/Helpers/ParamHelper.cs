@@ -1,14 +1,13 @@
-﻿using Archipelago.Core.Models;
-using Archipelago.Core.Util;
+﻿using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Models;
-using Avalonia.Media.TextFormatting;
 using DSAP.Models;
 using Serilog;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace DSAP.Helpers
 {
@@ -576,6 +575,69 @@ namespace DSAP.Helpers
                 return false;
             }
 
+            // print shop lineup params
+            /*
+            Log.Logger.Verbose("Printing Shop Lineup Params");
+
+            var armors = MiscHelper.GetArmor();
+            var weapons = MiscHelper.GetMeleeWeapons();
+            weapons.AddRange(MiscHelper.GetRangedWeapons());
+            weapons.AddRange(MiscHelper.GetShields());
+            weapons.AddRange(MiscHelper.GetSpellTools());
+            var rings = MiscHelper.GetRings();
+            var goods = MiscHelper.GetConsumables();
+            goods.AddRange(MiscHelper.GetKeyItems());
+            goods.AddRange(MiscHelper.GetUsableItems());
+            goods.AddRange(MiscHelper.GetUpgradeMaterials());
+            goods.AddRange(MiscHelper.GetSpells());
+            var spells = MiscHelper.GetSpells();
+            shopLineupParamStruct.FinalizeParams();
+            StringBuilder jsondoc = new StringBuilder("{\n\"ShopLineupParams\" : [");
+            bool first = true;
+            foreach (var shopitem in shopLineupParamStruct.ParamEntries)
+            {
+                byte[] itembytes = new byte[ShopLineupParam.Size];
+                Array.Copy(shopLineupParamStruct.ParamBytes, shopitem.paramOffset, itembytes, 0, itembytes.Length);
+                ShopLineupParam slp = new ShopLineupParam();
+                slp.Id = shopitem.id;
+                slp.ItemId = BitConverter.ToInt32(itembytes, ShopLineupParam.EQUIP_ID);
+                slp.Cost = BitConverter.ToInt32(itembytes, ShopLineupParam.COST);
+                slp.MatCost = BitConverter.ToInt32(itembytes, 8);
+                slp.EventFlag = BitConverter.ToInt32(itembytes, 0xc);
+                slp.Qwc = BitConverter.ToInt32(itembytes, 0x10);
+                slp.SellQuantity = BitConverter.ToInt16(itembytes, 0x14);
+                slp.ShopType = itembytes[0x16];
+                slp.EquipType = itembytes[0x17];
+                var name = "";
+                if (slp.EquipType == 0)
+                    slp.Name = weapons.Find(x => x.Id == slp.ItemId)?.Name;
+                if (slp.EquipType == 1)
+                    slp.Name = armors.Find(x => x.Id == slp.ItemId)?.Name;
+                if (slp.EquipType == 2)
+                    slp.Name = rings.Find(x => x.Id == slp.ItemId)?.Name;
+                if (slp.EquipType == 3)
+                    slp.Name = goods.Find(x => x.Id == slp.ItemId)?.Name;
+                if (slp.EquipType == 4)
+                    slp.Name = spells.Find(x => x.Id == slp.ItemId)?.Name;
+
+                //Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equipttype}");
+                //if (slp.EventFlag != -1)
+                //Log.Logger.Warning($"shop_item id={slp.Id}, itemid={slp.ItemId}, name={name}, val={slp.Cost}, matcost={slp.MatCost}, flag={slp.EventFlag}, qwc={slp.Qwc}, quant={slp.SellQuantity}, shoptype={slp.ShopType}, eqtype={slp.EquipType}");    
+                if (first)
+                {
+                    jsondoc.Append("\n");
+                    first = false;
+                }   
+                else
+                    jsondoc.Append(",\n");
+                
+                jsondoc.Append(JsonSerializer.Serialize(slp));
+            }
+            jsondoc.AppendLine("\n]\n}");
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + "shopdump.json", jsondoc.ToString());
+            */
+
+
             Log.Logger.Verbose("Reloading Shop Lineup Params");
 
             //if (App.DSOptions.ShopSanity == true)
@@ -590,7 +652,7 @@ namespace DSAP.Helpers
                     //Log.Logger.Information($"shop locid = {id}");
                     if (scoutedLocationInfo.TryGetValue(id, out var resultItem)) // get the matching scouted item
                     {
-                        if (shopFlag.OriginalItemId == 0)
+                        if (shopFlag.OriginalItemId == 0) // for completely new items
                         {
 
                             byte[] new_param_bytes = new byte[ShopLineupParam.Size];
@@ -620,52 +682,6 @@ namespace DSAP.Helpers
                     }
                 }
             }
-
-
-
-            // print shop lineup params
-            /*
-
-            var armors = MiscHelper.GetArmor();
-            var weapons = MiscHelper.GetMeleeWeapons();
-            weapons.AddRange(MiscHelper.GetRangedWeapons());
-            var rings = MiscHelper.GetRings();
-            var goods = MiscHelper.GetConsumables();
-            goods.AddRange(MiscHelper.GetKeyItems());
-            goods.AddRange(MiscHelper.GetUsableItems());
-            goods.AddRange(MiscHelper.GetUpgradeMaterials());
-            goods.AddRange(MiscHelper.GetSpells());
-            var spells = MiscHelper.GetSpells();
-
-            foreach (var shopitem in shopLineupParamStruct.ParamEntries)
-            {
-                byte[] itembytes = new byte[ShopLineupParam.Size];
-                Array.Copy(shopLineupParamStruct.ParamBytes, shopitem.paramOffset, itembytes, 0, itembytes.Length);
-                uint id = shopitem.id;
-                int itemid = BitConverter.ToInt32(itembytes, 0);
-                int val = BitConverter.ToInt32(itembytes, 4);
-                int matcost = BitConverter.ToInt32(itembytes, 8);
-                int flag = BitConverter.ToInt32(itembytes, 0xc);
-                int qwc = BitConverter.ToInt32(itembytes, 0x10);
-                short quant = BitConverter.ToInt16(itembytes, 0x14);
-                short shoptype = itembytes[0x16];
-                short equiptype = itembytes[0x17];
-                var name = "";
-                if (equiptype == 0)
-                    name = weapons.Find(x => x.Id == itemid)?.Name;
-                if (equiptype == 1)
-                    name = armors.Find(x => x.Id == itemid)?.Name;
-                if (equiptype == 2)
-                    name = rings.Find(x => x.Id == itemid)?.Name;
-                if (equiptype == 3)
-                    name = goods.Find(x => x.Id == itemid)?.Name;
-                if (equiptype == 4)
-                    name = spells.Find(x => x.Id == itemid)?.Name;
-                //Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equipttype}");
-                if (flag != -1)
-                    Log.Logger.Warning($"shop_item id={id}, itemid={itemid}, name={name}, val={val}, matcost={matcost}, flag={flag}, qwc={qwc}, quant={quant}, shoptype={shoptype}, eqtype={equiptype}");
-            }
-            */
 
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)

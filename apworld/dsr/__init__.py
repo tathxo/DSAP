@@ -183,6 +183,7 @@ class DSRWorld(World):
         # if (self.options.shop_sanity.value == True):
         if (self.options.limited_shop_item_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
+            self.enabled_location_categories.add(DSRLocationCategory.SHOP_EXTENDED_ITEM)
             # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_SHOP_ITEM)
 
         self.all_excluded_locations.update(self.options.exclude_locations.value)

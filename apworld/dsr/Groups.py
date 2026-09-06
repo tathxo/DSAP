@@ -128,14 +128,16 @@ location_name_groups = {
     "All DLC regions": set(),
     "All Fog Walls": set(),
     "All Boss Fog Walls": set(),
+    "All Shop Extended Items": set(),
     "After O+S": set()
 }
 
 category_to_loc_name_map = {
-    "DOOR": "All Doors",
+    # "DOOR": "All Doors",
     "ITEM_LOT": "All Item Lots",
     "FOG_WALL": "All Fog Walls",
-    "BOSS_FOG_WALL": "All Boss Fog Walls"
+    "BOSS_FOG_WALL": "All Boss Fog Walls",
+    "SHOP_EXTENDED_ITEM": "All Shop Extended Items",
 }
 
 # regions to add to "All DLC regions" group

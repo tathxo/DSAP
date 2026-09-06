@@ -12,13 +12,16 @@
         public const int SHOP_TYPE = 0x16;
         public const int EQUIP_TYPE = 0x17;
 
-        public int equip_id;
-        public int cost;
-        public int event_flag;
-        public int sell_quantity;
-        public byte shop_type;
-        public byte equip_type;
-
+        public uint Id { get; set; } = 0;
+        public string Name { get; set; } = "unknown";
+        public int ItemId { get; set; } = 0;
+        public int Cost { get; set; } = 0;
+        public int MatCost { get; set; } = 0;
+        public int EventFlag { get; set; } = -1;
+        public int Qwc { get; set; } = 0;
+        public int SellQuantity { get; set; } = 0;
+        public byte ShopType { get; set; } = 0;
+        public byte EquipType { get; set; } = 0;
         public ShopLineupParam()
         {
             return;

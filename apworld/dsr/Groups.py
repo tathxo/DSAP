@@ -153,7 +153,7 @@ dlc_regions = [
     "Oolacile Township - After Crest Key",
     "Chasm of the Abyss",
     "Chasm of the Abyss - Manus",
-    "Firelink Shrine - Domhnall of Zena After Artorias",
+    "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias",
 ]
 
 #Post Ornstein And Smough
@@ -194,7 +194,7 @@ post_os_regions  = [
     "Oolacile Township - After Crest Key",
     "Chasm of the Abyss",
     "Chasm of the Abyss - Manus",
-    "Firelink Shrine - Domhnall of Zena After Artorias",
+    "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias",
     "Firelink Altar",
     "Kiln of the First Flame",
     "Kiln of the First Flame - Gwyn"

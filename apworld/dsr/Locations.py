@@ -189,7 +189,7 @@ class DSRLocation(Location):
             "Firelink Shrine - Domhnall of Zena After Iron Golem",
             "Firelink Shrine - Domhnall of Zena After O+S",
             "Firelink Shrine - Domhnall of Zena After Gwyndolin",
-            "Firelink Shrine - Domhnall of Zena After Artorias",
+            "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias",
             "Upper Undead Burg - Male Undead Merchant",
             "Undead Parish - Andre of Astora",
             "Undead Parish - Oswald of Carim",
@@ -358,7 +358,7 @@ location_tables = {
     # DSRLocationData(11110xxx, f"DE: Domhnall of Zena", f"Domhnall of Zena Access", DSRLocationCategory.EVENT),
     DSRLocationData(11110865, f"Domhnall of Zena: Gold Pine Resin", f"Gold Pine Resin", DSRLocationCategory.SHOP_ITEM),
     # DSRLocationData(11110823, f"Domhnall of Zena: Bottomless Box", f"Bottomless Box", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110886, f"Domhnall of Zena: Master Key", f"Filler", DSRLocationCategory.SHOP_ITEM), # Remove master key from pool
+    DSRLocationData(11110886, f"Domhnall of Zena Under Aqueduct: Master Key", f"Filler", DSRLocationCategory.SHOP_ITEM), # Remove master key from pool
 ],
 "Firelink Shrine - Domhnall of Zena After Iron Golem": [
     DSRLocationData(11110866, f"Domhnall of Zena After Iron Golem: Golem Helm", f"Golem Helm", DSRLocationCategory.SHOP_ITEM),
@@ -388,11 +388,11 @@ location_tables = {
 # #     DSRLocationData(11110884, f"Domhnall of Zena: Bracelet of the Great Lord", f"Bracelet of the Great Lord", DSRLocationCategory.SHOP_ITEM),
 # #     DSRLocationData(11110885, f"Domhnall of Zena: Anklet of the Great Lord", f"Anklet of the Great Lord", DSRLocationCategory.SHOP_ITEM),
 # # ],
-"Firelink Shrine - Domhnall of Zena After Artorias": [
-    DSRLocationData(11110887, f"Domhnall of Zena After Artorias: Helm of Artorias", f"Helm of Artorias", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110888, f"Domhnall of Zena After Artorias: Armor of Artorias", f"Armor of Artorias", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110889, f"Domhnall of Zena After Artorias: Gauntlets of Artorias", f"Gauntlets of Artorias", DSRLocationCategory.SHOP_ITEM),
-    DSRLocationData(11110890, f"Domhnall of Zena After Artorias: Leggings of Artorias", f"Leggings of Artorias", DSRLocationCategory.SHOP_ITEM),
+"Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias": [
+    DSRLocationData(11110887, f"Domhnall of Zena Under Aqueduct After Artorias: Helm of Artorias", f"Helm of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110888, f"Domhnall of Zena Under Aqueduct After Artorias: Armor of Artorias", f"Armor of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110889, f"Domhnall of Zena Under Aqueduct After Artorias: Gauntlets of Artorias", f"Gauntlets of Artorias", DSRLocationCategory.SHOP_ITEM),
+    DSRLocationData(11110890, f"Domhnall of Zena Under Aqueduct After Artorias: Leggings of Artorias", f"Leggings of Artorias", DSRLocationCategory.SHOP_ITEM),
 ],
 "Upper Undead Burg - Before Fog": [
     DSRLocationData(11110568, f"UB: Soul of a Lost Undead - Window Corpse", f"Soul of a Lost Undead", DSRLocationCategory.ITEM_LOT),

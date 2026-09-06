@@ -271,9 +271,10 @@ namespace DSAP.Helpers
                         byte[] flags = ReadAllEventFlags();
                         if (flags.Length != 0 && oldFlags.Length != 0)
                         {
+                            MapInfo mapInfo = MapHelper.GetMapAndXyzCoords();
                             if (App.DSOptions.LimitedShopItemShuffle)
                             {
-                                CheckForHintTriggers(flags);
+                                CheckForHintTriggers(flags, mapInfo);
                                 ShopSafety(flags);
                             }
                             if (App.DSOptions.LizardShuffle)
@@ -311,6 +312,8 @@ namespace DSAP.Helpers
                         {
                             GhLizardSafety(flags);
                             ShopSafety(flags);
+                            PisacaSafety(flags);
+                            PWDAWarpSafety(flags);
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
@@ -324,7 +327,7 @@ namespace DSAP.Helpers
                 }
             });
         }
-        internal static List<(int, List<long>)> hintTriggers = [];
+        internal static List<ShopHintTrigger> hintTriggers = [];
         internal static void BuildHintTriggers(Dictionary<long, Archipelago.MultiClient.Net.Models.ScoutedItemInfo> scoutedLocationInfo, Archipelago.MultiClient.Net.Models.Hint[] hints)
         {
             // shopflags = missing locations
@@ -341,50 +344,66 @@ namespace DSAP.Helpers
 
             if (shopflags.Count() > 0)
             {
+                MapPoi domhnallDepthPosition = new MapPoi((float)-205.654, (float)-95.177, (float)-21.164);
+                MapPoi domhnallAqueductPosition = new MapPoi((float)-39.53, (float)-50.000, (float)-0.860);
                 // check hint flags
-                hintTriggers = new List<(int, List<long>)>
+                hintTriggers = new List<ShopHintTrigger>
                 {
-                    ( 71010000, shopflags.Where(x => x.Name.StartsWith("Andre")).Select(x => (long)x.Id).ToList() ), // Andre
-                    ( 71020040, shopflags.Where(x => x.Name.StartsWith("Big Hat Logan:")).Select(x =>  (long)x.Id).ToList() ), // Big Hat Logan in Firelink
-                    ( 71700007, shopflags.Where(x => x.Name.StartsWith("Big Hat Logan In Duke's Archives:")).Select(x =>  (long)x.Id).ToList() ), // Big Hat Logan in DA
-                    ( 71500001, shopflags.Where(x => x.Name.StartsWith("Crestfallen Merchant")).Select(x =>  (long)x.Id).ToList() ), // Crestfallen Merchant
-                    ( 71320006, shopflags.Where(x => x.Name.StartsWith("Domhnall of Zena:")).Select(x =>  (long)x.Id).ToList() ), // Domhnall of Zena - but not his master key
-                    ( 71000030, shopflags.Where(x => x.Name.StartsWith("Female Undead Merchant")).Select(x =>  (long)x.Id).ToList() ), // Female Undead Merchant
-                    ( 71510000, shopflags.Where(x => x.Name.StartsWith("Giant Blacksmith")).Select(x =>  (long)x.Id).ToList() ), // Giant Blacksmith
-                    ( 71020058, shopflags.Where(x => x.Name.StartsWith("Griggs of Vinheim:")).Select(x =>  (long)x.Id).ToList() ), // Griggs of Vinheim
-                    ( 71020062, shopflags.Where(x => x.Name.StartsWith("Griggs of Vinheim After Logan Leaves:")).Select(x =>  (long)x.Id).ToList() ), // Griggs of Vinheim After Logan leaves
-                    ( 71210061, shopflags.Where(x => x.Name.StartsWith("Hawkeye Gough")).Select(x =>  (long)x.Id).ToList() ), // Hawkeye Gough
-                    ( 71000022, shopflags.Where(x => x.Name.StartsWith("Laurentius of the Great Swamp")).Select(x =>  (long)x.Id).ToList() ), // Laurentius of the Great Swamp
-                    ( 71010070, shopflags.Where(x => x.Name.StartsWith("Male Undead Merchant")).Select(x =>  (long)x.Id).ToList() ), // Male Undead Merchant
-                    ( 71210010, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say yes
-                    ( 71210009, shopflags.Where(x => x.Name.StartsWith("Marvelous Chester")).Select(x =>  (long)x.Id).ToList() ), // Marvelous Chester if you say no
-                    ( 71800056, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim - if you're in the Way of White covenant
-                    ( 71800057, shopflags.Where(x => x.Name.StartsWith("Oswald of Carim")).Select(x =>  (long)x.Id).ToList() ), // Oswald of Carim
-                    ( 71300091, shopflags.Where(x => x.Name.StartsWith("Petrus of Thorolund")).Select(x =>  (long)x.Id).ToList() ), // Petrus of Thorolund
-                    ( 71810001, shopflags.Where(x => x.Name.StartsWith("Rickert of Vinheim")).Select(x =>  (long)x.Id).ToList() ), // Rickert of Vinheim
-                    ( 11300210, shopflags.Where(x => x.Name.StartsWith("Vamos")).Select(x =>  (long)x.Id).ToList() ), // Vamos - upon landing there
-                }.Where(x => x.Item2.Count > 0).ToList(); // trim already hinted
+                    new ShopHintTrigger(71010000, shopflags, "Andre"), // Andre
+                    new ShopHintTrigger(71020040, shopflags, "Big Hat Logan:"), // Big Hat Logan in Firelink
+                    new ShopHintTrigger(71700007, shopflags, "Big Hat Logan In Duke's Archives:"), // Big Hat Logan in DA
+                    new ShopHintTrigger(71500001, shopflags, "Crestfallen Merchant"), // Crestfallen Merchant
+                    new ShopHintTrigger(71320006, shopflags, "Domhnall of Zena:"), // Domhnall of Zena - but not his master key
+                    new ShopHintTrigger(71000030, shopflags, "Female Undead Merchant"), // Female Undead Merchant
+                    new ShopHintTrigger(71510000, shopflags, "Giant Blacksmith"), // Giant Blacksmith
+                    new ShopHintTrigger(71020058, shopflags, "Griggs of Vinheim:"), // Griggs of Vinheim
+                    new ShopHintTrigger(71020062, shopflags, "Griggs of Vinheim After Logan Leaves:"), // Griggs of Vinheim After Logan leaves
+                    new ShopHintTrigger(71210061, shopflags, "Hawkeye Gough"), // Hawkeye Gough
+                    new ShopHintTrigger(71000022, shopflags, "Laurentius of the Great Swamp"), // Laurentius of the Great Swamp
+                    new ShopHintTrigger(71010070, shopflags, "Male Undead Merchant"), // Male Undead Merchant
+                    new ShopHintTrigger(71210010, shopflags, "Marvelous Chester"), // Marvelous Chester if you say yes
+                    new ShopHintTrigger(71210009, shopflags, "Marvelous Chester"), // Marvelous Chester if you say no
+                    new ShopHintTrigger(71800056, shopflags, "Oswald of Carim"), // Oswald of Carim - if you're in the Way of White covenant
+                    new ShopHintTrigger(71800057, shopflags, "Oswald of Carim"), // Oswald of Carim
+                    new ShopHintTrigger(71300091, shopflags, "Petrus of Thorolund"), // Petrus of Thorolund
+                    new ShopHintTrigger(71810001, shopflags, "Rickert of Vinheim"), // Rickert of Vinheim
+                    new ShopHintTrigger(11300210, shopflags, "Vamos"), // Vamos - upon landing there
+                    // also add Domhnall positional hints
+                    new ShopHintTrigger(71320006, shopflags, "Domhnall of Zena Under Aqueduct: Master Key", [(5, domhnallAqueductPosition, [1431])]), // Master Key only under aquedeuct
+                    new ShopHintTrigger(71320006, shopflags, "Domhnall of Zena After Iron Golem:", [(5, domhnallDepthPosition, [11500001]), (5, domhnallAqueductPosition, [11500001, 1431])]), // after Iron Golem, in depth or aqueduct
+                    new ShopHintTrigger(71320006, shopflags, "Domhnall of Zena After O+S:", [(5, domhnallDepthPosition, [61323998]), (5, domhnallAqueductPosition, [61323998, 1431])]), // after O+S
+                    new ShopHintTrigger(71320006, shopflags, "Domhnall of Zena After Gwyndolin:", [(5, domhnallDepthPosition,[11510900]),(5, domhnallAqueductPosition, [11510900, 1431])]), // after Gwyndolin
+                    new ShopHintTrigger(71320006, shopflags, "Domhnall of Zena Under Aqueduct After Artorias:", [(5, domhnallAqueductPosition, [11210001, 1431])]), // After Artorias, only appears Under Aqueduct
+                }.Where(x => x.HintLocs.Count > 0).ToList(); // trim already hinted
             }
             else
                 hintTriggers = [];
         }
 
-        private static void CheckForHintTriggers(byte[] flags)
+        private static void CheckForHintTriggers(byte[] flags, MapInfo mapInfo)
         {
             foreach (var trigger in hintTriggers)
             {
-                if (trigger.Item2.Count > 0)
+                if (trigger.HintLocs.Count > 0)
                 {
-                    var (shopbyte, shopbit) = AddressHelper.GetEventFlagAddrAndByteOffset(trigger.Item1);
-                    if (flags[shopbyte] != 0)
+                    if (isFlagOnInBuffer(flags, trigger.ConditionFlag))
                     {
-                        //Log.Logger.Information($"flag byte for {trigger.Item1} at {shopbyte:x}:{shopbit} = {flags[shopbyte]:x}");
-                    }
-                    if (((flags[shopbyte] >> shopbit) & 0x01) == 0x01)
-                    {
-                        long[] plist = trigger.Item2.ToArray();
-                        App.Client.CurrentSession.Hints.CreateHints(HintStatus.Unspecified, plist);
-                        trigger.Item2.Clear();
+                        // If there are no position conditions, or 1 position condition is satisfied, send the hints
+                        if (trigger.PositionConditionList.Count == 0 || 
+                            trigger.PositionConditionList.Any(condition =>
+                            {
+                                if (condition.flagList.All(y => isFlagOnInBuffer(flags, y)))
+                                {
+                                    if (Math.Pow((mapInfo.X - condition.poi.X), 2) + Math.Pow((mapInfo.Y - condition.poi.Y), 2) + Math.Pow((mapInfo.Z - condition.poi.Z), 2) < Math.Pow(condition.proximity, 2))
+                                        return true;
+                                }
+                                return false;
+                            }))
+                        {
+                            long[] plist = trigger.HintLocs.ToArray();
+                            App.Client.CurrentSession.Hints.CreateHints(HintStatus.Unspecified, plist);
+                            trigger.HintLocs.Clear();
+                        }
                     }
                 }
             }

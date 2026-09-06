@@ -126,12 +126,11 @@ namespace DSAP.Helpers
                 }
 
                 uint mapid3 = 0; // 3 digit map code
-                uint wnum = MapHelper.GetWorldNumber();
-                uint anum = MapHelper.GetAreaNumber();
-                if (wnum > 0)
-                    mapid3 = 10 * wnum + anum;
-                if (mapid3 != cached_mapid3)
-                    Log.Logger.Verbose($"mapid={mapid3}, w={wnum}, a={anum}");
+
+                MapInfo mapInfo = MapHelper.GetMapAndXyzCoords();
+
+                if (mapInfo.MapId3 != cached_mapid3)
+                    Log.Logger.Verbose($"mapid={mapid3}, w={mapInfo.World}, a={mapInfo.Area}");
                 cached_mapid3 = mapid3;
 
                 ulong eventhead_ptr = AddressHelper.GetEmkHeadAddress();

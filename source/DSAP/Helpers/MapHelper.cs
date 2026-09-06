@@ -10,7 +10,7 @@ namespace DSAP.Helpers
 {
     public class MapHelper
     {
-        internal static Dictionary<int, int> MapToIndex = new List<(int, int)>([
+        internal static Dictionary<uint, int> MapToIndex = new List<(uint, int)>([
                 (1000000, 11), //  "Depths"), 
                 (1001000, 27), //  "* Undead Burg  / Undead Parish"), -> Undead Burg Upper
                 (1001100, 28), //  "* Undead Burg  / Undead Parish"), -> Undead Parish
@@ -68,15 +68,15 @@ namespace DSAP.Helpers
                         if (App.ControlsContext.TrackerMapTabSwitching && isInGame && App.SaveidSet)
                         {
                             var mapInfo = GetPosition();
-                            if (mapInfo.MapId != 0 && mapInfo.MapId != cached_mapInfo.MapId)
+                            if (mapInfo.MapIdLong != 0 && mapInfo.MapIdLong != cached_mapInfo.MapIdLong)
                             {
-                                int mapindex = MapToIndex[mapInfo.MapId];
+                                int mapindex = MapToIndex[mapInfo.MapIdLong];
                                 App.Client.CurrentSession.DataStorage[MapKey] = mapindex;
-                                cached_mapInfo.MapId = mapInfo.MapId;
+                                cached_mapInfo.MapIdLong = mapInfo.MapIdLong;
                             }
                             else
                             {
-                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapId}/idx{(mapInfo.MapId == 0 ? 0 : MapToIndex[mapInfo.MapId])} from {cached_mapInfo.MapId}/idx{(mapInfo.MapId == 0 ? 0 : MapToIndex[cached_mapInfo.MapId])}");
+                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapIdLong}/idx{(mapInfo.MapIdLong == 0 ? 0 : MapToIndex[mapInfo.MapIdLong])} from {cached_mapInfo.MapIdLong}/idx{(mapInfo.MapIdLong == 0 ? 0 : MapToIndex[cached_mapInfo.MapIdLong])}");
                             }
                         }
                         await Task.Delay(REPEAT_TIMER_MS);
@@ -84,7 +84,7 @@ namespace DSAP.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Log.Logger.Error($"Exception in ingame listener: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
+                    Log.Logger.Error($"Exception in ingame map listener: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
                 }
             });
         }
@@ -101,15 +101,15 @@ namespace DSAP.Helpers
                         if (App.ControlsContext.TrackerMapTabSwitching && isInGame)
                         {
                             var mapInfo = GetPosition();
-                            if (mapInfo.MapId != 0 && mapInfo.MapId != cached_mapInfo.MapId)
+                            if (mapInfo.MapIdLong != 0 && mapInfo.MapIdLong != cached_mapInfo.MapIdLong)
                             {
-                                int mapindex = MapToIndex[mapInfo.MapId];
-                                cached_mapInfo.MapId = mapInfo.MapId;
+                                int mapindex = MapToIndex[mapInfo.MapIdLong];
+                                cached_mapInfo.MapIdLong = mapInfo.MapIdLong;
                                 Log.Logger.Debug($"written map: {mapindex}");
                             }
                             else
                             {
-                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapId} from {cached_mapInfo.MapId}");
+                                Log.Logger.Verbose($"unchanged map: {mapInfo.MapIdLong} from {cached_mapInfo.MapIdLong}");
                             }
                         }
                         await Task.Delay(REPEAT_TIMER_MS);
@@ -117,29 +117,29 @@ namespace DSAP.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Log.Logger.Error($"Exception in ingame listener: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
+                    Log.Logger.Error($"Exception in ingame map listener: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
                 }
             });
         }
         public static MapInfo GetPosition()
         {
             Log.Logger.Verbose("Getting position");
-            var MapInfo = new MapInfo();
+            var mapInfo = new MapInfo();
             if (MiscHelper.IsInGame())
             {
+                Log.Logger.Debug("getpos inner");
                 // map = worldnumber + area number. e.g. 10 + 02 => m10_02 = firelink shrine
                 ulong eoffset = AddressHelper.GetBaseEAddress();
                 if (eoffset != 0)
                 {
-                    uint worldnumber = GetWorldNumber();
-                    uint areanumber = GetAreaNumber();
-                    (float x, float y, float z) xyzPos = GetXyzCoords();
-                    Log.Logger.Verbose($"Position: got w/a {worldnumber} {areanumber}");
-                    if (worldnumber > 9 && worldnumber < 19 && areanumber >= 0 && areanumber < 3)
+                    Log.Logger.Debug("getpos inner2");
+                    mapInfo = GetMapAndXyzCoords();
+                    Log.Logger.Debug($"Position: got w/a {mapInfo.World} {mapInfo.Area}");
+                    if (mapInfo.World > 9 && mapInfo.World < 19 && mapInfo.Area >= 0 && mapInfo.Area < 3)
                     {
-
-                        int tempMapId = (int)(100000 * worldnumber + 1000 * areanumber);
-                        Dictionary<int, string> mapDict = new List<(int, string)>([
+                        Log.Logger.Debug("getpos inner3");
+                        uint tempMapIdLong = (100000 * mapInfo.World + 1000 * mapInfo.Area);
+                        Dictionary<uint, string> mapDict = new List<(uint, string)>([
                             (1000000, "Depths"),
                             (1001000, "* Undead Burg / Undead Parish"),
                             (1002000, "Firelink Shrine"),
@@ -159,15 +159,12 @@ namespace DSAP.Helpers
                             (1801000, "Undead Asylum")
                             ]).ToDictionary();
 
-                        MapInfo.X = xyzPos.x;
-                        MapInfo.Y = xyzPos.y;
-                        MapInfo.Z = xyzPos.z;
-                        Log.Logger.Verbose($"tempMapId = {tempMapId}");
-                        if (mapDict.TryGetValue(tempMapId, out var mapName))
+                        Log.Logger.Verbose($"tempMapId = {tempMapIdLong}");
+                        if (mapDict.TryGetValue(tempMapIdLong, out var mapName))
                         {
                             if (mapName.StartsWith("* ")) // exceptions
                             {
-                                MapInfo.MapId = tempMapId;
+                                mapInfo.MapIdLong = tempMapIdLong;
                                 // compare to list of "points of interest"
                                 // get points of interest whose map = current
 
@@ -178,7 +175,7 @@ namespace DSAP.Helpers
                                     MapPoi best_poi = pois[mapName].First();
                                     foreach (var poi in pois[mapName])
                                     {
-                                        double distance = Math.Sqrt(Math.Pow(poi.X - MapInfo.X, 2) + Math.Pow(poi.Y - MapInfo.Y, 2) + Math.Pow(poi.Z - MapInfo.Z, 2));
+                                        double distance = Math.Sqrt(Math.Pow(poi.X - mapInfo.X, 2) + Math.Pow(poi.Y - mapInfo.Y, 2) + Math.Pow(poi.Z - mapInfo.Z, 2));
                                         if (distance < min_distance)
                                         {
                                             min_distance = distance;
@@ -187,65 +184,53 @@ namespace DSAP.Helpers
                                     }
                                     // if there's a submap, update map id to it
                                     if (best_poi.SubMapId > 0)
-                                        MapInfo.MapId += 100 * best_poi.SubMapId;
-                                    
+                                        mapInfo.MapIdLong += (uint)(100 * best_poi.SubMapId);
+
+                                    Log.Logger.Debug($"Best Poi: {best_poi.PoiName}, distance={min_distance:F2}, submap={best_poi.SubMapId}");
                                     Log.Logger.Verbose($"Best Poi: {best_poi.PoiName}, distance={min_distance:F2}, submap={best_poi.SubMapId}");
                                 }
                             }
                             else
-                                MapInfo.MapId = tempMapId;
+                                mapInfo.MapIdLong = tempMapIdLong;
+
 
 
                             
-                            Log.Logger.Verbose($"Map: {MapInfo.MapId}, {mapName}, \nx={xyzPos.x:F2}, \ny={xyzPos.y:F2}, \nz={xyzPos.z:F2}");
+                            Log.Logger.Verbose($"Map: {mapInfo.MapId3}, {mapName}, \nx={mapInfo.X:F2}, \ny={mapInfo.Y:F2}, \nz={mapInfo.Z:F2}");
                         }
-                        return MapInfo;
+                        return mapInfo;
                     }
                 }
             }
-            Log.Logger.Debug($"Got position: {MapInfo.MapId} (no update)");
-            return MapInfo;
+            Log.Logger.Debug($"Got position: {mapInfo.MapId3} (no update)");
+            return mapInfo;
         }
+        // consolidate to one read for performance
+        public static MapInfo GetMapAndXyzCoords(ulong eOffset = 0) // chr pos data + 0x10, 0x14, 0x18
+        {
+            MapInfo mapInfo = new MapInfo();
 
-        public static uint GetWorldNumber(ulong eOffset = 0) // E + A23
-        {
             if (eOffset == 0)
                 eOffset = AddressHelper.GetBaseEAddress();
             if (eOffset != 0)
             {
-                var next = MiscHelper.OffsetPointer(eOffset, 0xA23);
-                return Memory.ReadByte(next);
-            }
-            return 0;
-        }
-        public static uint GetAreaNumber(ulong eOffset = 0) // E + A22
-        {
-            if (eOffset == 0)
-                eOffset = AddressHelper.GetBaseEAddress();
-            if (eOffset != 0)
-            {
-                var next = MiscHelper.OffsetPointer(eOffset, 0xA22);
-                return Memory.ReadByte(next);
-            }
-            return 0;
-        }
-        public static (float, float, float) GetXyzCoords(ulong eOffset = 0) // chr pos data + 0x10, 0x14, 0x18
-        {
-            if (eOffset == 0)
-                eOffset = AddressHelper.GetBaseEAddress();
-            if (eOffset != 0)
-            {
+                var startpos = MiscHelper.OffsetPointer(eOffset, 0xA22);
+                byte[] pos18 = Memory.ReadByteArray(startpos, 18);
+                byte world = pos18[1]; // 0xA23
+                byte area = pos18[0]; // 0xA22
+                mapInfo.MapId3 = (uint)world * 10 + (uint)area;
+                string str = "";
+                Log.Logger.Debug($"building mapid3={mapInfo.MapId3}, w={world}, a={area}, pos18={BitConverter.ToString(pos18)}");
+                // unused comments
                 // chr pos data = chr map data + 0x28
                 // chr map data = chrdata1 + 0x48
                 // chrdata1 = [world chr base + 68]
-                var next = MiscHelper.OffsetPointer(eOffset, 0xA28);
-                byte[] pos12 = Memory.ReadByteArray(next, 12);
-                float x = BitConverter.ToSingle(pos12, 0);
-                float y = BitConverter.ToSingle(pos12, 4);
-                float z = BitConverter.ToSingle(pos12, 8);
-                return (x, y, z);
+                mapInfo.X = BitConverter.ToSingle(pos18, 6);
+                mapInfo.Y = BitConverter.ToSingle(pos18, 10);
+                mapInfo.Z = BitConverter.ToSingle(pos18, 14);
+                Log.Logger.Debug($"getmap end");
             }
-            return (0, 0, 0);
+            return mapInfo;
         }
     }
 }

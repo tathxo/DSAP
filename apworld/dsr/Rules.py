@@ -200,7 +200,7 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
   "Firelink Shrine - Domhnall of Zena After Gwyndolin": [
     DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Gwyndolin Defeated")), #vanilla, but his inventory is more complicated due to flags
   ],
-  "Firelink Shrine - Domhnall of Zena After Artorias": [
+  "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias": [
     DsrEntranceRule("Firelink Shrine - Domhnall of Zena", Has("Artorias the Abysswalker Defeated")), #vanilla, but his inventory is more complicated due to flags
   ],
   "Depths to Blighttown Door": [

@@ -324,7 +324,7 @@ class DSRWorld(World):
             "Firelink Shrine - Domhnall of Zena After Iron Golem",
             "Firelink Shrine - Domhnall of Zena After O+S",
             "Firelink Shrine - Domhnall of Zena After Gwyndolin",
-            "Firelink Shrine - Domhnall of Zena After Artorias",
+            "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias",
             "Upper Undead Burg - Male Undead Merchant",
             "Undead Parish - Andre of Astora",
             "Undead Parish - Oswald of Carim",

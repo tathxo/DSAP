@@ -10,5 +10,11 @@ namespace DSAP.Models
         public float X { get; set; } = 0;
         public float Y { get; set; } = 0;
         public float Z { get; set; } = 0;
+        public MapPoi(float x, float y, float z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
     }
 }

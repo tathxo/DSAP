@@ -72,6 +72,12 @@
     "Id": 11110980
   },
   {
+    "Name": "BT: Homeward Bone - Pulled Lever After Quelaag",
+    "ItemLotParamId": 9030,
+    "Flag": 11400200,
+    "Id": 11111128
+  },
+  {
     "Name": "DR: Humanity - Ceaseless Discharge Drop",
     "ItemLotParamId": 9000,
     "Flag": 11410900,

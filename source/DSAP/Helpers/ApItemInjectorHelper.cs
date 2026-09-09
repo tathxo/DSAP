@@ -82,23 +82,48 @@ namespace DSAP.Helpers
 
         internal static string BuildItemName(KeyValuePair<long, ScoutedItemInfo> item)
         {
+            const byte progression = 0b001;
+            const byte useful = 0b010;
+            const byte trap = 0b100;
+            string color = "00EEEE";
+            if ((((byte)item.Value.Flags) & progression) == progression) color = "AF99EF";
+            else if ((((byte)item.Value.Flags) & useful) == useful) color = "6D8BE8";
+            else if ((((byte)item.Value.Flags) & trap) == trap) color = "FA8072";
+
+            // strip #'s out of item name and player name in case they screw up the string
+            string itemnm = item.Value.ItemDisplayName.Replace('#', ' ').Replace('%', ' ');
+            string playernm = item.Value.Player.Alias.Replace('#', ' ').Replace('%', ' ');
+
+            // there seems to be a 64 character limit for item names.
             if (item.Value.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
-                return $"[AP] {item.Value.ItemDisplayName}\0";
-            return $"{item.Value.Player}'s {item.Value.ItemDisplayName}\0";
+            {
+                int maxlen = 63 - 17;
+                if (itemnm.Length > maxlen) itemnm = itemnm.Substring(0, maxlen);
+                return $"[AP] #c[{color}]{itemnm}#c\0"; // 17 chars plus item name
+            }
+            else
+            {
+                int pnlen = playernm.Length;
+                int maxlen = 63 - 15 - pnlen;
+                if (itemnm.Length > maxlen) itemnm = itemnm.Substring(0, maxlen);
+                return $"{playernm}'s #c[{color}]{itemnm}#c\0"; // 15 chars plus item plus player name
+            }   
         }
         internal static string BuildItemCaption(KeyValuePair<long, ScoutedItemInfo> item)
         {
             const byte progression = 0b001;
             const byte useful = 0b010;
             const byte trap = 0b100;
-            string item_type = "Filler";
-            if (((byte)item.Value.Flags) == 0b001) item_type = "Progression";
-            else if (((byte)item.Value.Flags) == 0b010) item_type = "Useful";
-            else if (((byte)item.Value.Flags) == 0b100) item_type = "Trap";
+            string item_type = "#c[00EEEE]Filler#c";
+            if ((((byte)item.Value.Flags) & progression) == progression) item_type = "#c[AF99EF]Progression#c";
+            else if ((((byte)item.Value.Flags) & useful) == useful) item_type = "#c[6D8BE8]Useful#c";
+            else if ((((byte)item.Value.Flags) & trap) == trap) item_type = "#c[FA8072]Trap#c";
+
+            string playernm = item.Value.Player.Alias.Replace('#', ' ').Replace('%', ' ');
 
             if (item.Value.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
-                return $"{item_type} for you, in this game.\0";
-            return $"{item_type} for {item.Value.Player}'s {item.Value.ItemGame}.\0";
+                return $"{item_type} for #c[EE00EE]you#c, in this game.\0"; 
+            return $"{item_type} for #c[FAFAD2]#b{playernm}#b#c's world of #b{item.Value.ItemGame}#b.\0";
         }
         internal static string BuildDsrEventItemCaption()
         {

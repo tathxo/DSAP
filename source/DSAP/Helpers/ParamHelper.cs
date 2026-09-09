@@ -677,6 +677,10 @@ namespace DSAP.Helpers
                                 //Array.Copy(BitConverter.GetBytes(312), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
                                 shopLineupParamStruct.ParamBytes[entry.paramOffset + ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
                                 //Array.Copy(BitConverter.GetBytes(1500), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
+                                if (shopFlag.OriginalQuantity == 0 && shopFlag.Flag != 0)
+                                {
+                                    Array.Copy(BitConverter.GetBytes(shopFlag.Flag), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EVENT_FLAG, sizeof(int));
+                                }
                             }
                         }
                     }

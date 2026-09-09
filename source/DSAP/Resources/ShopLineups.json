@@ -30,6 +30,196 @@
     "Flag": 11017040
   },
   {
+    "ParamId": 1107,
+    "OriginalItemId": 100000,
+    "Id": 11111064,
+    "Name": "Male Undead Merchant: Dagger",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 300,
+    "Flag": 61322000
+  },
+  {
+    "ParamId": 1108,
+    "OriginalItemId": 200000,
+    "Id": 11111065,
+    "Name": "Male Undead Merchant: Shortsword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": 61322010
+  },
+  {
+    "ParamId": 1110,
+    "OriginalItemId": 400000,
+    "Id": 11111066,
+    "Name": "Male Undead Merchant: Scimitar",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": 61322020
+  },
+  {
+    "ParamId": 1111,
+    "OriginalItemId": 601000,
+    "Id": 11111067,
+    "Name": "Male Undead Merchant: Rapier",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": 61322030
+  },
+  {
+    "ParamId": 1112,
+    "OriginalItemId": 700000,
+    "Id": 11111068,
+    "Name": "Male Undead Merchant: Hand Axe",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 450,
+    "Flag": 61322040
+  },
+  {
+    "ParamId": 1113,
+    "OriginalItemId": 800000,
+    "Id": 11111069,
+    "Name": "Male Undead Merchant: Club",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 150,
+    "Flag": 61322050
+  },
+  {
+    "ParamId": 1114,
+    "OriginalItemId": 809000,
+    "Id": 11111070,
+    "Name": "Male Undead Merchant: Reinforced Club",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 350,
+    "Flag": 61322060
+  },
+  {
+    "ParamId": 1115,
+    "OriginalItemId": 1000000,
+    "Id": 11111071,
+    "Name": "Male Undead Merchant: Spear",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": 61322070
+  },
+  {
+    "ParamId": 1116,
+    "OriginalItemId": 1200000,
+    "Id": 11111072,
+    "Name": "Male Undead Merchant: Short Bow",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322080
+  },
+  {
+    "ParamId": 1117,
+    "OriginalItemId": 1400000,
+    "Id": 11111073,
+    "Name": "Male Undead Merchant: East-West Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 400,
+    "Flag": 61322090
+  },
+  {
+    "ParamId": 1118,
+    "OriginalItemId": 1403000,
+    "Id": 11111074,
+    "Name": "Male Undead Merchant: Small Leather Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": 61322100
+  },
+  {
+    "ParamId": 1119,
+    "OriginalItemId": 1405000,
+    "Id": 11111075,
+    "Name": "Male Undead Merchant: Buckler",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": 61322110
+  },
+  {
+    "ParamId": 1120,
+    "OriginalItemId": 1408000,
+    "Id": 11111076,
+    "Name": "Male Undead Merchant: Leather Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": 61322120
+  },
+  {
+    "ParamId": 1121,
+    "OriginalItemId": 1450000,
+    "Id": 11111077,
+    "Name": "Male Undead Merchant: Heater Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322130
+  },
+  {
+    "ParamId": 1122,
+    "OriginalItemId": 1460000,
+    "Id": 11111078,
+    "Name": "Male Undead Merchant: Warrior's Round Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": 61322140
+  },
+  {
+    "ParamId": 1129,
+    "OriginalItemId": 170000,
+    "Id": 11111079,
+    "Name": "Male Undead Merchant: Chain Helm",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": 61322150
+  },
+  {
+    "ParamId": 1130,
+    "OriginalItemId": 171000,
+    "Id": 11111080,
+    "Name": "Male Undead Merchant: Chain Armor",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": 61322160
+  },
+  {
+    "ParamId": 1131,
+    "OriginalItemId": 172000,
+    "Id": 11111081,
+    "Name": "Male Undead Merchant: Leather Gauntlets",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": 61322170
+  },
+  {
+    "ParamId": 1132,
+    "OriginalItemId": 173000,
+    "Id": 11111082,
+    "Name": "Male Undead Merchant: Chain Leggings",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": 61322180
+  },
+  {
     "ParamId": 1133,
     "OriginalItemId": 2608,
     "Id": 11110823,
@@ -110,6 +300,166 @@
     "Flag": 11507040
   },
   {
+    "ParamId": 5308,
+    "OriginalItemId": 351000,
+    "Id": 11111083,
+    "Name": "Crestfallen Merchant: Greatsword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": 61322190
+  },
+  {
+    "ParamId": 5309,
+    "OriginalItemId": 750000,
+    "Id": 11111084,
+    "Name": "Crestfallen Merchant: Greataxe",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": 61322200
+  },
+  {
+    "ParamId": 5310,
+    "OriginalItemId": 1455000,
+    "Id": 11111085,
+    "Name": "Crestfallen Merchant: Balder Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 4000,
+    "Flag": 61322210
+  },
+  {
+    "ParamId": 5311,
+    "OriginalItemId": 1501000,
+    "Id": 11111086,
+    "Name": "Crestfallen Merchant: Tower Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": 61322220
+  },
+  {
+    "ParamId": 5318,
+    "OriginalItemId": 10000,
+    "Id": 11111087,
+    "Name": "Crestfallen Merchant: Catarina Helm",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 10000,
+    "Flag": 61322230
+  },
+  {
+    "ParamId": 5319,
+    "OriginalItemId": 11000,
+    "Id": 11111088,
+    "Name": "Crestfallen Merchant: Catarina Armor",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 10000,
+    "Flag": 61322240
+  },
+  {
+    "ParamId": 5320,
+    "OriginalItemId": 12000,
+    "Id": 11111089,
+    "Name": "Crestfallen Merchant: Catarina Gauntlets",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 7000,
+    "Flag": 61322250
+  },
+  {
+    "ParamId": 5321,
+    "OriginalItemId": 13000,
+    "Id": 11111090,
+    "Name": "Crestfallen Merchant: Catarina Leggings",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 7000,
+    "Flag": 61322260
+  },
+  {
+    "ParamId": 5322,
+    "OriginalItemId": 490000,
+    "Id": 11111091,
+    "Name": "Crestfallen Merchant: Steel Helm",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322270
+  },
+  {
+    "ParamId": 5323,
+    "OriginalItemId": 491000,
+    "Id": 11111092,
+    "Name": "Crestfallen Merchant: Steel Armor",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": 61322280
+  },
+  {
+    "ParamId": 5324,
+    "OriginalItemId": 492000,
+    "Id": 11111093,
+    "Name": "Crestfallen Merchant: Steel Gauntlets",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322290
+  },
+  {
+    "ParamId": 5325,
+    "OriginalItemId": 493000,
+    "Id": 11111094,
+    "Name": "Crestfallen Merchant: Steel Leggings",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322300
+  },
+  {
+    "ParamId": 5326,
+    "OriginalItemId": 510000,
+    "Id": 11111095,
+    "Name": "Crestfallen Merchant: Balder Helm",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322310
+  },
+  {
+    "ParamId": 5327,
+    "OriginalItemId": 511000,
+    "Id": 11111096,
+    "Name": "Crestfallen Merchant: Balder Armor",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": 61322320
+  },
+  {
+    "ParamId": 5328,
+    "OriginalItemId": 512000,
+    "Id": 11111097,
+    "Name": "Crestfallen Merchant: Balder Gauntlets",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322330
+  },
+  {
+    "ParamId": 5329,
+    "OriginalItemId": 513000,
+    "Id": 11111098,
+    "Name": "Crestfallen Merchant: Balder Leggings",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322340
+  },
+  {
     "ParamId": 1401,
     "OriginalItemId": 2002,
     "Id": 11110822,
@@ -150,6 +500,106 @@
     "Flag": 11017170
   },
   {
+    "ParamId": 1405,
+    "OriginalItemId": 201000,
+    "Id": 11111099,
+    "Name": "Andre of Astora: Longsword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322350
+  },
+  {
+    "ParamId": 1406,
+    "OriginalItemId": 202000,
+    "Id": 11111100,
+    "Name": "Andre of Astora: Broadsword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322360
+  },
+  {
+    "ParamId": 1407,
+    "OriginalItemId": 300000,
+    "Id": 11111101,
+    "Name": "Andre of Astora: Bastard Sword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 3000,
+    "Flag": 61322370
+  },
+  {
+    "ParamId": 1408,
+    "OriginalItemId": 701000,
+    "Id": 11111102,
+    "Name": "Andre of Astora: Battle Axe",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322380
+  },
+  {
+    "ParamId": 1409,
+    "OriginalItemId": 803000,
+    "Id": 11111103,
+    "Name": "Andre of Astora: Warpick",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": 61322390
+  },
+  {
+    "ParamId": 1410,
+    "OriginalItemId": 901000,
+    "Id": 11111104,
+    "Name": "Andre of Astora: Caestus",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 200,
+    "Flag": 61322400
+  },
+  {
+    "ParamId": 1411,
+    "OriginalItemId": 1050000,
+    "Id": 11111105,
+    "Name": "Andre of Astora: Pike",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 2000,
+    "Flag": 61322410
+  },
+  {
+    "ParamId": 1412,
+    "OriginalItemId": 1402000,
+    "Id": 11111106,
+    "Name": "Andre of Astora: Large Leather Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": 61322420
+  },
+  {
+    "ParamId": 1413,
+    "OriginalItemId": 1452000,
+    "Id": 11111107,
+    "Name": "Andre of Astora: Tower Kite Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322430
+  },
+  {
+    "ParamId": 1414,
+    "OriginalItemId": 1477000,
+    "Id": 11111108,
+    "Name": "Andre of Astora: Caduceus Kite Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322440
+  },
+  {
     "ParamId": 1421,
     "OriginalItemId": 0,
     "Id": 11111046,
@@ -188,6 +638,76 @@
     "OriginalQuantity": 1,
     "Value": 1000,
     "Flag": 11007010
+  },
+  {
+    "ParamId": 1502,
+    "OriginalItemId": 205000,
+    "Id": 11111109,
+    "Name": "Domhnall of Zena: Crystal Straight Sword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 4000,
+    "Flag": 61322450
+  },
+  {
+    "ParamId": 1503,
+    "OriginalItemId": 304000,
+    "Id": 11111110,
+    "Name": "Domhnall of Zena: Crystal Greatsword",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 6000,
+    "Flag": 61322460
+  },
+  {
+    "ParamId": 1504,
+    "OriginalItemId": 1471000,
+    "Id": 11111111,
+    "Name": "Domhnall of Zena: Crystal Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 4000,
+    "Flag": 61322470
+  },
+  {
+    "ParamId": 1505,
+    "OriginalItemId": 110000,
+    "Id": 11111112,
+    "Name": "Domhnall of Zena: Helm of the Wise",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 12000,
+    "Flag": 61322480
+  },
+  {
+    "ParamId": 1506,
+    "OriginalItemId": 111000,
+    "Id": 11111113,
+    "Name": "Domhnall of Zena: Armor of the Glorious",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 15000,
+    "Flag": 61322490
+  },
+  {
+    "ParamId": 1507,
+    "OriginalItemId": 112000,
+    "Id": 11111114,
+    "Name": "Domhnall of Zena: Gauntlets of the Vanquisher",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 10000,
+    "Flag": 61322500
+  },
+  {
+    "ParamId": 1508,
+    "OriginalItemId": 113000,
+    "Id": 11111115,
+    "Name": "Domhnall of Zena: Boots of the Explorer",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 10000,
+    "Flag": 61322510
   },
   {
     "ParamId": 1550,
@@ -644,6 +1164,16 @@
     "Flag": 11027220
   },
   {
+    "ParamId": 2010,
+    "OriginalItemId": 1300000,
+    "Id": 11111116,
+    "Name": "Griggs of Vinheim: Sorcerer's Catalyst",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": 61322520
+  },
+  {
     "ParamId": 2020,
     "OriginalItemId": 3040,
     "Id": 11110909,
@@ -682,6 +1212,16 @@
     "OriginalQuantity": 1,
     "Value": 4000,
     "Flag": 11607130
+  },
+  {
+    "ParamId": 2102,
+    "OriginalItemId": 1300000,
+    "Id": 11111117,
+    "Name": "Rickert of Vinheim: Sorcerer's Catalyst",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": 61322530
   },
   {
     "ParamId": 2200,
@@ -954,6 +1494,26 @@
     "Flag": 11017180
   },
   {
+    "ParamId": 4005,
+    "OriginalItemId": 1360000,
+    "Id": 11111118,
+    "Name": "Petrus of Thorolund: Talisman",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": 61322540
+  },
+  {
+    "ParamId": 4006,
+    "OriginalItemId": 1362000,
+    "Id": 11111119,
+    "Name": "Petrus of Thorolund: Thorolund Talisman",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322550
+  },
+  {
     "ParamId": 4007,
     "OriginalItemId": 0,
     "Id": 11111063,
@@ -1074,6 +1634,16 @@
     "Flag": 11607110
   },
   {
+    "ParamId": 4402,
+    "OriginalItemId": 373,
+    "Id": 11111120,
+    "Name": "Oswald of Carim: Indictment",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 200,
+    "Flag": 61322560
+  },
+  {
     "ParamId": 4403,
     "OriginalItemId": 5700,
     "Id": 11110946,
@@ -1082,6 +1652,16 @@
     "OriginalQuantity": 1,
     "Value": 40000,
     "Flag": 11607030
+  },
+  {
+    "ParamId": 4404,
+    "OriginalItemId": 1367000,
+    "Id": 11111121,
+    "Name": "Oswald of Carim: Velka's Talisman",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322570
   },
   {
     "ParamId": 4405,
@@ -1232,6 +1812,66 @@
     "OriginalQuantity": 1,
     "Value": 20000,
     "Flag": 11707110
+  },
+  {
+    "ParamId": 6200,
+    "OriginalItemId": 1101000,
+    "Id": 11111122,
+    "Name": "Giant Blacksmith: Giant's Halberd",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": 61322580
+  },
+  {
+    "ParamId": 6201,
+    "OriginalItemId": 1502000,
+    "Id": 11111123,
+    "Name": "Giant Blacksmith: Giant Shield",
+    "OriginalType": "Weapon",
+    "OriginalQuantity": 0,
+    "Value": 10000,
+    "Flag": 61322590
+  },
+  {
+    "ParamId": 6211,
+    "OriginalItemId": 530000,
+    "Id": 11111124,
+    "Name": "Giant Blacksmith: Giant Helm",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 6000,
+    "Flag": 61322600
+  },
+  {
+    "ParamId": 6212,
+    "OriginalItemId": 531000,
+    "Id": 11111125,
+    "Name": "Giant Blacksmith: Giant Armor",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": 61322610
+  },
+  {
+    "ParamId": 6213,
+    "OriginalItemId": 532000,
+    "Id": 11111126,
+    "Name": "Giant Blacksmith: Giant Gauntlets",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 6000,
+    "Flag": 61322620
+  },
+  {
+    "ParamId": 6214,
+    "OriginalItemId": 533000,
+    "Id": 11111127,
+    "Name": "Giant Blacksmith: Giant Leggings",
+    "OriginalType": "Armor",
+    "OriginalQuantity": 0,
+    "Value": 6000,
+    "Flag": 61322630
   },
   {
     "ParamId": 6215,

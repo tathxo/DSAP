@@ -1,10 +1,16 @@
 ﻿For added shop item lots.
 To try to avoid collisions as much as possible, I went as unused as possible:
-digit 1 = 6, unused but valid span of flags, as far as I can tell.
-digit 2-4 = 132, Ash Lake/Great Hollow
-digit 5-8 = offset to 3000, up to 3999.
-Shop item counts need 10 bytes per slot, to account for up to 2^10=1023 items in slot.
-We only use 1.
+digit 1 = 6, mostly unused but valid span of flags. Some map objects / ObjActs seem to change flags in this range.
+digit 2-4 = 132, Ash Lake/Great Hollow..which is mostly empty of interactable objects
+digit 5-8 = offset to 2000, up to 3999. Past 5000 would reset.
+Shop item counts need 8 or 10 flags per slot, but I stick with 10 because the game does.
+
+Every 10 values (inclusive) from
+"Flag": "61322000"
+to
+"Flag": "61322630" 
+
+And these flags specifically:
 "Flag": "61323000"
 "Flag": "61323010"
 "Flag": "61323020"
@@ -25,4 +31,4 @@ We only use 1.
 "Flag": "61323170"
 
 "Flag": "61323998" Flag reserved for o+s armor set handling
-"Flag": "61323999" Flag reserved for gwyn armor set handling
+"Flag": "61323999" Flag reserved for gwyn armor set handling (currently unused)

@@ -236,7 +236,7 @@ location_skip_categories = {
 location_locked_categories = {
 }
 
-# Next Available ID = 11111064
+# Next Available ID = 11111129
 location_tables = {
 "Undead Asylum Cell": [
     DSRLocationData(11110000, f"UA: Dungeon Cell Key", f"Dungeon Cell Key", DSRLocationCategory.SKIP),
@@ -726,6 +726,7 @@ location_tables = {
     DSRLocationData(11110980, f"BT: Twin Humanities - Quelaag Drop", f"Twin Humanities",  DSRLocationCategory.BOSS_HUMANITY),
     DSRLocationData(11110835, f"BT: Daughter of Chaos Bonfire", f"Bonfire Warp Unlock - Daughter of Chaos", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110556, f"BT: Bell of Awakening #2 rung", f"Bell of Awakening #2", DSRLocationCategory.EVENT),
+    DSRLocationData(11111128, f"BT: Homeward Bone - Pulled Lever After Quelaag", f"Homeward Bone",  DSRLocationCategory.BOSS_BONE),
 ],
 "Lower Blighttown - Eingyi": [
     # DSRLocationData(11110xxx, f"BT: Eingyi", f"Eingyi Access", DSRLocationCategory.EVENT),

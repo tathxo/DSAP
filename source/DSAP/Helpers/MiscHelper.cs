@@ -91,12 +91,6 @@ namespace DSAP.Helpers
         public static Dictionary<string, Tuple<int, string>> BuildSlotLocationToItemUpgMap(Dictionary<string, object> slotData, int currentSlot)
         {
             Dictionary<string, Tuple<int, string>> result = [];
-            
-            if (App.DSOptions.ApworldCompare("0.0.20.0") < 0) /* apworld is < 0.0.20.0, which introduces weapon upgrades */
-            {
-                Log.Logger.Warning($"Apworld version too low, skipping weapon upgrade mapping.");
-                return result;
-            }
 
             if (App.DSOptions.UpgradedWeaponsPercentage == 0)
             {

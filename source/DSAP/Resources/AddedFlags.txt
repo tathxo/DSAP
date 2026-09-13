@@ -9,6 +9,8 @@ Every 10 values (inclusive) from
 "Flag": "61322000"
 to
 "Flag": "61322630" 
++ 
+"Flag": "61322640" (griggs special)
 
 And these flags specifically:
 "Flag": "61323000"

@@ -10,7 +10,7 @@ namespace DSAP.Models
     {
         string curr_version = "0.0.0.0";
         string extended_version = "";
-        public bool outofdate = false;
+        public bool outofdate { get; set; } = false;
         public uint apiver_major;
         public uint apiver_minor;
         public uint apiver_revision;
@@ -97,7 +97,6 @@ namespace DSAP.Models
                     (apiver_major == currmajor && apiver_minor > currminor))
                 {
                     Log.Logger.Error("Apworld detected that is too advanced for the DSAP client. Upgrade your client.");
-                    Log.Logger.Error("Otherwise, expect errors and instability.");
                     outofdate = true;
                 }
                 /* is apworld gen'd with a lower version? */
@@ -106,7 +105,7 @@ namespace DSAP.Models
                 {
                     // revision bump indicates issues.
                     Log.Logger.Error("Apworld detected that is too old for this version of the DSAP client.");
-                    Log.Logger.Error("Otherwise, expect errors and instability.");
+                    Log.Logger.Error("Switch to an appropriate client version, or request your host regenerate the multiworld with an updated apworld.");
                     outofdate = true;
                 }
                 Log.Logger.Information($"Client api level {currmajor}.{currminor}.{currrevision}.{currbuild}, " +

@@ -1754,10 +1754,12 @@ public partial class App : Application
                     {
 
                         Log.Logger.Error($"Your saved slot # and seed match existing information on the server.");
-                        Log.Logger.Error($"However, your saveid was not detected - probably because this is a new room of this seed.");
-                        Log.Logger.Warning("\nRECOMMENDED: Close DSAP and start a new save.");
-                        Log.Logger.Warning("\nIf you want to reset the saved slot for this game save and have this save treated as a new save: Type /resetsave");
-                        Log.Logger.Warning("If you loaded the wrong save: Switch to a correct save, then type /saveloaded");
+                        Log.Logger.Error($"However, your saveid, used to sync your save to the server, was not detected.");
+                        Log.Logger.Error($"This is probably because your host erroneously generated a new room, \ninstead of having all players resume play using the initial room.");
+                        Log.Logger.Error($"Note: You can unpause a room by simply refreshing its page.");
+                        Log.Logger.Warning("\nRECOMMENDED: Inform your host about this mistake.");
+                        Log.Logger.Warning("\nIf you want to reset the saved server info for this game save,\nand have this save treated as a new save in this room: Type /resetsave");
+                        Log.Logger.Warning("If you loaded a wrong save entirely: Switch to a correct save, then type /saveloaded");
                         CheckSaveId = false; // don't keep sending message until user has /resetsave or /saveloaded
                     }
                 }
@@ -1768,8 +1770,8 @@ public partial class App : Application
             {
                 Log.Logger.Error($"Your saved slot # ({slot}) does not match the slot # you connected to ({connslot}).");
                 Log.Logger.Error($"This means you loaded a save that was used in a slot in this seed.");
-                Log.Logger.Warning("\nRECOMMENDED: Close DSAP and reconnect to the correct slot.");
-                Log.Logger.Warning("\nIf you want to reset the saved slot for this game save and have this save treated as a new save: Type /resetsave");
+                Log.Logger.Warning("\nRECOMMENDED: Restart DSAP and reconnect to the correct slot.");
+                Log.Logger.Warning("\nIf you want to reset the saved server info for this game save,\nand have this save treated as a new save in this room: Type /resetsave");
                 Log.Logger.Warning("If you loaded the wrong save: Switch to a correct save, then type /saveloaded");
                 CheckSaveId = false; // don't keep sending message until user has /resetsave or /saveloaded
                 return false;
@@ -1779,7 +1781,7 @@ public partial class App : Application
         {
             Log.Logger.Error($"Your saved seed hash ({seed}) does not match the room seed hash ({roomseed}).");
             Log.Logger.Error($"This means you loaded a save that was used in a different AP instance.");
-            Log.Logger.Warning("\nIf you want to reset your seed and have this save treated as a new save: Type /resetsave");
+            Log.Logger.Warning("\nIf you want to reset the saved server info for this game save,\nand have this save treated as a new save in this room: Type /resetsave");
             Log.Logger.Warning("If you loaded the wrong save: Switch to a correct save, then type /saveloaded");
             CheckSaveId = false; // don't keep sending message until user has /resetsave or /saveloaded
             return false;
@@ -1969,8 +1971,13 @@ public partial class App : Application
             DSOptions = new DarkSoulsOptions(App.Client.Options, slotData);
             if (DSOptions.outofdate)
             {
-                Client.AddOverlayMessage("Client or apworld out of data - instability and errors likely.");
-                Client.AddOverlayMessage("See client log for details.");
+                Log.Logger.Error("Client or apworld out of data - disconnecting.");
+                Client.AddOverlayMessage("Client or apworld out of data - disconnecting.");
+                Task.Run(() =>
+                {
+                    Client.Disconnect();
+                });
+                return;
             }
             Log.Logger.Debug($"{DSOptions.ToString()}");
 

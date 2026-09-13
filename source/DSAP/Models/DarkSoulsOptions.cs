@@ -39,6 +39,7 @@ namespace DSAP.Models
         public bool LizardShuffle { get; set; }
         // Shops
         public bool LimitedShopItemShuffle { get; set; }
+        public bool UnlimitedShopItemShuffle { get; set; }
         public uint ShopHints { get; set; }
         // Logic
         public Enums.DSLogicToAccessCatacombs LogicToAccessCatacombs { get; set; }
@@ -183,6 +184,7 @@ namespace DSAP.Models
             LizardShuffle = GetBool("lizard_shuffle");
 
             LimitedShopItemShuffle = GetBool("limited_shop_item_shuffle");
+            UnlimitedShopItemShuffle = GetBool("unlimited_shop_item_shuffle");
 
             if (App.Client.Options.ContainsKey("shop_hints"))
                 ShopHints = ((JsonElement)App.Client.Options["shop_hints"]).GetUInt32();

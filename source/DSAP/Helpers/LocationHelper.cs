@@ -154,7 +154,7 @@ namespace DSAP.Helpers
         public static List<ILocation> GetShopLineupFlagLocations()
         {
             List<ILocation> locations = new List<ILocation>();
-            var lotFlags = GetShopLineupFlags();
+            var lotFlags = GetShopLineupFlags().Where(x => x.Flag != -1 && x.Id != 0); // ignore "infinite" slots
             var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {

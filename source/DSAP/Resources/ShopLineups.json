@@ -10,6 +10,46 @@
     "Flag": 11017020
   },
   {
+    "ParamId": 1101,
+    "OriginalItemId": 280,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Repair Powder",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1102,
+    "OriginalItemId": 290,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Throwing Knife",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1103,
+    "OriginalItemId": 292,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Firebomb",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1104,
+    "OriginalItemId": 296,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Lloyd's Talisman",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
     "ParamId": 1105,
     "OriginalItemId": 2021,
     "Id": 11110042,
@@ -180,6 +220,66 @@
     "Flag": 61322140
   },
   {
+    "ParamId": 1123,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1124,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1125,
+    "OriginalItemId": 2006000,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Wooden Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 3,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1126,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1127,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1128,
+    "OriginalItemId": 2103000,
+    "Id": 0,
+    "Name": "Male Undead Merchant: Wood Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
     "ParamId": 1129,
     "OriginalItemId": 170000,
     "Id": 11111079,
@@ -260,6 +360,76 @@
     "Flag": 61323010
   },
   {
+    "ParamId": 1200,
+    "OriginalItemId": 270,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Bloodred Moss Clump",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 300,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1201,
+    "OriginalItemId": 271,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Purple Moss Clump",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1202,
+    "OriginalItemId": 272,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Blooming Purple Moss Clump",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1203,
+    "OriginalItemId": 291,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Poison Throwing Knife",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1204,
+    "OriginalItemId": 293,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Dung Pie",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 200,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1205,
+    "OriginalItemId": 294,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Alluring Skull",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1206,
+    "OriginalItemId": 310,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Charcoal Pine Resin",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
     "ParamId": 1207,
     "OriginalItemId": 312,
     "Id": 11110860,
@@ -270,6 +440,36 @@
     "Flag": 11017190
   },
   {
+    "ParamId": 1208,
+    "OriginalItemId": 313,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Rotten Pine Resin",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1209,
+    "OriginalItemId": 330,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Homeward Bone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1210,
+    "OriginalItemId": 370,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Prism Stone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
     "ParamId": 1211,
     "OriginalItemId": 500,
     "Id": 11110861,
@@ -278,6 +478,146 @@
     "OriginalQuantity": 1,
     "Value": 5000,
     "Flag": 11027020
+  },
+  {
+    "ParamId": 1212,
+    "OriginalItemId": 2003000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Fire Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1213,
+    "OriginalItemId": 2004000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Poison Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1214,
+    "OriginalItemId": 274,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Purging Stone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 6000,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1215,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1216,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1217,
+    "OriginalItemId": 2006000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Wooden Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 3,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1218,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1219,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1220,
+    "OriginalItemId": 2103000,
+    "Id": 0,
+    "Name": "Female Undead Merchant: Wood Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5300,
+    "OriginalItemId": 260,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Green Blossom",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5301,
+    "OriginalItemId": 297,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Black Firebomb",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5302,
+    "OriginalItemId": 1000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5303,
+    "OriginalItemId": 1010,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Large Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 4000,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5304,
+    "OriginalItemId": 1020,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Green Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 5000,
+    "Flag": -1
   },
   {
     "ParamId": 5306,
@@ -338,6 +678,66 @@
     "OriginalQuantity": 0,
     "Value": 8000,
     "Flag": 61322220
+  },
+  {
+    "ParamId": 5312,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5313,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5314,
+    "OriginalItemId": 2002000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Feather Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5315,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5316,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 5317,
+    "OriginalItemId": 2102000,
+    "Id": 0,
+    "Name": "Crestfallen Merchant: Sniper Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 250,
+    "Flag": -1
   },
   {
     "ParamId": 5318,
@@ -458,6 +858,16 @@
     "OriginalQuantity": 0,
     "Value": 5000,
     "Flag": 61322340
+  },
+  {
+    "ParamId": 1400,
+    "OriginalItemId": 1000,
+    "Id": 0,
+    "Name": "Andre of Astora: Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
   },
   {
     "ParamId": 1401,
@@ -600,6 +1010,66 @@
     "Flag": 61322440
   },
   {
+    "ParamId": 1415,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Andre of Astora: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1416,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Andre of Astora: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1417,
+    "OriginalItemId": 2006000,
+    "Id": 0,
+    "Name": "Andre of Astora: Wooden Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 3,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1418,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Andre of Astora: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1419,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Andre of Astora: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1420,
+    "OriginalItemId": 2103000,
+    "Id": 0,
+    "Name": "Andre of Astora: Wood Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
     "ParamId": 1421,
     "OriginalItemId": 0,
     "Id": 11111046,
@@ -708,6 +1178,66 @@
     "OriginalQuantity": 0,
     "Value": 10000,
     "Flag": 61322510
+  },
+  {
+    "ParamId": 1509,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Domhnall of Zena: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1510,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Domhnall of Zena: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1511,
+    "OriginalItemId": 2006000,
+    "Id": 0,
+    "Name": "Domhnall of Zena: Wooden Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 3,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1512,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Domhnall of Zena: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1513,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Domhnall of Zena: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 1514,
+    "OriginalItemId": 2103000,
+    "Id": 0,
+    "Name": "Domhnall of Zena: Wood Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
   },
   {
     "ParamId": 1550,
@@ -1284,6 +1814,16 @@
     "Flag": 11607000
   },
   {
+    "ParamId": 2401,
+    "OriginalItemId": 312,
+    "Id": 0,
+    "Name": "Ingward: Transient Curse",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1000,
+    "Flag": -1
+  },
+  {
     "ParamId": 3000,
     "OriginalItemId": 4000,
     "Id": 11110914,
@@ -1694,6 +2234,16 @@
     "Flag": 11607080
   },
   {
+    "ParamId": 4408,
+    "OriginalItemId": 330,
+    "Id": 0,
+    "Name": "Oswald of Carim: Homeward Bone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
     "ParamId": 4409,
     "OriginalItemId": 0,
     "Id": 11111058,
@@ -1834,6 +2384,96 @@
     "Flag": 61322590
   },
   {
+    "ParamId": 6202,
+    "OriginalItemId": 2005000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Moonlight Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6203,
+    "OriginalItemId": 2007000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Dragonslayer Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6204,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6205,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6206,
+    "OriginalItemId": 2002000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Feather Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6207,
+    "OriginalItemId": 2104000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Lightning Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 700,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6208,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6209,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6210,
+    "OriginalItemId": 2102000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Sniper Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 250,
+    "Flag": -1
+  },
+  {
     "ParamId": 6211,
     "OriginalItemId": 530000,
     "Id": 11111124,
@@ -1904,6 +2544,46 @@
     "Flag": 11017170
   },
   {
+    "ParamId": 6218,
+    "OriginalItemId": 1000,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6219,
+    "OriginalItemId": 1010,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Large Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 3800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6220,
+    "OriginalItemId": 1020,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Green Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 4800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6221,
+    "OriginalItemId": 1130,
+    "Id": 0,
+    "Name": "Giant Blacksmith: Twinkling Titanite",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 8000,
+    "Flag": -1
+  },
+  {
     "ParamId": 6222,
     "OriginalItemId": 0,
     "Id": 11111061,
@@ -1912,6 +2592,26 @@
     "OriginalQuantity": 1,
     "Value": 5000,
     "Flag": 61323060
+  },
+  {
+    "ParamId": 6300,
+    "OriginalItemId": 330,
+    "Id": 0,
+    "Name": "Vamos: Homeward Bone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6301,
+    "OriginalItemId": 1000,
+    "Id": 0,
+    "Name": "Vamos: Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
   },
   {
     "ParamId": 6302,
@@ -1944,6 +2644,66 @@
     "Flag": 11017170
   },
   {
+    "ParamId": 6305,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Vamos: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6306,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Vamos: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6307,
+    "OriginalItemId": 2006000,
+    "Id": 0,
+    "Name": "Vamos: Wooden Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 3,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6308,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Vamos: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6309,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Vamos: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6310,
+    "OriginalItemId": 2103000,
+    "Id": 0,
+    "Name": "Vamos: Wood Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
     "ParamId": 6311,
     "OriginalItemId": 0,
     "Id": 11111059,
@@ -1964,6 +2724,106 @@
     "Flag": 61323080
   },
   {
+    "ParamId": 6410,
+    "OriginalItemId": 260,
+    "Id": 0,
+    "Name": "Marvelous Chester: Green Blossom",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1200,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6411,
+    "OriginalItemId": 270,
+    "Id": 0,
+    "Name": "Marvelous Chester: Bloodred Moss Clump",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 400,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6412,
+    "OriginalItemId": 271,
+    "Id": 0,
+    "Name": "Marvelous Chester: Purple Moss Clump",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6413,
+    "OriginalItemId": 272,
+    "Id": 0,
+    "Name": "Marvelous Chester: Blooming Purple Moss Clump",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 1500,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6414,
+    "OriginalItemId": 290,
+    "Id": 0,
+    "Name": "Marvelous Chester: Throwing Knife",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 30,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6415,
+    "OriginalItemId": 292,
+    "Id": 0,
+    "Name": "Marvelous Chester: Firebomb",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6416,
+    "OriginalItemId": 294,
+    "Id": 0,
+    "Name": "Marvelous Chester: Alluring Skull",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6417,
+    "OriginalItemId": 296,
+    "Id": 0,
+    "Name": "Marvelous Chester: Lloyd's Talisman",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6418,
+    "OriginalItemId": 297,
+    "Id": 0,
+    "Name": "Marvelous Chester: Black Firebomb",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6419,
+    "OriginalItemId": 330,
+    "Id": 0,
+    "Name": "Marvelous Chester: Homeward Bone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 600,
+    "Flag": -1
+  },
+  {
     "ParamId": 6420,
     "OriginalItemId": 500,
     "Id": 11110963,
@@ -1972,6 +2832,66 @@
     "OriginalQuantity": 13,
     "Value": 10000,
     "Flag": 11217100
+  },
+  {
+    "ParamId": 6421,
+    "OriginalItemId": 2000000,
+    "Id": 0,
+    "Name": "Marvelous Chester: Standard Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 20,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6422,
+    "OriginalItemId": 2001000,
+    "Id": 0,
+    "Name": "Marvelous Chester: Large Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 100,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6423,
+    "OriginalItemId": 2002000,
+    "Id": 0,
+    "Name": "Marvelous Chester: Feather Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 200,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6424,
+    "OriginalItemId": 2100000,
+    "Id": 0,
+    "Name": "Marvelous Chester: Standard Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 50,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6425,
+    "OriginalItemId": 2101000,
+    "Id": 0,
+    "Name": "Marvelous Chester: Heavy Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 150,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6426,
+    "OriginalItemId": 2102000,
+    "Id": 0,
+    "Name": "Marvelous Chester: Sniper Bolt",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 400,
+    "Flag": -1
   },
   {
     "ParamId": 6427,
@@ -2074,6 +2994,36 @@
     "Flag": 11207040
   },
   {
+    "ParamId": 6600,
+    "OriginalItemId": 293,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Dung Pie",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 200,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6601,
+    "OriginalItemId": 330,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Homeward Bone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 300,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6602,
+    "OriginalItemId": 370,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Prism Stone",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 10,
+    "Flag": -1
+  },
+  {
     "ParamId": 6603,
     "OriginalItemId": 510,
     "Id": 11110965,
@@ -2092,6 +3042,46 @@
     "OriginalQuantity": 1,
     "Value": 5,
     "Flag": 11217020
+  },
+  {
+    "ParamId": 6608,
+    "OriginalItemId": 1000,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6609,
+    "OriginalItemId": 1010,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Large Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 3800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6610,
+    "OriginalItemId": 1020,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Green Titanite Shard",
+    "OriginalType": "Good",
+    "OriginalQuantity": 0,
+    "Value": 4800,
+    "Flag": -1
+  },
+  {
+    "ParamId": 6611,
+    "OriginalItemId": 2008000,
+    "Id": 0,
+    "Name": "Hawkeye Gough: Gough's Great Arrow",
+    "OriginalType": "Arrow",
+    "OriginalQuantity": 0,
+    "Value": 650,
+    "Flag": -1
   },
   {
     "ParamId": 6612,

@@ -303,7 +303,7 @@ namespace DSAP.Helpers
                 }
             }
 
-            Log.Logger.Information($"{foundItems} items overwritten");
+            Log.Logger.Debug($"{foundItems} items overwritten");
             App.Client.AddOverlayMessage($"{foundItems} items overwritten");
 
             if (foundItems == 0)

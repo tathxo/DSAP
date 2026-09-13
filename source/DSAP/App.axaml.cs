@@ -1022,19 +1022,24 @@ public partial class App : Application
 
             if (!Client.IsConnected)
             {
-                Log.Logger.Warning("Connect to AP Server failed");
+                Log.Logger.Warning($"Connect to AP Server at host '{e.Host}' as slot '{e.Slot}' failed");
                 Context.ConnectButtonEnabled = true;
                 return;
-
             }
             Client.MessageReceived += Client_MessageReceived;
+            DSOptions = null;
 
             await Client.Login(e.Slot, !string.IsNullOrWhiteSpace(e.Password) ? e.Password : null);
 
             if (!Client.IsLoggedIn)
             {
-                Log.Logger.Warning("Login failed");
-                Client.AddOverlayMessage("Login failed");
+                if (DSOptions != null && DSOptions.outofdate)
+                {
+                    Client.Disconnect();
+                }
+
+                Log.Logger.Warning($"Login failed to AP Server as slot '{e.Slot}' failed");
+                Client.AddOverlayMessage($"Login failed to AP Server as slot '{e.Slot}' failed");
                 Context.ConnectButtonEnabled = true;
                 return;
             }
@@ -1971,12 +1976,8 @@ public partial class App : Application
             DSOptions = new DarkSoulsOptions(App.Client.Options, slotData);
             if (DSOptions.outofdate)
             {
-                Log.Logger.Error("Client or apworld out of data - disconnecting.");
-                Client.AddOverlayMessage("Client or apworld out of data - disconnecting.");
-                Task.Run(() =>
-                {
-                    Client.Disconnect();
-                });
+                Log.Logger.Error("ERROR: Client or apworld out of date - DISCONNECTING.");
+                Client.AddOverlayMessage("ERROR: Client or apworld out of date - DISCONNECTING.");
                 return;
             }
             Log.Logger.Debug($"{DSOptions.ToString()}");

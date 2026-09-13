@@ -701,14 +701,14 @@ namespace DSAP.Helpers
 
                     var slotidx = shopLineupParamStruct.ParamEntries.FindIndex(x => x.id == nextSlot.ParamId);
                     var newtuple = shopLineupParamStruct.ParamEntries[slotidx];
-                    Log.Logger.Information($"Shop rando: new: {paramId}, old: {newtuple.id}");
+                    Log.Logger.Verbose($"Shop rando: new: {paramId}, old: {newtuple.id}");
                     newtuple.id = (uint)paramId;
                     shopLineupParamStruct.ParamEntries[slotidx] = newtuple;
                 }
             }
 
             // do some flag manipulation if Grigg's catalyst is a location, to prevent him leaving too early.
-            if (scoutedLocationInfo.TryGetValue(11111116, out var resultItem)) // get the matching scouted item
+            if (scoutedLocationInfo.TryGetValue(11111116, out var resultItem2)) // get the matching scouted item
             {
                 // Normally griggs leaves if you buy all his spells, by flags being on.
                 // So, manipulate the flag on the last one, 2021 / 11027240 / Soul Spear, to point elsewhere.

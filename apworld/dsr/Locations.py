@@ -1417,10 +1417,10 @@ location_tables = {
     DSRLocationData(11110478, f"TotG: Skull Lantern", f"Skull Lantern", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110479, f"TotG: Eye of Death - Upper Giant Coffin", f"Eye of Death x3", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110480, f"TotG: Large Divine Ember", f"Large Divine Ember", DSRLocationCategory.ITEM_LOT),
+    DSRLocationData(11110481, f"TotG: Soul of a Brave Warrior - Lower Giant Coffin", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
 ],
 "Tomb of the Giants - After White Fog": [
     DSRLocationData(11110795, f"TotG: Fog Wall - Tomb of the Giants", f"Fog Wall Key - Tomb of the Giants", DSRLocationCategory.FOG_WALL),
-    DSRLocationData(11110481, f"TotG: Soul of a Brave Warrior - Lower Giant Coffin", f"Soul of a Brave Warrior", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110482, f"TotG: Effigy Shield", f"Effigy Shield", DSRLocationCategory.ITEM_LOT),
     DSRLocationData(11110483, f"TotG: Tomb of the Giants Bonfire", f"Bonfire Warp Unlock - Tomb of the Giants", DSRLocationCategory.BONFIRE),
     DSRLocationData(11110484, f"TotG: Covetous Silver Serpent Ring", f"Covetous Silver Serpent Ring", DSRLocationCategory.ITEM_LOT),

@@ -640,13 +640,12 @@ namespace DSAP.Helpers
 
             Log.Logger.Verbose("Reloading Shop Lineup Params");
 
-            //if (App.DSOptions.ShopSanity == true)
-            {
-                // if we are here, we are updating the params.
-                var shopflags = LocationHelper.GetShopLineupFlags();
+            var shopFlagLocs = LocationHelper.GetShopLineupFlags().Where(x => x.Id > 0);
 
+            //if (App.DSOptions.LimitedShopItemShuffle) // don't actually need to check this - if locations exist in AP, we rando them.
+            {
                 // for flags in the list of known shop flags
-                foreach (var shopFlag in shopflags)
+                foreach (var shopFlag in shopFlagLocs)
                 {
                     int id = shopFlag.Id;
                     //Log.Logger.Information($"shop locid = {id}");
@@ -676,14 +675,35 @@ namespace DSAP.Helpers
 
                                 //Array.Copy(BitConverter.GetBytes(312), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
                                 shopLineupParamStruct.ParamBytes[entry.paramOffset + ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
-                                //Array.Copy(BitConverter.GetBytes(1500), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
-                                if (shopFlag.OriginalQuantity == 0 && shopFlag.Flag != 0)
+                                                                                                                            //Array.Copy(BitConverter.GetBytes(1500), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
+                                if (shopFlag.OriginalQuantity == 0 && shopFlag.Flag != 0) // for "previously infinite" items (like weapons and armor), that have been replaced with checks.
                                 {
                                     Array.Copy(BitConverter.GetBytes(shopFlag.Flag), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EVENT_FLAG, sizeof(int));
                                 }
                             }
                         }
                     }
+                }
+            }
+            if (App.DSOptions.UnlimitedShopItemShuffle)
+            {
+                var infiniteShopSlots = LocationHelper.GetShopLineupFlags().Where(x => x.Id == 0 && x.OriginalQuantity == 0 && x.Flag == -1).ToList();
+                var paramIds = infiniteShopSlots.Select(x => x.ParamId).ToList();
+
+                // init rand from seed
+                var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed));
+                // foreach paramid, assign it a random slot, and replace that slot's id.
+                foreach (var paramId in paramIds)
+                {
+                    var nextSlotIdx = rand.Next(infiniteShopSlots.Count());
+                    var nextSlot = infiniteShopSlots.ElementAt(nextSlotIdx);
+                    infiniteShopSlots.Remove(nextSlot);
+
+                    var slotidx = shopLineupParamStruct.ParamEntries.FindIndex(x => x.id == nextSlot.ParamId);
+                    var newtuple = shopLineupParamStruct.ParamEntries[slotidx];
+                    Log.Logger.Information($"Shop rando: new: {paramId}, old: {newtuple.id}");
+                    newtuple.id = (uint)paramId;
+                    shopLineupParamStruct.ParamEntries[slotidx] = newtuple;
                 }
             }
 

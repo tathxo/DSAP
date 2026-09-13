@@ -666,6 +666,7 @@ class DSRWorld(World):
                 "lizard_shuffle": self.options.lizard_shuffle.value,
 
                 # Shops
+                "unlimited_shop_item_shuffle": self.options.unlimited_shop_item_shuffle.value,
                 "limited_shop_item_shuffle": self.options.limited_shop_item_shuffle.value,
                 "shop_hints": self.options.shop_hints.value,
                 

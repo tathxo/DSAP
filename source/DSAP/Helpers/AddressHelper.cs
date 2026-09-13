@@ -459,6 +459,19 @@ namespace DSAP.Helpers
                     });
                 }
             }
+            // for Griggs, normally he moves on if you buy all his spells.
+            // Since we added his catalyst as a check, he could move on without us getting all checks.
+            // So we swapped the flagid 11027240 to something else, and check if both non-vanilla flags are set.
+            // If so, set 11027240
+            if (!isFlagOnInBuffer(flags, 11027240) && isFlagOnInBuffer(flags, 61322520) && isFlagOnInBuffer(flags, 61322640))
+            {
+                Log.Logger.Information("All Griggs item purchased - allowing him to move on.");
+                Task.Run(() =>
+                {
+                    Task.Delay(500);
+                    App.SetEventFlag(11027240, true);
+                });
+            }
         }
         private static void GhLizardSafety(byte[] flags) // based on 11320300 events
         {

@@ -707,6 +707,19 @@ namespace DSAP.Helpers
                 }
             }
 
+            // do some flag manipulation if Grigg's catalyst is a location, to prevent him leaving too early.
+            if (scoutedLocationInfo.TryGetValue(11111116, out var resultItem)) // get the matching scouted item
+            {
+                // Normally griggs leaves if you buy all his spells, by flags being on.
+                // So, manipulate the flag on the last one, 2021 / 11027240 / Soul Spear, to point elsewhere.
+                // We'll monitor that flag and the catalyst one to set the "real" flag 11027240
+                foreach (var entry in shopLineupParamStruct.ParamEntries.Where(x=>x.id == 2021))
+                {
+                    // write to its "flag id" the new/fake one 61322640, which we'll monitor alongside 61322520 (the catalyst flag)
+                    Array.Copy(BitConverter.GetBytes(61322640), 0, shopLineupParamStruct.ParamBytes, entry.paramOffset + ShopLineupParam.EVENT_FLAG, sizeof(int));
+                }
+            }
+
             // Get rickert's weapon item, use it as basis for new shop lineup item.
             if (App.DSOptions.GhostDifficulty == Enums.DSGhostDifficulty.rickert_sells_curses)
             {

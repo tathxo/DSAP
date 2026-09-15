@@ -127,14 +127,12 @@ namespace DSAP.Helpers
             var mapInfo = new MapInfo();
             if (MiscHelper.IsInGame())
             {
-                Log.Logger.Debug("getpos inner");
                 // map = worldnumber + area number. e.g. 10 + 02 => m10_02 = firelink shrine
                 ulong eoffset = AddressHelper.GetBaseEAddress();
                 if (eoffset != 0)
                 {
-                    Log.Logger.Debug("getpos inner2");
                     mapInfo = GetMapAndXyzCoords();
-                    Log.Logger.Debug($"Position: got w/a {mapInfo.World} {mapInfo.Area}");
+                    Log.Logger.Verbose($"Position: got w/a {mapInfo.World} {mapInfo.Area}");
                     if (mapInfo.World > 9 && mapInfo.World < 19 && mapInfo.Area >= 0 && mapInfo.Area < 3)
                     {
                         Log.Logger.Debug("getpos inner3");
@@ -186,7 +184,6 @@ namespace DSAP.Helpers
                                     if (best_poi.SubMapId > 0)
                                         mapInfo.MapIdLong += (uint)(100 * best_poi.SubMapId);
 
-                                    Log.Logger.Debug($"Best Poi: {best_poi.PoiName}, distance={min_distance:F2}, submap={best_poi.SubMapId}");
                                     Log.Logger.Verbose($"Best Poi: {best_poi.PoiName}, distance={min_distance:F2}, submap={best_poi.SubMapId}");
                                 }
                             }
@@ -220,7 +217,7 @@ namespace DSAP.Helpers
                 byte area = pos18[0]; // 0xA22
                 mapInfo.MapId3 = (uint)world * 10 + (uint)area;
                 string str = "";
-                Log.Logger.Debug($"building mapid3={mapInfo.MapId3}, w={world}, a={area}, pos18={BitConverter.ToString(pos18)}");
+                Log.Logger.Verbose($"building mapid3={mapInfo.MapId3}, w={world}, a={area}, pos18={BitConverter.ToString(pos18)}");
                 // unused comments
                 // chr pos data = chr map data + 0x28
                 // chr map data = chrdata1 + 0x48
@@ -228,7 +225,6 @@ namespace DSAP.Helpers
                 mapInfo.X = BitConverter.ToSingle(pos18, 6);
                 mapInfo.Y = BitConverter.ToSingle(pos18, 10);
                 mapInfo.Z = BitConverter.ToSingle(pos18, 14);
-                Log.Logger.Debug($"getmap end");
             }
             return mapInfo;
         }

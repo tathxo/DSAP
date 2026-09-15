@@ -135,7 +135,6 @@ namespace DSAP.Helpers
                     Log.Logger.Verbose($"Position: got w/a {mapInfo.World} {mapInfo.Area}");
                     if (mapInfo.World > 9 && mapInfo.World < 19 && mapInfo.Area >= 0 && mapInfo.Area < 3)
                     {
-                        Log.Logger.Debug("getpos inner3");
                         uint tempMapIdLong = (100000 * mapInfo.World + 1000 * mapInfo.Area);
                         Dictionary<uint, string> mapDict = new List<(uint, string)>([
                             (1000000, "Depths"),

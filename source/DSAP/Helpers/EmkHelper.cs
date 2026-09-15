@@ -125,13 +125,11 @@ namespace DSAP.Helpers
                     }
                 }
 
-                uint mapid3 = 0; // 3 digit map code
-
                 MapInfo mapInfo = MapHelper.GetMapAndXyzCoords();
 
                 if (mapInfo.MapId3 != cached_mapid3)
-                    Log.Logger.Verbose($"mapid={mapid3}, w={mapInfo.World}, a={mapInfo.Area}");
-                cached_mapid3 = mapid3;
+                    Log.Logger.Verbose($"mapid={mapInfo.MapId3}, w={mapInfo.World}, a={mapInfo.Area}");
+                cached_mapid3 = mapInfo.MapId3;
 
                 ulong eventhead_ptr = AddressHelper.GetEmkHeadAddress();
                 if (eventhead_ptr == 0)
@@ -180,7 +178,7 @@ namespace DSAP.Helpers
                                 if (!emk.HasKey) /* Player doesn't have key -> pull it */
                                 {
                                     // Only pull it if we're in the relevant map. This is to do less "pulls" in general!
-                                    if (emk.MapId3 == mapid3) /* Compare current mapid to event's valid mapid */
+                                    if (emk.MapId3 == mapInfo.MapId3) /* Compare current mapid to event's valid mapid */
                                     {
                                         ulong nextptr = Memory.ReadULong(thisEmk + 0x68);
                                         Memory.Write(prevptr, nextptr);
@@ -190,6 +188,8 @@ namespace DSAP.Helpers
                                         updatedEmk = true;
                                         Log.Logger.Debug($"Pulled event: {emk.Name} at {emk.Saved_Ptr:X}");
                                     }
+                                    //else
+                                    //    Log.Logger.Debug($"wrong map to pull event {emk.Name}, mapid3={mapInfo.MapId3}, emkmapid3={emk.MapId3}");
                                 }
                                 else /* Player has event's key, but we found it in list? Destroy our "old" version, and stop interfering. */
                                 {
@@ -211,7 +211,7 @@ namespace DSAP.Helpers
                     if (emk.HasKey && emk.Saved_Ptr != 0)
                     {
                         /* If we're in the map for the event */
-                        if (emk.MapId3 == mapid3) /* Compare current mapid to event's valid mapid */
+                        if (emk.MapId3 == mapInfo.MapId3) /* Compare current mapid to event's valid mapid */
                         {
                             addingEmks.Add(emk);
                             Log.Logger.Debug($"Re-adding event: {emk.Name} at {emk.Saved_Ptr:X}");

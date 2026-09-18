@@ -327,9 +327,9 @@ region_rules_table: dict[str, list[DsrEntranceRule]] = {
     DsrEntranceRule("Anor Londo - Ornstein and Smough", True_()), # Has("Ornstein and Smough Defeated")),
   ],
   "Anor Londo - Gwyndolin": [
-    # attacking the illusion -> no ring needed
-    DsrEntranceRule("Anor Londo - After Ornstein and Smough", Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off),
-    DsrEntranceRule("Anor Londo - After First Fog", Has("Darkmoon Seance Ring") & (Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off)),
+    # access either via darkmoon seance ring, or attacking the Gwynevere illusion
+    DsrEntranceRule("Anor Londo - After First Fog", (Has("Darkmoon Seance Ring") | CanReachRegion("Anor Londo - After Ornstein and Smough"))
+                    & (Has("Boss Fog Wall Key - Gwyndolin") | bossfogwall_sanity_off)),
   ],
   "Anor Londo - After Gwyndolin": [
     DsrEntranceRule("Anor Londo - Gwyndolin", True_()), # Has("Gwyndolin Defeated")),

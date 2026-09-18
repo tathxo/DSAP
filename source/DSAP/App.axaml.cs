@@ -110,7 +110,7 @@ public partial class App : Application
         Context.ConnectClicked += Context_ConnectClicked;
         Context.UnstuckClicked += Context_UnstuckClicked;
         Context.CommandReceived += Context_CommandReceived;
-        Context.OverlayEnabled = true;
+        Context.OverlayEnabled = false;
         Context.AutoscrollEnabled = true;
 
         Context.ConnectButtonEnabled = true;

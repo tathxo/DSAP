@@ -371,15 +371,17 @@ namespace DSAP.Helpers
                     currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
                 }
             }
-            // if current list doesn't match data storage, update data storage
-            if (App.Client?.CurrentSession?.DataStorage[StorageKey] != null)
-            {
-                if (App.Client.CurrentSession.DataStorage[StorageKey] != currentBonfiresInfo)
+            App.Client?.CurrentSession?.DataStorage[StorageKey].GetAsync<long>().ContinueWith(val => { 
+                if (val.IsCompleted && val.Result != currentBonfiresInfo)
                 {
                     App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or(currentBonfiresInfo);
-                    UpdateBonfiresFromServer(App.Client.CurrentSession.DataStorage[StorageKey]);
+                    App.Client.CurrentSession.DataStorage[StorageKey].GetAsync<long>().ContinueWith(val2 =>
+                    {
+                        if (val.IsCompleted)
+                            UpdateBonfiresFromServer(val2.Result);
+                    });
                 }
-            }
+            });
         }
 
         internal static CancellationTokenSource ctsource = new CancellationTokenSource();

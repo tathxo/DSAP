@@ -750,8 +750,9 @@ namespace DSAP.Helpers
             Array.Copy(shopLineupParamStruct.ParamBytes, copyentry.paramOffset, parambytes, 0, parambytes.Length);
             Array.Copy(BitConverter.GetBytes(312), 0, parambytes, ShopLineupParam.EQUIP_ID, sizeof(int)); // equip id for transient curse
             parambytes[ShopLineupParam.EQUIP_TYPE] = (byte)3; // equip type = "good"
-            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, ShopLineupParam.COST, sizeof(int)); // value = 1500 souls
-
+            Array.Copy(BitConverter.GetBytes(1500), 0, parambytes, ShopLineupParam.COST, sizeof(int)); // value = 1500 soul
+            Array.Copy(BitConverter.GetBytes(-1), 0, parambytes, ShopLineupParam.EVENT_FLAG, sizeof(int)); // reset event flag
+            Array.Copy(BitConverter.GetBytes((short)0), 0, parambytes, ShopLineupParam.SELL_QUANTITY, sizeof(short)); // set "unlimited number" can be purchased
             shopLineupParamStruct.AddParam(2103, parambytes, Encoding.ASCII.GetBytes("[AP]+transient curses"));
             Log.Logger.Debug("Added transient curses to Rickert's shop");
 

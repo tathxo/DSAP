@@ -812,5 +812,161 @@ namespace DSAP.Helpers
                 App.Client.AddOverlayMessage($"{tpCommand} teleport failed - player has not killed {bossName}.");
             }
         }
+
+        /*  ----------Code To Emulate--------------
+            sub rsp,0x30
+            mov rcx,0
+            mov edx,[entity] (12345678)
+            mov r8d,[animation] (1234)
+            xor r9b,r9b
+            mov byte ptr [RSP + 20],0x0
+            movabs r14,0x1404867e0
+            call r14
+            add rsp,0x30
+            ret
+        */
+        /*  generated machine code/asm
+            0:  48 83 ec 30             sub    rsp,0x30
+            4:  48 c7 c1 00 00 00 00    mov    rcx,0x0
+            b:  ba 00 00 00 00          mov    edx,0x0
+            10: 41 b8 00 00 00 00       mov    r8d,0x0
+            16: 45 30 c9                xor    r9b,r9b
+            19: c6 44 24 14 00          mov    BYTE PTR [rsp+0x14],0x0
+            1e: 49 be e0 67 48 40 01    movabs r14,0x140480700
+            25: 00 00 00 
+            28: 41 ff d6                call   r14
+            2b: 48 83 c4 30             add    rsp,0x30
+            2f: c3                      ret
+         */
+        internal static byte[] PlayAnimation(int entity, int animation)
+        {
+            byte[] x = new byte[] {
+                0x48, 0x83, 0xec, 0x38,                   // sub    rsp,0x38
+                0x48, 0xc7, 0xc1, 0x00, 0x00, 0x00, 0x00, // mov    rcx,0x0
+                0xba, 0x00, 0x00, 0x00, 0x00,             // mov    edx,0x0 <- fill with entity
+                0x41, 0xb8, 0x00, 0x00, 0x00, 0x00,       // mov    r8d,0x0 < - fill with animation
+                0x45, 0x30, 0xc9,                         // xor    r9b,r9b
+                0xc6, 0x44, 0x24, 0x14, 0x00,             // mov    BYTE PTR [rsp+0x14],0x0
+                // experimental
+                0x48, 0xb9, 0xb0, 0xb1, 0xc7, 0x41, 0x01, 0x00, 0x00, 0x00, // movabs RCX,0x141c7b1b0 (DbgEvent_Global_obj)
+                0x48, 0x8b, 0x09,                                     // mov rcx, qword ptr [rcx]
+                //
+                0x49, 0xbe, 0x00, 0x07, 0x48, 0x40, 0x01, // movabs r14,0x140480700
+                0x00, 0x00, 0x00,
+                0x41, 0xff, 0xd6,                         // call   r14
+                0x48, 0x83, 0xc4, 0x38,                   // add    rsp,0x38
+                0xc3,                                     // ret
+            };
+            Array.Copy(BitConverter.GetBytes(entity), 0, x, 12, sizeof(int));
+            Array.Copy(BitConverter.GetBytes(animation), 0, x, 18, sizeof(int));
+
+            return x;
+        }
+        /*  ----------Code To Emulate--------------
+            // This successfully:
+            //   A) removes the item bag sfx for the location, and
+            //   B) moves its interact position (at 0x30[float[3]]) to [0,-20,0] (could instead have toggled off item bag + 0x48 [x40]), 
+            //  but it does NOT:
+            //   1) set item pickup flag 
+            //   2) open chests (or set chest flag open)
+             mov rdx,0
+             movabs rcx,0x141c7a0c8
+             mov rcx,qword ptr[rcx]
+             test rcx,rcx
+             jz NOTFOUND
+
+             mov rcx,qword ptr[rcx+0x48]
+
+            LOOP:
+             TEST rcx,rcx
+             jz NOTFOUND
+             cmp dword ptr [rcx + 0x28],edx
+             je FOUND
+             mov rcx,qword ptr[rcx+8]
+             jmp LOOP
+ 
+            FOUND:
+             mov dword ptr [rcx+0x30],0x0
+             mov dword ptr [rcx+0x34],0x0000A0C1
+             mov dword ptr [rcx+0x38],0x0
+             mov rdx,rcx
+             movabs r14,0x1403f8df0
+             call r14
+             mov rax,0
+             ret
+
+            NOTFOUND:
+             mov rax,4
+             ret
+
+        */
+        /*  generated machine code/asm
+            0:  48 c7 c2 00 00 00 00    mov    rdx,0x0
+            7:  48 b9 c8 a0 c7 41 01    movabs rcx,0x141c7a0c8
+            e:  00 00 00 
+            11: 48 8b 09                mov    rcx,QWORD PTR [rcx]
+            14: 48 85 c9                test   rcx,rcx
+            17: 74 41                   je     5a <NOTFOUND>
+            19: 48 8b 49 48             mov    rcx,QWORD PTR [rcx+0x48]
+
+            000000000000001d <LOOP>:
+            1d: 48 85 c9                test   rcx,rcx
+            20: 74 38                   je     5a <NOTFOUND>
+            22: 39 51 28                cmp    DWORD PTR [rcx+0x28],edx
+            25: 74 06                   je     2d <FOUND>
+            27: 48 8b 49 08             mov    rcx,QWORD PTR [rcx+0x8]
+            2b: eb f0                   jmp    1d <LOOP>
+
+            000000000000002d <FOUND>:
+            2d: c7 41 30 00 00 00 00    mov    DWORD PTR [rcx+0x30],0x0
+            34: c7 41 34 c1 a0 00 00    mov    DWORD PTR [rcx+0x34],0xa0c1
+            3b: c7 41 38 00 00 00 00    mov    DWORD PTR [rcx+0x38],0x0
+            42: 48 89 ca                mov    rdx,rcx
+            45: 49 be f0 8d 3f 40 01    movabs r14,0x1403f8df0
+            4c: 00 00 00 
+            4f: 41 ff d6                call   r14
+            52: 48 c7 c0 00 00 00 00    mov    rax,0x0
+            59: c3                      ret
+
+            000000000000005a <NOTFOUND>:
+            5a: 48 c7 c0 04 00 00 00    mov    rax,0x4
+            61: c3                      ret
+         */
+        internal static byte[] RemoveItemBag(int flag)
+        {
+            byte[] x = new byte[] { 
+                0x48, 0xC7, 0xC2, 0x00, 0x00, 0x00, 0x00,
+                0x48, 0xB9, 0xC8, 0xA0, 0xC7, 0x41, 0x01, 0x00, 0x00, 0x00, 
+                0x48, 0x8B, 0x09, 
+
+                0x48, 0x85, 0xC9, 
+                0x74, 0x41, 
+                0x48, 0x8B, 0x49, 0x48, 
+                0x48, 0x85, 0xC9, 
+                0x74, 0x38, 
+                0x39, 0x51, 0x28, 
+                0x74, 0x06, 
+                0x48, 0x8B, 0x49, 0x08, 
+                0xEB, 0xF0,
+
+                0xc7, 0x41, 0x30, 0x00, 0x00, 0x00, 0x00,
+                0xc7, 0x41, 0x34, 0xc1, 0xa0, 0x00, 0x00,
+                0xc7, 0x41, 0x38, 0x00, 0x00, 0x00, 0x00,
+                0x48, 0x89, 0xCA, 
+                0x49, 0xBE, 0xf0, 0x8d, 0x3F, 0x40, 0x01, 0x00, 0x00, 0x00, 
+                0x41, 0xFF, 0xD6, 
+                0x48, 0xC7, 0xC0, 0x02, 0x00, 0x00, 0x00, 
+                0xC3, 
+                
+                0x48, 0xC7, 0xC0, 0x04, 0x00, 0x00, 0x00, 
+                0xC3 };
+
+            // debugging: jmp to 1403f8e7e
+            //                 0x49, 0xBE, 0x7e, 0x8e, 0x3F, 0x40, 0x01, 0x00, 0x00, 0x00, 
+            //                 0x41, 0xFF, 0xD6, 
+
+            Array.Copy(BitConverter.GetBytes(flag), 0, x, 3, sizeof(int));
+            return x;
+        }
     }
 }

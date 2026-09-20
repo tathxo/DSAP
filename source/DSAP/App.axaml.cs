@@ -471,6 +471,60 @@ public partial class App : Application
             Log.Logger.Information($"Soul multiplier is {(sm / 100.0):P0}");
             Log.Logger.Information($"Weight multiplier is {(wm / 100.0):P0}");
         }
+#if DEBUG
+        else if (command.StartsWith("/item"))
+        {
+
+            string[] cmdparts = command.Split(" ");
+            int flag = 51020010;
+            if (cmdparts.Length >= 2)
+            {
+                flag = Int32.Parse(cmdparts[1]);
+            }
+            RemoveItemBag(flag);
+        }
+        else if (command.StartsWith("/anim"))
+        {
+
+            string[] cmdparts = command.Split(" ");
+            int entity = 1401100;
+            int animation = 0;
+            if (cmdparts.Length >= 3)
+            {
+                entity = Int32.Parse(cmdparts[1]);
+                animation = Int32.Parse(cmdparts[2]);
+            }
+            PlayAnimation(entity, animation);
+        }
+        else if (command.StartsWith("/obj"))
+        {
+            ulong WorldObjManImp = Memory.ReadULong(0x141c75dd8);
+            int areacount = Memory.ReadInt(WorldObjManImp + 0x18);
+            ulong areaObjBase = Memory.ReadULong(WorldObjManImp + 0x20);
+            for (ulong i = 0; i < (ulong) areacount; i++)
+            {
+                ulong WorldAreaObj = i * 0x20 + areaObjBase;
+                int blockcount = Memory.ReadInt(WorldAreaObj + 0x10);
+                ulong BlockObjBase = Memory.ReadULong(WorldAreaObj + 0x18);
+                for (ulong j = 0; j < (ulong) blockcount; j++)
+                {
+                    ulong WorldBlockObj = j * 0x160 + BlockObjBase;
+                    int objcount = Memory.ReadInt(WorldBlockObj + 0x78);
+                    ulong objbase = Memory.ReadULong(WorldBlockObj + 0x80);
+                    for (ulong k = 0; k < (ulong) objcount; k++)
+                    {
+                        int entityid = Memory.ReadInt(objbase + 8 * k);
+                        int objid = Memory.ReadInt(objbase + 8 * k + 4);
+
+                        byte womi_blk = (byte) ((objid >> 0x14) & 0x000000ff);
+                        int objidx = (objid & 0xfffff);
+                        ulong handle = Memory.ReadULong(Memory.ReadULong(WorldObjManImp + 0x30) + (ulong)womi_blk * 0x160 + 0x50) + (ulong)objidx * 0x120;
+                        Log.Logger.Information($"{i};{j};{k}:{entityid},{objid:x},{handle:x}");
+                    }
+                }
+            }
+        }
+#endif
 
         //else if (command.StartsWith("/get")) // for debugging
         //{
@@ -483,6 +537,26 @@ public partial class App : Application
         }
 
     }
+
+    public static void RemoveItemBag(int flag)
+    {
+        var command = MiscHelper.RemoveItemBag(flag);
+
+        var result = Memory.ExecuteCommand(command);
+
+        Log.Logger.Verbose($"Removed item with flag: {flag}, {result}");
+
+    }
+    private void PlayAnimation(int entity, int animation)
+    {
+        var command = MiscHelper.PlayAnimation(entity, animation);
+
+        var result = Memory.ExecuteCommand(command);
+
+        Log.Logger.Information($"Playing animation: {entity}:{animation}");
+
+    }
+
     // Process the command which will list all of a specific type of lock that is active.
     // Based on the list of "relevant" EmkControllers (built on connect based on which of our DSR items are in the pool)
     private void ProcessListLocksCommand(string shortCmd, string fullCmd, string displayableEventType, Func<DsrEventType, bool> condition)

@@ -283,8 +283,13 @@ namespace DSAP.Helpers
                             }
                             PisacaSafety(flags);
                             PWDAWarpSafety(flags);
+                            CollectSafety(flags);
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
+                        }
+                        else
+                        {
+                            cached_AllLocationsChecked_count = -1;
                         }
                         oldFlags = flags;
                         await Task.Delay(1000);
@@ -543,6 +548,90 @@ namespace DSAP.Helpers
                     App.SetEventFlag(706, true); // reset "can warp" to true
                 });
             }
+        }
+
+        // for "collect" and for seamless co-op (and for other saves) items can be collected from the world "for you".
+        // requires more testing for grouped items and chained items (e.g. armor sets, armor+weapon lots, etc)
+        static int cached_AllLocationsChecked_count = 0;
+        private static void CollectSafety(byte[] flags)
+        {
+            var checkedLocs = App.Client.CurrentSession.Locations.AllLocationsChecked;
+            if (checkedLocs.Count() == cached_AllLocationsChecked_count) // end early if no change
+                return;
+            cached_AllLocationsChecked_count = checkedLocs.Count();
+
+            var uncheckedLocs = App.Client.CurrentSession.Locations.AllMissingLocations;
+
+            var checkedItemlots = LocationHelper.GetItemLotFlags()
+                .Where(x => checkedLocs.Contains(x.Id)).GroupBy(x => x.Flag).ToDictionary(x => x.First().Flag); // location is checked
+
+            var uncheckedItemLots = LocationHelper.GetItemLotFlags()
+                .Where(x => uncheckedLocs.Contains(x.Id)).ToList().GroupBy(x=>x.Flag).ToDictionary(x => x.First().Flag); // location is "missing"
+
+            int numchecked = 0;
+            int numremoved = 0;
+            //var shopflags = LocationHelper.GetShopLineupFlags(); // for debugging
+            foreach (var location in checkedItemlots)
+            {
+                int thisflag = location.Key;
+                if (!isFlagOnInBuffer(flags, thisflag))
+                {
+                    numchecked++;
+                    foreach(var loc1 in location.Value)
+                        Log.Logger.Verbose($"{loc1.Name} collected by server or another player - checking eligibility.");
+
+                    if (uncheckedItemLots.ContainsKey(thisflag)) // unchecked item on same flag, don't remove
+                        continue;
+
+                    if (uncheckedItemLots.ContainsKey(thisflag + 1)) // unchecked item on next flag, don't remove
+                        continue;
+                    if (uncheckedItemLots.ContainsKey(thisflag - 1)) // unchecked item on prev flag, don't remove
+                        continue;
+
+                    if (checkedItemlots.ContainsKey(thisflag + 1) && uncheckedItemLots.ContainsKey(thisflag + 2)) // unchecked item on next +2 flag, don't remove
+                        continue;
+                    if (checkedItemlots.ContainsKey(thisflag - 1) && uncheckedItemLots.ContainsKey(thisflag - 2)) // unchecked item on prev -2 flag, don't remove
+                        continue;
+
+                    numremoved++;
+                    Task.Run(() =>
+                    {
+                        Task.Delay(100);
+                        App.RemoveItemBag(thisflag);
+                        App.SetEventFlag(thisflag, true);
+                    });
+                }
+            }
+            Log.Logger.Debug($"collect: # checked: {numchecked}, # removed: {numremoved}");
+
+
+            // now do the same thing for shop items
+            var checkedShoplots = LocationHelper.GetShopLineupFlags()
+                .Where(x => checkedLocs.Contains(x.Id)).GroupBy(x => x.Flag).ToDictionary(x => x.First().Flag); // location is checked
+
+            numchecked = 0;
+            numremoved = 0;
+            foreach (var location in checkedShoplots)
+            {
+                int thisflag = location.Key;
+                if (!isFlagOnInBuffer(flags, thisflag))
+                {
+                    numchecked++;
+                    foreach (var loc1 in location.Value)
+                        Log.Logger.Verbose($"{loc1.Name} collected by server or another player - checking eligibility.");
+
+                    if (uncheckedItemLots.ContainsKey(thisflag)) // unchecked item on same flag, don't remove
+                        continue;
+
+                    numremoved++;
+                    Task.Run(() =>
+                    {
+                        Task.Delay(100);
+                        App.SetEventFlag(thisflag, true);
+                    });
+                }
+            }
+            Log.Logger.Debug($"shop collect: # checked: {numchecked}, # removed: {numremoved}");
         }
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {

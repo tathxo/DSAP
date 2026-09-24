@@ -1,12 +1,16 @@
-﻿using Archipelago.Core.Util;
+﻿using Archipelago.Core;
+using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
 using DSAP.Models;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using static DSAP.Enums;
 
 namespace DSAP.Helpers
 {
@@ -284,12 +288,16 @@ namespace DSAP.Helpers
                             PisacaSafety(flags);
                             PWDAWarpSafety(flags);
                             CollectSafety(flags);
+                            BonfireInjectorHelper.PollBonfires(flags);
+                            PollBosses(flags);
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
                         else
                         {
                             cached_AllLocationsChecked_count = -1;
+                            BonfireInjectorHelper.ResetKnownBonfires();
+                            cached_local_boss_pflags = 0;
                         }
                         oldFlags = flags;
                         await Task.Delay(1000);
@@ -413,7 +421,7 @@ namespace DSAP.Helpers
                 }
             }
         }
-        private static bool isFlagOnInBuffer(byte[] flagsBuffer, int flagnum)
+        public static bool isFlagOnInBuffer(byte[] flagsBuffer, int flagnum)
         {
             var (flagbyte, flagbit) = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum);
             if (((flagsBuffer[flagbyte] >> flagbit) & 0x01) == 0x01)
@@ -632,6 +640,146 @@ namespace DSAP.Helpers
                 }
             }
             Log.Logger.Debug($"shop collect: # checked: {numchecked}, # removed: {numremoved}");
+        }
+        static string BossStorageKey = "";
+        public static long serverBosses = 0;
+        /// <summary>
+        /// Start tracking boss statuses
+        /// </summary>
+        /// <returns></returns>
+        public static void TrackBossDefeatsAsync()
+        {
+            if (App.Client?.CurrentSession?.ConnectionInfo == null)
+                return;
+            ArchipelagoClient Client = App.Client;
+            BossStorageKey = $"dsr_bosses_{Client.CurrentSession.ConnectionInfo.Team}_{Client.CurrentSession.ConnectionInfo.Slot}";
+            Client.CurrentSession.DataStorage[BossStorageKey].Initialize(0);
+            Client.CurrentSession.DataStorage[BossStorageKey].OnValueChanged -= UpdateBossesFromServer;
+            Client.CurrentSession.DataStorage[BossStorageKey].OnValueChanged += UpdateBossesFromServer;
+
+            Client.CurrentSession.DataStorage[BossStorageKey].GetAsync().ContinueWith(t => {
+                serverBosses = (long)t.Result;
+            });
+        }
+        private static void UpdateBossesFromServer(JToken originalValue, JToken newValue, Dictionary<string, JToken> additionalArguments)
+        {
+            UpdateBossesFromServer((long)newValue);
+        }
+        private static void UpdateBossesFromServer(long newValue)
+        {
+            serverBosses = (long)newValue;
+        }
+        // Bosses -> polling method
+        static long cached_local_boss_pflags = 0;
+        private static void PollBosses(byte[] flags)
+        {
+            // Get 'cached local bonfire long', and check the '0' fields' flags; turn on if they are set.
+            // Then, compare it to the server bonfires. For any on in server and not in local, turn it on
+            var originalServerBosses = serverBosses;
+
+            long local_boss_pflags = cached_local_boss_pflags;
+
+            if (App.DSOptions.Goal == DSGoal.all_bosses)
+            {
+                var bossLocs = LocationHelper.GetBossFlags();
+                Dictionary<int, BossFlag> bossmap = bossLocs.ToDictionary(x => x.PersistId, x => x);
+
+                for (int i = 1; i < 32; i++)
+                {
+                    if (((local_boss_pflags >> (i - 1)) & 0x00000001) == 0) // if (i-1) bit is off
+                    {
+                        if (bossmap.TryGetValue(i, out var boss)) // get the corresponding bonfire
+                        {
+                            // if the bonfire flag is on, mark the pflag on
+                            if (isFlagOnInBuffer(flags, boss.Flag))
+                            {
+                                local_boss_pflags |= (long)1 << (i - 1);
+                                Log.Logger.Information($"Boss defeated: {boss.Name}");
+                                continue;
+                            }
+
+                            // if the pflag is on in the server flags, turn on the flag and or it
+                            if (((originalServerBosses >> (i - 1)) & 0x00000001) == 1) // if server i-1 bit is on
+                            {
+                                //App.SetEventFlag(boss.Flag, true);
+                                local_boss_pflags |= (long)1 << (i - 1);
+                                Log.Logger.Information($"Boss defeated remotely: {boss.Name}");
+                            }
+                        }
+                    }
+                }
+                if (local_boss_pflags != cached_local_boss_pflags) // if flags changed
+                {
+                    // if goal was reached
+                    if ((local_boss_pflags & App.DSOptions.RequiredBosses) == App.DSOptions.RequiredBosses)
+                    {
+                        Log.Logger.Information($"Sending Goal for All Bosses");
+                        App.SendGoal();
+                    }
+                    // if goal wasn't reached, calculate how close they are
+                    else
+                    {
+                        int bosses_completed = 0;
+                        int bosses_total = 0;
+                        for (int i = 1; i < 32; i++)
+                        {
+                            if (((App.DSOptions.RequiredBosses >> (i-1)) & 0x01) == 1)
+                            {
+                                bosses_total++;
+                                if (((local_boss_pflags >> (i-1)) & 0x01) == 1)
+                                    bosses_completed++;
+                            }
+                        }
+                        Log.Logger.Information($"Bosses completed/total = {bosses_completed}/{bosses_total}");
+                    }
+                }
+                // if server doesn't match local, "or" them.
+                if (local_boss_pflags != originalServerBosses)
+                {
+                    Task.Run(() =>
+                    {
+                        if (BossStorageKey != "")
+                            App.Client.CurrentSession.DataStorage[BossStorageKey] += Bitwise.Or(local_boss_pflags);
+                    });
+                }
+                cached_local_boss_pflags = local_boss_pflags;
+            }
+            
+        }
+        // just goalcheck all bosses
+        internal static bool GoalCheckAllBosses()
+        {
+            var bossLocs = LocationHelper.GetBossFlags();
+            Dictionary<int, BossFlag> bossmap = bossLocs.ToDictionary(x => x.PersistId, x => x);
+            // if goal was reached
+            if ((cached_local_boss_pflags & App.DSOptions.RequiredBosses) == App.DSOptions.RequiredBosses)
+            {
+                Log.Logger.Information($"Sending Goal for All Bosses");
+                App.SendGoal();
+                return true;
+            }
+            // if goal wasn't reached, calculate how close they are
+            else
+            {
+                int bosses_completed = 0;
+                int bosses_total = 0;
+                for (int i = 1; i < 32; i++)
+                {
+                    if (((App.DSOptions.RequiredBosses >> (i - 1)) & 0x01) == 1)
+                    {
+                        bosses_total++;
+                        if (((cached_local_boss_pflags >> (i - 1)) & 0x01) == 1)
+                        {
+                            bosses_completed++;
+                            Log.Logger.Information($"[x] {bossmap[i].Name}");
+                        }
+                        else
+                            Log.Logger.Information($"[_] {bossmap[i].Name}");
+                    }
+                }
+                Log.Logger.Information($"Bosses completed/total = {bosses_completed}/{bosses_total}");
+                return false;
+            }
         }
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {

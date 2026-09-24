@@ -14,7 +14,7 @@ namespace DSAP.Helpers
 {
     public class BonfireInjectorHelper
     {
-        private static string StorageKey = "";
+        public static string StorageKey = "";
         // probably builds the list of entries
         private const ulong hook1_loc = 0x1406ed2d6;
         private const int hook1_length = 14;
@@ -79,14 +79,6 @@ namespace DSAP.Helpers
 
                 Memory.FreeMemory((nint)old_bonfire_struct); // free old struct
             }
-        }
-        internal static async Task InitBonfireStorage()
-        {
-            if (App.Client?.CurrentSession?.ConnectionInfo == null)
-                return;
-
-            StorageKey = $"bonfires_{App.Client.CurrentSession.ConnectionInfo.Team}_{App.Client.CurrentSession.ConnectionInfo.Slot}";
-            App.Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
         }
         /// <summary>
         /// Build a new bonfire area structure and stub zone, and insert hooks
@@ -301,154 +293,91 @@ namespace DSAP.Helpers
             hooks_set = true;
         }
 
-        public static void setBonfireByLoc(int locid)
-        {
-            List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
-            BonfireWarp bonfire = bonfirelocs.Find(x => x.Id == locid);
-            if (bonfire != null)
-            {
-                if (((ulong)(long)(App.Client.CurrentSession.DataStorage[StorageKey]) & ((ulong)1 << (bonfire.PersistId - 1))) == 0)
-                {
-                    Log.Logger.Debug($"Turning on bit: {bonfire.PersistId - 1}, {bonfire.Name}");
-                    currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
-                    App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or((long)1 << (bonfire.PersistId - 1));
-                    givePlayerLordvesselFlag();
-                }
-            }
-            else
-            {
-                Log.Logger.Warning($"Warning: Did not find bonfire with id {locid} in bonfire list");
-            }
-        }
-
-        public static void givePlayerLordvesselFlag()
-        {
-            // Then, if player has the option to always have warping available turned on, and hasn't unlocked warping, unlock it with a cheeky message change
-            if (App.DSOptions.CanWarpWithoutLordvessel)
-            {
-                var canwarp_eventflag = 710; // 710 is the lordvessel warp flag. Future: maybe turn on 717 (emergency warp) instead, until player has lordvessel, to prevent Frampt nomming & Ingward granting Key To the Seal?
-                var baseAddress = AddressHelper.GetEventFlagsOffset();
-                var canwarp_address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(canwarp_eventflag).Item1;
-                var canwarp_bit = AddressHelper.GetEventFlagAddrAndByteOffset(canwarp_eventflag).Item2;
-                if (!Memory.ReadBit(canwarp_address, canwarp_bit)) // if it's not already set
-                {
-                    // change "By the power of the Lordvessel, [etc]" -> "By the power of Archipelago"
-                    MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BANNERS, x => false);
-                    msgManStruct.UpdateMsg(10010620, "By the power of the multiworld, you may now warp between bonfires");
-                    MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BANNERS);
-
-                    // unlock warping
-                    Memory.WriteBit(canwarp_address, canwarp_bit, true);
-                }
-            }
-        }
-
         /// <summary>
         /// Start tracking bonfire list status
         /// </summary>
         /// <returns></returns>
         public static void TrackLitBonfiresAsync()
         {
-
+            if (App.Client?.CurrentSession?.ConnectionInfo == null)
+                return;
             ArchipelagoClient Client = App.Client;
+            StorageKey = $"bonfires_{Client.CurrentSession.ConnectionInfo.Team}_{Client.CurrentSession.ConnectionInfo.Slot}";
+            Client.CurrentSession.DataStorage[StorageKey].Initialize(0);
             Client.CurrentSession.DataStorage[StorageKey].OnValueChanged -= UpdateBonfiresFromServer;
             Client.CurrentSession.DataStorage[StorageKey].OnValueChanged += UpdateBonfiresFromServer;
-        }
-        internal static async void ResetKnownBonfires()
-        {
-            ctsource.Cancel();
-            currentBonfiresInfo = 0;
-            while (!MiscHelper.IsInGame() || !App.SaveidSet) // player is not in game
-            {
-                await Task.Delay(TimeSpan.FromSeconds(1)); // wait a second between checks
-            }
 
-            // only called once in game
-            foreach (var bonfire in App.AllowedBonfireWarps)
-            {
-                if (App.CheckEventFlag(bonfire.Flag) == 1)
-                {
-                    currentBonfiresInfo |= (long)1 << (bonfire.PersistId - 1);
-                }
-            }
-            App.Client?.CurrentSession?.DataStorage[StorageKey].GetAsync<long>().ContinueWith(val => { 
-                if (val.IsCompleted && val.Result != currentBonfiresInfo)
-                {
-                    App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or(currentBonfiresInfo);
-                    App.Client.CurrentSession.DataStorage[StorageKey].GetAsync<long>().ContinueWith(val2 =>
-                    {
-                        if (val.IsCompleted)
-                            UpdateBonfiresFromServer(val2.Result);
-                    });
-                }
+            Client.CurrentSession.DataStorage[StorageKey].GetAsync().ContinueWith(t => {
+                serverBonfires = (long)t.Result;
             });
         }
-
-        internal static CancellationTokenSource ctsource = new CancellationTokenSource();
-        static long currentBonfiresInfo = 0;
-        static DateTime LatestUpdate = DateTime.MinValue;
-        private static async void UpdateBonfiresFromServer(JToken originalValue, JToken newValue, Dictionary<string, JToken> additionalArguments)
+        public static long serverBonfires = 0;
+        private static void UpdateBonfiresFromServer(JToken originalValue, JToken newValue, Dictionary<string, JToken> additionalArguments)
         {
             UpdateBonfiresFromServer((long)newValue);
         }
-        private static async void UpdateBonfiresFromServer(long newValue)
+        private static void UpdateBonfiresFromServer(long newValue)
         {
-            CancellationToken ctoken = ctsource.Token;
-            // also pass in time of creation?
-            var createdTime = DateTime.Now;
-            LatestUpdate = createdTime;
-            await Task.Run(async () =>
+            serverBonfires = (long)newValue;
+        }
+
+        // Bonfires -> polling method
+        static long cached_local_bonfire_pflags = 0;
+        internal static void PollBonfires(byte[] flags)
+        {
+            // Get 'cached local bonfire long', and check the '0' fields' flags; turn on if they are set.
+            // Then, compare it to the server bonfires. For any on in server and not in local, turn it on
+            long originalServerBonfires = BonfireInjectorHelper.serverBonfires;
+
+            long local_bonfire_pflags = cached_local_bonfire_pflags;
+
+            List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
+            Dictionary<int, BonfireWarp> bonfiremap = bonfirelocs.ToDictionary(x => x.PersistId, x => x);
+            for (int i = 1; i < 64; i++)
             {
-                if (newValue != currentBonfiresInfo) // if bonfire list has changed
+                if (((local_bonfire_pflags >> (i - 1)) & 0x00000001) == 0) // if (i-1) bit is off
                 {
-                    Log.Logger.Debug($"Updating from server, {currentBonfiresInfo} to {newValue | currentBonfiresInfo}");
-                    List<BonfireWarp> bonfirelocs = App.AllowedBonfireWarps;
-                    Dictionary<int, BonfireWarp> bonfiremap = bonfirelocs.ToDictionary(x => x.PersistId, x => x);
-                    var saved_conninfo = App.Client.CurrentSession.ConnectionInfo;
-
-                    while (!MiscHelper.IsInGame() || !App.SaveidSet) // player is not in game
+                    if (bonfiremap.TryGetValue(i, out var bonfire)) // get the corresponding bonfire
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(1)); // wait a second between checks
-
-                        if (LatestUpdate > createdTime) // a later task like this exists - Skip this one.
-                            return;
-                        if (ctoken.IsCancellationRequested)
-                            return;
-                    }
-
-                    // player is now in game, in a valid save, on the same connection.
-                    long difference = ((long)newValue) & (currentBonfiresInfo ^ 0x7fffffffffffffff); // get all flags that are on in the new value and not in our cached value
-
-                    int diffcount = 0;
-                    for (int i = 1; i <= 64; i++)
-                    {
-                        if (((difference >> (i - 1)) & 0x00000001) == 1) // if (i-1) bit is on
+                        // if the bonfire flag is on, mark the pflag on
+                        if (AddressHelper.isFlagOnInBuffer(flags, bonfire.Flag))
                         {
-                            if (bonfiremap.TryGetValue(i, out var bonfire)) // get the corresponding bonfire
-                            {
-                                diffcount++;
-                                // check event flag. If it's off, set it on and put a message out
-                                // then update currentBonfiresInfo
-                                if (App.CheckEventFlag(bonfire.Flag) == 0)
-                                {
-                                    App.SetEventFlag(bonfire.Flag, true);
-                                    Log.Logger.Information($"Unlocked bonfire {bonfire.Name}");
-                                }
-                                currentBonfiresInfo |= ((long)1 << (i - 1));
-                            }
+                            local_bonfire_pflags |=((long)1 << (i - 1));
+                            Log.Logger.Verbose($"Bonfire lit:{bonfire.Name}");
+                            continue;
+                        }
+
+                        // if the pflag is on in the server flags, turn on the flag and or it
+                        if (((originalServerBonfires >> (i - 1)) & 0x00000001) == 1) // if server i-1 bit is on
+                        {
+                            App.SetEventFlag(bonfire.Flag, true);
+                            local_bonfire_pflags |= ((long)1 << (i - 1));
+                            Log.Logger.Verbose($"Bonfire lit remotely:{bonfire.Name}");
                         }
                     }
-                    if (diffcount > 0)
-                    {
-                        Log.Logger.Debug($"{diffcount} bonfires updated");
-                        givePlayerLordvesselFlag();
-                    }
                 }
-                else
+            }
+            // set lordvessel warp flag on if "warp without lordvessel" is on
+            if (local_bonfire_pflags != 0 && App.DSOptions.CanWarpWithoutLordvessel && !AddressHelper.isFlagOnInBuffer(flags, 710))
+            {
+                App.SetEventFlag(710, true);
+            }
+
+            // if server doesn't match local, "or" them.
+            if (local_bonfire_pflags != originalServerBonfires)
+            {
+                Log.Logger.Verbose($"bonfire flags local {local_bonfire_pflags} != {originalServerBonfires} server");
+                Task.Run(() =>
                 {
-                    Log.Logger.Debug($"Unchanged bonfire string {newValue} == {currentBonfiresInfo}");
-                }
-            });
+                    if (StorageKey != "")
+                        App.Client.CurrentSession.DataStorage[StorageKey] += Bitwise.Or(local_bonfire_pflags);
+                });
+            }
+            cached_local_bonfire_pflags = local_bonfire_pflags;
+        }
+        internal static void ResetKnownBonfires()
+        {
+            cached_local_bonfire_pflags = 0;
         }
     }
 }

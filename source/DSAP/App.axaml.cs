@@ -712,35 +712,7 @@ public partial class App : Application
             }
             else if (DSOptions.Goal == DSGoal.all_bosses)
             {
-                var bossLocs = LocationHelper.GetBossFlagLocations();
-                bossLocs.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-                int total_bosses = bossLocs.Count;
-                int completed_bosses = 0;
-                foreach (var boss in bossLocs)
-                {
-                    if (boss.Check())
-                    {
-                        completed_bosses++;
-                    }
-                }
-                if (completed_bosses == total_bosses)
-                {
-                    Log.Logger.Information($"Sending Goal for All Bosses");
-                    sendingGoal = true;
-                }
-                else
-                {
-                    Client.AddOverlayMessage($"You have defeated {completed_bosses}/{total_bosses} bosses.");
-                    Log.Logger.Information($"You have defeated {completed_bosses}/{total_bosses} bosses.");
-                    foreach (var boss in bossLocs)
-                    {
-                        if (boss.Check())
-                            Log.Logger.Information($"[x] {boss.Name}");
-                        else
-                            Log.Logger.Information($"[_] {boss.Name}");
-                    }
-                }
+                AddressHelper.GoalCheckAllBosses();
             }
             else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
             {
@@ -1469,22 +1441,11 @@ public partial class App : Application
             if (will_popup)
                 AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
         }
- 
-        // if it's the bonfire list of locs
-        if (App.AllowedBonfireWarps.ToDictionary(x=> x.Id, x => x).TryGetValue(locid, out var bonfire))
-        {
-            // run in another thread because this manipulates slot data, so it could deadlock on packet received
-            Task.Run(() =>
-            {
-                // send it to slotdata, to mark as "bonfires completed"
-                BonfireInjectorHelper.setBonfireByLoc(locid);
-            });
-        }
 
         Log.Logger.Debug($"Location Completed: {e.CompletedLocation.Name} at {e.CompletedLocation.Id}");
     }
 
-    private static void SendGoal()
+    internal static void SendGoal()
     {
         Task.Run(async () =>
         {
@@ -1982,9 +1943,6 @@ public partial class App : Application
         var watch = System.Diagnostics.Stopwatch.StartNew();
 
         SaveidSet = false;
-        BonfireInjectorHelper.TrackLitBonfiresAsync();
-        /* Initialize flag to off - to prevent receiving items until we have set the saveid */
-        BonfireInjectorHelper.ResetKnownBonfires();
 
         /* Make ready to receive items */
         /* If we haven't yet initialized the dictionary, do so. */
@@ -2018,8 +1976,9 @@ public partial class App : Application
             scoutedLocationInfo = await Client.CurrentSession.Locations.ScoutLocationsAsync(false, locids);
 
             await ApItemInjectorHelper.AddAPItems(scoutedLocationInfo);
-            await BonfireInjectorHelper.InitBonfireStorage();
+            BonfireInjectorHelper.TrackLitBonfiresAsync();
             await BonfireInjectorHelper.UpdateBonfires();
+            AddressHelper.TrackBossDefeatsAsync();
 
             HookHelper.InitPauseHook();
             

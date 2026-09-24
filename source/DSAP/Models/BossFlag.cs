@@ -8,5 +8,6 @@ namespace DSAP.Models
 {
     public class BossFlag : EventFlag
     {
+        public int PersistId { get; set; }
     }
 }

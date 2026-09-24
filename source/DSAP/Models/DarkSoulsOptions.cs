@@ -17,6 +17,7 @@ namespace DSAP.Models
         public uint apiver_build;
         // Game
         public Enums.DSGoal Goal {  get; set; }
+        public long RequiredBosses { get; set; }
         // QoL
         public bool WarpToAllBonfires { get; set; }
         public bool CanWarpWithoutLordvessel { get; set; }
@@ -128,6 +129,20 @@ namespace DSAP.Models
                 Goal = goal;
             else
                 Goal = Enums.DSGoal.gwyn;
+
+            if (Goal == Enums.DSGoal.all_bosses && RequiredBosses == 0)
+            {
+                RequiredBosses = 0x03FFFFFF; // all 26 bosses by default
+
+                if (!GetBool("include_pw") && (apiver_major > 0 || apiver_minor >= 3)) // no pw & version >= 0.3
+                {
+                    RequiredBosses &= (0xFFFFFFFF - (0x1 << 13 - 1)); // Remove Priscilla
+                }
+                if (!GetBool("include_dlc") && (apiver_major > 0 || apiver_minor >= 3)) // no dlc & version >= 0.3
+                {
+                    RequiredBosses &= (0xFFFFFFFF - (0xF << 23 - 1)); // Remove all 4 DLC bosses, Sanc Guardian -> Manus
+                }
+            }
 
             if (App.Client.Options.ContainsKey("ghost_difficulty") && Enum.TryParse(((JsonElement)App.Client.Options["ghost_difficulty"]).ToString(), out Enums.DSGhostDifficulty gd))
                 GhostDifficulty = gd;

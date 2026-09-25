@@ -360,6 +360,11 @@ namespace DSAP.Helpers
             // set lordvessel warp flag on if "warp without lordvessel" is on
             if (local_bonfire_pflags != 0 && App.DSOptions.CanWarpWithoutLordvessel && !AddressHelper.isFlagOnInBuffer(flags, 710))
             {
+                // change "By the power of the Lordvessel, [etc]" -> "By the power of the multiworld"
+                MsgManHelper.ReadMsgManStruct(out var msgManStruct, MsgManStruct.OFFSET_BANNERS, x => false);
+                msgManStruct.UpdateMsg(10010620, "By the power of the multiworld, you may now warp between bonfires");
+                MsgManHelper.WriteFromMsgManStruct(msgManStruct, MsgManStruct.OFFSET_BANNERS);
+
                 App.SetEventFlag(710, true);
             }
 

@@ -297,7 +297,7 @@ namespace DSAP.Helpers
                         {
                             cached_AllLocationsChecked_count = -1;
                             BonfireInjectorHelper.ResetKnownBonfires();
-                            cached_local_boss_pflags = 0;
+                            cached_local_boss_pflags = -1;
                         }
                         oldFlags = flags;
                         await Task.Delay(1000);
@@ -670,14 +670,22 @@ namespace DSAP.Helpers
             serverBosses = (long)newValue;
         }
         // Bosses -> polling method
-        static long cached_local_boss_pflags = 0;
+        static long cached_local_boss_pflags = -1;
         private static void PollBosses(byte[] flags)
         {
             // Get 'cached local bonfire long', and check the '0' fields' flags; turn on if they are set.
             // Then, compare it to the server bonfires. For any on in server and not in local, turn it on
             var originalServerBosses = serverBosses;
 
+            bool initial_load = false; // used to prevent message spam on reload
             long local_boss_pflags = cached_local_boss_pflags;
+            if (local_boss_pflags == -1)
+            {
+                initial_load = true;
+                local_boss_pflags = 0;
+            }
+                
+
 
             if (App.DSOptions.Goal == DSGoal.all_bosses)
             {
@@ -694,7 +702,8 @@ namespace DSAP.Helpers
                             if (isFlagOnInBuffer(flags, boss.Flag))
                             {
                                 local_boss_pflags |= (long)1 << (i - 1);
-                                Log.Logger.Information($"Boss defeated: {boss.Name}");
+                                if (!initial_load)
+                                    Log.Logger.Information($"Boss defeated: {boss.Name}");
                                 continue;
                             }
 
@@ -703,7 +712,8 @@ namespace DSAP.Helpers
                             {
                                 //App.SetEventFlag(boss.Flag, true);
                                 local_boss_pflags |= (long)1 << (i - 1);
-                                Log.Logger.Information($"Boss defeated remotely: {boss.Name}");
+                                if (!initial_load)
+                                    Log.Logger.Information($"Boss defeated remotely: {boss.Name}");
                             }
                         }
                     }
@@ -730,7 +740,8 @@ namespace DSAP.Helpers
                                     bosses_completed++;
                             }
                         }
-                        Log.Logger.Information($"Bosses completed/total = {bosses_completed}/{bosses_total}");
+                        if (!initial_load)
+                            Log.Logger.Information($"Bosses completed/total = {bosses_completed}/{bosses_total}");
                     }
                 }
                 // if server doesn't match local, "or" them.

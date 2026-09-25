@@ -143,6 +143,7 @@ namespace DSAP.Models
                     RequiredBosses &= (0xFFFFFFFF - (0xF << 23 - 1)); // Remove all 4 DLC bosses, Sanc Guardian -> Manus
                 }
             }
+            Log.Logger.Information($"req bosses = {RequiredBosses:X}, dlc {GetBool("include_dlc")}, pw {GetBool("include_dlc")}");
 
             if (App.Client.Options.ContainsKey("ghost_difficulty") && Enum.TryParse(((JsonElement)App.Client.Options["ghost_difficulty"]).ToString(), out Enums.DSGhostDifficulty gd))
                 GhostDifficulty = gd;

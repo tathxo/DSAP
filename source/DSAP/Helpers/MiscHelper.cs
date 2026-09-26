@@ -1,5 +1,6 @@
 ﻿using Archipelago.Core.Util;
 using DSAP.Models;
+using DynamicData.Aggregation;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -79,82 +80,6 @@ namespace DSAP.Helpers
             ulong newAddress = ptr;
             return ptr + (ulong)offset;
         }
-
-        /// <summary>
-        /// Build a mapping of the slot:locationid key to itemid:upg value based on info stored in slotdata from the server.
-        /// </summary>
-        /// <details>
-        /// This is used later when replacing or receiving items - to know if they should be ugpraded.
-        /// This is needed because we don't have an individual ApId per possible upgrade, but it is deterministic from the generate.
-        /// </details>
-        /// <returns></returns>
-        public static Dictionary<string, Tuple<int, string>> BuildSlotLocationToItemUpgMap(Dictionary<string, object> slotData, int currentSlot)
-        {
-            Dictionary<string, Tuple<int, string>> result = [];
-
-            if (App.DSOptions.UpgradedWeaponsPercentage == 0)
-            {
-                Log.Logger.Information($"Upgraded weapon percentage detected as 0, skipping weapon upgrades.");
-                return result;
-            }
-
-            /* Get itemsAddress, itemsId, and itemsUpgrades into lists */
-            List<string> itemsAddress = new List<string?>();
-            List<int?> itemsId = new List<int?>();
-            List<string?> itemsUpgrades = new List<string?>();
-
-            try
-            {
-                if (slotData.TryGetValue("itemsAddress", out object itemsAddress_temp))
-                {
-                    itemsAddress.AddRange(JsonSerializer.Deserialize<string?[]>(itemsAddress_temp.ToString()));
-                    if (slotData.TryGetValue("itemsId", out object itemsId_temp))
-                    {
-                        itemsId.AddRange(JsonSerializer.Deserialize<int?[]>(itemsId_temp.ToString()));
-                        if (slotData.TryGetValue("itemsUpgrades", out object itemsUpgrades_temp))
-                        {
-                            itemsUpgrades.AddRange(JsonSerializer.Deserialize<string[]>(itemsUpgrades_temp.ToString()));
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error($"exception creating upg map: {e.Message} {e.ToString()}");
-            }
-
-            if (itemsAddress.Count == 0 || itemsId.Count == 0 || itemsUpgrades.Count == 0
-             || itemsAddress.Count != itemsId.Count || itemsAddress.Count != itemsUpgrades.Count)
-            {
-                Log.Logger.Error("Cannot map item upgrades: itemsAddress, itemsId, itemsUpgrades count mismatch.");
-                Log.Logger.Error($"{itemsAddress.Count},{itemsId.Count},{itemsUpgrades.Count}");
-                App.Client.AddOverlayMessage("Cannot map item upgrades: itemsAddress, itemsId, itemsUpgrades count mismatch.");
-                App.Client.AddOverlayMessage($"{itemsAddress.Count},{itemsId.Count},{itemsUpgrades.Count}");
-            }
-            else
-            {
-                /* Iterate over each pair of entries in the pair of lists */
-                for (int i = 0; i < itemsAddress.Count; i++)
-                {
-                    string address = itemsAddress[i];
-                    int? id = itemsId[i];
-                    string? upgrade = itemsUpgrades[i];
-
-                    /* skip it if there's no item id, no upgrade info, and it doesn't have a location address */
-                    if (id.HasValue && upgrade != null && !address.EndsWith(":None")) 
-                    {
-                        /* Now processing each potential items with upgrades */
-                        /* key = address ("1:4000") */
-                        /* value = item id , upgrade (8000, "Magic:5")*/
-                        result[address] = new (id.Value, upgrade);
-                    }
-                }
-            }
-            Log.Logger.Debug($"upgdict size = {result.Count}");
-
-            return result;
-        }
-
 
         public static bool GetIsPlayerOnline()
         {
@@ -433,6 +358,19 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json, GetJsonOptions());
             return list;
         }
+        static Dictionary<int, DarkSoulsItem> cached_all_weapons = [];
+        public static Dictionary<int, DarkSoulsItem> GetAllWeaponsById()
+        {
+            if (cached_all_weapons.Count == 0)
+            {
+                var melee_weapons = MiscHelper.GetMeleeWeapons().ToList();
+                var ranged_weapons = MiscHelper.GetRangedWeapons().Where(x => !x.Name.Contains("Arrow") && !x.Name.Contains("Bolt")).ToList();
+                var spell_tools = MiscHelper.GetSpellTools();
+                var shields = MiscHelper.GetShields();
+                cached_all_weapons = (melee_weapons.Union(ranged_weapons).Union(spell_tools).Union(shields)).ToDictionary(x => x.ApId);
+            }
+            return cached_all_weapons;
+        }
         public static List<DarkSoulsItem> GetProgressiveItems()
         {
             var json = OpenEmbeddedResource("DSAP.Resources.ProgressiveItems.json");
@@ -451,50 +389,98 @@ namespace DSAP.Helpers
             return cached_mapPois;
         }
 
-        public static DarkSoulsItem UpgradeItem(DarkSoulsItem item, string itemupg, bool log = false)
+        public static DarkSoulsItem UpgradeItem(DarkSoulsItem item, bool log = false)
         {
-            if (itemupg != null)
+            // Set seed to slot seed hash + apid, then choice.random() into the list of allowed infusions. Then calculate its path depending on level
+
+            ushort roomseed = MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed);
+            ushort connslot = (ushort)App.Client.CurrentSession.ConnectionInfo.Slot;
+
+            int itemseed = item.ApId + roomseed + connslot;
+            Random rand = new Random(itemseed);
+            string infusion_type = "Normal";
+            uint lvl = ParamHelper.CalculateIncomingWeaponUpgradeLevel();
+            if (lvl == 0)
+                return item;
+
+            if (item.UpgradeType == Enums.ItemUpgrade.Infusable)
             {
-                Dictionary<String, int> infusionmap = new Dictionary<string, int>
+                int infusionIdx = rand.Next() % App.DSOptions.IncomingWeaponUpgradeInfusionPaths.Count;
+                infusion_type = App.DSOptions.IncomingWeaponUpgradeInfusionPaths[infusionIdx];
+            }
+            if (item.UpgradeType == Enums.ItemUpgrade.InfusableRestricted)
+            {
+                // get limited infusion list
+                List<String> RestrictedInfusions = ["Normal", "Crystal", "Lightning", "Magic", "Divine", "Fire"];
+                List<String> AllowedRestrictedInfusions = App.DSOptions.IncomingWeaponUpgradeInfusionPaths.Where(x => RestrictedInfusions.Contains(x)).ToList();
+                if (AllowedRestrictedInfusions.Count == 0) // set at minimum Normal
                 {
-                    {"Normal", 0},
-                    {"Crystal", 1},
-                    {"Lightning", 2},
-                    {"Raw", 3},
-                    {"Magic", 4},
-                    {"Enchanted", 5},
-                    {"Divine", 6},
-                    {"Occult", 7},
-                    {"Fire", 8},
-                    {"Chaos", 9},
+                    AllowedRestrictedInfusions = ["Normal"]; // always must be able to upgrade to something.
+                }
+                int infusionIdx = rand.Next() % AllowedRestrictedInfusions.Count;
+                infusion_type = AllowedRestrictedInfusions[infusionIdx];
+            }
+            if (item.UpgradeType == Enums.ItemUpgrade.Unique)
+            {
+                lvl = lvl / 3;
+                if (lvl == 0)
+                    return item;
+            }
+            // type, id, max level, min level, prev type id
+            Dictionary<String, (int id, uint maxlevel, uint minlevel, string prevtype)> infusionmap = new Dictionary<string, (int id, uint maxlevel, uint minlevel, string prevtype)>
+            {
+                {"Normal", (0, 15, 0, "")},
+                {"Crystal", (1, 15, 10, "Normal")},
+                {"Lightning", (2, 15, 10, "Normal")},
+                {"Raw", (3, 10, 5, "Normal")},
+                {"Magic", (4, 15, 5, "Normal")},
+                {"Enchanted", (5, 15, 10, "Magic")},
+                {"Divine", (6, 15, 5, "Normal")},
+                {"Occult", (7, 15, 10, "Divine")},
+                {"Fire", (8, 15, 5, "Normal")},
+                {"Chaos", (9, 15, 10, "Fire")},
+            };
+
+            if (infusionmap.ContainsKey(infusion_type))
+            {
+                var infusion_entry = infusionmap[infusion_type];
+                if (lvl > infusion_entry.maxlevel) // if raw but > +10, cap it
+                    lvl = infusion_entry.maxlevel;
+                
+                while (lvl < infusion_entry.minlevel) // if it's on the path to this spot, find the earlier branch. e.g. Occult of +9? -> Divine +4
+                {
+                    infusion_type = infusion_entry.prevtype; // update type
+                    infusion_entry = infusionmap[infusion_type]; // update entry
+                }
+
+                // should be in range by now..
+                //if (lvl >= infusion_entry.minlevel) // if in the range, all good.
+                // normalize (e.g. Occult of lvl 11 => Occult +1)
+                int actual_lvl = (int)lvl - (int)infusion_entry.minlevel;
+
+                DarkSoulsItem newitem = new DarkSoulsItem
+                {
+                    Name = item.Name,
+                    Id = item.Id + (int)actual_lvl + 100 * infusion_entry.id,
+                    StackSize = item.StackSize,
+                    UpgradeType = item.UpgradeType,
+                    Category = item.Category,
+                    ApId = item.ApId
                 };
 
-                string[] tokens = itemupg.Split(':');
-                if (tokens.Count() == 2)
+                if (log)
                 {
-                    var infusionMod= infusionmap[tokens[0]];
-                    var lvl = Int32.Parse(tokens[1]);
-                    DarkSoulsItem newitem = new DarkSoulsItem
-                    {
-                        Name = item.Name,
-                        Id = item.Id + lvl + 100 * infusionMod,
-                        StackSize = item.StackSize,
-                        UpgradeType = item.UpgradeType,
-                        Category = item.Category,
-                        ApId = item.ApId
-                    };
-                    if (log)
-                    {
-                        Log.Logger.Information($"Upgraded item {item.Name} to {itemupg}");
-                        App.Client.AddOverlayMessage($"Upgraded item {item.Name} to {itemupg}");
-                    }
-                        
-                    
-                    return newitem;
+                    string itemUpg = (infusion_type == "Normal" ? "" : (infusion_type + " ")) + (actual_lvl > 0 ? "+" + actual_lvl : "");
+                    Log.Logger.Information($"Upgraded item {item.Name} to {itemUpg}");
+                    App.Client.AddOverlayMessage($"Upgraded item {item.Name} to {itemUpg}");
                 }
+
+                return newitem;
+
             }
-            Log.Logger.Error($"Error upgrading item {item.Name}");
-            App.Client.AddOverlayMessage($"Error upgrading item {item.Name}");
+
+            Log.Logger.Error($"Error upgrading item {item.Name} to {infusion_type}");
+            App.Client.AddOverlayMessage($"Error upgrading item {item.Name} to {infusion_type}");
 
             return item;
         }

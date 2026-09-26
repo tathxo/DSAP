@@ -21,6 +21,9 @@ namespace DSAP.Models
         // QoL
         public bool WarpToAllBonfires { get; set; }
         public bool CanWarpWithoutLordvessel { get; set; }
+        // Sanity
+        public bool FogwallSanity { get; set; }
+        public bool BossFogwallSanity { get; set; }
         // Difficulty
         public Enums.DSGhostDifficulty GhostDifficulty { get; set; }
         public uint SoulMultiplierBase { get; set; }
@@ -29,9 +32,11 @@ namespace DSAP.Models
         public uint WeightMultiplierBase { get; set; }
         public uint WeightMultiplierMin { get; set; }
         public uint WeightMultiplierSteps { get; set; }
-        // Sanity
-        public bool FogwallSanity { get; set; }
-        public bool BossFogwallSanity { get; set; }
+        // weapon upgrades
+        public List<String> IncomingWeaponUpgradeInfusionPaths { get; set; } = [];
+        public uint IncomingWeaponUpgradeBase { get; set; }
+        public uint IncomingWeaponUpgradeMax { get; set; }
+        public uint IncomingWeaponUpgradeSteps { get; set; }
         // Shuffle
         public bool BossSoulShuffle { get; set; }
         public bool BossHumanityShuffle { get; set; }
@@ -56,12 +61,6 @@ namespace DSAP.Models
         public bool NoWeaponRequirements { get; set; }
         public bool NoSpellStatRequirements { get; set; }
         public bool NoMiracleCovenantRequirements { get; set; }
-        // weapon upgrades
-        public uint UpgradedWeaponsPercentage { get; set; }
-        public List<String> UpgradedWeaponsAllowedInfusionTypes { get; set; } = [];
-        public bool UpgradedWeaponsAdjustedLevels { get; set; }
-        public uint UpgradedWeaponsMinLevel { get; set; }
-        public uint UpgradedWeaponsMaxLevel { get; set; }
         public DarkSoulsOptions(Dictionary<string, object> optionsDict, Dictionary<string, object> slotData)
         {
             string version = Archipelago.Core.AvaloniaGUI.Utils.Helpers.GetAppVersion();
@@ -150,7 +149,7 @@ namespace DSAP.Models
             else
                 GhostDifficulty = Enums.DSGhostDifficulty.normal;
             
-            // soul multiplier
+            // Progressive Soul Multiplier
             if (App.Client.Options.ContainsKey("soul_multiplier_base"))
                 SoulMultiplierBase = ((JsonElement)App.Client.Options["soul_multiplier_base"]).GetUInt32();
             else
@@ -169,7 +168,7 @@ namespace DSAP.Models
                 SoulMultiplierSteps = 0;
             }
 
-            // weight multiplier
+            // Progressive Weight Multiplier
             if (App.Client.Options.ContainsKey("weight_multiplier_base"))
                 WeightMultiplierBase = ((JsonElement)App.Client.Options["weight_multiplier_base"]).GetUInt32();
             else
@@ -186,6 +185,31 @@ namespace DSAP.Models
             { // not found - default to min = base, 0 steps
                 WeightMultiplierMin = WeightMultiplierBase;
                 WeightMultiplierSteps = 0;
+            }
+
+
+            // Progressive Incoming Weapon Upgrades
+            if (App.Client.Options.ContainsKey("soul_multiplier_base"))
+                IncomingWeaponUpgradeBase = ((JsonElement)App.Client.Options["incoming_weapon_upgrade_base"]).GetUInt32();
+            else
+                IncomingWeaponUpgradeBase = 0;
+
+            if (App.Client.Options.ContainsKey("incoming_weapon_upgrade_max"))
+                IncomingWeaponUpgradeMax = ((JsonElement)App.Client.Options["incoming_weapon_upgrade_max"]).GetUInt32();
+            else
+                IncomingWeaponUpgradeMax = 0;
+
+            if (App.Client.Options.ContainsKey("incoming_weapon_upgrade_steps"))
+                IncomingWeaponUpgradeSteps = ((JsonElement)App.Client.Options["incoming_weapon_upgrade_steps"]).GetUInt32();
+            else
+            { // not found - default to max = base, 0 steps
+                IncomingWeaponUpgradeSteps = IncomingWeaponUpgradeBase;
+                IncomingWeaponUpgradeSteps = 0;
+            }
+
+            if (App.Client.Options.TryGetValue("incoming_weapon_upgrade_infusion_paths", out object allowed_infusions))
+            {
+                IncomingWeaponUpgradeInfusionPaths.AddRange(JsonSerializer.Deserialize<string[]>(allowed_infusions.ToString()));
             }
 
 
@@ -237,33 +261,8 @@ namespace DSAP.Models
             else
                 StartingPyromancy = 0;
 
-            NoWeaponRequirements = GetBool("no_weapon_requirements");
-            NoSpellStatRequirements = GetBool("no_spell_stat_requirements");
-            NoMiracleCovenantRequirements = GetBool("no_miracle_covenant_requirements");
             // Equipment options group end
 
-
-            if (App.Client.Options.ContainsKey("upgraded_weapons_percentage"))
-                UpgradedWeaponsPercentage = ((JsonElement)App.Client.Options["upgraded_weapons_percentage"]).GetUInt32();
-            else
-            {
-                Log.Logger.Warning("No 'upgraded weapons percentage' found. 'Weapon Upgrade' behavior will not occur.");
-                UpgradedWeaponsPercentage = 0;
-            }
-
-
-            UpgradedWeaponsAdjustedLevels = GetBool("upgraded_weapons_adjusted_levels");
-
-            if (App.Client.Options.ContainsKey("upgraded_weapons_min_level"))
-                UpgradedWeaponsMinLevel = ((JsonElement)App.Client.Options["upgraded_weapons_min_level"]).GetUInt32();
-
-            if (App.Client.Options.ContainsKey("upgraded_weapons_max_level"))
-                UpgradedWeaponsMaxLevel = ((JsonElement)App.Client.Options["upgraded_weapons_max_level"]).GetUInt32();
-
-            if (App.Client.Options.TryGetValue("upgraded_weapons_allowed_infusions", out object allowed_infusions))
-            {
-                UpgradedWeaponsAllowedInfusionTypes.AddRange(JsonSerializer.Deserialize<string[]>(allowed_infusions.ToString()));
-            }
         }
         internal bool GetBool(string str)
         {

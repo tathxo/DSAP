@@ -52,7 +52,6 @@ public partial class App : Application
     // 
     internal static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
     internal static Dictionary<int, ItemLot> ItemLotReplacementMap = [];
-    private static Dictionary<string, Tuple<int, string>> SlotLocToItemUpgMap = [];
     // Logging
     private static readonly object _lockObject = new object();
     // Deathlink
@@ -834,6 +833,10 @@ public partial class App : Application
                 ParamHelper.ModifyWeaponParams();
                 ParamHelper.ModifyArmorParams();
             }
+            else if (item.Name == "Progressive Incoming Weapon Upgrade")
+            {
+                ParamHelper.UpdateIncomingWeaponUpgradeLevel();
+            }
             if (doPopup)
             {
                 AddItemWithMessage((int)DSItemCategory.KeyItems, item.Id, item.Quantity);
@@ -1587,16 +1590,9 @@ public partial class App : Application
                 Client.AddOverlayMessage($"Received {itemToReceive.Name} ({itemToReceive.ApId})");
 
                 Log.Logger.Verbose($"Attempting to upgrade item: '{itemToReceive.ApId}' {itemToReceive.Name} from loc {e.LocationId}.");
-                if (DSOptions.UpgradedWeaponsPercentage > 0
-                    && SlotLocToItemUpgMap.TryGetValue($"{e.Player.Slot}:{e.LocationId}", out var itemupg))
+                if (DSOptions.IncomingWeaponUpgradeSteps > 0 && itemToReceive.UpgradeType != ItemUpgrade.None && itemToReceive.Category != DSItemCategory.Armor)
                 {
-                    if (itemupg.Item1 == itemToReceive.ApId) // if item apid matches
-                        itemToReceive = MiscHelper.UpgradeItem(itemToReceive, itemupg.Item2, true);
-                    else
-                    {
-                        Log.Logger.Error($"Item upgrade error: '{itemupg.Item1}' != '{itemToReceive.ApId}', for item {itemToReceive.Name}.");
-                        Client.AddOverlayMessage($"Item upgrade error: '{itemupg.Item1}' != '{itemToReceive.ApId}', for item {itemToReceive.Name}.");
-                    }
+                    itemToReceive = MiscHelper.UpgradeItem(itemToReceive, true);
                 }
                 AddAbstractItem(itemToReceive, will_popup);
                 if (itemToReceive.Name == "Ring of Sacrifice x10") // handle this with an exception. Comes from Oswald's shop
@@ -1969,8 +1965,6 @@ public partial class App : Application
 
             AllowedBonfireWarps = MiscHelper.GetBonfireWarpInfos();
 
-            SlotLocToItemUpgMap = MiscHelper.BuildSlotLocationToItemUpgMap(slotData, currentSlot);
-
             var locids = Client.CurrentSession.Locations.AllLocations.ToArray();
 
             scoutedLocationInfo = await Client.CurrentSession.Locations.ScoutLocationsAsync(false, locids);
@@ -1999,6 +1993,9 @@ public partial class App : Application
         ParamHelper.ModifyGameAreaParams();
         ParamHelper.ModifyShopLineupParams(scoutedLocationInfo);
 
+        // handle setting weapon upg modifier as well, since it's like the multipliers
+        ParamHelper.UpdateIncomingWeaponUpgradeLevel();
+
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
@@ -2022,7 +2019,6 @@ public partial class App : Application
         Client.AddOverlayMessage("Disconnected from Archipelago");
         SaveidSet = false;
         BonfireInjectorHelper.ResetKnownBonfires();
-        SlotLocToItemUpgMap = [];
         EmkControllers = [];
         AddressHelper.added_warping_emk = false;
         AllowedBonfireWarps = [];

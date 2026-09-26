@@ -206,6 +206,42 @@ namespace DSAP.Helpers
             }
             return multiplier;
         }
+        internal static uint IncomingWeaponUpgradesReceived = 0;
+        internal static void UpdateIncomingWeaponUpgradeLevel()
+        {
+            uint old_upgrade_level = CalculateIncomingWeaponUpgradeLevel();
+            var psm = MiscHelper.GetProgressiveItems().Find(x => x.Name == "Progressive Incoming Weapon Upgrade");
+            var received_item_count = App.Client.ItemManager.itemsReceivedCurrentSession;
+            IncomingWeaponUpgradesReceived = (uint)(App.Client.CurrentSession.Items.AllItemsReceived.Take(received_item_count).Where(x => x.ItemId == psm.ApId)).Count();
+            uint new_upgrade_level = CalculateIncomingWeaponUpgradeLevel();
+
+            if (new_upgrade_level == old_upgrade_level)
+            {
+                Log.Logger.Information($"Setting Incoming Weapon Upgrades to level {new_upgrade_level}");
+                App.Client.AddOverlayMessage($"Setting Incoming Weapon Upgrades to level {new_upgrade_level}");
+            }
+            else
+            {
+                Log.Logger.Information($"Updating Incoming Weapon Upgrades from level {old_upgrade_level} to level {new_upgrade_level}");
+                App.Client.AddOverlayMessage($"Updating Incoming Weapon Upgrades from level {old_upgrade_level} to level {new_upgrade_level}");
+            }
+        }
+        internal static uint CalculateIncomingWeaponUpgradeLevel()
+        {
+            uint UpgradeLevel = App.DSOptions.IncomingWeaponUpgradeBase; // base value, if 0 or less Progressive Incoming Weapon Upgrade items received
+
+            if (App.DSOptions.IncomingWeaponUpgradeSteps == 0) // explicitly handle this case to avoid dividing by 0
+                UpgradeLevel = App.DSOptions.IncomingWeaponUpgradeBase;
+            else if (IncomingWeaponUpgradesReceived >= App.DSOptions.IncomingWeaponUpgradeSteps) // cap at max UpgradeLevel
+                UpgradeLevel = App.DSOptions.IncomingWeaponUpgradeMax;
+            else if (IncomingWeaponUpgradesReceived > 0) // otherwise, calculate as part of the way from base to max
+            {
+                uint difference = (App.DSOptions.IncomingWeaponUpgradeMax - App.DSOptions.IncomingWeaponUpgradeBase);
+                uint distance = (difference * IncomingWeaponUpgradesReceived) / App.DSOptions.IncomingWeaponUpgradeSteps;
+                UpgradeLevel = App.DSOptions.IncomingWeaponUpgradeBase + distance;
+            }
+            return UpgradeLevel;
+        }
         internal static bool ModifyWeaponParams()
         {
 

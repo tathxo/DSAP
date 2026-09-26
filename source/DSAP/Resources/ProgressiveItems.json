@@ -14,5 +14,13 @@
     "Category": "Progressive",
     "ApId": 11111401,
     "Id": 11109002
+  },
+  {
+    "Name": "Progressive Incoming Weapon Upgrade",
+    "StackLimit": 0,
+    "UpgradeType": "None",
+    "Category": "Progressive",
+    "ApId": 11111402,
+    "Id": 11109003
   }
 ]

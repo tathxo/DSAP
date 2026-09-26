@@ -395,46 +395,52 @@ class NoMiracleCovenantRequirements(DefaultOnToggle):
     """Removes covenant requirements for casting certain miracles."""
     display_name = "No Miracle Covenant Requirements"
 
-class UpgradedWeaponsPercentage(Range):
-    """Percentage of weapons (including shields) in the pool that will be replaced with upgraded versions, if possible.
-    Does not affect starting equipment.
-    Choose a higher value for an easier time."""
-    display_name = "Upgraded Weapons Percentage"
-    range_start = 0
-    range_end = 100
-    default = 0
-
-class UpgradedWeaponsAllowedInfusions(OptionList):
-    """Which infusions are allowed if UpgradedWeapons.
-    Available infusion types are Normal, Raw, Magic, Fire, Divine, Chaos, Enchanted, Occult, Crystal, and Lightning.
-    If "Normal" is removed, all upgraded weapons will have a different, available infusion."""
-    display_name = "Upgraded Weapons - Allowed Infusions"
-    default = {"Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"}
-    valid_keys = ["Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"]
-
-class UpgradedWeaponsAdjustedLevels(DefaultOnToggle):
-    """For upgraded weapons added to the pool, Whether to 'adjust' weapon levels for applying the ranges.
-    When true, the min/max levels will apply to an calculated "level" of an infused weapon adjusted by:
-     +5 for Raw/Magic/Fire/Divine
-     +10 for Chaos/Enchanted/Occult/Crystal/Lightning 
-    When false, the min/max levels will not be adjusted."""
-    display_name = "Upgraded Weapons - Adjust Ranges"
-
-class UpgradedWeaponsMinLevel(Range):
-    """Minimum upgrade value on upgraded weapons in the pool.
-    This can exclude certain infusions if their calculated level cannot be at the minimum level. """
-    display_name = "Upgraded Weapons - Minimum Level"
+class IncomingWeaponUpgradeBaseLevel(Range):
+    """Base value for an upgrade amount applied to weapons and shields, expressed as a percentage.
+    0 is no upgrades.
+    15 is max upgrades."""
+    display_name = "Incoming Weapon Upgrade - Base Level"
     range_start = 0
     range_end = 15
     default = 0
 
+class IncomingWeaponUpgradeMaxLevel(Range):
+    """Maximum (final) value for an upgrade amount applied to weapons and shields, expressed as a percentage.
 
-class UpgradedWeaponsMaxLevel(Range):
-    """Maximum upgrade plus value on upgraded weapons in the pool."""
-    display_name = "Upgraded Weapons - Maximum Level"
+    Only takes effect if not equal to incoming_weapon_upgrade_base, and incoming_weapon_upgrade_steps is non-zero."""
+    display_name = "Incoming Weapon Upgrade - Max Level"
     range_start = 0
     range_end = 15
     default = 15
+
+class IncomingWeaponUpgradeSteps(Range):
+    """Number of steps from the BASE to the max weapon upgrade level.
+    This is how many "Progressive Weapon Upgrade" items will be added to the item pool.
+
+    Upon receiving one, incoming weapons and shields will be upgraded by ((the distance from base to min)/(this value)) levels.
+    As an example, if your minimum is 0 and max is 15, and this is set to 5 steps,
+    the first such item will make your next weapons come in with +3, 2nd to +6, and so on.
+    Unique weapons and shields will be scaled down by 1/3, as their max upgrade is 5 levels instead of 15.
+    If the resulting value is not a whole number, it will be rounded down.
+
+    Setting this to 15 steps will result in 15 items, receiving each of which will increase incoming weapon upgrade level by 1.
+
+    Has no effect if the incoming_weapon_upgrade_base and incoming_weapon_upgrade_max are equal.
+
+    If zero, incoming_weapon_upgrade_base is applied to all weapons."""
+    display_name = "Incoming Weapon Upgrade Steps"
+    range_start = 0
+    range_end = 15
+    default = 5
+
+class IncomingWeaponUpgradeInfusionPaths(OptionList):
+    """Which infusions "final paths" are allowed if IncomingWeaponUpgradeSteps is non-zero.
+    Available infusion types are Normal, Raw, Magic, Fire, Divine, Chaos, Enchanted, Occult, Crystal, and Lightning.
+    Choosing just "Occult", for example, will result in weapon upgraded "normally" from +0 to +4, divine 0-4 from +5 to +9, and occult 0-5 from +10 to +15.
+    """
+    display_name = "Incoming Weapon Upgrade - Allowed Infusion Paths"
+    default = {"Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"}
+    valid_keys = ["Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"]
 
 class EnableDeathlinkOption(Toggle):
     """Includes Deathlink"""
@@ -459,6 +465,10 @@ option_groups = [
         CanWarpWithoutLordvessel,
         WarpToAllBonfires,
         ]),
+    OptionGroup("Sanity", [
+        FogwallSanity,
+        BossFogwallSanity,
+        ]),
     OptionGroup("Difficulty", [
         GhostDifficulty,
         SoulMultiplierBase,
@@ -468,9 +478,11 @@ option_groups = [
         WeightMultiplierMin,
         WeightMultiplierSteps,
         ]),
-    OptionGroup("Sanity", [
-        FogwallSanity,
-        BossFogwallSanity,
+    OptionGroup("Incoming Weapon Upgrades", [
+        IncomingWeaponUpgradeBaseLevel,
+        IncomingWeaponUpgradeMaxLevel,
+        IncomingWeaponUpgradeSteps,
+        IncomingWeaponUpgradeInfusionPaths
         ]),
     OptionGroup("Optional Region Selection", [
         IncludeDlc,
@@ -513,13 +525,6 @@ option_groups = [
         NoSpellStatRequirements,
         NoMiracleCovenantRequirements
         ]),
-    OptionGroup("Upgraded Weapons", [
-        UpgradedWeaponsPercentage,
-        UpgradedWeaponsAllowedInfusions,
-        UpgradedWeaponsAdjustedLevels,
-        UpgradedWeaponsMinLevel,
-        UpgradedWeaponsMaxLevel,
-        ])
     ]
 
 
@@ -537,7 +542,10 @@ class DSROption(PerGameCommonOptions):
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
     warp_to_all_bonfires: WarpToAllBonfires
   
-  
+    # Sanity
+    fogwall_sanity: FogwallSanity
+    boss_fogwall_sanity: BossFogwallSanity
+
     # Difficulty
     ghost_difficulty: GhostDifficulty
     soul_multiplier_base: SoulMultiplierBase
@@ -547,9 +555,11 @@ class DSROption(PerGameCommonOptions):
     weight_multiplier_min: WeightMultiplierMin
     weight_multiplier_steps: WeightMultiplierSteps
 
-    # Sanity
-    fogwall_sanity: FogwallSanity
-    boss_fogwall_sanity: BossFogwallSanity
+    # Incoming Weapon Upgrades
+    incoming_weapon_upgrade_infusion_paths: IncomingWeaponUpgradeInfusionPaths
+    incoming_weapon_upgrade_base: IncomingWeaponUpgradeBaseLevel
+    incoming_weapon_upgrade_max: IncomingWeaponUpgradeMaxLevel
+    incoming_weapon_upgrade_steps: IncomingWeaponUpgradeSteps
 
     # Optional Region Selection
     include_dlc: IncludeDlc
@@ -591,10 +601,3 @@ class DSROption(PerGameCommonOptions):
     no_weapon_requirements: NoWeaponRequirements
     no_spell_stat_requirements: NoSpellStatRequirements
     no_miracle_covenant_requirements: NoMiracleCovenantRequirements
-
-    # Upgraded Weapons
-    upgraded_weapons_percentage: UpgradedWeaponsPercentage
-    upgraded_weapons_allowed_infusions: UpgradedWeaponsAllowedInfusions
-    upgraded_weapons_adjusted_levels : UpgradedWeaponsAdjustedLevels
-    upgraded_weapons_min_level: UpgradedWeaponsMinLevel
-    upgraded_weapons_max_level: UpgradedWeaponsMaxLevel

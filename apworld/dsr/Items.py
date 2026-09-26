@@ -258,6 +258,7 @@ _all_items_base = [
 
     ("Progressive Soul Multiplier", 1400, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
     ("Progressive Weight Reducer", 1401, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
+    ("Progressive Incoming Weapon Upgrade", 1402, DSRItemCategory.PROGRESSIVE_MULTIPLIER),
 
     ("Eye of Death", 2000, DSRItemCategory.CONSUMABLE),
     ("Cracked Red Eye Orb", 2001, DSRItemCategory.CONSUMABLE),

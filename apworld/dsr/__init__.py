@@ -9,7 +9,7 @@ from worlds.generic.Rules import add_rule, add_item_rule
 from rule_builder.rules import Rule, True_, Has, HasAll
 
 from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions, _all_items
-from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, UpgradeEquipment, ReplaceItem, titanite_replacements
+from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, ReplaceItem, titanite_replacements
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, \
     location_locked_categories, region_name_list
 from .Groups import location_name_groups, item_name_groups, \
@@ -119,14 +119,6 @@ class DSRWorld(World):
                     # You can also set .value directly but that won't work if you have OptionSets
                     setattr(self.options, key, opt.from_any(value))
         # End UT yamlless support
-            
-        # if upgrade level max < min, reverse them
-        if self.options.upgraded_weapons_percentage.value > 0 and self.options.upgraded_weapons_max_level.value < self.options.upgraded_weapons_min_level.value:
-            (self.options.upgraded_weapons_min_level, self.options.upgraded_weapons_max_level) = (self.options.upgraded_weapons_max_level, self.options.upgraded_weapons_min_level)
-
-        # If % > 0 but no allowed infusion types, default to normal
-        if self.options.upgraded_weapons_percentage.value > 0 and len(self.options.upgraded_weapons_allowed_infusions.value) == 0:
-            self.options.upgraded_weapons_allowed_infusions.value = ['Normal']
 
         ## Soul Multiplier
         # If soul multiplier steps is 0, don't make there be an increase at all. Base is both the base and max
@@ -153,6 +145,25 @@ class DSRWorld(World):
         # If weight multiplier base < min, reverse them
         if self.options.weight_multiplier_base.value < self.options.weight_multiplier_min.value:
             (self.options.weight_multiplier_base.value, self.options.weight_multiplier_min.value) = (self.options.weight_multiplier_min.value, self.options.weight_multiplier_base.value)
+
+        # If steps > 0 but no allowed infusion types, default to normal
+        if self.options.incoming_weapon_upgrade_steps.value > 0 and len(
+                self.options.incoming_weapon_upgrade_infusion_paths.value) == 0:
+            self.options.incoming_weapon_upgrade_infusion_paths.value = ['Normal']
+
+        ## Incoming Weapon Upgrades
+        # If Incoming Weapon Upgrade Steps is 0, don't make there be an increase at all. Base is both the base and max
+        if self.options.incoming_weapon_upgrade_steps.value == 0:
+            self.options.incoming_weapon_upgrade_base.value = self.options.incoming_weapon_upgrade_max.value
+
+        # If Incoming Weapon Upgrade base and max are equal, set steps to 0.
+        if self.options.incoming_weapon_upgrade_base.value == self.options.incoming_weapon_upgrade_max.value:
+            self.options.incoming_weapon_upgrade_steps.value = 0
+
+        # If Incoming Weapon Upgrade base > max, reverse them
+        if self.options.incoming_weapon_upgrade_base.value > self.options.incoming_weapon_upgrade_max.value:
+            (self.options.incoming_weapon_upgrade_base.value, self.options.incoming_weapon_upgrade_max.value) = (
+                self.options.incoming_weapon_upgrade_max.value, self.options.incoming_weapon_upgrade_base.value)
 
         # If goal_condition is o+s, force no dlc
         if self.options.include_dlc.value == True and self.options.goal_condition.value == GoalConditionOption.option_ornstein_and_smough:
@@ -530,14 +541,14 @@ class DSRWorld(World):
         items_names = []
         items_upgrades = []
         items_address = []
-        for location in self.multiworld.get_filled_locations():
-            if location.item.player == self.player:
-                #we are the receiver of the item
-                items_id.append(location.item.code)
-                items_names.append(location.item.name)
-                upgrade = UpgradeEquipment(location.item.code, self.options, self)
-                items_upgrades.append(upgrade)
-                items_address.append(f'{location.player}:{location.address}')
+        # for location in self.multiworld.get_filled_locations():
+        #     if location.item.player == self.player:
+        #         #we are the receiver of the item
+        #         items_id.append(location.item.code)
+        #         items_names.append(location.item.name)
+        #         upgrade = UpgradeEquipment(location.item.code, self.options, self)
+        #         items_upgrades.append(upgrade)
+        #         items_address.append(f'{location.player}:{location.address}')
 
         slot_data = {
             "options": {
@@ -548,6 +559,9 @@ class DSRWorld(World):
                 # QoL
                 "can_warp_without_lordvessel": self.options.can_warp_without_lordvessel.value,
                 "warp_to_all_bonfires": self.options.warp_to_all_bonfires.value,
+                # Sanity
+                "fogwall_sanity": self.options.fogwall_sanity.value,
+                "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
                 # Difficulty
                 "ghost_difficulty": self.options.ghost_difficulty.value,
                 "soul_multiplier_base": self.options.soul_multiplier_base.value,
@@ -556,9 +570,11 @@ class DSRWorld(World):
                 "weight_multiplier_base": self.options.weight_multiplier_base.value,
                 "weight_multiplier_min": self.options.weight_multiplier_min.value,
                 "weight_multiplier_steps": self.options.weight_multiplier_steps.value,
-                # Sanity
-                "fogwall_sanity": self.options.fogwall_sanity.value,
-                "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,
+                # Upgraded Weapons
+                "incoming_weapon_upgrade_infusion_paths": self.options.incoming_weapon_upgrade_infusion_paths.value,
+                "incoming_weapon_upgrade_base": self.options.incoming_weapon_upgrade_base.value,
+                "incoming_weapon_upgrade_max": self.options.incoming_weapon_upgrade_max.value,
+                "incoming_weapon_upgrade_steps": self.options.incoming_weapon_upgrade_steps.value,
                 # Optional Region Selection
                 "include_dlc": self.options.include_dlc.value,
                 "include_pw": self.options.include_pw.value,
@@ -593,12 +609,6 @@ class DSRWorld(World):
                 "no_weapon_requirements": self.options.no_weapon_requirements.value,
                 "no_spell_stat_requirements": self.options.no_spell_stat_requirements.value,
                 "no_miracle_covenant_requirements": self.options.no_miracle_covenant_requirements.value,
-                # Upgraded Weapons
-                "upgraded_weapons_percentage": self.options.upgraded_weapons_percentage.value,
-                "upgraded_weapons_allowed_infusions": self.options.upgraded_weapons_allowed_infusions.value,
-                "upgraded_weapons_adjusted_levels": self.options.upgraded_weapons_adjusted_levels.value,
-                "upgraded_weapons_min_level": self.options.upgraded_weapons_min_level.value,
-                "upgraded_weapons_max_level": self.options.upgraded_weapons_max_level.value,
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
@@ -615,16 +625,16 @@ class DSRWorld(World):
         self.items_address = items_address
 
         return slot_data
-
-    def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        wrote_items = False
-        if (len(self.items_upgrades) > 0):
-            spoiler_handle.write(f"\nDSR weapon upgrades for {self.multiworld.player_name[self.player]}:\n")
-            for i in range(len(self.items_upgrades)):
-                if self.items_upgrades[i] == None or self.items_upgrades[i] == "":
-                    continue
-                spoiler_handle.write(f"\nitem {self.items_names[i]} at loc {self.items_address[i]} upgraded to {self.items_upgrades[i]}.")
-                wrote_items = True
-            if not wrote_items:
-                spoiler_handle.write("\nNo items upgraded")
-            spoiler_handle.write("\n") # Spacing
+    #
+    # def write_spoiler(self, spoiler_handle: TextIO) -> None:
+    #     wrote_items = False
+    #     if (len(self.items_upgrades) > 0):
+    #         spoiler_handle.write(f"\nDSR weapon upgrades for {self.multiworld.player_name[self.player]}:\n")
+    #         for i in range(len(self.items_upgrades)):
+    #             if self.items_upgrades[i] == None or self.items_upgrades[i] == "":
+    #                 continue
+    #             spoiler_handle.write(f"\nitem {self.items_names[i]} at loc {self.items_address[i]} upgraded to {self.items_upgrades[i]}.")
+    #             wrote_items = True
+    #         if not wrote_items:
+    #             spoiler_handle.write("\nNo items upgraded")
+    #         spoiler_handle.write("\n") # Spacing

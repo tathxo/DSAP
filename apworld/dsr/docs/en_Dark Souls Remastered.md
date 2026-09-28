@@ -76,9 +76,7 @@ For example, the following configuration will not require you to do the DLC, The
 ```yaml
   # Exclude DLC and out-of-the-way regions
   exclude_locations:
-    - "All DLC regions"
-    - "The Great Hollow"
-    - "Ash Lake"
+    ["All DLC regions", "Ash Lake", "The Great Hollow"]
 ```
 
 ## Artificial Logic Without Fogwall Locking

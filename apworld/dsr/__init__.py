@@ -14,7 +14,7 @@ from .Locations import DSRLocation, DSRLocationCategory, location_tables, locati
     location_locked_categories, region_name_list
 from .Groups import location_name_groups, item_name_groups, \
     dlc_prog_items, pw_prog_items, gh_prog_items, post_os_prog_items, post_os_cata_prog_items
-from .Options import DSROption, option_groups, GoalConditionOption, LogicToAccessCatacombs
+from .Options import DSROption, option_groups, GoalConditionOption, LogicToAccessCatacombs, GhostDifficulty
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
 from .Skips import get_all_skips
 
@@ -152,6 +152,13 @@ class DSRWorld(World):
             self.options.incoming_weapon_upgrade_infusion_paths.value = ['Normal']
 
         ## Incoming Weapon Upgrades
+        # If there won't be enough AP weapons for upgrades to matter much, reduce steps to 0
+        # This prevents the problem of having to remove weapons from the pool to support the weapon upgrade items
+        if self.options.limited_shop_item_shuffle.value == False: # and self.options.generic_corpse_drops.value == False:
+            print(f"DSR [{self.player_name}]: Very few weapons in item pool - disabling progressive incoming weapon upgrade system")
+            self.options.incoming_weapon_upgrade_steps.value = 0
+
+
         # If Incoming Weapon Upgrade Steps is 0, don't make there be an increase at all. Base is both the base and max
         if self.options.incoming_weapon_upgrade_steps.value == 0:
             self.options.incoming_weapon_upgrade_base.value = self.options.incoming_weapon_upgrade_max.value
@@ -177,7 +184,18 @@ class DSRWorld(World):
 
         self.enabled_location_categories.add(DSRLocationCategory.EVENT)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
-        self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
+
+        # self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
+        self.enabled_location_categories.add(DSRLocationCategory.CHEST_ITEM)
+        # self.enabled_location_categories.add(DSRLocationCategory.CORPSE_ITEM)
+        self.enabled_location_categories.add(DSRLocationCategory.CORPSE_PROG_ITEM)
+        self.enabled_location_categories.add(DSRLocationCategory.CORPSE_USEFUL_ITEM)
+        self.enabled_location_categories.add(DSRLocationCategory.NPC_DROP)
+        self.enabled_location_categories.add(DSRLocationCategory.MINIBOSS_DROP)
+        self.enabled_location_categories.add(DSRLocationCategory.GUARANTEED_DROP)
+        self.enabled_location_categories.add(DSRLocationCategory.FROZEN_BLACKSMITH)
+        self.enabled_location_categories.add(DSRLocationCategory.NPC_PROG_ITEM)
+
         # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.MIMIC_DROP)
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
@@ -376,8 +394,6 @@ class DSRWorld(World):
         rip, required_skip_item_names = BuildRequiredItemPool(self, itempoolSize, self.ignorable_items)
         crip = [self.create_item(item.name) for item in rip]
 
-
-
         disabled_items = [loc.default_item for loc in location_dictionary.values() if loc.category not in self.enabled_location_categories]
         StillRequiredPool = [item for item in crip if item not in itempool and item not in skipitempool and item.name not in disabled_items]
         guaranteedpool = BuildGuaranteedItemPool(self)
@@ -408,22 +424,72 @@ class DSRWorld(World):
         #     print("non-fogwall required item: " + str(item))
 
         # print(f"required pool = {StillRequiredPool}")
-        replacable_souls = [
+        replacable_filler = [
             "Soul of a Lost Undead",
             "Large Soul of a Lost Undead",
             "Soul of a Nameless Soldier",
             "Large Soul of a Nameless Soldier",
             "Soul of a Proud Knight",
+            "Homeward Bone", # 11 in pool with boss bones on
         ]
         # Replace each of the above souls, in order, as needed
         if len(StillRequiredPool) + len(guaranteedpool) > len(removable_items):
-            for soul in replacable_souls:
-                print(f"DSR: Detected additional replacements required ({len(removable_items)}/{len(StillRequiredPool) + len(guaranteedpool)}).")
-                print(f"Adding " + str(len([item for item in itempool if item.name == soul])) + f" {soul} items to removable items.")
-                removable_items += [item for item in itempool if item.name == soul]
-                print("DSR: Now " + str(len(removable_items)) + " filler items are removable.")
-                if len(StillRequiredPool) + len(guaranteedpool) <= len(removable_items):
+            print(f"DSR [{self.player_name}]: Detected additional replacements required ({len(removable_items)}/{len(StillRequiredPool) + len(guaranteedpool)}).")
+            for soul in replacable_filler:
+                if (len([item for item in itempool if item.name == soul]) > 0):
+                    print(f"DSR [{self.player_name}]: Adding " + str(len([item for item in itempool if item.name == soul])) + f" {soul} items to removable items.")
+                    removable_items += [item for item in itempool if item.name == soul]
+                    if len(StillRequiredPool) + len(guaranteedpool) <= len(removable_items):
+                        break
+
+        num_required_to_remove = len(StillRequiredPool) + len(guaranteedpool)
+        num_removable = len(removable_items)
+        print(f"DSR [{self.player_name}]: Now {num_removable} filler items are removable out of {num_required_to_remove} required")
+
+        excluded_consumables = []
+        if self.options.ghost_difficulty != GhostDifficulty.option_normal:
+            excluded_consumables.extend(["Transient Curse x2", "Transient Curse x4"])
+
+        consumables = [item.name for item in _all_items if item.category == DSRItemCategory.CONSUMABLE
+                       and item.name not in [item2.name for item2 in removable_items]
+                       and item.name not in excluded_consumables
+                       ]
+
+        armors = [item.name for item in _all_items if item.category == DSRItemCategory.ARMOR]
+        weapons = [item.name for item in _all_items if item.category == DSRItemCategory.WEAPON]
+        shields  = [item.name for item in _all_items if item.category == DSRItemCategory.SHIELD and item.name not in ["Grass Crest Shield"]]
+        upg_mats = [item.name for item in _all_items if item.category == DSRItemCategory.UPGRADE_MATERIAL]
+
+        if num_required_to_remove > num_removable:
+            num_more_required = num_required_to_remove - num_removable
+            print(f"DSR [{self.player_name}]: Could not remove enough items to meet requirements from yaml settings...removing additional items")
+
+            # list all the items, first
+            # print("_items:")
+            # print(f"{itempool}")
+            # print("_req_items:")
+            # print(f"{StillRequiredPool}")
+            typelists = [("armor", armors, 0.6),
+                         ("consumable", consumables, 0.8),
+                         ("shield", shields, 0.7),
+                         ("weapon", weapons, 0.7),
+                         ("upgrade material", upg_mats, 0.9),
+                         ]
+            for i in range(5):
+                if num_more_required <= 0:
                     break
+                tlname = typelists[i][0]
+                typelist = typelists[i][1]
+                weight = typelists[i][2]
+                type_removable_items = [item for item in itempool if item.name in typelist and item.name not in key_item_names and item.name not in self.options.guaranteed_items.value.keys()]
+                self.random.shuffle(type_removable_items)
+                num_items_to_replace = min(num_more_required, int(len(type_removable_items) * weight))  # don't replace more than half
+                print(f"DSR [{self.player_name}]: Removing {num_items_to_replace} {tlname} items from group of {len(type_removable_items)} eligible {tlname}s")
+                removable_items += type_removable_items[0:num_items_to_replace]
+                num_more_required -= num_items_to_replace
+            # if after all of that, there still aren't enough removed, throw an error
+            # if num_more_required > 0:
+            #     raise OptionError
 
         for item in removable_items:
             if len(StillRequiredPool) > 0:

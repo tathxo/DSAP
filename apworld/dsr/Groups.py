@@ -95,7 +95,7 @@ item_name_groups = {
     "Carvings"          : [item for item in item_dictionary.keys() if "carving" in item.lower()],
     "Multiplayer Items" : [item for item in multiplayer_items],
     "Covenant Items"    : [item for item in covenant_items],
-    "Junk"              : [item for item in item_dictionary.keys() if "carving" in item.lower()] + [item for item in multiplayer_items] + [item for item in covenant_items] + ["Pendant"] + ["Prism Stone x20"],
+    "Junk"              : [item for item in item_dictionary.keys() if "carving" in item.lower()] + [item for item in multiplayer_items] + [item for item in covenant_items] + ["Pendant", "Prism Stone x20", "Gold Coin", "Silver Coin x5"],
 
     # Following groups are used for skips
     # These items can be wielded by almost (max needs 5 levels of investment) any character from beginning of the game. 

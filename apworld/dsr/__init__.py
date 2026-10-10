@@ -152,16 +152,16 @@ class DSRWorld(World):
             self.options.incoming_weapon_upgrade_infusion_paths.value = ['Normal']
 
         ## Incoming Weapon Upgrades
-        # If there won't be enough AP weapons for upgrades to matter much, reduce steps to 0
+        # If there won't be enough AP weapons for upgrades to matter much (and not many souls to replace), reduce steps to 0
         # This prevents the problem of having to remove weapons from the pool to support the weapon upgrade items
-        if self.options.limited_shop_item_shuffle.value == False: # and self.options.generic_corpse_drops.value == False:
-            print(f"DSR [{self.player_name}]: Very few weapons in item pool - disabling progressive incoming weapon upgrade system")
+        if self.options.limited_shop_item_shuffle.value == False and self.options.basic_corpse_item_shuffle.value == False:
+            print(f"DSR [{self.player_name}]: Very few weapons and locations in item pool - disabling progressive incoming weapon upgrade system")
             self.options.incoming_weapon_upgrade_steps.value = 0
 
 
         # If Incoming Weapon Upgrade Steps is 0, don't make there be an increase at all. Base is both the base and max
         if self.options.incoming_weapon_upgrade_steps.value == 0:
-            self.options.incoming_weapon_upgrade_base.value = self.options.incoming_weapon_upgrade_max.value
+            self.options.incoming_weapon_upgrade_max.value = self.options.incoming_weapon_upgrade_base.value
 
         # If Incoming Weapon Upgrade base and max are equal, set steps to 0.
         if self.options.incoming_weapon_upgrade_base.value == self.options.incoming_weapon_upgrade_max.value:
@@ -187,7 +187,8 @@ class DSRWorld(World):
 
         # self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
         self.enabled_location_categories.add(DSRLocationCategory.CHEST_ITEM)
-        # self.enabled_location_categories.add(DSRLocationCategory.CORPSE_ITEM)
+        if (self.options.basic_corpse_item_shuffle.value == True):
+            self.enabled_location_categories.add(DSRLocationCategory.CORPSE_ITEM)
         self.enabled_location_categories.add(DSRLocationCategory.CORPSE_PROG_ITEM)
         self.enabled_location_categories.add(DSRLocationCategory.CORPSE_USEFUL_ITEM)
         self.enabled_location_categories.add(DSRLocationCategory.NPC_DROP)
@@ -651,6 +652,9 @@ class DSRWorld(World):
                 "boss_bone_shuffle": self.options.boss_bone_shuffle.value,
                 "bk_weapon_shuffle": self.options.bk_weapon_shuffle.value,
                 "lizard_shuffle": self.options.lizard_shuffle.value,
+
+                # Item Pickup Shuffling
+                "basic_corpse_item_shuffle": self.options.basic_corpse_item_shuffle.value,
 
                 # Shops
                 "unlimited_shop_item_shuffle": self.options.unlimited_shop_item_shuffle.value,

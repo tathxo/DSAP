@@ -178,15 +178,22 @@ class BlackKnightWeaponShuffle(DefaultOnToggle):
     These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool."""
     display_name = "Black Knight Weapon Shuffle"
 
+
 class CrystalLizardShuffle(Toggle):
     """Adds Crystal Lizard drop locations to the multiworld item pool.
     This adds 2 locations per lizard: 1 for their Twinkling Titanite, and 1 for an additional drop - which is made guaranteed.
-    
+
     There are 25 total crystal lizards, 10 of which are in the Great Hollow, and 5 of which are in the DLC.
     If one escapes, you can quit out and reload to respawn it.
     Great Hollow lizards are forced to spawn on every load instead of their vanilla 1/3 chance per load."""
     display_name = "Crystal Lizard Shuffle"
 
+# Item Pickup Shuffle
+class BasicCorpseItemShuffle(DefaultOnToggle):
+    """Adds basic corpse item locations to the pool.
+    Corpses with progression items (keys) will still always be shuffled, regardless of this setting.
+    Setting this to false drastically decreases the number of checks in the game, but also decreases the number of soul items available."""
+    display_name = "Basic Corpse Item Shuffle"
 
 class UnlimitedShopItemShuffle(DefaultOnToggle):
     """Shuffles unlimited quantity consumable and arrow shop slots from unmissable shopkeepers.
@@ -497,6 +504,9 @@ option_groups = [
         BlackKnightWeaponShuffle,
         CrystalLizardShuffle,
         ]),
+    OptionGroup("Item Pickup Shuffling", [
+            BasicCorpseItemShuffle,
+        ]),
     OptionGroup("Shops", [
         UnlimitedShopItemShuffle,
         LimitedShopItemShuffle,
@@ -573,6 +583,9 @@ class DSROption(PerGameCommonOptions):
     boss_bone_shuffle: BossBoneShuffle
     bk_weapon_shuffle: BlackKnightWeaponShuffle
     lizard_shuffle: CrystalLizardShuffle
+
+    # Item Pickup Shuffling
+    basic_corpse_item_shuffle: BasicCorpseItemShuffle
 
     # Shops
     unlimited_shop_item_shuffle: UnlimitedShopItemShuffle

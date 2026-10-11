@@ -70,6 +70,19 @@ namespace DSAP.Models
             }
         }
 
+        internal void PrintAllParams<Param>()
+        {
+            foreach (var paramentry in ParamEntries)
+            {
+                byte[] strbytes = new byte[200];
+                int maxlen = StringBytes.Length - paramentry.strOffset;
+                if (maxlen > 100) maxlen = 100;
+                Array.Copy(StringBytes, paramentry.strOffset, strbytes, 0, maxlen);
+
+                Log.Logger.Information($"good id={paramentry.id}, str={Encoding.Unicode.GetString(strbytes)}");
+            }
+        }
+
         internal void AddParam(uint newid, byte[] newParamBytes, byte[] stringBytes)
         {
             uint paramOffset = (uint)ParamBytes.Length + (uint)AddedParamBytes.Count; // get index of "current end" of param bytes

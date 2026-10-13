@@ -18,6 +18,7 @@ namespace DSAP.Models
         // Game
         public Enums.DSGoal Goal {  get; set; }
         public long RequiredBosses { get; set; }
+        public string IncludedOptionalZones { get; set; } = "";
         // QoL
         public bool WarpToAllBonfires { get; set; }
         public bool CanWarpWithoutLordvessel { get; set; }
@@ -142,7 +143,15 @@ namespace DSAP.Models
                     RequiredBosses &= (0xFFFFFFFF - (0xF << 23 - 1)); // Remove all 4 DLC bosses, Sanc Guardian -> Manus
                 }
             }
-            Log.Logger.Information($"req bosses = {RequiredBosses:X}, dlc {GetBool("include_dlc")}, pw {GetBool("include_dlc")}");
+            Log.Logger.Debug($"req bosses = {RequiredBosses:X}, dlc {GetBool("include_dlc")}, pw {GetBool("include_dlc")}");
+
+            IncludedOptionalZones = "";
+            if (GetBool("include_dlc"))
+                IncludedOptionalZones += "dlc ";
+            if (GetBool("include_pw"))
+                IncludedOptionalZones += "pw ";
+            if (GetBool("include_gh"))
+                IncludedOptionalZones += "gh ";
 
             if (App.Client.Options.ContainsKey("ghost_difficulty") && Enum.TryParse(((JsonElement)App.Client.Options["ghost_difficulty"]).ToString(), out Enums.DSGhostDifficulty gd))
                 GhostDifficulty = gd;
@@ -280,7 +289,10 @@ namespace DSAP.Models
             {
                 string name = descriptor.Name;
                 object value = descriptor.GetValue(this);
-                result += $"{name}={value}\n";
+                if (name == "RequiredBosses")
+                    result += $"{name}={value:X}\n";
+                else
+                    result += $"{name}={value}\n";
             }
             return result;
         }

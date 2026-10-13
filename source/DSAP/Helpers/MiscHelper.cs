@@ -1,6 +1,5 @@
 ﻿using Archipelago.Core.Util;
 using DSAP.Models;
-using DynamicData.Aggregation;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -311,7 +310,7 @@ namespace DSAP.Helpers
             var json = OpenEmbeddedResource("DSAP.Resources.DsrEvents.json");
             var list = JsonSerializer.Deserialize<List<DsrEvent>>(json, GetJsonOptions());
             List<EmkController> newlist = list.Select(x => new EmkController(x.Locname, x.KeychainName, x.Type,
-                x.Eventid, x.Eventslot, x.Itemid)).ToList();
+                x.Eventid, x.Eventslot, x.Itemid, x.Locid)).ToList();
             return newlist;
         }
         static public Dictionary<string, DsrEvent> cached_DsrBossDeps = [];

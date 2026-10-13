@@ -271,23 +271,11 @@ namespace DSAP.Helpers
         {
             List<EmkController> result = [];
 
-            List<int?> itemsId = [];
-            try
-            {
-                if (slotData.TryGetValue("itemsId", out object itemsId_temp))
-                {
-                    itemsId.AddRange(JsonSerializer.Deserialize<int?[]>(itemsId_temp.ToString()));
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error($"exception creating fog map: {e.Message} {e.ToString()}");
-            }
             var events = MiscHelper.GetDsrEventEmks();
-            foreach (var item in itemsId)
+            var locs = App.Client.CurrentSession.Locations.AllLocations;
+            foreach (var newemk in events)
             {
-                EmkController? newemk = events.Find(x => x.ApId == item);
-                if (newemk != null)
+                if (locs.Contains(newemk.ApLocId) && newemk.Type != Enums.DsrEventType.EARLYFOGWALL)
                 {
                     Log.Logger.Verbose($"Adding {newemk.Name} to list. Id:slot={newemk.Eventid}:{newemk.Eventslot}");
                     result.Add(newemk);

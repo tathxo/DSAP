@@ -68,7 +68,7 @@ public partial class App : Application
     public static bool CheckSaveId = true;
     private static bool _goalSent = false;
     private static readonly SemaphoreSlim _goalSemaphore = new SemaphoreSlim(1, 1);
-    public static List<EmkController> EmkControllers = [];
+    public static List<EmkController> EmkControllers { get; set; } = [];
     internal static DarkSoulsClient dsrClient = null;
     private bool overlayInitialized = false;
     private static uint connect_command_step = 0;
@@ -1781,7 +1781,7 @@ public partial class App : Application
             var itemlistcopy = Client.CurrentSession.Items.AllItemsReceived.ToList();
             foreach (var item in itemlistcopy)
             {
-                var emk = EmkControllers.Find(x => x.ApId == item.ItemId);
+                var emk = EmkControllers.Find(x => x.ApItemId == item.ItemId);
                 if (emk != null)
                 {
                     emk.Unlock();
@@ -1848,7 +1848,7 @@ public partial class App : Application
         /* Find the event in the EmkController list,
          * and mark it as unlocked. */
 
-        EmkController? emk = EmkControllers.Find(x => x.ApId == ApId);
+        EmkController? emk = EmkControllers.Find(x => x.ApItemId == ApId);
         if (emk != null)
         {
             emk.Unlock();

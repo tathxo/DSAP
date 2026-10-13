@@ -538,7 +538,7 @@ namespace DSAP.Helpers
         {
             if (!added_warping_emk && !App.EmkControllers.Any(x => x.Eventid == 706)) // if not yet added, add the emk.
             {
-                var newemk = new EmkController("Warping", "none", Enums.DsrEventType.GENERIC, 706, 0, 0);
+                var newemk = new EmkController("Warping", "none", Enums.DsrEventType.GENERIC, 706, 0, 0, 0);
                 newemk.MapId3 = 170;
                 App.EmkControllers.Add(newemk);
                 added_warping_emk = true;

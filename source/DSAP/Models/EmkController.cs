@@ -14,14 +14,15 @@ namespace DSAP.Models
         public string Name {  get; set; }
         public string KeychainName { get; set; }
         public DsrEventType Type { get; set; }
-        public int ApId { get; set; } // AP item id that clears this event lock
+        public int ApItemId { get; set; } // AP item id that clears this event lock
+        public int ApLocId { get; set; } // AP item id that clears this event lock
         public int Eventid { get; set; }
         public int Eventslot { get; set; }
         public int MapId3 { get; set; } // 3-digit map+area id
         public ulong Saved_Ptr { get; set; } // pointer to the saved event, if it has been detached.
         public bool HasKey { get; set; } // whether player has the "key" to the event, and to stop "locking" it
 
-        public EmkController(string name, string keychainName, DsrEventType type, int eventid, int eventslot, int apid)
+        public EmkController(string name, string keychainName, DsrEventType type, int eventid, int eventslot, int apitemid, int aplocid)
         {
             Deactivated = false;
             HasKey = false;
@@ -31,7 +32,8 @@ namespace DSAP.Models
             Eventid = eventid;
             Eventslot = eventslot;
             Saved_Ptr = 0;
-            ApId = apid;
+            ApItemId = apitemid;
+            ApLocId = aplocid;
             // Save the 2nd-4th digits of the event number.
             // If we eventually add map-agnostic events, or multi-map events (e.g. darkroot garden elevator),
             // then make this an explicit list of maps defined in the json instead.

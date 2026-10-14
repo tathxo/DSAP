@@ -293,65 +293,50 @@ class DSRWorld(World):
             if (default_item in titanite_replacements.keys()):
                 default_item = ReplaceItem(self, default_item)
 
-            if (location.category in self.enabled_location_categories and 
-                location.category not in location_skip_categories # [DSRLocationCategory.EVENT, DSRLocationCategory.DOOR]:
-                and location.category not in location_locked_categories
-                and not (self.options.excluded_location_behavior == "do_not_randomize" and location.name in self.all_excluded_locations)): 
-                self.gc = self.gc + 1
-                if (location.category in [DSRLocationCategory.FOG_WALL, DSRLocationCategory.BOSS_FOG_WALL]):
-                    default_item = "Fogwall Filler"
-                # print("Adding location: " + location.name + " with default item " + location.default_item)
-                new_location = DSRLocation(
-                    self.player,
-                    location.name,
-                    location.category,
-                    default_item,
-                    self.location_name_to_id[location.name],
-                    new_region
-                )
-                if (location.category in [DSRLocationCategory.MISSABLE_DROP, DSRLocationCategory.MISSABLE_SHOP_ITEM]):
-                    new_location.progress_type = LocationProgressType.EXCLUDED
-            # elif (location.category in self.enabled_location_categories and
-            #       location.category in location_locked_categories): # DSRLocationCategory.BONFIRE_WARP
-            #     self.bw = self.bw + 1
-            #     default_item = location.default_item
-            #     # Place bonfire warp locations statically
-            #     event_item = self.create_item(default_item)
-            #     new_location = DSRLocation(
-            #         self.player,
-            #         location.name,
-            #         location.category,
-            #         default_item,
-            #         self.location_name_to_id[location.name],
-            #         new_region
-            #     )
-            #     new_location.place_locked_item(event_item)
-            else:
-                self.bc = self.bc + 1
-                if (location.category in [DSRLocationCategory.FOG_WALL, DSRLocationCategory.BOSS_FOG_WALL, 
-                                          DSRLocationCategory.DOOR]):
-                    default_item = "Nothing"
-                    # print("Placing event: " + default_item + " in location: " + location.name)
+            if location.category in self.enabled_location_categories or self.is_item_prog(default_item):
+                if (location.category in self.enabled_location_categories
+                    and location.category not in location_skip_categories   # [DSRLocationCategory.EVENT, DSRLocationCategory.DOOR]:
+                    and location.category not in location_locked_categories
+                    and not (self.options.excluded_location_behavior == "do_not_randomize" and location.name in self.all_excluded_locations)):
+                    self.gc = self.gc + 1
+                    if (location.category in [DSRLocationCategory.FOG_WALL, DSRLocationCategory.BOSS_FOG_WALL]):
+                        default_item = "Fogwall Filler"
+                    # print("Adding location: " + location.name + " with default item " + location.default_item)
+                    new_location = DSRLocation(
+                        self.player,
+                        location.name,
+                        location.category,
+                        default_item,
+                        self.location_name_to_id[location.name],
+                        new_region
+                    )
+                    if location.category in [DSRLocationCategory.MISSABLE_DROP, DSRLocationCategory.MISSABLE_SHOP_ITEM]:
+                        new_location.progress_type = LocationProgressType.EXCLUDED
+                else:
+                    self.bc = self.bc + 1
+                    if (location.category in [DSRLocationCategory.FOG_WALL, DSRLocationCategory.BOSS_FOG_WALL,
+                                              DSRLocationCategory.DOOR]):
+                        default_item = "Nothing"
+                        # print("Placing event: " + default_item + " in location: " + location.name)
 
-
-                # Replace non-randomized progression items with events
-                event_item = self.create_item(default_item)
-                # if event_item.classification != ItemClassification.progression:
-                #    continue
-                # print("Adding Location: " + location.name + " as an event with default item " + default_item)
-                new_location = DSRLocation(
-                    self.player,
-                    location.name,
-                    location.category,
-                    default_item,
-                    None,
-                    new_region
-                )
-                event_item.code = None
-                new_location.place_locked_item(event_item)
+                    # Replace non-randomized progression items with events
+                    event_item = self.create_item(default_item)
+                    # if event_item.classification != ItemClassification.progression:
+                    #    continue
+                    # print("Adding Location: " + location.name + " as an event with default item " + default_item)
+                    new_location = DSRLocation(
+                        self.player,
+                        location.name,
+                        location.category,
+                        default_item,
+                        None,
+                        new_region
+                    )
+                    event_item.code = None
+                    new_location.place_locked_item(event_item)
                 
 
-            new_region.locations.append(new_location)
+                new_region.locations.append(new_location)
         
         # print("created " + str(len(new_region.locations)) + " locations")
         self.multiworld.regions.append(new_region)
@@ -534,6 +519,14 @@ class DSRWorld(World):
         #for item in self.multiworld.itempool:
             #print(item.name)
 
+    def is_item_prog(self, name: str) -> bool:
+        if (name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT,
+                                                                         DSRItemCategory.KEY_ITEM,
+                                                                         DSRItemCategory.FOGWALL,
+                                                                         DSRItemCategory.BOSSFOGWALL]
+            and name not in self.ignorable_items):
+            return True
+        return False
 
     def create_item(self, name: str) -> DSRItem:
         useful_categories = [
@@ -546,8 +539,7 @@ class DSRWorld(World):
 
         data = self.item_name_to_id[name]
 
-        if (name in key_item_names or item_dictionary[name].category in [DSRItemCategory.EVENT, DSRItemCategory.KEY_ITEM, DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]
-                and name not in self.ignorable_items):
+        if self.is_item_prog(name):
             item_classification = ItemClassification.progression
         elif item_dictionary[name].category in useful_categories:
             item_classification = ItemClassification.useful

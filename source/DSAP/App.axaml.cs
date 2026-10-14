@@ -1594,12 +1594,18 @@ public partial class App : Application
                 {
                     itemToReceive = MiscHelper.UpgradeItem(itemToReceive, true);
                 }
-                AddAbstractItem(itemToReceive, will_popup);
-                if (itemToReceive.Name == "Ring of Sacrifice x10") // handle this with an exception. Comes from Oswald's shop
+                
+                if (itemToReceive.Quantity == 10 && itemToReceive.Name == "Ring of Sacrifice x10") // handle this with an exception. Comes from Oswald's shop
                 {
-                    for (int i=0; i<9;i++)
-                        AddAbstractItem(itemToReceive, false);
+                    // Previously, a "x10 quantity" ring when received ends up being one "stack" of 10 rings, which can be put into the bottomless box as x2 1-quantity items
+                    // Instead, set quantity to 1 and send 9 extra of them.
+                    // Ideally, we could do a popup for a "x10" quantity ring, and send ten x1 items
+                    
+                    itemToReceive.Quantity = 1;
+                    for (int i = 0; i < 9; i++)
+                        AddAbstractItem(itemToReceive, will_popup);
                 }
+                AddAbstractItem(itemToReceive, will_popup);
 
                 /* If after receiving item (or trap), player is still in game, then it received successfully */
                 if (MiscHelper.IsInGame())

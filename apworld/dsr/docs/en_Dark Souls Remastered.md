@@ -84,6 +84,13 @@ For example, the following configuration will not require you to do the DLC, The
 * Access to the Great Hollow is behind Blighttown access + Lordvessel item.
 * Access to New Londo Ruins Door to the Seal + Lower New Londo Ruins from Upper New Londo Ruins requires access to being able to defeat Ornstein and Smough (in addition to having the Key to the Seal - the default rule).
 
+## Is equip on pickup supported?
+
+Yes, with the `auto_equip` yaml option. Weapons, shields, armor and rings are equipped as soon as you find or receive them from the multiworld, replacing what you have on.
+Covenant of Artorias and the Charred Ring are not replaced as these might just insta-kill you.
+Items that aren't randomized, such as starting weapons, unshuffled enemy drops and vanilla shop stock, are not equipped.
+You can change it while playing with `/autoequip [on/off/toggle]` in the client or the switch in Custom Controls. It goes back to your yaml's value when you reconnect.
+
 ## How do I read the location names?
 
 Locations are generally in this format:  

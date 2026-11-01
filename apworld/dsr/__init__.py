@@ -618,6 +618,7 @@ class DSRWorld(World):
                 # QoL
                 "can_warp_without_lordvessel": self.options.can_warp_without_lordvessel.value,
                 "warp_to_all_bonfires": self.options.warp_to_all_bonfires.value,
+                "auto_equip": self.options.auto_equip.value,
                 # Sanity
                 "fogwall_sanity": self.options.fogwall_sanity.value,
                 "boss_fogwall_sanity": self.options.boss_fogwall_sanity.value,

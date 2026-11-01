@@ -18,6 +18,16 @@ class WarpToAllBonfires(DefaultOnToggle):
     Warpable bonfires are synced between all saves on the slot, regardless of your choice."""
     display_name = "Warp To All Bonfires"
 
+class AutoEquip(Toggle):
+    """Automatically equip weapons, shields, armor and rings when you find or receive them.
+    This replaces what you have equipped, including with gear you are too weak to use well or too heavy to roll in.
+    Melee weapons go in right hand 1, shields in left hand 1, and bows, catalysts, talismans and the Skull Lantern in left hand 2.
+    Covenant of Artorias and the Orange Charred Ring are never replaced. Ammo and spells are not equipped.
+
+    Only sets the starting value: it can be changed during play in the client, with /autoequip or in Custom Controls.
+    It goes back to this value when you reconnect."""
+    display_name = "Auto Equip"
+
 # Difficulty
 class GhostDifficulty(Choice):
     """How to manage difficulty for ghosts.
@@ -472,6 +482,7 @@ option_groups = [
     OptionGroup("Quality of Life", [
         CanWarpWithoutLordvessel,
         WarpToAllBonfires,
+        AutoEquip,
         ]),
     OptionGroup("Sanity", [
         FogwallSanity,
@@ -552,6 +563,7 @@ class DSROption(PerGameCommonOptions):
     # QoL
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
     warp_to_all_bonfires: WarpToAllBonfires
+    auto_equip: AutoEquip
   
     # Sanity
     fogwall_sanity: FogwallSanity

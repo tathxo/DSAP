@@ -32,6 +32,7 @@ namespace DSAP.ViewModels
         private bool _vanillaWarpNames = false;
         private string _warpSortOrder = "";
         private bool _deathlink = false;
+        private bool _autoEquip = false;
         private bool _trackerMapTabSwitching = true;
         private bool _pauseInGestureMenu = true;
 
@@ -126,6 +127,11 @@ namespace DSAP.ViewModels
                         ((App)App.Current).SetDeathlink(_deathlink);
                 }
             }
+        }
+        public bool AutoEquip
+        {
+            get => _autoEquip;
+            set => this.RaiseAndSetIfChanged(ref _autoEquip, value);
         }
         public bool TrackerMapTabSwitching
         {

@@ -129,6 +129,10 @@
 				<Label>Pause In Gesture Menu</Label>
 				<ToggleSwitch IsChecked="{Binding PauseInGestureMenu}"></ToggleSwitch>
             </StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Auto Equip Received Items</Label>
+				<ToggleSwitch IsChecked="{Binding AutoEquip}"></ToggleSwitch>
+            </StackPanel>
         </StackPanel>
         <ToggleButton Grid.Row="2" 
                 Content="Deathlink" 

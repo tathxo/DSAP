@@ -149,6 +149,7 @@ public partial class App : Application
             Log.Logger.Warning(" /warp [DLC/AP/FA] - warp to the DLC/Archives Prison/Firelink Altar if you've been locked out.");
             Log.Logger.Warning("--- Client Settings ---");
             Log.Logger.Warning(" /deathlink [on/off/toggle] - change your deathlink status (does not persist beyond current session).");
+            Log.Logger.Warning(" /autoequip [on/off/toggle/status] - change whether received equipment is equipped automatically (does not persist beyond current session).");
             Log.Logger.Warning("--- End of DSAP commands. ---");
             Client?.SendMessage(a.Command); /* send original command through client for the rest of /help - maybe player will have something if they are an admin. */
         }
@@ -329,6 +330,29 @@ public partial class App : Application
                 Log.Logger.Warning($"Invalid command: {a.Command} - too many arguments received. Format: /deathlink [on/off/toggle]");
             }
             /* Don't send /deathlink to normal processing */
+        }
+        else if (command.StartsWith("/autoequip"))
+        {
+            string[] cmdparts = command.Split(" ");
+            string action = cmdparts.Length > 1 ? cmdparts[1] : "toggle";
+            if (cmdparts.Length > 2)
+            {
+                Log.Logger.Warning($"Invalid command: {a.Command} - too many arguments received. Format: /autoequip [on/off/toggle/status]");
+            }
+            else if (action == "status")
+            {
+                AutoEquipHelper.LogStatus();
+            }
+            else if (action == "on" || action == "off" || action == "toggle")
+            {
+                ControlsContext.AutoEquip = action == "toggle" ? !ControlsContext.AutoEquip : action == "on";
+                Log.Logger.Information($"Auto equip is now {(ControlsContext.AutoEquip ? "on" : "off")}.");
+            }
+            else
+            {
+                Log.Logger.Warning($"Invalid command: \"{a.Command}\". Second argument must be one of [on, off, toggle, status].");
+            }
+            /* Don't send /autoequip to normal processing */
         }
         else if (command.StartsWith("/fog"))
         {
@@ -1045,6 +1069,7 @@ public partial class App : Application
             {
                 SetDeathlink(true);
             }
+            ControlsContext.AutoEquip = Client.Options.ContainsKey("auto_equip") && ((JsonElement)Client.Options["auto_equip"]).GetUInt32() != 0;
             SaveLoadHelper.SaveAllSettings();
 
             if (ControlsContext.Deathlink != deathlink_enabled) // if button wasn't set correctly
@@ -1606,6 +1631,7 @@ public partial class App : Application
                         AddAbstractItem(itemToReceive, will_popup);
                 }
                 AddAbstractItem(itemToReceive, will_popup);
+                AutoEquipHelper.TryEquip(itemToReceive);
 
                 /* If after receiving item (or trap), player is still in game, then it received successfully */
                 if (MiscHelper.IsInGame())

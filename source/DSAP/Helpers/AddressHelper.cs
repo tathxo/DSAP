@@ -838,6 +838,13 @@ namespace DSAP.Helpers
 
             return $"{d1}{d234}{d5678}";
         }
+        internal static ulong GetPlayerGameDataAddress()
+        {
+            var baseB = GetBaseBAddress();
+            if (baseB == 0)
+                return 0;
+            return Memory.ReadULong(MiscHelper.OffsetPointer(baseB, 0x10));
+        }
         internal static ulong GetPlayerHPAddress()
         {
             var baseB = GetBaseBAddress();

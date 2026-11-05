@@ -111,19 +111,6 @@ class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
     display_name = "Guaranteed Items"
 
-class ExcludedLocationBehaviorOption(Choice):
-    """How to choose items for excluded locations in DSR.
-
-    - **Forbid Useful:** Neither progression items nor useful items can be placed in excluded
-      locations.
-    - **Do Not Randomize:** Excluded locations always contain the same item as in vanilla
-      Dark Souls: Remastered.
-    """
-    display_name = "Excluded Locations Behavior"
-    option_forbid_useful = 2
-    option_do_not_randomize = 3
-    default = 2
-
 class FogwallSanity(DefaultOnToggle):
     """Makes area fog walls uninteractable until you receive their items from the item pool. 
     Fog walls will also give checks when you pass through them.
@@ -157,6 +144,7 @@ class IncludeGreatHollow(DefaultOnToggle):
     """Whether to randomize  the Great Hollow and Ash Lake locations and items."""
     display_name = "Include Great Hollow And Ash Lake"
 
+# Boss Shuffle
 class BossSoulShuffle(DefaultOnToggle):
     """Makes boss soul drops be shuffled into the multiworld item pool.
     Does not affect the Lord Souls, which are always shuffled in."""
@@ -170,17 +158,47 @@ class BossBoneShuffle(Toggle):
     """Makes boss homeward bone drops be shuffled into the multiworld item pool."""
     display_name = "Boss Bone Shuffle"
 
+# Item Pickup Shuffle
+class CorpseFillerItemShuffle(Choice):
+    """Adds corpse locations with filler items to the multiworld pool, the local pool, or not at all. Up to 367 locations.
+    Setting this to "into multiworld" randomizes them into the AP pool - between all games in the multiworld.
+    Setting this to "locally" only randomizes it locally - only within this game of DSR.
+    Setting this to "vanilla" does not randomize them."""
+    display_name = "Corpse Filler Item Shuffle"
+    option_into_multiworld = 1
+    option_locally = 2
+    option_vanilla = 3
+    default = 1
+
+class CorpseUsefulItemShuffle(Choice):
+    """How to randomize corpse locations with useful items. Up to 7 locations.
+    Includes Grass Crest Shield, some Firekeeper Souls, some embers, Chaos Flame Ember, and Sewer Chamber Key locations.
+
+    Setting this to "into multiworld" randomizes them into the AP pool - between all games in the multiworld.
+    Setting this to "locally" only randomizes it locally - only within this game of DSR.
+    Setting this to "vanilla" does not randomize them."""
+    display_name = "Corpse Useful Item Shuffle"
+    option_into_multiworld = 1
+    option_locally = 2
+    option_vanilla = 3
+    default = 1
+
+# One-time Enemy Drop Shuffle
 class BlackKnightWeaponShuffle(DefaultOnToggle):
-    """Makes Black Knight weapon drop locations guaranteed, and adds their weapons to the multiworld item pool.
+    """Makes Black Knight weapon drop locations guaranteed, and adds their weapons to the multiworld item pool. Up to 7 locations.
     This only applies to the 7 non-respawning Black Knights in the game.
-    With this off, their Titanite Chunk drops are still added to the pool, and the weapon drops are left to chance.
+    With this off, the weapon drop change is left unmodified, and those locations are unrandomized.
 
     These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool."""
     display_name = "Black Knight Weapon Shuffle"
 
+class BlackKnightTitaniteShuffle(DefaultOnToggle):
+    """Adds Black Knight titanite chunks as locations and items to the multiworld and item pool. Up to 7 locations.
+    This only applies to the 7 non-respawning Black Knights in the game."""
+    display_name = "Black Knight Titanite Shuffle"
 
 class CrystalLizardShuffle(Toggle):
-    """Adds Crystal Lizard drop locations to the multiworld item pool.
+    """Adds Crystal Lizard drops as locations to the multiworld and item pool. Up to 50 locations total.
     This adds 2 locations per lizard: 1 for their Twinkling Titanite, and 1 for an additional drop - which is made guaranteed.
 
     There are 25 total crystal lizards, 10 of which are in the Great Hollow, and 5 of which are in the DLC.
@@ -188,13 +206,25 @@ class CrystalLizardShuffle(Toggle):
     Great Hollow lizards are forced to spawn on every load instead of their vanilla 1/3 chance per load."""
     display_name = "Crystal Lizard Shuffle"
 
-# Item Pickup Shuffle
-class BasicCorpseItemShuffle(DefaultOnToggle):
-    """Adds basic corpse item locations to the pool.
-    Corpses with progression items (keys) will still always be shuffled, regardless of this setting.
-    Setting this to false drastically decreases the number of checks in the game, but also decreases the number of soul items available."""
-    display_name = "Basic Corpse Item Shuffle"
+class MimicDropShuffle(DefaultOnToggle):
+    """Adds mimic drops as locations to the multiworld and item pool. Up to 9 locations total, includes 1 prog item (Crest Key)."""
+    display_name = "Mimic Drop Shuffle"
 
+class MinibossDropShuffle(DefaultOnToggle):
+    """Adds the Valley of Drakes' Undead Dragon's and two Hydras' drops as locations to the multiworld and item pool. Up to 4 locations."""
+    display_name = "Miniboss Drop Shuffle"
+
+class HostileNpcDropShuffle(DefaultOnToggle):
+    """Adds hostile NPC (not invader) drops as locations to the multiworld and item pool. Up to 4 locations.
+    Included NPCs: Oscar in 2nd asylum visit, Havel, and Grana of Izalith."""
+    display_name = "Hostile Npc Drop Shuffle"
+
+class MiscDropShuffle(DefaultOnToggle):
+    """Adds uncategorized guaranteed drops as locations to the multiworld and item pool. Up to 7 locations.
+    Includes Broken Pendant, Sunlight Maggot, Sif Rescue (Cleansing Greatshield), the 2 Pisaca drops, a PW pyromancy engorged zombie, and the Oolacile "I'm Sorry" Carving sorceress."""
+    display_name = "Miscellaneous Drop Shuffle"
+
+# Shop Shuffle
 class UnlimitedShopItemShuffle(DefaultOnToggle):
     """Shuffles unlimited quantity consumable and arrow shop slots from unmissable shopkeepers.
 
@@ -497,15 +527,29 @@ option_groups = [
         IncludePaintedWorld,
         IncludeGreatHollow,
         ]),
-    OptionGroup("Shuffling", [
+    # OptionGroup("Lord Souls", [
+    #     LordSoulShuffle,
+    #     LordSoulShardsRequired,
+    #     LordSoulShardsExtra,
+    #     ]),
+    OptionGroup("Boss Drop Shuffling", [
+        # BossMiscDropShuffle,
         BossSoulShuffle,
         BossHumanityShuffle,
         BossBoneShuffle,
+        ]),
+    OptionGroup("One-Time Drop Shuffling", [
         BlackKnightWeaponShuffle,
+        BlackKnightTitaniteShuffle,
+        MinibossDropShuffle,
+        MimicDropShuffle,
+        HostileNpcDropShuffle,
         CrystalLizardShuffle,
+        MiscDropShuffle,
         ]),
     OptionGroup("Item Pickup Shuffling", [
-            BasicCorpseItemShuffle,
+        CorpseFillerItemShuffle,
+        CorpseUsefulItemShuffle,
         ]),
     OptionGroup("Shops", [
         UnlimitedShopItemShuffle,
@@ -534,7 +578,7 @@ option_groups = [
         StartingPyromancy,
         NoWeaponRequirements,
         NoSpellStatRequirements,
-        NoMiracleCovenantRequirements
+        NoMiracleCovenantRequirements,
         ]),
     ]
 
@@ -546,7 +590,6 @@ class DSROption(PerGameCommonOptions):
     enable_deathlink: EnableDeathlinkOption
     goal_condition: GoalConditionOption
     guaranteed_items: GuaranteedItemsOption
-    excluded_location_behavior: ExcludedLocationBehaviorOption
     start_inventory_from_pool: StartInventoryPool
 
     # QoL
@@ -581,11 +624,19 @@ class DSROption(PerGameCommonOptions):
     boss_soul_shuffle: BossSoulShuffle
     boss_humanity_shuffle: BossHumanityShuffle
     boss_bone_shuffle: BossBoneShuffle
+
+    # One-Time Drop Shuffling
     bk_weapon_shuffle: BlackKnightWeaponShuffle
+    bk_titanite_shuffle: BlackKnightTitaniteShuffle
     lizard_shuffle: CrystalLizardShuffle
+    mimic_drop_shuffle: MimicDropShuffle
+    miniboss_drop_shuffle: MinibossDropShuffle
+    hostile_npc_drop_shuffle: HostileNpcDropShuffle
+    misc_drop_shuffle: MiscDropShuffle
 
     # Item Pickup Shuffling
-    basic_corpse_item_shuffle: BasicCorpseItemShuffle
+    corpse_filler_item_shuffle: CorpseFillerItemShuffle
+    corpse_useful_item_shuffle: CorpseUsefulItemShuffle
 
     # Shops
     unlimited_shop_item_shuffle: UnlimitedShopItemShuffle

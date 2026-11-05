@@ -64,6 +64,9 @@ class DSRWorld(World):
     data_version = 0
     base_id = 11110000
     enabled_location_categories: Set[DSRLocationCategory]
+    ap_loc_categories = []
+    local_loc_categories = []
+    vanilla_loc_categories = []
     required_client_version = (0, 5, 1)
     item_name_to_id = DSRItem.get_name_to_id()
     location_name_to_id = DSRLocation.get_name_to_id()
@@ -105,6 +108,26 @@ class DSRWorld(World):
 
 
     def generate_early(self):
+        # For optional location categories, map their options to the slot data string. This has to be defined before UT yamlless support to map it backward
+        acr_cat_map : List[tuple[str, Option, DSRLocationCategory]] = [
+            ("BS", self.options.boss_soul_shuffle, DSRLocationCategory.BOSS_SOUL),
+            ("BH", self.options.boss_humanity_shuffle, DSRLocationCategory.BOSS_HUMANITY),
+            ("BB", self.options.boss_bone_shuffle, DSRLocationCategory.BOSS_BONE),
+
+            # One Time Drop Shuffle
+            ("BKW", self.options.bk_weapon_shuffle, DSRLocationCategory.BK_DROP),
+            ("BKT", self.options.bk_titanite_shuffle, DSRLocationCategory.BK_WEAPON),
+            ("LIZ", self.options.lizard_shuffle, DSRLocationCategory.CRYSTAL_LIZARD),
+            ("MIM", self.options.mimic_drop_shuffle, DSRLocationCategory.MIMIC_DROP),
+            ("MBD", self.options.miniboss_drop_shuffle, DSRLocationCategory.MINIBOSS_DROP),
+            ("NPC", self.options.hostile_npc_drop_shuffle, DSRLocationCategory.HOSTILE_NPC_DROP),
+            ("MIS", self.options.misc_drop_shuffle, DSRLocationCategory.MISC_DROP),
+
+            # Item Pickup Shuffling
+            ("CFI", self.options.corpse_filler_item_shuffle, DSRLocationCategory.CORPSE_FILLER_ITEM),
+            ("CUI", self.options.corpse_useful_item_shuffle, DSRLocationCategory.CORPSE_USEFUL_ITEM),
+        ]
+
         # Start UT yamlless support
         re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if re_gen_passthrough and self.game in re_gen_passthrough:
@@ -118,6 +141,15 @@ class DSRWorld(World):
                 if opt is not None:
                     # You can also set .value directly but that won't work if you have OptionSets
                     setattr(self.options, key, opt.from_any(value))
+            if "ap_loc_categories" in slot_data:
+                # maybe go the other way, to check for unknown acronyms in the slot data?
+                for (acr, copt, cat) in acr_cat_map:
+                    if acr in slot_data["ap_loc_categories"].split(","):
+                        copt.value = CorpseFillerItemShuffle.option_into_multiworld
+
+
+
+
         # End UT yamlless support
 
         ## Soul Multiplier
@@ -186,53 +218,42 @@ class DSRWorld(World):
         self.enabled_location_categories.add(DSRLocationCategory.BOSS)
         self.enabled_location_categories.add(DSRLocationCategory.BOSS_DROP)
 
-        # self.enabled_location_categories.add(DSRLocationCategory.ITEM_LOT)
         self.enabled_location_categories.add(DSRLocationCategory.CHEST_ITEM)
 
         # Always shuffle corpse prog items. If player wants to make them vanilla, they can use plando
         self.enabled_location_categories.add(DSRLocationCategory.CORPSE_PROG_ITEM)
-        # Conditionally shuffle corpse filler and useful items
-        if self.options.corpse_filler_item_shuffle.value == CorpseFillerItemShuffle.option_into_multiworld:
-            self.enabled_location_categories.add(DSRLocationCategory.CORPSE_FILLER_ITEM)
-        if self.options.corpse_useful_item_shuffle.value == CorpseUsefulItemShuffle.option_into_multiworld:
-            self.enabled_location_categories.add(DSRLocationCategory.CORPSE_USEFUL_ITEM)
-
-
-        if self.options.mimic_drop_shuffle.value:
-            self.enabled_location_categories.add(DSRLocationCategory.MIMIC_DROP)
-        if self.options.miniboss_drop_shuffle.value:
-            self.enabled_location_categories.add(DSRLocationCategory.MINIBOSS_DROP)
-        if self.options.hostile_npc_drop_shuffle.value:
-            self.enabled_location_categories.add(DSRLocationCategory.HOSTILE_NPC_DROP)
-        if self.options.misc_drop_shuffle.value:
-            self.enabled_location_categories.add(DSRLocationCategory.MISC_DROP)
-
+        # Always shuffle frozen blacksmiths, and npc prog items
         self.enabled_location_categories.add(DSRLocationCategory.FROZEN_BLACKSMITH)
         self.enabled_location_categories.add(DSRLocationCategory.NPC_PROG_ITEM)
 
-        # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_DROP)
+
+        self.ap_loc_categories = []
+        self.local_loc_categories = []
+        self.vanilla_loc_categories = []
+
+
+        # Build optional ap location categories into their loc lists
+        for (acr, copt, cat) in acr_cat_map:
+            if copt.value == CorpseFillerItemShuffle.option_into_multiworld:
+                self.ap_loc_categories.append(acr)
+            elif copt.value == CorpseFillerItemShuffle.option_locally:
+                self.local_loc_categories.append(acr)
+            elif copt.value == CorpseFillerItemShuffle.option_vanilla:
+                self.vanilla_loc_categories.append(acr)
+        # Use the values in the ap loc list to enable those categories specifically
+        for (acr, copt, cat) in acr_cat_map:
+            if acr in self.ap_loc_categories:
+                self.enabled_location_categories.add(cat)
+
+
         self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
-        
-        if (self.options.boss_soul_shuffle.value == True):
-            self.enabled_location_categories.add(DSRLocationCategory.BOSS_SOUL)
-        if (self.options.boss_humanity_shuffle.value == True):
-            self.enabled_location_categories.add(DSRLocationCategory.BOSS_HUMANITY)
-        if (self.options.boss_bone_shuffle.value == True):
-            self.enabled_location_categories.add(DSRLocationCategory.BOSS_BONE)
 
-        self.enabled_location_categories.add(DSRLocationCategory.BK_DROP)
-        if (self.options.bk_weapon_shuffle.value == True):
-            self.enabled_location_categories.add(DSRLocationCategory.BK_WEAPON)
-
-        if (self.options.lizard_shuffle.value == True):
-            self.enabled_location_categories.add(DSRLocationCategory.CRYSTAL_LIZARD)
-
-        # self.enabled_location_categories.add(DSRLocationCategory.DOOR)
         if (self.options.fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.FOG_WALL)
         if (self.options.boss_fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.BOSS_FOG_WALL)
-        # if (self.options.shop_sanity.value == True):
+
+
         if (self.options.limited_shop_item_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_EXTENDED_ITEM)
@@ -657,23 +678,9 @@ class DSRWorld(World):
                 "include_pw": self.options.include_pw.value,
                 "include_gh": self.options.include_gh.value,
 
-                # Boss Drop Shuffle
-                "boss_soul_shuffle": self.options.boss_soul_shuffle.value,
-                "boss_humanity_shuffle": self.options.boss_humanity_shuffle.value,
-                "boss_bone_shuffle": self.options.boss_bone_shuffle.value,
-
-                # One Time Drop Shuffle
-                "bk_weapon_shuffle" : self.options.bk_weapon_shuffle.value,
-                "bk_titanite_shuffle" : self.options.bk_titanite_shuffle.value,
-                "lizard_shuffle" : self.options.lizard_shuffle.value,
-                "mimic_drop_shuffle" : self.options.mimic_drop_shuffle.value,
-                "miniboss_drop_shuffle" : self.options.miniboss_drop_shuffle.value,
-                "hostile_npc_drop_shuffle" : self.options.hostile_npc_drop_shuffle.value,
-                "misc_drop_shuffle" : self.options.misc_drop_shuffle.value,
-
-                # Item Pickup Shuffling
-                "cfi_shuffle": self.options.corpse_filler_item_shuffle.value,
-                "cui_shuffle": self.options.corpse_useful_item_shuffle.value,
+                # info about which location categories are ap randomized
+                "ap_loc_categories": ",".join(self.ap_loc_categories),
+                "local_loc_categories": ",".join(self.local_loc_categories),
 
                 # Shops
                 "unlimited_shop_item_shuffle": self.options.unlimited_shop_item_shuffle.value,

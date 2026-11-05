@@ -4,6 +4,27 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, Op
 from Options import OptionGroup
 from .Skips import get_all_skips, SkipDifficulty
 
+# Game Options
+class EnableDeathlinkOption(Toggle):
+    """Includes Deathlink"""
+    display_name = "Enable Deathlink"
+
+class GoalConditionOption(Choice):
+    """Set the goal condition
+
+    - **Gwyn:** Default option -Beat Gwyn, Lord of Cinder
+    - **Bosses:** Defeat all bosses
+    - **Ornstein and Smough:** Kill Ornstein and Smough. Choosing this option also excludes all checks that would require the Lordvessel."""
+    display_name = "Goal Condition"
+    option_gwyn = 0
+    option_all_bosses = 1
+    option_ornstein_and_smough = 2
+    option_manus = 3
+    default = 0
+
+class GuaranteedItemsOption(ItemDict):
+    """Guarantees that the specified items will be in the item pool"""
+    display_name = "Guaranteed Items"
 
 # QoL
 class CanWarpWithoutLordvessel(DefaultOnToggle):
@@ -106,11 +127,7 @@ class WeightMultiplierSteps(Range):
     range_end = 10
     default = 0
 
-# Game Options
-class GuaranteedItemsOption(ItemDict):
-    """Guarantees that the specified items will be in the item pool"""
-    display_name = "Guaranteed Items"
-
+# Sanity
 class FogwallSanity(DefaultOnToggle):
     """Makes area fog walls uninteractable until you receive their items from the item pool. 
     Fog walls will also give checks when you pass through them.
@@ -480,23 +497,6 @@ class IncomingWeaponUpgradeInfusionPaths(OptionList):
     default = {"Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"}
     valid_keys = ["Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"]
 
-class EnableDeathlinkOption(Toggle):
-    """Includes Deathlink"""
-    display_name = "Enable Deathlink"
-
-class GoalConditionOption(Choice):
-    """Set the goal condition
-    
-    - **Gwyn:** Default option -Beat Gwyn, Lord of Cinder
-    - **Bosses:** Defeat all bosses
-    - **Ornstein and Smough:** Kill Ornstein and Smough. Choosing this option also excludes all checks that would require the Lordvessel."""
-    display_name = "Goal Condition"
-    option_gwyn = 0
-    option_all_bosses = 1
-    option_ornstein_and_smough = 2
-    option_manus = 3
-    default = 0
-    
 # Group relevant options
 option_groups = [
     OptionGroup("Quality of Life", [
@@ -516,12 +516,6 @@ option_groups = [
         WeightMultiplierMin,
         WeightMultiplierSteps,
         ]),
-    OptionGroup("Incoming Weapon Upgrades", [
-        IncomingWeaponUpgradeBaseLevel,
-        IncomingWeaponUpgradeMaxLevel,
-        IncomingWeaponUpgradeSteps,
-        IncomingWeaponUpgradeInfusionPaths
-        ]),
     OptionGroup("Optional Region Selection", [
         IncludeDlc,
         IncludePaintedWorld,
@@ -538,6 +532,10 @@ option_groups = [
         BossHumanityShuffle,
         BossBoneShuffle,
         ]),
+    OptionGroup("Item Pickup Shuffling", [
+        CorpseFillerItemShuffle,
+        CorpseUsefulItemShuffle,
+    ]),
     OptionGroup("One-Time Drop Shuffling", [
         BlackKnightWeaponShuffle,
         BlackKnightTitaniteShuffle,
@@ -546,10 +544,6 @@ option_groups = [
         HostileNpcDropShuffle,
         CrystalLizardShuffle,
         MiscDropShuffle,
-        ]),
-    OptionGroup("Item Pickup Shuffling", [
-        CorpseFillerItemShuffle,
-        CorpseUsefulItemShuffle,
         ]),
     OptionGroup("Shops", [
         UnlimitedShopItemShuffle,
@@ -580,7 +574,13 @@ option_groups = [
         NoSpellStatRequirements,
         NoMiracleCovenantRequirements,
         ]),
-    ]
+    OptionGroup("Incoming Weapon Upgrades", [
+        IncomingWeaponUpgradeBaseLevel,
+        IncomingWeaponUpgradeMaxLevel,
+        IncomingWeaponUpgradeSteps,
+        IncomingWeaponUpgradeInfusionPaths,
+    ]),
+]
 
 
 @dataclass

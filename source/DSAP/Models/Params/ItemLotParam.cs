@@ -127,6 +127,9 @@ namespace DSAP.Models
         [MemoryOffset(0x93)]
         public byte cumulateReset { get; set; }
 
+        public const int LOT_ITEM_NUM_01 = 0x8a;
+        public const int LOT_ITEM_CATEGORY_01 = 0x20;
+        public const int LOT_ITEM_ID_01 = 0x0;
 
         override public string ToString()
         {

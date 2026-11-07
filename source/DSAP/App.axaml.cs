@@ -52,6 +52,9 @@ public partial class App : Application
     // 
     internal static Dictionary<long, ScoutedItemInfo> scoutedLocationInfo = [];
     internal static Dictionary<int, ItemLot> ItemLotReplacementMap = [];
+    internal static Dictionary<string, string[]> locNameGroups = [];
+    internal static Dictionary<long, long> localRandoMap = []; // map of local non-ap locations by apid to their matching item's apid (kind of a "local scout info")
+    internal static List<ILocation> missingLocationsList = [];
     // Logging
     private static readonly object _lockObject = new object();
     // Deathlink
@@ -1083,27 +1086,7 @@ public partial class App : Application
             }
 
 
-            var bossLocations = LocationHelper.GetBossFlagLocations();
-            var itemLocations = LocationHelper.GetItemLotLocations();
-            var bossExtraItemLocations = LocationHelper.GetBossExtraItemLotLocations();
-            var extraItemLocations = LocationHelper.GetExtraItemLotLocations();
-            var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
-            var doorLocations = LocationHelper.GetDoorFlagLocations();
-            var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
-            var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
-            var miscLocations = LocationHelper.GetMiscFlagLocations();
-
-            var fullLocationsList = bossLocations
-                .Union(itemLocations)
-                .Union(bossExtraItemLocations)
-                .Union(extraItemLocations)
-                .Union(bonfireLocations)
-                .Union(doorLocations)
-                .Union(fogWallLocations)
-                .Union(shopLineupLocations)
-                .Union(miscLocations)
-                .ToList();
-            Client.MonitorLocationsAsync(fullLocationsList);
+            Client.MonitorLocationsAsync(missingLocationsList);
 
             StartEmkWatchers(EmkControllers);
             StartInGameWatcher();
@@ -1952,9 +1935,17 @@ public partial class App : Application
         {
             /* get slot info */
             int currentSlot = App.Client.CurrentSession.ConnectionInfo.Slot;
+           
             var slotDataTask = App.Client.CurrentSession.DataStorage.GetSlotDataAsync(currentSlot);
-            slotDataTask.Wait();
+            var locNameGroupsTask = Client.CurrentSession.DataStorage.GetLocationNameGroupsAsync();
+            
+            var locids = Client.CurrentSession.Locations.AllLocations.ToArray();
+            var scoutedLocationInfoTask = Client.CurrentSession.Locations.ScoutLocationsAsync(false, locids);
+            
+            await Task.WhenAll([slotDataTask, locNameGroupsTask, scoutedLocationInfoTask]);
             Dictionary<string, object> slotData = slotDataTask.Result;
+            locNameGroups = locNameGroupsTask.Result;
+            scoutedLocationInfo = scoutedLocationInfoTask.Result;
 
             DSOptions = new DarkSoulsOptions(App.Client.Options, slotData);
             if (DSOptions.outofdate)
@@ -1971,9 +1962,8 @@ public partial class App : Application
 
             AllowedBonfireWarps = MiscHelper.GetBonfireWarpInfos();
 
-            var locids = Client.CurrentSession.Locations.AllLocations.ToArray();
+            
 
-            scoutedLocationInfo = await Client.CurrentSession.Locations.ScoutLocationsAsync(false, locids);
 
             await ApItemInjectorHelper.AddAPItems(scoutedLocationInfo);
             BonfireInjectorHelper.TrackLitBonfiresAsync();
@@ -1985,6 +1975,132 @@ public partial class App : Application
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo);
             var hints = await App.Client.CurrentSession.Hints.GetHintsAsync();
             AddressHelper.BuildHintTriggers(scoutedLocationInfo, hints);
+
+
+
+            var bossLocations = LocationHelper.GetBossFlagLocations();
+            var itemLocations = LocationHelper.GetItemLotLocations();
+            var bossExtraItemLocations = LocationHelper.GetBossExtraItemLotLocations();
+            var extraItemLocations = LocationHelper.GetExtraItemLotLocations();
+            var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
+            var doorLocations = LocationHelper.GetDoorFlagLocations();
+            var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
+            var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
+            var miscLocations = LocationHelper.GetMiscFlagLocations();
+
+            var fullLocationsList = bossLocations
+                .Union(itemLocations)
+                .Union(bossExtraItemLocations)
+                .Union(extraItemLocations)
+                .Union(bonfireLocations)
+                .Union(doorLocations)
+                .Union(fogWallLocations)
+                .Union(shopLineupLocations)
+                .Union(miscLocations)
+                .ToList();
+
+
+            // get full list of locally rando'd ids
+            HashSet<long> localRandoLocs = [];
+            foreach (var locgroup in locNameGroups.Where(x => DSOptions.LocalRandodLocGroups.Contains(x.Key)).Select(x => x.Value).ToList())
+            {
+                foreach (var loc in locgroup)
+                {
+                    long idresult = App.Client.CurrentSession.Locations.GetLocationIdFromName(App.Client.CurrentSession.ConnectionInfo.Game, loc);
+                    if (idresult > 0)
+                        localRandoLocs.Add(idresult);
+                    else
+                        Log.Logger.Warning($"id not found for loc: {loc}");
+                    Log.Logger.Warning($"adding local rando loc: {loc}/{idresult}");
+                }
+            }
+            Log.Logger.Warning($"localrandolocs size = {localRandoLocs.Count}");
+
+            // get full location list from id list
+            List<ILocation> origLocalRandoList = fullLocationsList.Where(x => !Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
+            List<ILocation> localRandoList = fullLocationsList.Where(x => !Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
+            
+            Log.Logger.Warning($"localrandolist size = {localRandoList.Count}");
+            // create a mapping for locally rando'd ids => other locations
+            var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed));
+            {
+                
+                ParamHelper.ReadFromBytes(out ParamStruct<ShopLineupParam> shopLineupParamStruct,
+                                                     ShopLineupParam.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+                var shopLineupFlags = LocationHelper.GetShopLineupFlags();
+
+                ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> itemLotParamStruct,
+                                                     ItemLotParam.spOffset,
+                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
+                var itemLotFlags = LocationHelper.GetItemLotFlags();
+
+                foreach (var loc in localRandoList.Select(x => x.Id).ToList())
+                {
+                    var nextSlotIdx = rand.Next(localRandoList.Count());
+                    var nextSlot = localRandoList.ElementAt(nextSlotIdx);
+                    localRandoList.Remove(nextSlot);
+
+                    Log.Logger.Warning($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to {nextSlot.Name}");
+
+                    foreach (var shoplineup in shopLineupFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
+                    {
+                        foreach (var parament in shopLineupParamStruct.ParamEntries.Where(x => x.id == shoplineup.ParamId)) // for each param that matches param id
+                        {
+                            uint target_id = BitConverter.ToUInt32(shopLineupParamStruct.ParamBytes, (int)(parament.paramOffset + ShopLineupParam.EQUIP_ID));
+                            byte target_quantity = Math.Max((byte)shopLineupParamStruct.ParamBytes[parament.paramOffset + ShopLineupParam.SELL_QUANTITY], (byte)1); // guarantee at least 1
+
+                            byte target_type = shopLineupParamStruct.ParamBytes[parament.paramOffset + ShopLineupParam.EQUIP_TYPE];
+                            Dictionary<int, DSItemCategory> typecatmap = new Dictionary<int, DSItemCategory>()
+                            {
+                                { 0, DSItemCategory.AnyWeapon},
+                                { 1, DSItemCategory.Armor},
+                                { 2, DSItemCategory.Rings},
+                                { 3, DSItemCategory.Consumables},
+                                { 4, DSItemCategory.Spells}
+                            };
+                            DSItemCategory target_category = typecatmap[target_type];
+
+                            DarkSoulsItem? target_item = AllItems.Find(x => x.Id == target_id && x.Quantity == target_quantity && x.Category == target_category);
+                            if (target_item != null)
+                            {
+                                int target_item_apid = target_item.ApId;
+                                localRandoMap.Add(loc, target_item_apid);
+                                Log.Logger.Warning($"mapping locid={loc} to {target_item.Name}");
+                            }
+                            else
+                                Log.Logger.Error($"failed to map locid={loc}");
+                        }
+                    }
+
+                    foreach (var itemlotflag in itemLotFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
+                    {
+                        foreach (var parament in itemLotParamStruct.ParamEntries.Where(x => x.id == itemlotflag.ItemLotParamId)) // for each lot param that matches param id
+                        {
+                            uint target_id = BitConverter.ToUInt32(itemLotParamStruct.ParamBytes, (int)(parament.paramOffset + ItemLotParam.LOT_ITEM_ID_01));
+                            byte target_quantity = Math.Max((byte)itemLotParamStruct.ParamBytes[parament.paramOffset + ItemLotParam.LOT_ITEM_NUM_01], (byte)1); // guarantee at least 1
+                            DSItemCategory target_category = (DSItemCategory)BitConverter.ToUInt32(itemLotParamStruct.ParamBytes, (int)(parament.paramOffset + ItemLotParam.LOT_ITEM_CATEGORY_01));
+
+                            DarkSoulsItem? target_item = AllItems.Find(x => x.Id == target_id && x.Quantity == target_quantity && x.Category == target_category);
+                            if (target_item != null)
+                            {
+                                int target_item_apid = target_item.ApId;
+                                localRandoMap.Add(loc, target_item_apid);
+                                Log.Logger.Warning($"mapping locid={loc} to {target_item.Name}");
+                            }
+                            else
+                                Log.Logger.Error($"failed to map locid={loc}");
+                        }
+                    }
+
+
+                }
+            }
+            
+            // Setup missing locations list for location listening
+            missingLocationsList = fullLocationsList
+                .Where(x => Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id)) // only listen for uncompleted locations
+                .ToList();
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
@@ -2030,6 +2146,8 @@ public partial class App : Application
         AllowedBonfireWarps = [];
         ItemLotReplacementMap = [];
         scoutedLocationInfo = [];
+        locNameGroups = [];
+        localRandoMap = [];
     }
     private void OnGameDisconnected(object sender, EventArgs args)
     {

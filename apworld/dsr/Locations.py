@@ -10,7 +10,7 @@ class DSRLocationCategory(IntEnum):
     BOSS = 2,
     BONFIRE = 3,
     DOOR = 4,
-    ITEM_LOT = 5,
+    # ITEM_LOT = 5,
     ENEMY_DROP = 6,
     FOG_WALL = 7,
     BOSS_FOG_WALL = 8,

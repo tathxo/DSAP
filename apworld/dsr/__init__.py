@@ -129,8 +129,8 @@ class DSRWorld(World):
             ("BB", self.options.boss_bone_shuffle, DSRLocationCategory.BOSS_BONE),
 
             # One Time Drop Shuffle
-            ("BKW", self.options.bk_weapon_shuffle, DSRLocationCategory.BK_DROP),
-            ("BKT", self.options.bk_titanite_shuffle, DSRLocationCategory.BK_WEAPON),
+            ("BKW", self.options.bk_weapon_shuffle, DSRLocationCategory.BK_WEAPON),
+            ("BKT", self.options.bk_titanite_shuffle, DSRLocationCategory.BK_TITANITE),
             ("LIZ", self.options.lizard_shuffle, DSRLocationCategory.CRYSTAL_LIZARD),
             ("MIM", self.options.mimic_drop_shuffle, DSRLocationCategory.MIMIC_DROP),
             ("MBD", self.options.miniboss_drop_shuffle, DSRLocationCategory.MINIBOSS_DROP),

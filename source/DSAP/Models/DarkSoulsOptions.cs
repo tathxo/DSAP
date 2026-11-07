@@ -19,6 +19,7 @@ namespace DSAP.Models
         public Enums.DSGoal Goal {  get; set; }
         public long RequiredBosses { get; set; }
         public string IncludedOptionalZones { get; set; } = "";
+        public List<String> LocalRandodLocGroups { get; set; } = [];
         // QoL
         public bool WarpToAllBonfires { get; set; }
         public bool CanWarpWithoutLordvessel { get; set; }
@@ -152,6 +153,38 @@ namespace DSAP.Models
                 IncludedOptionalZones += "pw ";
             if (GetBool("include_gh"))
                 IncludedOptionalZones += "gh ";
+
+            LocalRandodLocGroups = [];
+            if (App.Client.Options.ContainsKey("local_loc_categories"))
+            {
+                var loc_group_string = ((JsonElement)App.Client.Options["local_loc_categories"]).ToString();
+                Dictionary<string, string> acrToGroup = new Dictionary<string, string>()
+                {
+                    {"BS", "Boss Souls"},
+                    {"BH", "Boss Humanity"},
+                    {"BB", "Boss Bones"},
+
+                    //# One Time Drop Shuffle
+                    {"BKW", "Black Knight Weapons"},
+                    {"BKT", "Black Knight Titanites"},
+                    {"LIZ", "Crystal Lizards"},
+                    {"MIM", "Mimic Drops"},
+                    {"MBD", "Miniboss Drops"},
+                    {"NPC", "Npc Prog Items"},
+                    {"MIS", "Misc Drops"},
+
+                    //# Item Pickup Shuffling
+                    {"CFI", "Corpse Filler Items"},
+                    {"CUI", "Corpse Useful Items"}
+                };
+                foreach (var acr in loc_group_string.Split(','))
+                {
+                    if (acrToGroup.TryGetValue(acr, out string val))
+                    {
+                        LocalRandodLocGroups.Add(val);
+                    }
+                }
+            }
 
             if (App.Client.Options.ContainsKey("ghost_difficulty") && Enum.TryParse(((JsonElement)App.Client.Options["ghost_difficulty"]).ToString(), out Enums.DSGhostDifficulty gd))
                 GhostDifficulty = gd;
@@ -291,6 +324,13 @@ namespace DSAP.Models
                 object value = descriptor.GetValue(this);
                 if (name == "RequiredBosses")
                     result += $"{name}={value:X}\n";
+                else if (name == "LocalRandodLocGroups")
+                {
+                    result += $"{name}=[";
+                    foreach (var g in LocalRandodLocGroups)
+                        result += $"{g},";
+                    result += "]\n";
+                }
                 else
                     result += $"{name}={value}\n";
             }

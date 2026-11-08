@@ -4,7 +4,9 @@ using DSAP.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -189,6 +191,45 @@ namespace DSAP.Helpers
             return builtString;
         }
 
+        private static short ResolveApIconId()
+        {
+            const string PATCHED_ASSET_MD5 = "345668f031755f3f3b03a9fec7110e2f";
+            const short PRISM_STONE_ID = 2042;
+            const short AP_ICON_ID = 3032;
+
+            var processModule = Memory.GetCurrentProcess().MainModule;
+            if (processModule == null)
+            {
+                Log.Logger.Warning("Unable to read process information");
+                return PRISM_STONE_ID;
+            }
+
+            var gameDirectory = Path.GetDirectoryName(processModule.FileName);
+            Log.Logger.Debug($"DSR installed at '{gameDirectory}'");
+
+            var assetPath = Path.Join(gameDirectory, "menu", "menu_0.tpf.dcx");
+
+            if (!File.Exists(assetPath))
+            {
+                Log.Logger.Warning("Unable to find/access assets");
+                return PRISM_STONE_ID;
+            }
+
+            using var stream = File.OpenRead(assetPath);
+            byte[] hash = MD5.HashData(stream);
+            string md5 = Convert.ToHexString(hash).ToLowerInvariant();
+
+            Log.Logger.Debug($"menu_0.tpf.dcx md5={md5}");
+
+            if (md5 != PATCHED_ASSET_MD5)
+            {
+                Log.Logger.Information("DSR not patched. Using Prism Stone id");
+                return PRISM_STONE_ID;
+            }
+
+            Log.Logger.Information("DSR patched. Using AP Icon id");
+            return AP_ICON_ID;
+        }
 
         private static bool upgradeGoods(List<KeyValuePair<long, string>> addedEntries)
         {
@@ -225,6 +266,8 @@ namespace DSAP.Helpers
             parambytes[0x12] = 0; // sell value byte 2
             parambytes[0x13] = 0; // sell value byte 3
 
+            var iconId = ResolveApIconId();
+
             // For each new item, "Add Item" to ParamSt
             for (uint i = 0; i < new_entries; i++)
             {
@@ -237,7 +280,7 @@ namespace DSAP.Helpers
                 parambytes[0x1d] = idbytes[1]; // sort byte 1
                 //parambytes[0x1e] = idbytes[2];
                 //parambytes[0x1f] = idbytes[3];
-                byte[] iconbytes = BitConverter.GetBytes((short)2042);
+                byte[] iconbytes = BitConverter.GetBytes(iconId);
                 parambytes[0x2c] = iconbytes[0]; // icon byte 0
                 parambytes[0x2d] = iconbytes[1]; // icon byte 1
                 // This will add the item to the array, and append its string to the NewString buffer

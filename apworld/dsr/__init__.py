@@ -18,7 +18,7 @@ from .Options import DSROption, option_groups, GoalConditionOption, LogicToAcces
     CorpseUsefulItemShuffle, CorpseFillerItemShuffle
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
 from .Skips import get_all_skips
-
+from . import Patch as Patch
 
 from settings import Group, FilePath
 
@@ -46,6 +46,13 @@ class DSRSettings(Group):
         required = False
     ut_poptracker_path: UTPoptrackerPath | str = UTPoptrackerPath()
 
+    class GamePath(FilePath):
+        """Path to the game executable"""
+        description = "The DSR game executable"
+        required = True
+        md5s = ["878b4603a2cc1ba2cbcd15fc6248e37e"]
+    exe_path : GamePath | str = GamePath(r'C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\DarkSoulsRemastered.exe')
+    
 def map_page_index(data: Any) -> int:
     if (data is None or data == ""):
         return 0
@@ -78,7 +85,14 @@ class DSRWorld(World):
         "map_page_locations" : "locations/locations.json",
         "external_pack_key" : "ut_poptracker_path",
         "map_page_setting_key" : "DSR_current_map_{team}_{player}",
-        "map_page_index" : map_page_index
+        "map_page_index" : map_page_index,
+        "item_page_items" : "items/items.json",
+        "map_page_item_layouts_left" : [
+            { "name": "Lord Souls",        "items": ["Lordvessel", "Lord Souls"],       "orientation": "lr", "cols": 5 },
+            { "name": "Progression Items", "items": ["Key items", "Progression Items"], "orientation": "lr", "cols": 5 },
+            { "name": "Fog Walls",         "items": "Fog Wall Keys",                    "orientation": "lr", "cols": 6, "item_size": (36, 48) },
+            { "name": "Boss Fog Walls",    "items": "Boss Fog Wall Keys",               "orientation": "lr", "cols": 6, "item_size": (36, 48) }
+        ]
     }
 
     # Tell UT we don't need a yaml

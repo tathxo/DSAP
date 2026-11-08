@@ -175,29 +175,36 @@ class BossBoneShuffle(Toggle):
     """Makes boss homeward bone drops be shuffled into the multiworld item pool."""
     display_name = "Boss Bone Shuffle"
 
-# Item Pickup Shuffle
-class CorpseFillerItemShuffle(Choice):
-    """Adds corpse locations with filler items to the multiworld pool, the local pool, or not at all. Up to 367 locations.
-    Setting this to "into multiworld" randomizes them into the AP pool - between all games in the multiworld.
-    Setting this to "locally" only randomizes it locally - only within this game of DSR.
-    Setting this to "vanilla" does not randomize them."""
-    display_name = "Corpse Filler Item Shuffle"
+class LocalRandoChoice(Choice):
+    """Class to inherit randomizing things that can optionally be just local."""
     option_into_multiworld = 1
     option_locally = 2
     option_vanilla = 3
     default = 1
 
-class CorpseUsefulItemShuffle(Choice):
+# Item Pickup Shuffle
+class CorpseFillerItemShuffle(LocalRandoChoice):
+    """Adds corpse locations with filler items to the multiworld pool, the local pool, or not at all. Up to 367 locations.
+
+    - **into multiworld:** randomize them into the AP pool - between all games in the multiworld.
+    - **locally:** only randomize them locally - only within this game of DSR. These items will not be AP locations and will not count toward hint cost.
+    - **vanilla:** do not randomize them."""
+    display_name = "Corpse Filler Item Shuffle"
+    default = 1
+
+class CorpseUsefulItemShuffle(LocalRandoChoice):
     """How to randomize corpse locations with useful items. Up to 7 locations.
     Includes Grass Crest Shield, some Firekeeper Souls, some embers, Chaos Flame Ember, and Sewer Chamber Key locations.
 
-    Setting this to "into multiworld" randomizes them into the AP pool - between all games in the multiworld.
-    Setting this to "locally" only randomizes it locally - only within this game of DSR.
-    Setting this to "vanilla" does not randomize them."""
+    See Corpse Filler Item Shuffle description for option value definitions."""
     display_name = "Corpse Useful Item Shuffle"
-    option_into_multiworld = 1
-    option_locally = 2
-    option_vanilla = 3
+    default = 1
+
+class CorpseRingItemShuffle(LocalRandoChoice):
+    """How to randomize corpse locations with ring items. Up to 6 locations.
+
+    See Corpse Filler Item Shuffle description for option value definitions."""
+    display_name = "Corpse Ring Item Shuffle"
     default = 1
 
 # One-time Enemy Drop Shuffle
@@ -637,6 +644,7 @@ class DSROption(PerGameCommonOptions):
     # Item Pickup Shuffling
     corpse_filler_item_shuffle: CorpseFillerItemShuffle
     corpse_useful_item_shuffle: CorpseUsefulItemShuffle
+    corpse_ring_item_shuffle: CorpseRingItemShuffle
 
     # Shops
     unlimited_shop_item_shuffle: UnlimitedShopItemShuffle

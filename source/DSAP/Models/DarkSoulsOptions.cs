@@ -175,7 +175,8 @@ namespace DSAP.Models
 
                     //# Item Pickup Shuffling
                     {"CFI", "Corpse Filler Items"},
-                    {"CUI", "Corpse Useful Items"}
+                    {"CUI", "Corpse Useful Items"},
+                    {"CRI", "Corpse Ring Items"}
                 };
                 foreach (var acr in loc_group_string.Split(','))
                 {

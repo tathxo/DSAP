@@ -126,6 +126,7 @@ class DSRWorld(World):
             # Item Pickup Shuffling
             ("CFI", self.options.corpse_filler_item_shuffle, DSRLocationCategory.CORPSE_FILLER_ITEM),
             ("CUI", self.options.corpse_useful_item_shuffle, DSRLocationCategory.CORPSE_USEFUL_ITEM),
+            ("CRI", self.options.corpse_ring_item_shuffle, DSRLocationCategory.CORPSE_RING_ITEM),
         ]
 
         # Start UT yamlless support

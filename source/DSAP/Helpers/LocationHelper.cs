@@ -12,24 +12,23 @@ namespace DSAP.Helpers
     internal class LocationHelper
     {
         #region Location Helpers
-        private static List<ILocation> CachedItemLotLocations = null;
-        private static List<ILocation> CachedExtraBossItemLotLocations = null;
-        private static List<ILocation> CachedExtraItemLotLocations = null;
+        private static List<Location> CachedItemLotLocations = null;
+        private static List<Location> CachedExtraBossItemLotLocations = null;
+        private static List<Location> CachedExtraItemLotLocations = null;
         
-        public static List<ILocation> GetItemLotLocations()
+        public static List<Location> GetItemLotLocations()
         {
             if (CachedItemLotLocations != null)
                 return CachedItemLotLocations;
 
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags = GetItemLotFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
@@ -37,20 +36,19 @@ namespace DSAP.Helpers
             CachedItemLotLocations = locations;
             return locations;
         }
-        public static List<ILocation> GetBossExtraItemLotLocations()
+        public static List<Location> GetBossExtraItemLotLocations()
         {
             if (CachedExtraBossItemLotLocations != null)
                 return CachedExtraBossItemLotLocations;
 
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags = GetBossExtraItemLotFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
@@ -58,20 +56,19 @@ namespace DSAP.Helpers
             CachedExtraBossItemLotLocations = locations;
             return locations;
         }
-        public static List<ILocation> GetExtraItemLotLocations()
+        public static List<Location> GetExtraItemLotLocations()
         {
             if (CachedExtraItemLotLocations != null)
                 return CachedExtraItemLotLocations;
 
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags = GetExtraItemLotFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
@@ -80,71 +77,65 @@ namespace DSAP.Helpers
             return locations;
         }
         
-        public static List<ILocation> GetBossFlagLocations()
+        public static List<Location> GetBossFlagLocations()
         {
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags = GetBossFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
             return locations;
         }
-        public static List<ILocation> GetBonfireFlagLocations()
+        public static List<Location> GetBonfireFlagLocations()
         {
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var bonfireFlags = GetBonfireFlags().Where(x => x.Flag != 0);
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             
-            Log.Logger.Verbose($"bfloc baseadd={baseAddress},0x{baseAddress:X}");
-
             foreach (var bonfire in bonfireFlags)
             {
                 locations.Add(new Location
                 {
                     Name = bonfire.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(bonfire.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(bonfire.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(bonfire.Flag).Item2,
                     Id = bonfire.Id
                 });
             }
             return locations;
         }
-        public static List<ILocation> GetDoorFlagLocations()
+        public static List<Location> GetDoorFlagLocations()
         {
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags = GetDoorFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
             }
             return locations;
         }
-        public static List<ILocation> GetFogWallFlagLocations()
+        public static List<Location> GetFogWallFlagLocations()
         {
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags = GetFogWallFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });
@@ -192,17 +183,16 @@ namespace DSAP.Helpers
             }
             return locations;
         }
-        public static List<ILocation> GetMiscFlagLocations()
+        public static List<Location> GetMiscFlagLocations()
         {
-            List<ILocation> locations = new List<ILocation>();
+            List<Location> locations = new List<Location>();
             var lotFlags =  GetMiscFlags();
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 locations.Add(new Location
                 {
                     Name = lot.Name,
-                    Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                    Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                     Id = lot.Id,
                 });

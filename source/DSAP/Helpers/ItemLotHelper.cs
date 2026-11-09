@@ -1075,6 +1075,7 @@ namespace DSAP.Helpers
             var extra_item_lots = LocationHelper.GetExtraItemLotFlags().Where(x => x.IsEnabled);
             var all_extra_lots = boss_extra_item_lots.Union(extra_item_lots);
             var scouts = App.scoutedLocationInfo;
+            var localRando = App.localRandoMap;
             var overwritten_items = new HashSet<int>();
             var blankLot = new ItemLot
             {
@@ -1085,11 +1086,13 @@ namespace DSAP.Helpers
                 Items = [blankLotItem]
             };
 
+            
             foreach (var lot in all_extra_lots)
             {
-                if (scouts.TryGetValue(lot.Id, out var scout))
+                // Clear any items in the "extra" lot data (both in scouts and "local rando" data) - so we can forcibly guarantee it later
+                if (scouts.TryGetValue(lot.Id, out var scout) || localRando.TryGetValue(lot.Id, out var scoutid))
                 {
-                    // keep track of lots we've overwritten
+                    // keep track of lots we've overwritten. Necessary due to shared item lots (e.g. homeward bone, humanity)
                     if (!overwritten_items.Contains(lot.ItemLotParamId))
                     {
                         overwritten_items.Add(lot.ItemLotParamId);
@@ -1119,16 +1122,14 @@ namespace DSAP.Helpers
                         localRandoLocs.Add(idresult);
                     else
                         Log.Logger.Warning($"id not found for loc: {loc}");
-                    Log.Logger.Warning($"adding local rando loc: {loc}/{idresult}");
                 }
             }
-            Log.Logger.Warning($"localrandolocs size = {localRandoLocs.Count}");
 
             // get full location list from id list
             List<ILocation> origLocalRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
             List<ILocation> localRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
 
-            Log.Logger.Warning($"localrandolist size = {localRandoList.Count}");
+            Log.Logger.Verbose($"localrandolist size = {localRandoList.Count}");
             // create a mapping for locally rando'd ids => other locations
             {
                 var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed + 1));
@@ -1148,7 +1149,6 @@ namespace DSAP.Helpers
                     var nextSlot = localRandoList.ElementAt(nextSlotIdx);
                     localRandoList.Remove(nextSlot);
 
-                    Log.Logger.Warning($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to {nextSlot.Name}");
 
                     foreach (var shoplineup in shopLineupFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
                     {
@@ -1173,7 +1173,7 @@ namespace DSAP.Helpers
                             {
                                 int target_item_apid = target_item.ApId;
                                 localRandoMap.Add(loc, target_item_apid);
-                                Log.Logger.Warning($"mapping locid={loc} to {target_item.Name}");
+                                Log.Logger.Verbose($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to loc '{nextSlot.Name}'; item='{target_item.Name}'");
                             }
                             else
                                 Log.Logger.Error($"failed to map locid={loc}");
@@ -1193,7 +1193,7 @@ namespace DSAP.Helpers
                             {
                                 int target_item_apid = target_item.ApId;
                                 localRandoMap.Add(loc, target_item_apid);
-                                Log.Logger.Warning($"mapping locid={loc} to {target_item.Name}");
+                                Log.Logger.Verbose($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to loc '{nextSlot.Name}'; item='{target_item.Name}'");
                             }
                             else
                                 Log.Logger.Error($"failed to map locid={loc}");

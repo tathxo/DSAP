@@ -1939,7 +1939,7 @@ public partial class App : Application
             Dictionary<string, object> slotData = slotDataTask.Result;
             locNameGroups = locNameGroupsTask.Result;
             scoutedLocationInfo = scoutedLocationInfoTask.Result;
-            Log.Logger.Error($"len slotdata = {slotData.Count}, lng={locNameGroups.Count}, sli={scoutedLocationInfo.Count}");
+            Log.Logger.Verbose($"len slotdata = {slotData.Count}, lng={locNameGroups.Count}, sli={scoutedLocationInfo.Count}");
 
             DSOptions = new DarkSoulsOptions(App.Client.Options, slotData);
             if (DSOptions.outofdate)
@@ -1994,10 +1994,10 @@ public partial class App : Application
 
             
             // Setup missing locations list for location listening
-            missingLocationsList = fullLocationsList
+            // just shop lineups at this point (everything else is in the polling checker)
+            missingLocationsList = shopLineupLocations
                 .Where(x => Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id)) // only listen for uncompleted locations
                 .ToList();
-            Log.Logger.Error($"mll={missingLocationsList.Count}");
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
@@ -2022,8 +2022,8 @@ public partial class App : Application
         ParamHelper.UpdateItemLots(ItemLotReplacementMap);
 
 
-        Log.Logger.Error($"mll2={missingLocationsList.Count}");
         Client.MonitorLocationsAsync(missingLocationsList);
+        // comment out for now - delete once shop is moved over
 
         StartEmkWatchers(EmkControllers);
         StartInGameWatcher();

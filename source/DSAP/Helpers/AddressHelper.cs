@@ -1,4 +1,5 @@
 ﻿using Archipelago.Core;
+using Archipelago.Core.Models;
 using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
@@ -290,6 +291,8 @@ namespace DSAP.Helpers
                             CollectSafety(flags);
                             BonfireInjectorHelper.PollBonfires(flags);
                             PollBosses(flags);
+                            NewLocationListener(flags);
+
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
                         }
@@ -298,6 +301,7 @@ namespace DSAP.Helpers
                             cached_AllLocationsChecked_count = -1;
                             BonfireInjectorHelper.ResetKnownBonfires();
                             cached_local_boss_pflags = -1;
+                            cached_fullLocationsList = [];
                         }
                         oldFlags = flags;
                         await Task.Delay(1000);
@@ -640,6 +644,99 @@ namespace DSAP.Helpers
                 }
             }
             Log.Logger.Debug($"shop collect: # checked: {numchecked}, # removed: {numremoved}");
+        }
+        private static List<Location> cached_fullLocationsList = [];
+        private static void NewLocationListener(byte[] flags)
+        {
+            // Build a "cached location listener" (which will reset on new slot...?).
+            // Upon detecting a location, send the check if it's a valid check. Otherwise, send local item if it's a local item in the extra items pool.
+            // There are 3 types of item locations: Ones where player gets them during local rando, and ones where they don't, and irrelevant/unused ones
+            // Gets: in shop, basic item lot
+            //  Shops won't be local rando to start (maybe), so irrelevant.
+            // Doesn't get: "extra" and "extra boss" items, fog walls
+            //  Fog walls not giving for local rando doesn't matter (for now) - they can't be made local only.
+            // Irrelevant: Bosses, Bonfires, Doors, and Misc are all unused. These would all fall into the "doesn't get" category, though.
+            // 
+
+            if (cached_fullLocationsList.Count == 0)
+            {
+                var bossLocations = LocationHelper.GetBossFlagLocations();
+                var itemLocations = LocationHelper.GetItemLotLocations();
+                var bossExtraItemLocations = LocationHelper.GetBossExtraItemLotLocations();
+                var extraItemLocations = LocationHelper.GetExtraItemLotLocations();
+                var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
+                var doorLocations = LocationHelper.GetDoorFlagLocations();
+                var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
+                //var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
+                var miscLocations = LocationHelper.GetMiscFlagLocations();
+
+                // don't do shops lineups for now - because of "complex" checks
+
+                List<Location> fullLocationsList = bossLocations
+                    .Union(itemLocations)
+                    .Union(bossExtraItemLocations)
+                    .Union(extraItemLocations)
+                    .Union(bonfireLocations)
+                    .Union(doorLocations)
+                    .Union(fogWallLocations)
+                    //.Union(shopLineupLocations)
+                    .Union(miscLocations)
+                    .ToList();
+
+                cached_fullLocationsList = fullLocationsList;
+            }
+                
+
+            List<long> checksToSend = [];
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
+            foreach (var loc in cached_fullLocationsList)
+            {
+                if ((int)loc.Address > flags.Count())
+                {
+                    Log.Logger.Error($"Error found in loc:{loc.Name}, address={loc.Address:X}");
+                }
+                if (((flags[loc.Address] >> loc.AddressBit) & 0x01) == 0x01) // optimize this by 
+                {
+                    // if it's in list of valid locations, accumulate missing checks to send.
+                    if (App.Client.CurrentSession.Locations.AllLocations.Contains(loc.Id))
+                    {
+                        if (App.Client.CurrentSession.Locations.AllMissingLocations.Contains(loc.Id))
+                        {
+                            checksToSend.Add(loc.Id);
+                            // mark the location to remove it from the list
+                        }
+                    }
+                    else // not in list of valid locations -> check local rando
+                    {
+                        //Log.Logger.Warning($"local rando item found?");
+                        if (App.localRandoMap.TryGetValue(loc.Id, out long locItemId))
+                        {
+                            //Log.Logger.Warning($"Yes!");
+                            // we have it in local rando, so find the item and add it.
+                            if (App.AllItemsByApId.TryGetValue((int)locItemId, out var itemToReceive))
+                            {
+                                //Log.Logger.Warning($"Sending item: {itemToReceive.Name}");
+                                App.AddAbstractItem(itemToReceive, true);
+                                // todo: Also mark each one "received" somehow, so we don't receive it multiple times.
+                                // Right now we receive it forever, instead of on every reconnect, but that's because the below also hasn't been done
+                                // Also mark the location to remove it from the list
+                            }
+                        }
+                    }
+                }
+            }
+
+            watch.Stop();
+            Log.Logger.Information($"[New Loc Scan] Completed, took {watch.ElapsedTicks} ticks total to check {cached_fullLocationsList.Count} locations");
+
+            if (checksToSend.Count > 0)
+            {
+                Log.Logger.Information($"Sending {checksToSend.Count} locations");
+                App.Client.CurrentSession.Locations.CompleteLocationChecks(checksToSend.ToArray());
+                // todo: also send player popup for these locations, and cleanup "location completed" callback
+            }
         }
         static string BossStorageKey = "";
         public static long serverBosses = 0;

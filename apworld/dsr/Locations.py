@@ -549,7 +549,7 @@ location_tables = {
     DSRLocationData(11111121, f"Oswald of Carim: Velka's Talisman", f"Velka's Talisman", DSRLocationCategory.SHOP_EXTENDED_ITEM),
 ],
 "Firelink Shrine - After Undead Parish Elevator": [
-    DSRLocationData(11110075, f"FS: Undead Asylum F2 West Key", f"Undead Asylum F2 West Key", DSRLocationCategory.CORPSE_FILLER_ITEM),
+    DSRLocationData(11110075, f"FS: Undead Asylum F2 West Key", f"Undead Asylum F2 West Key", DSRLocationCategory.CORPSE_PROG_ITEM),
 ],
 "Northern Undead Asylum Second Visit": [
     DSRLocationData(11111009, f"UA2: Black Knight Sword - Black Knight Drop, Hallway Before Fog", f"Black Knight Sword", DSRLocationCategory.BK_WEAPON),
@@ -566,7 +566,7 @@ location_tables = {
     DSRLocationData(11110076, f"UA2: Undead Asylum F2 West Door opened", f"Door Filler", DSRLocationCategory.DOOR),
 ],
 "Northern Undead Asylum Second Visit - Behind F2 West Door": [
-    DSRLocationData(11110078, f"UA2: Rusted Iron Ring", f"Rusted Iron Ring", DSRLocationCategory.CORPSE_FILLER_ITEM),
+    DSRLocationData(11110078, f"UA2: Rusted Iron Ring", f"Rusted Iron Ring", DSRLocationCategory.CORPSE_RING_ITEM),
 ],
 "Northern Undead Asylum Second Visit - Cell": [
     DSRLocationData(11110079, f"UA2: Peculiar Doll", f"Peculiar Doll", DSRLocationCategory.CORPSE_PROG_ITEM),

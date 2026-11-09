@@ -542,6 +542,7 @@ option_groups = [
     OptionGroup("Item Pickup Shuffling", [
         CorpseFillerItemShuffle,
         CorpseUsefulItemShuffle,
+        CorpseRingItemShuffle
     ]),
     OptionGroup("One-Time Drop Shuffling", [
         BlackKnightWeaponShuffle,
@@ -553,8 +554,8 @@ option_groups = [
         MiscDropShuffle,
         ]),
     OptionGroup("Shops", [
-        UnlimitedShopItemShuffle,
         LimitedShopItemShuffle,
+        UnlimitedShopItemShuffle,
         ShopHints,
         ]),
     OptionGroup("Logic", [

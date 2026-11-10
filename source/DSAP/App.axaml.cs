@@ -1330,7 +1330,7 @@ public partial class App : Application
         Log.Logger.Information(JsonSerializer.Serialize(e.Message, MiscHelper.GetJsonOptions()));
         Client.AddRichOverlayMessage(e.Message);
     }
-    internal static void NewLocationCompleted(DarkSoulsLocation loc)
+    internal static void NewLocationCompletedCallback(DarkSoulsLocation loc)
     {
         var locid = loc.Id;
         if (DSOptions.Goal == DSGoal.gwyn)
@@ -1424,97 +1424,8 @@ public partial class App : Application
     }
     private static void Client_LocationCompleted(object? sender, Archipelago.Core.Models.LocationCompletedEventArgs e)
     {
-        var locid = e.CompletedLocation.Id;
-        if (DSOptions.Goal == DSGoal.gwyn)
-        {
-            if (e.CompletedLocation.Name.Contains("Lord of Cinder"))
-            {
-                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
-                SendGoal();
-            }
-            else if (locid == 11110499) // hardcoded "Gwyn, Lord of Cinder" location
-            {
-                Log.Logger.Information($"Sending Goal for location id: {locid}");
-                SendGoal();
-            }
-        }
-        else if (DSOptions.Goal == DSGoal.all_bosses)
-        {
-            var hasGoaledBosses = true;
-            var bossLocs = LocationHelper.GetBossFlagLocations();
-            bossLocs.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            if (bossLocs.Any(x => x.Name == e.CompletedLocation.Name)) // only bother doing all the checks if current location is in the list
-            {
-                int total_bosses = bossLocs.Count;
-                int completed_bosses = 0;
-                foreach (var boss in bossLocs) 
-                {
-                    if (boss.Check())
-                    {
-                        completed_bosses++;
-                    }
-                }
-                Log.Logger.Information($"Boss defeated: {e.CompletedLocation.Name}");
-                Client.AddOverlayMessage($"Boss defeated: {e.CompletedLocation.Name}");
-                if (completed_bosses == total_bosses)
-                {
-                    Log.Logger.Information($"Sending Goal for All Bosses");
-                    SendGoal();
-                }
-                else
-                {
-                    Client.AddOverlayMessage($"You have defeated {completed_bosses}/{total_bosses} bosses.");
-                    Log.Logger.Information($"You have defeated {completed_bosses}/{total_bosses} bosses.");
-                }
-            }
-        }
-        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
-        {
-            if (e.CompletedLocation.Name == "Ornstein and Smough")
-            {
-                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
-                SendGoal();
-            }
-        }
-        else if (DSOptions.Goal == DSGoal.manus)
-        {
-            if (e.CompletedLocation.Name == "Manus, Father of the Abyss")
-            {
-                Log.Logger.Information($"Sending Goal for location: {e.CompletedLocation.Name}");
-                SendGoal();
-            }    
-        }
-
-        // if it's a boss location, check the boss fogwall. If its flag is not set, set it
-        var bossdeps = MiscHelper.GetDsrBossDeps();
-        if (bossdeps.TryGetValue(e.CompletedLocation.Name, out DsrEvent dsrevent))
-        {
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
-            Location loc = new Location
-            {
-                Name = dsrevent.Locname,
-                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item1,
-                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item2,
-                Id = dsrevent.Locid,
-            };
-            if (!loc.Check())
-            {
-                Memory.WriteBit(loc.Address, loc.AddressBit, true);
-            }
-        }
-
-        // if it's in our scouted locs & not in our own game,
-        if (scoutedLocationInfo.TryGetValue(e.CompletedLocation.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
-        {
-            bool will_popup = WillPopupSend(value.Player, value.Flags);
-            if (will_popup)
-                AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
-        }
-
-        Log.Logger.Debug($"Location Completed: {e.CompletedLocation.Name} at {e.CompletedLocation.Id}");
+        Log.Logger.Error($"Location Completed (UNUSED): {e.CompletedLocation.Name} at {e.CompletedLocation.Id}");
     }
-
     internal static void SendGoal()
     {
         Task.Run(async () =>

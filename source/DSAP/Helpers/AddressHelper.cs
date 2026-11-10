@@ -300,7 +300,7 @@ namespace DSAP.Helpers
                             }
                             
                             // every iteration
-                            NewLocationListener(flags);
+                            NewLocationListener(oldFlags, flags);
 
                             if (App.monitoringEventFlags)
                                 DetectEventFlagDifferences(oldFlags, flags);
@@ -311,6 +311,7 @@ namespace DSAP.Helpers
                             BonfireInjectorHelper.ResetKnownBonfires();
                             cached_local_boss_pflags = -1;
                             cached_fullLocationsList = [];
+                            hasInitiallyTestedFlags = false;
                         }
                         oldFlags = flags;
                         await Task.Delay(100);
@@ -654,13 +655,20 @@ namespace DSAP.Helpers
             }
             Log.Logger.Debug($"shop collect: # checked: {numchecked}, # removed: {numremoved}");
         }
+        private static bool hasInitiallyTestedFlags = false;
         private static List<DarkSoulsLocation> cached_fullLocationsList = [];
-        private static List<DarkSoulsLocation> cached_regularItems = [];
-        private static void NewLocationListener(byte[] flags)
+        private static void NewLocationListener(byte[] oldFlags, byte[] flags)
         {
-            // Build a "cached location listener" (which will reset on new slot...?).
-            // Upon detecting a location, send the check if it's a valid check. Otherwise, send local item if it's a local item in the extra items pool.
-            // There are 3 types of item locations: Ones where player gets them during local rando, and ones where they don't, and irrelevant/unused ones
+            // This is effectively a more performant replacement for the old Monitor Locations call made with the list of all locations.
+            //   Measured by elapsed time, it processes ~800 locations in average ~200 ticks, whereas the old method used 8 threads which took ~1000 ticks to process 25 locations each.
+            //     I calculate it, therefore, as around 20x to 160x more performant. This was measured in my test setup, before adding the sequenceEqual() wrapper check (which appears to be a ~2x speed boost)
+            //   This could _maybe_ be further "sped up" by using tasks/threading, but it wouldn't effectively use less CPU (actually, the opposite).
+            //     So for low performance pcs, that would not lead to an improvement.
+            //
+            // Build a "cached location listener" (which should reset on new slot).
+            // Upon detecting a location, send the check if it's a valid check. Otherwise, send local item if it's a locally rando'd item in the extra items pool.
+            //
+            // There are 3 types of item locations: Ones where player gets them during local rando, ones where they don't, and irrelevant/unused ones
             // Gets: in shop, basic item lot
             //  Shops won't be local rando to start (maybe), so irrelevant.
             // Doesn't get: "extra" and "extra boss" items, fog walls
@@ -680,8 +688,6 @@ namespace DSAP.Helpers
                 var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
                 var miscLocations = LocationHelper.GetMiscFlagLocations();
 
-                // don't do shops lineups for now - because of "complex" checks
-
                 List<DarkSoulsLocation> fullLocationsList = bossLocations
                     .Union(itemLocations)
                     .Union(bossExtraItemLocations)
@@ -691,13 +697,10 @@ namespace DSAP.Helpers
                     .Union(fogWallLocations)
                     .Union(shopLineupLocations)
                     .Union(miscLocations)
+                    .Where(x => App.Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id) || App.localRandoMap.ContainsKey(x.Id))
                     .ToList();
 
                 cached_fullLocationsList = fullLocationsList;
-
-                cached_regularItems = itemLocations
-                    //.Union(shopLineupLocations)
-                    .ToList();
             }
 
 
@@ -708,47 +711,51 @@ namespace DSAP.Helpers
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            foreach (var loc in cached_fullLocationsList)
+            if (!hasInitiallyTestedFlags || !flags.SequenceEqual(oldFlags)) // only check all flags on first time, and whenever some part changes
             {
-                if ((int)loc.Address > flags.Count())
+                hasInitiallyTestedFlags = true;
+                foreach (var loc in cached_fullLocationsList)
                 {
-                    Log.Logger.Error($"Error found in loc:{loc.Name}, address={loc.Address:X}");
-                }
-                if (((flags[loc.Address] >> loc.AddressBit) & 0x01) == 0x01
-                    && (loc.CheckType != LocationCheckType.AND ||
-                    ((flags[loc.Address2] >> loc.Address2Bit) & 0x01) == 0x01))
-                {
-                    // if it's in list of valid locations, accumulate missing checks to send.
-                    if (App.Client.CurrentSession.Locations.AllLocations.Contains(loc.Id))
+                    if ((int)loc.Address > flags.Count())
                     {
-                        if (App.Client.CurrentSession.Locations.AllMissingLocations.Contains(loc.Id))
-                        {
-                            checksToSend.Add(loc.Id);
-                            App.NewLocationCompleted(loc);
-                        }
-                        locsToRemove.Add(loc);
+                        Log.Logger.Error($"Error found in loc:{loc.Name}, address={loc.Address:X}");
                     }
-                    else // not in list of valid locations -> check local rando
+                    if (((flags[loc.Address] >> loc.AddressBit) & 0x01) == 0x01
+                        && (loc.CheckType != LocationCheckType.AND ||
+                        ((flags[loc.Address2] >> loc.Address2Bit) & 0x01) == 0x01))
                     {
-                        //Log.Logger.Warning($"local rando item found?");
-                        if (App.localRandoMap.TryGetValue(loc.Id, out long locItemId))
+                        // if it's in list of valid locations, accumulate missing checks to send.
+                        if (App.Client.CurrentSession.Locations.AllLocations.Contains(loc.Id))
                         {
-                            //Log.Logger.Warning($"Yes!");
-                            // we have it in local rando, so find the item and add it.
-                            if (App.AllItemsByApId.TryGetValue((int)locItemId, out var itemToReceive))
+                            if (App.Client.CurrentSession.Locations.AllMissingLocations.Contains(loc.Id))
                             {
-                                // Any items from local rando that need to be sent will have a "delivered item flag id" value
-                                // The rest are e.g. floor drops, etc.
-                                if (loc.DeliveredFlagId != 0)
+                                checksToSend.Add(loc.Id);
+                                App.NewLocationCompletedCallback(loc);
+                            }
+                            locsToRemove.Add(loc);
+                        }
+                        else // not in list of valid locations -> check local rando
+                        {
+                            //Log.Logger.Warning($"local rando item found?");
+                            if (App.localRandoMap.TryGetValue(loc.Id, out long locItemId))
+                            {
+                                //Log.Logger.Warning($"Yes!");
+                                // we have it in local rando, so find the item and add it.
+                                if (App.AllItemsByApId.TryGetValue((int)locItemId, out var itemToReceive))
                                 {
-                                    if (!isFlagOnInBuffer(flags, loc.DeliveredFlagId)) // flag for "item was already delivered" is off
+                                    // Any items from local rando that need to be sent will have a "delivered item flag id" value
+                                    // The rest are e.g. floor drops, etc.
+                                    if (loc.DeliveredFlagId != 0)
                                     {
-                                        itemsToDeliver.Add(itemToReceive);
-                                        // Also mark each one "received", so we don't receive it multiple times.
-                                        flagsToSet.Add(loc.DeliveredFlagId);
+                                        if (!isFlagOnInBuffer(flags, loc.DeliveredFlagId)) // flag for "item was already delivered" is off
+                                        {
+                                            itemsToDeliver.Add(itemToReceive);
+                                            // Also mark each one "received", so we don't receive it multiple times.
+                                            flagsToSet.Add(loc.DeliveredFlagId);
+                                        }
                                     }
+                                    locsToRemove.Add(loc);
                                 }
-                                locsToRemove.Add(loc);
                             }
                         }
                     }
@@ -756,13 +763,16 @@ namespace DSAP.Helpers
             }
 
             watch.Stop();
-            Log.Logger.Information($"[New Loc Scan] Completed, took {watch.ElapsedTicks} ticks total to check {cached_fullLocationsList.Count} locations");
 
+            //if (watch.ElapsedTicks > 500)
+                //Log.Logger.Information($"[New Loc Scan] Completed, took {watch.ElapsedTicks} ticks total to check {cached_fullLocationsList.Count} locations");
+            
             if (checksToSend.Count > 0)
             {
                 Log.Logger.Information($"Sending {checksToSend.Count} locations");
                 App.Client.CurrentSession.Locations.CompleteLocationChecks(checksToSend.ToArray());
-                // todo: also send player popup for these locations, and cleanup "location completed" callback
+                // player already got a popup for these locations above (for others' items)
+                // todo get a popup for players' own items and remove it from receiveItems callback
             }
             // deliver local rando items to player
             if (itemsToDeliver.Count > 0)
@@ -948,6 +958,8 @@ namespace DSAP.Helpers
         }
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {
+            //int changedFlags = 0;
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
             for (int i = 0; i < (1 + 18 * 4); i++)
             {
                 // each chunk is 10 "x000-x999" sets of flags, across 128 or 0x80 
@@ -970,6 +982,7 @@ namespace DSAP.Helpers
                                 int changebit = (changebyte >> (7 - k)) & 0x01;
                                 if (changebit != 0)
                                 {
+                                    //changedFlags++;
                                     int oldbit = (oldbyte >> (7 - k)) & 0x01;
                                     int newbit = (newbyte >> (7 - k)) & 0x01;
                                     var flag = GetFlagIdFromOffset(i, j, k);
@@ -983,6 +996,10 @@ namespace DSAP.Helpers
                     }
                 }
             }
+
+            watch.Stop();
+            
+            //Log.Logger.Information($"[Eventflag Diff] Completed, took {watch.ElapsedTicks} ticks total to find {changedFlags} changed flags");
         }
         internal static string GetFlagIdFromOffset(int slice, int bytenum, int bitnum)
         {

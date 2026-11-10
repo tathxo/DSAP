@@ -12,20 +12,20 @@ namespace DSAP.Helpers
     internal class LocationHelper
     {
         #region Location Helpers
-        private static List<Location> CachedItemLotLocations = null;
-        private static List<Location> CachedExtraBossItemLotLocations = null;
-        private static List<Location> CachedExtraItemLotLocations = null;
+        private static List<DarkSoulsLocation> CachedItemLotLocations = null;
+        private static List<DarkSoulsLocation> CachedExtraBossItemLotLocations = null;
+        private static List<DarkSoulsLocation> CachedExtraItemLotLocations = null;
         
-        public static List<Location> GetItemLotLocations()
+        public static List<DarkSoulsLocation> GetItemLotLocations()
         {
             if (CachedItemLotLocations != null)
                 return CachedItemLotLocations;
 
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetItemLotFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -36,16 +36,16 @@ namespace DSAP.Helpers
             CachedItemLotLocations = locations;
             return locations;
         }
-        public static List<Location> GetBossExtraItemLotLocations()
+        public static List<DarkSoulsLocation> GetBossExtraItemLotLocations()
         {
             if (CachedExtraBossItemLotLocations != null)
                 return CachedExtraBossItemLotLocations;
 
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetBossExtraItemLotFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -56,16 +56,16 @@ namespace DSAP.Helpers
             CachedExtraBossItemLotLocations = locations;
             return locations;
         }
-        public static List<Location> GetExtraItemLotLocations()
+        public static List<DarkSoulsLocation> GetExtraItemLotLocations()
         {
             if (CachedExtraItemLotLocations != null)
                 return CachedExtraItemLotLocations;
 
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetExtraItemLotFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -77,13 +77,13 @@ namespace DSAP.Helpers
             return locations;
         }
         
-        public static List<Location> GetBossFlagLocations()
+        public static List<DarkSoulsLocation> GetBossFlagLocations()
         {
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetBossFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -93,14 +93,14 @@ namespace DSAP.Helpers
             }
             return locations;
         }
-        public static List<Location> GetBonfireFlagLocations()
+        public static List<DarkSoulsLocation> GetBonfireFlagLocations()
         {
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var bonfireFlags = GetBonfireFlags().Where(x => x.Flag != 0);
             
             foreach (var bonfire in bonfireFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = bonfire.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(bonfire.Flag).Item1,
@@ -110,13 +110,13 @@ namespace DSAP.Helpers
             }
             return locations;
         }
-        public static List<Location> GetDoorFlagLocations()
+        public static List<DarkSoulsLocation> GetDoorFlagLocations()
         {
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetDoorFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -126,13 +126,13 @@ namespace DSAP.Helpers
             }
             return locations;
         }
-        public static List<Location> GetFogWallFlagLocations()
+        public static List<DarkSoulsLocation> GetFogWallFlagLocations()
         {
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetFogWallFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -142,54 +142,47 @@ namespace DSAP.Helpers
             }
             return locations;
         }
-        public static List<ILocation> GetShopLineupFlagLocations()
+        public static List<DarkSoulsLocation> GetShopLineupFlagLocations()
         {
-            List<ILocation> locations = new List<ILocation>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags = GetShopLineupFlags().Where(x => x.Flag != -1 && x.Id != 0); // ignore "infinite" slots
             var baseAddress = AddressHelper.GetEventFlagsOffset();
             foreach (var lot in lotFlags)
             {
                 if (lot.Preflag == 0)
                 {
-                    locations.Add(new Location
+                    locations.Add(new DarkSoulsLocation
                     {
                         Name = lot.Name,
-                        Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                        Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                         AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
                         Id = lot.Id,
                     });
                 }
                 else
                 {
-                    locations.Add(new CompositeLocation
+                    locations.Add(new DarkSoulsLocation
                     {
                         Name = lot.Name,
-                        Conditions = [
-                            new Location
-                            {
-                                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Preflag).Item1,
-                                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Preflag).Item2,
-                            },
-                            new Location
-                            {
-                                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
-                                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
-                            }],
+                        Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
+                        AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                        Address2 = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Preflag).Item1,
+                        Address2Bit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Preflag).Item2,
+                        CheckType = LocationCheckType.AND, // technically this should be a composite (to be compatible with the memory library, but this is easier for our purposes
                         Id = lot.Id,
-                        CheckType = LocationCheckType.AND
                     });
                 }
 
             }
             return locations;
         }
-        public static List<Location> GetMiscFlagLocations()
+        public static List<DarkSoulsLocation> GetMiscFlagLocations()
         {
-            List<Location> locations = new List<Location>();
+            List<DarkSoulsLocation> locations = new List<DarkSoulsLocation>();
             var lotFlags =  GetMiscFlags();
             foreach (var lot in lotFlags)
             {
-                locations.Add(new Location
+                locations.Add(new DarkSoulsLocation
                 {
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
@@ -292,7 +285,7 @@ namespace DSAP.Helpers
         public static void SetEventFlag(int flagnum, byte newvalue)
         {
             var baseAddress = AddressHelper.GetEventFlagsOffset();
-            Location newloc = new Location()
+            Location newloc = new DarkSoulsLocation()
             {
                 Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item1,
                 AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item2

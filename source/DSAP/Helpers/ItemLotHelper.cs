@@ -1107,7 +1107,7 @@ namespace DSAP.Helpers
             Log.Logger.Debug($"Replaced {overwritten_items.Count} \"extra\" item lots.");
         }
 
-        internal static void BuildLocalRandoMap(out Dictionary<long, long> localRandoMap, List<ILocation> fullLocationsList)
+        internal static void BuildLocalRandoMap(out Dictionary<long, long> localRandoMap, List<DarkSoulsLocation> fullLocationsList)
         // get full list of locally rando'd ids
         {
             localRandoMap = [];
@@ -1126,8 +1126,8 @@ namespace DSAP.Helpers
             }
 
             // get full location list from id list
-            List<ILocation> origLocalRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
-            List<ILocation> localRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
+            List<DarkSoulsLocation> origLocalRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
+            List<DarkSoulsLocation> localRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
 
             Log.Logger.Verbose($"localrandolist size = {localRandoList.Count}");
             // create a mapping for locally rando'd ids => other locations

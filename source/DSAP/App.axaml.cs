@@ -54,7 +54,6 @@ public partial class App : Application
     internal static Dictionary<int, ItemLot> ItemLotReplacementMap = [];
     internal static Dictionary<string, string[]> locNameGroups = [];
     internal static Dictionary<long, long> localRandoMap = []; // map of local non-ap locations by apid to their matching item's apid (kind of a "local scout info")
-    internal static List<ILocation> missingLocationsList = [];
     // Logging
     private static readonly object _lockObject = new object();
     // Deathlink
@@ -1331,6 +1330,98 @@ public partial class App : Application
         Log.Logger.Information(JsonSerializer.Serialize(e.Message, MiscHelper.GetJsonOptions()));
         Client.AddRichOverlayMessage(e.Message);
     }
+    internal static void NewLocationCompleted(DarkSoulsLocation loc)
+    {
+        var locid = loc.Id;
+        if (DSOptions.Goal == DSGoal.gwyn)
+        {
+            if (loc.Name.Contains("Lord of Cinder"))
+            {
+                Log.Logger.Information($"Sending Goal for location: {loc.Name}");
+                SendGoal();
+            }
+            else if (locid == 11110499) // hardcoded "Gwyn, Lord of Cinder" location
+            {
+                Log.Logger.Information($"Sending Goal for location id: {locid}");
+                SendGoal();
+            }
+        }
+        else if (DSOptions.Goal == DSGoal.all_bosses)
+        {
+            var hasGoaledBosses = true;
+            var bossLocs = LocationHelper.GetBossFlagLocations();
+            bossLocs.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+            if (bossLocs.Any(x => x.Name == loc.Name)) // only bother doing all the checks if current location is in the list
+            {
+                int total_bosses = bossLocs.Count;
+                int completed_bosses = 0;
+                foreach (var boss in bossLocs)
+                {
+                    if (boss.Check())
+                    {
+                        completed_bosses++;
+                    }
+                }
+                Log.Logger.Information($"Boss defeated: {loc.Name}");
+                Client.AddOverlayMessage($"Boss defeated: {loc.Name}");
+                if (completed_bosses == total_bosses)
+                {
+                    Log.Logger.Information($"Sending Goal for All Bosses");
+                    SendGoal();
+                }
+                else
+                {
+                    Client.AddOverlayMessage($"You have defeated {completed_bosses}/{total_bosses} bosses.");
+                    Log.Logger.Information($"You have defeated {completed_bosses}/{total_bosses} bosses.");
+                }
+            }
+        }
+        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
+        {
+            if (loc.Name == "Ornstein and Smough")
+            {
+                Log.Logger.Information($"Sending Goal for location: {loc.Name}");
+                SendGoal();
+            }
+        }
+        else if (DSOptions.Goal == DSGoal.manus)
+        {
+            if (loc.Name == "Manus, Father of the Abyss")
+            {
+                Log.Logger.Information($"Sending Goal for location: {loc.Name}");
+                SendGoal();
+            }
+        }
+
+        // if it's a boss location, check the boss fogwall. If its flag is not set, set it
+        var bossdeps = MiscHelper.GetDsrBossDeps();
+        if (bossdeps.TryGetValue(loc.Name, out DsrEvent dsrevent))
+        {
+            var baseAddress = AddressHelper.GetEventFlagsOffset();
+            Location loc2 = new Location
+            {
+                Name = dsrevent.Locname,
+                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item1,
+                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item2,
+                Id = dsrevent.Locid,
+            };
+            if (!loc.Check())
+            {
+                Memory.WriteBit(loc.Address, loc.AddressBit, true);
+            }
+        }
+
+        // if it's in our scouted locs & not in our own game,
+        if (scoutedLocationInfo.TryGetValue(loc.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)
+        {
+            bool will_popup = WillPopupSend(value.Player, value.Flags);
+            if (will_popup)
+                AddItemWithMessage((int)DSItemCategory.KeyItems, (int)value.LocationId, 1); // put a message (item will be ignored)
+        }
+
+        Log.Logger.Debug($"Location Completed: {loc.Name} at {loc.Id}");
+    }
     private static void Client_LocationCompleted(object? sender, Archipelago.Core.Models.LocationCompletedEventArgs e)
     {
         var locid = e.CompletedLocation.Id;
@@ -1991,13 +2082,6 @@ public partial class App : Application
             ItemLotHelper.BuildLotParamIdToLotMap(out ItemLotReplacementMap, scoutedLocationInfo, localRandoMap);
             var hints = await App.Client.CurrentSession.Hints.GetHintsAsync();
             AddressHelper.BuildHintTriggers(scoutedLocationInfo, hints);
-
-            
-            // Setup missing locations list for location listening
-            // just shop lineups at this point (everything else is in the polling checker)
-            missingLocationsList = shopLineupLocations
-                .Where(x => Client.CurrentSession.Locations.AllMissingLocations.Contains(x.Id)) // only listen for uncompleted locations
-                .ToList();
         }
         ItemLotHelper.RandomizeStartingLoadouts(); // modifies CharaInit Params
 
@@ -2020,10 +2104,6 @@ public partial class App : Application
 
         /* Set to only receive remote items and starting inventory */
         ParamHelper.UpdateItemLots(ItemLotReplacementMap);
-
-
-        Client.MonitorLocationsAsync(missingLocationsList);
-        // comment out for now - delete once shop is moved over
 
         StartEmkWatchers(EmkControllers);
         StartInGameWatcher();

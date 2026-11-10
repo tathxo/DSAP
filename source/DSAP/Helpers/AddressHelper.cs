@@ -4,6 +4,7 @@ using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using DSAP.Models;
+using DynamicData;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -265,8 +266,10 @@ namespace DSAP.Helpers
                 try
                 {
                     byte[] oldFlags = [];
+                    ulong iterations = 0;
                     while (true)
                     {
+                        iterations++;
                         if (!App.Client?.IsConnected ?? false == true)
                         {
                             Log.Logger.Error("Client disconnection detected - stopping eventflag monitor");
@@ -276,21 +279,27 @@ namespace DSAP.Helpers
                         byte[] flags = ReadAllEventFlags();
                         if (flags.Length != 0 && oldFlags.Length != 0)
                         {
-                            MapInfo mapInfo = MapHelper.GetMapAndXyzCoords();
-                            if (App.DSOptions.LimitedShopItemShuffle)
+                            // 1 in 10 iterations
+                            if (iterations % 10 == 0)
                             {
-                                CheckForHintTriggers(flags, mapInfo);
-                                ShopSafety(flags);
+                                MapInfo mapInfo = MapHelper.GetMapAndXyzCoords();
+                                if (App.DSOptions.LimitedShopItemShuffle)
+                                {
+                                    CheckForHintTriggers(flags, mapInfo);
+                                    ShopSafety(flags);
+                                }
+                                if (App.DSOptions.LizardShuffle)
+                                {
+                                    GhLizardSafety(flags);
+                                }
+                                PisacaSafety(flags);
+                                PWDAWarpSafety(flags);
+                                CollectSafety(flags);
+                                BonfireInjectorHelper.PollBonfires(flags);
+                                PollBosses(flags);
                             }
-                            if (App.DSOptions.LizardShuffle)
-                            {
-                                GhLizardSafety(flags);
-                            }
-                            PisacaSafety(flags);
-                            PWDAWarpSafety(flags);
-                            CollectSafety(flags);
-                            BonfireInjectorHelper.PollBonfires(flags);
-                            PollBosses(flags);
+                            
+                            // every iteration
                             NewLocationListener(flags);
 
                             if (App.monitoringEventFlags)
@@ -304,7 +313,7 @@ namespace DSAP.Helpers
                             cached_fullLocationsList = [];
                         }
                         oldFlags = flags;
-                        await Task.Delay(1000);
+                        await Task.Delay(100);
                     }
                 }
                 catch (Exception ex)
@@ -645,7 +654,8 @@ namespace DSAP.Helpers
             }
             Log.Logger.Debug($"shop collect: # checked: {numchecked}, # removed: {numremoved}");
         }
-        private static List<Location> cached_fullLocationsList = [];
+        private static List<DarkSoulsLocation> cached_fullLocationsList = [];
+        private static List<DarkSoulsLocation> cached_regularItems = [];
         private static void NewLocationListener(byte[] flags)
         {
             // Build a "cached location listener" (which will reset on new slot...?).
@@ -667,27 +677,34 @@ namespace DSAP.Helpers
                 var bonfireLocations = LocationHelper.GetBonfireFlagLocations();
                 var doorLocations = LocationHelper.GetDoorFlagLocations();
                 var fogWallLocations = LocationHelper.GetFogWallFlagLocations();
-                //var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
+                var shopLineupLocations = LocationHelper.GetShopLineupFlagLocations();
                 var miscLocations = LocationHelper.GetMiscFlagLocations();
 
                 // don't do shops lineups for now - because of "complex" checks
 
-                List<Location> fullLocationsList = bossLocations
+                List<DarkSoulsLocation> fullLocationsList = bossLocations
                     .Union(itemLocations)
                     .Union(bossExtraItemLocations)
                     .Union(extraItemLocations)
                     .Union(bonfireLocations)
                     .Union(doorLocations)
                     .Union(fogWallLocations)
-                    //.Union(shopLineupLocations)
+                    .Union(shopLineupLocations)
                     .Union(miscLocations)
                     .ToList();
 
                 cached_fullLocationsList = fullLocationsList;
+
+                cached_regularItems = itemLocations
+                    //.Union(shopLineupLocations)
+                    .ToList();
             }
-                
+
 
             List<long> checksToSend = [];
+            List<DarkSoulsItem> itemsToDeliver = [];
+            List<long> flagsToSet = [];
+            List<DarkSoulsLocation> locsToRemove = [];
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -697,7 +714,9 @@ namespace DSAP.Helpers
                 {
                     Log.Logger.Error($"Error found in loc:{loc.Name}, address={loc.Address:X}");
                 }
-                if (((flags[loc.Address] >> loc.AddressBit) & 0x01) == 0x01) // optimize this by 
+                if (((flags[loc.Address] >> loc.AddressBit) & 0x01) == 0x01
+                    && (loc.CheckType != LocationCheckType.AND ||
+                    ((flags[loc.Address2] >> loc.Address2Bit) & 0x01) == 0x01))
                 {
                     // if it's in list of valid locations, accumulate missing checks to send.
                     if (App.Client.CurrentSession.Locations.AllLocations.Contains(loc.Id))
@@ -705,8 +724,9 @@ namespace DSAP.Helpers
                         if (App.Client.CurrentSession.Locations.AllMissingLocations.Contains(loc.Id))
                         {
                             checksToSend.Add(loc.Id);
-                            // mark the location to remove it from the list
+                            App.NewLocationCompleted(loc);
                         }
+                        locsToRemove.Add(loc);
                     }
                     else // not in list of valid locations -> check local rando
                     {
@@ -717,11 +737,18 @@ namespace DSAP.Helpers
                             // we have it in local rando, so find the item and add it.
                             if (App.AllItemsByApId.TryGetValue((int)locItemId, out var itemToReceive))
                             {
-                                //Log.Logger.Warning($"Sending item: {itemToReceive.Name}");
-                                App.AddAbstractItem(itemToReceive, true);
-                                // todo: Also mark each one "received" somehow, so we don't receive it multiple times.
-                                // Right now we receive it forever, instead of on every reconnect, but that's because the below also hasn't been done
-                                // Also mark the location to remove it from the list
+                                // Any items from local rando that need to be sent will have a "delivered item flag id" value
+                                // The rest are e.g. floor drops, etc.
+                                if (loc.DeliveredFlagId != 0)
+                                {
+                                    if (!isFlagOnInBuffer(flags, loc.DeliveredFlagId)) // flag for "item was already delivered" is off
+                                    {
+                                        itemsToDeliver.Add(itemToReceive);
+                                        // Also mark each one "received", so we don't receive it multiple times.
+                                        flagsToSet.Add(loc.DeliveredFlagId);
+                                    }
+                                }
+                                locsToRemove.Add(loc);
                             }
                         }
                     }
@@ -736,6 +763,36 @@ namespace DSAP.Helpers
                 Log.Logger.Information($"Sending {checksToSend.Count} locations");
                 App.Client.CurrentSession.Locations.CompleteLocationChecks(checksToSend.ToArray());
                 // todo: also send player popup for these locations, and cleanup "location completed" callback
+            }
+            // deliver local rando items to player
+            if (itemsToDeliver.Count > 0)
+            {
+                Log.Logger.Information($"Sending {itemsToDeliver.Count} Items");
+                foreach (var item in itemsToDeliver)
+                {
+                    //Log.Logger.Warning($"Sending item: {itemToReceive.Name}");
+                    App.AddAbstractItem(item, true);
+                }   
+            }
+            if (flagsToSet.Count > 0)
+            {
+                Log.Logger.Information($"Setting {flagsToSet.Count} flags");
+                Task.Run(() =>
+                {
+                    Task.Delay(100);
+                    foreach (var flag in flagsToSet)
+                    {
+                        App.SetEventFlag((int)flag, true);
+                    }
+                });
+            }
+            if (locsToRemove.Count > 0)
+            {
+                Log.Logger.Information($"Removing {locsToRemove.Count} locations from checking");
+                foreach (var loc in locsToRemove)
+                {
+                    cached_fullLocationsList.Remove(loc); 
+                }
             }
         }
         static string BossStorageKey = "";

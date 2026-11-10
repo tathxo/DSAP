@@ -34,3 +34,12 @@ And these flags specifically:
 
 "Flag": "61323998" Flag reserved for o+s armor set handling
 "Flag": "61323999" Flag reserved for gwyn armor set handling (currently unused)
+
+
+AKA
+61322000 - 61322649 - armors/weapons in shops
+61323000 - 61323179 - drops added to shops
+61323200 - 61323281 - "delivered flag ids" for "extra" item lots (for local rando)
+61323300 - 61323335 - "delivered flag ids" for "extra" boss item lots (for local rando)
+
+61323998 - 61323999 - special

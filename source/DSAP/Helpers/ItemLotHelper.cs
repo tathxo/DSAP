@@ -1040,7 +1040,7 @@ namespace DSAP.Helpers
             {
                 if (paramlots.TryGetValue(item.ItemLotParamId, out var value))
                 {
-                    if (value == item.Flag)
+                    if ((value == item.Flag && item.OriginalFlagId == 0) || value == item.OriginalFlagId)
                     {
                         // all ok
                     }

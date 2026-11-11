@@ -15,7 +15,7 @@ from .Locations import DSRLocation, DSRLocationCategory, location_tables, locati
 from .Groups import location_name_groups, item_name_groups, \
     dlc_prog_items, pw_prog_items, gh_prog_items, post_os_prog_items, post_os_cata_prog_items
 from .Options import DSROption, option_groups, GoalConditionOption, LogicToAccessCatacombs, GhostDifficulty, \
-    CorpseUsefulItemShuffle, CorpseFillerItemShuffle
+    LocalRandoChoice
 from .Rules import region_rules_table, DsrEntranceRule, location_rules_table, DsrLocationRule
 from .Skips import get_all_skips
 
@@ -235,11 +235,11 @@ class DSRWorld(World):
 
         # Build optional ap location categories into their loc lists
         for (acr, copt, cat) in acr_cat_map:
-            if copt.value == CorpseFillerItemShuffle.option_into_multiworld:
+            if copt.value == LocalRandoChoice.option_true:
                 self.ap_loc_categories.append(acr)
-            elif copt.value == CorpseFillerItemShuffle.option_locally:
+            elif copt.value == LocalRandoChoice.option_local_only:
                 self.local_loc_categories.append(acr)
-            elif copt.value == CorpseFillerItemShuffle.option_vanilla:
+            elif copt.value == LocalRandoChoice.option_false:
                 self.vanilla_loc_categories.append(acr)
         # Use the values in the ap loc list to enable those categories specifically
         for (acr, copt, cat) in acr_cat_map:

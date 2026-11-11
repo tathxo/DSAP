@@ -1,8 +1,10 @@
 import typing
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, PerGameCommonOptions, OptionCounter, StartInventoryPool
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, OptionList, DeathLink, \
+    PerGameCommonOptions, OptionCounter, StartInventoryPool
 from Options import OptionGroup
 from .Skips import get_all_skips, SkipDifficulty
+
 
 # Game Options
 class EnableDeathlinkOption(Toggle):
@@ -65,7 +67,7 @@ class SoulMultiplierBase(Range):
 
 class SoulMultiplierMax(Range):
     """Maximum (final) value for a multiplier applied to enemy & boss soul drops, expressed as a percentage.
-    
+
     Only takes effect if not equal to soul_multiplier_base, and soul_multiplier_steps is non-zero."""
     display_name = "Soul Multiplier - Maximum Percentage"
     range_start = 20
@@ -73,9 +75,9 @@ class SoulMultiplierMax(Range):
     default = 100
 
 class SoulMultiplierSteps(Range):
-    """Number of steps from the base to the maximum multiplier. 
+    """Number of steps from the base to the maximum multiplier.
     This is how many "Progressive Soul Multiplier" items will be added to the item pool.
-    
+
     Upon receiving one, the soul multiplier will increase (1/(this value)) * (the distance from max to base).
     As an example, if your soul_multiplier_base is 100, soul_multiplier_max is 200, and this is set to 4, then the
     first such item will set the soul drop multiplier to 125%, 2nd to 150%, and so on.
@@ -110,9 +112,9 @@ class WeightMultiplierMin(Range):
     default = 100
 
 class WeightMultiplierSteps(Range):
-    """Number of steps from the base to the minimum multiplier. 
+    """Number of steps from the base to the minimum multiplier.
     This is how many "Progressive Weight Reducer" items will be added to the item pool.
-    
+
     Upon receiving one, the weight multiplier will decrease (1/(this value)) * (the distance from base to min).
     As an example, if your weight_multiplier_base is 100, weight_multiplier_min is 20, and this is set to 4, then the
     first such item will set the weight multiplier to 80%, 2nd to 60%, and so on.
@@ -129,11 +131,11 @@ class WeightMultiplierSteps(Range):
 
 # Sanity
 class FogwallSanity(DefaultOnToggle):
-    """Makes area fog walls uninteractable until you receive their items from the item pool. 
+    """Makes area fog walls uninteractable until you receive their items from the item pool.
     Fog walls will also give checks when you pass through them.
     The Undead Asylum fog wall will not be locked, to avoid super-early BK.
     Recommended to turn this on."""
-    display_name = "Fogwall Sanity" 
+    display_name = "Fogwall Sanity"
 
 class BossFogwallSanity(Toggle):
     """Makes boss fog walls uninteractable until you receive their items from the item pool.
@@ -144,7 +146,7 @@ class BossFogwallSanity(Toggle):
       Sif,
       Seath (2nd encounter), and
       Kalameet."""
-    display_name = "Boss Fogwall Sanity" 
+    display_name = "Boss Fogwall Sanity"
 
 class IncludeDlc(DefaultOnToggle):
     """Whether to randomize the Artorias of the Abyss DLC expansion content.
@@ -161,107 +163,143 @@ class IncludeGreatHollow(DefaultOnToggle):
     """Whether to randomize  the Great Hollow and Ash Lake locations and items."""
     display_name = "Include Great Hollow And Ash Lake"
 
-# Boss Shuffle
-class BossSoulShuffle(DefaultOnToggle):
-    """Makes boss soul drops be shuffled into the multiworld item pool.
-    Does not affect the Lord Souls, which are always shuffled in."""
-    display_name = "Boss Soul Shuffle"
+class LordSoulShuffle(DefaultOnToggle):
+    """Whether to shuffle the Lord Souls into the pool"""
+    display_name = "Lord Soul Shuffle"
 
-class BossHumanityShuffle(DefaultOnToggle):
-    """Makes boss humanity and twin humanity drops be shuffled into the multiworld item pool."""
-    display_name = "Boss Humanity Shuffle"
+    # option_false = 0
+    # option_true = 1
+    # option_shards = 2
 
-class BossBoneShuffle(Toggle):
-    """Makes boss homeward bone drops be shuffled into the multiworld item pool."""
-    display_name = "Boss Bone Shuffle"
+# class LordSoulShardsRequired(Range):
+#     """If Lord Soul Shuffle is set to "Shards", this is the number of shards required to open the Kiln Door."""
+#     display_name = "Lord Soul Shards Required"
+#     range_start = 1
+#     range_end = 10
+#     default = 4
+#
+# class LordSoulShardsExtra(Range):
+#     """If Lord Soul Shuffle is set to "Shards", this is the number of shards beyond the Required amount that will be in the pool."""
+#     display_name = "Lord Soul Shuffle"
+#     range_start = 0
+#     range_end = 10
+#     default = 0
 
 class LocalRandoChoice(Choice):
     """Class to inherit randomizing things that can optionally be just local."""
-    option_into_multiworld = 1
-    option_locally = 2
-    option_vanilla = 3
+    option_false = 0
+    option_true = 1
+    option_local_only = 2
     default = 1
+
+# Boss Shuffle
+class BossSoulShuffle(LocalRandoChoice):
+    """Makes boss soul drops be shuffled into the multiworld item pool.
+    Does not affect the Lord Souls.
+
+    - **false:** do not randomize them - they will be in their vanilla locations.
+    - **true:** randomize them into the AP pool - between all games in the multiworld.
+    - **local_only:** only randomize them locally - within this game of DSR. These items will not be AP locations/checks, and will not count toward hint points or hint cost."""
+    display_name = "Boss Soul Shuffle"
+
+class BossHumanityShuffle(LocalRandoChoice):
+    """Makes boss humanity and twin humanity drops be shuffled into the multiworld item pool.
+
+    See Boss Soul Shuffle description for option choice descriptions."""
+    display_name = "Boss Humanity Shuffle"
+
+class BossBoneShuffle(LocalRandoChoice):
+    """Makes boss homeward bone drops be shuffled into the multiworld item pool.
+
+    See Boss Soul Shuffle description for option choice descriptions."""
+    display_name = "Boss Bone Shuffle"
+    default = 0
 
 # Item Pickup Shuffle
 class CorpseFillerItemShuffle(LocalRandoChoice):
     """Adds corpse locations with filler items to the multiworld pool, the local pool, or not at all. Up to 367 locations.
 
-    - **into multiworld:** randomize them into the AP pool - between all games in the multiworld.
-    - **locally:** only randomize them locally - only within this game of DSR. These items will not be AP locations and will not count toward hint cost.
-    - **vanilla:** do not randomize them."""
+    - **false:** do not randomize them - they will be in their vanilla locations.
+    - **true:** randomize them into the AP pool - between all games in the multiworld.
+    - **local_only:** only randomize them locally - within this game of DSR. These items will not be AP locations/checks, and will not count toward hint points or hint cost."""
     display_name = "Corpse Filler Item Shuffle"
-    default = 1
 
 class CorpseUsefulItemShuffle(LocalRandoChoice):
     """How to randomize corpse locations with useful items. Up to 7 locations.
     Includes Grass Crest Shield, some Firekeeper Souls, some embers, Chaos Flame Ember, and Sewer Chamber Key locations.
 
-    See Corpse Filler Item Shuffle description for option value definitions."""
+    See Corpse Filler Item Shuffle description for option choice descriptions."""
     display_name = "Corpse Useful Item Shuffle"
-    default = 1
 
 class CorpseRingItemShuffle(LocalRandoChoice):
     """How to randomize corpse locations with ring items. Up to 6 locations.
 
-    See Corpse Filler Item Shuffle description for option value definitions."""
+    See Corpse Filler Item Shuffle description for option choice descriptions."""
     display_name = "Corpse Ring Item Shuffle"
-    default = 1
 
 # One-time Enemy Drop Shuffle
-class BlackKnightWeaponShuffle(DefaultOnToggle):
+class BlackKnightWeaponShuffle(LocalRandoChoice):
     """Makes Black Knight weapon drop locations guaranteed, and adds their weapons to the multiworld item pool. Up to 7 locations.
     This only applies to the 7 non-respawning Black Knights in the game.
     With this off, the weapon drop change is left unmodified, and those locations are unrandomized.
 
-    These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool."""
+    These weapons are quite powerful, and this option adds 2 Swords, 2 Halberds, 1 Greataxe, 1 Greatsword, and 1 Shield to the pool.
+
+    - **false:** do not randomize them - they will be in their vanilla locations.
+    - **true:** randomize them into the AP pool - between all games in the multiworld.
+    - **local_only:** only randomize them locally - within this game of DSR. These items will not be AP locations/checks, and will not count toward hint points or hint cost."""
     display_name = "Black Knight Weapon Shuffle"
 
-class BlackKnightTitaniteShuffle(DefaultOnToggle):
+class BlackKnightTitaniteShuffle(LocalRandoChoice):
     """Adds Black Knight titanite chunks as locations and items to the multiworld and item pool. Up to 7 locations.
-    This only applies to the 7 non-respawning Black Knights in the game."""
+    This only applies to the 7 non-respawning Black Knights in the game.
+
+    See Black Knight Weapon Shuffle description for option choice descriptions."""
     display_name = "Black Knight Titanite Shuffle"
 
-class CrystalLizardShuffle(Toggle):
+class CrystalLizardShuffle(LocalRandoChoice):
     """Adds Crystal Lizard drops as locations to the multiworld and item pool. Up to 50 locations total.
     This adds 2 locations per lizard: 1 for their Twinkling Titanite, and 1 for an additional drop - which is made guaranteed.
 
     There are 25 total crystal lizards, 10 of which are in the Great Hollow, and 5 of which are in the DLC.
     If one escapes, you can quit out and reload to respawn it.
-    Great Hollow lizards are forced to spawn on every load instead of their vanilla 1/3 chance per load."""
+    Great Hollow lizards are forced to spawn on every load instead of their vanilla 1/3 chance per load.
+
+    See Black Knight Weapon Shuffle description for option choice descriptions."""
     display_name = "Crystal Lizard Shuffle"
 
-class MimicDropShuffle(DefaultOnToggle):
-    """Adds mimic drops as locations to the multiworld and item pool. Up to 9 locations total, includes 1 prog item (Crest Key)."""
-    display_name = "Mimic Drop Shuffle"
+class MinibossDropShuffle(LocalRandoChoice):
+    """Adds the Valley of Drakes' Undead Dragon's and two Hydras' drops as locations to the multiworld and item pool. Up to 4 locations.
 
-class MinibossDropShuffle(DefaultOnToggle):
-    """Adds the Valley of Drakes' Undead Dragon's and two Hydras' drops as locations to the multiworld and item pool. Up to 4 locations."""
+    See Black Knight Weapon Shuffle description for option choice descriptions."""
     display_name = "Miniboss Drop Shuffle"
 
-class HostileNpcDropShuffle(DefaultOnToggle):
+class HostileNpcDropShuffle(LocalRandoChoice):
     """Adds hostile NPC (not invader) drops as locations to the multiworld and item pool. Up to 4 locations.
-    Included NPCs: Oscar in 2nd asylum visit, Havel, and Grana of Izalith."""
+    Included NPCs: Oscar in 2nd asylum visit, Havel, and Grana of Izalith.
+
+    See Black Knight Weapon Shuffle description for option choice descriptions."""
     display_name = "Hostile Npc Drop Shuffle"
+
+class MimicDropShuffle(DefaultOnToggle):
+    """Adds mimic drops as locations to the multiworld and item pool. Up to 9 locations total, includes 1 prog item (Crest Key).
+    If disabled, mimic drops are vanilla - the Crest Key mimic will drop the Crest Key, etc."""
+    display_name = "Mimic Drop Shuffle"
 
 class MiscDropShuffle(DefaultOnToggle):
     """Adds uncategorized guaranteed drops as locations to the multiworld and item pool. Up to 7 locations.
-    Includes Broken Pendant, Sunlight Maggot, Sif Rescue (Cleansing Greatshield), the 2 Pisaca drops, a PW pyromancy engorged zombie, and the Oolacile "I'm Sorry" Carving sorceress."""
+    Includes Broken Pendant, Sunlight Maggot, Sif Rescue (Cleansing Greatshield), the 2 Pisaca drops, a PW pyromancy engorged zombie, and the Oolacile "I'm Sorry" Carving sorceress.
+
+    If disabled, these drops will be as vanilla - Broken Pendant will be post-Dawn rescue in the Duke's Archives, Sunlight maggot at the Lost Izalith shortcut, etc."""
     display_name = "Miscellaneous Drop Shuffle"
 
 # Shop Shuffle
-class UnlimitedShopItemShuffle(DefaultOnToggle):
-    """Shuffles unlimited quantity consumable and arrow shop slots from unmissable shopkeepers.
-
-    Shops Shuffled by this option include all those on the Limited shuffle option below, plus Ingward.
-    """
-    display_name = "Unlimited Shop Item Shuffle"
-
 class LimitedShopItemShuffle(DefaultOnToggle):
     """Adds limited quantity shop slots from unmissable shopkeepers as locations, and shuffles their items into the multiworld.
     This treats Weapon and Armor slots as limited quantity slots, adding 1 of each to the pool.
     Missable shopkeepers, who can be made unavailable based on progression or dialogue options, will not have their shops shuffled into the multiworld.
     Shuffled Shops' keepers will be made immune to player attacks to make them unmissable, and their drops added as shuffled locations to their shop.
-    
+
     Shops Shuffled by this option:
     Andre of Astora
     Big Hat Logan (considered in-logic once you can make his shop available at Duke's Archives)
@@ -281,6 +319,14 @@ class LimitedShopItemShuffle(DefaultOnToggle):
     """
     display_name = "Limited Shop Item Shuffle"
 
+class UnlimitedShopItemShuffle(DefaultOnToggle):
+    """Shuffles unlimited quantity consumable and arrow shop slots from unmissable shopkeepers.
+
+    Shops Shuffled by this option include all those on the Limited shuffle option below, plus Ingward.
+    """
+    display_name = "Unlimited Shop Item Shuffle"
+
+
 class ShopHints(Choice):
     """When Shop items are shuffled, this options control what types of Archipelago Hints will be created upon talking to the relevant merchant (with the shop slots unlocked)."""
     display_name = "Shop Hints"
@@ -290,7 +336,7 @@ class ShopHints(Choice):
     option_all = 3
     default = 1
 
-def skip_logic_helper(difficulty: SkipDifficulty): 
+def skip_logic_helper(difficulty: SkipDifficulty):
     available_skips = get_all_skips()
     valid_keys = {skip.name for skip in available_skips if skip.difficulty == difficulty}
     default = {skip.name: 0 for skip in available_skips if skip.difficulty == difficulty}
@@ -298,9 +344,9 @@ def skip_logic_helper(difficulty: SkipDifficulty):
     return valid_keys, default
 
 class SkipLogicEasy(OptionCounter):
-    """ In the following section you can enable specific skips to perform. The skips are losely categorized by their difficulty. 
+    """ In the following section you can enable specific skips to perform. The skips are losely categorized by their difficulty.
         Numbers other than 0 put the skip into logic.
-        Recommended to edit in the yaml, due to problems in Options Creator. 
+        Recommended to edit in the yaml, due to problems in Options Creator.
 
         For more detailed description of each individual skip visit https://docs.google.com/spreadsheets/d/1X7CHM0lT8vMiZmlGNtzdr3UXz71onuuRC2FyrNRw-UQ/edit?gid=840526629#gid=840526629
     """
@@ -312,19 +358,21 @@ class SkipLogicEasy(OptionCounter):
 
 class SkipLogicMedium(OptionCounter):
     display_name = "Enabled Medium Skips"
-    difficulty=SkipDifficulty.MEDIUM
+    difficulty = SkipDifficulty.MEDIUM
     valid_keys, default = skip_logic_helper(difficulty)
 
 
 class SkipLogicHard(OptionCounter):
     display_name = "Enabled Hard Skips"
-    difficulty=SkipDifficulty.HARD
+    difficulty = SkipDifficulty.HARD
     valid_keys, default = skip_logic_helper(difficulty)
+
 
 class SkipLogicVeryHard(OptionCounter):
     display_name = "Enabled Very Hard Skips"
-    difficulty=SkipDifficulty.VERY_HARD
+    difficulty = SkipDifficulty.VERY_HARD
     valid_keys, default = skip_logic_helper(difficulty)
+
 
 class LogicToAccessFirelinkAltar(Choice):
     """Firelink Altar logical Access requirement.
@@ -346,7 +394,7 @@ class LogicToAccessFirelinkAltar(Choice):
     default = 2
 
 class LogicToAccessCatacombs(Choice):
-    """Artificial logic for The Catacombs access. 
+    """Artificial logic for The Catacombs access.
      Before the chosen condition, The Catacombs will be considered "out of logic"
 
     - **no_logic:** (not recommended) Catacombs is in-logic as soon as you get to Firelink Shrine.
@@ -383,7 +431,7 @@ class RandomizeStartingLoadouts(DefaultOnToggle):
     Shields will always be 1-handed-wieldable with starting stats.
     Weapons will always be at least 2-handed-wieldable with starting stats.
     You can see what weapons/shield/item each class starts with in their description.
-    Starting spells are randomized separately.""" 
+    Starting spells are randomized separately."""
     display_name = "Randomize Starting Loadout"
 
 class RandomizeStartingGifts(DefaultOnToggle):
@@ -401,7 +449,7 @@ class RequireOneHandedStartingWeapons(DefaultOnToggle):
 class ExtraStartingWeaponForMeleeClasses(Toggle):
     """If randomize_starting_loadouts is on, this option determines if melee classes will get a second melee weapon."""
     display_name = "Extra Starting Weapon For Melee Classes"
-    
+
 class ExtraStartingShieldForAllClasses(Toggle):
     """If randomize_starting_loadouts is on, this option determines if all classes will get a second starting shield."""
     display_name = "Extra Starting Shield For All Classes"
@@ -504,16 +552,17 @@ class IncomingWeaponUpgradeInfusionPaths(OptionList):
     default = {"Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"}
     valid_keys = ["Normal", "Raw", "Magic", "Fire", "Divine", "Chaos", "Enchanted", "Occult", "Crystal", "Lightning"]
 
+
 # Group relevant options
 option_groups = [
     OptionGroup("Quality of Life", [
         CanWarpWithoutLordvessel,
         WarpToAllBonfires,
-        ]),
+    ]),
     OptionGroup("Sanity", [
         FogwallSanity,
         BossFogwallSanity,
-        ]),
+    ]),
     OptionGroup("Difficulty", [
         GhostDifficulty,
         SoulMultiplierBase,
@@ -522,23 +571,23 @@ option_groups = [
         WeightMultiplierBase,
         WeightMultiplierMin,
         WeightMultiplierSteps,
-        ]),
+    ]),
     OptionGroup("Optional Region Selection", [
         IncludeDlc,
         IncludePaintedWorld,
         IncludeGreatHollow,
-        ]),
-    # OptionGroup("Lord Souls", [
-    #     LordSoulShuffle,
-    #     LordSoulShardsRequired,
-    #     LordSoulShardsExtra,
-    #     ]),
+    ]),
+    OptionGroup("Lord Souls", [
+        LordSoulShuffle,
+        #     LordSoulShardsRequired,
+        #     LordSoulShardsExtra,
+    ]),
     OptionGroup("Boss Drop Shuffling", [
         # BossMiscDropShuffle,
         BossSoulShuffle,
         BossHumanityShuffle,
         BossBoneShuffle,
-        ]),
+    ]),
     OptionGroup("Item Pickup Shuffling", [
         CorpseFillerItemShuffle,
         CorpseUsefulItemShuffle,
@@ -548,21 +597,21 @@ option_groups = [
         BlackKnightWeaponShuffle,
         BlackKnightTitaniteShuffle,
         MinibossDropShuffle,
-        MimicDropShuffle,
         HostileNpcDropShuffle,
         CrystalLizardShuffle,
+        MimicDropShuffle,
         MiscDropShuffle,
-        ]),
+    ]),
     OptionGroup("Shops", [
         LimitedShopItemShuffle,
         UnlimitedShopItemShuffle,
         ShopHints,
-        ]),
+    ]),
     OptionGroup("Logic", [
         LogicToAccessFirelinkAltar,
         LogicToAccessCatacombs,
         LogicToAccessTotG,
-        ]),
+    ]),
     # OptionGroup("Skip Logic - Warning!", [
     #     SkipLogicEasy,
     #     SkipLogicMedium,
@@ -581,7 +630,7 @@ option_groups = [
         NoWeaponRequirements,
         NoSpellStatRequirements,
         NoMiracleCovenantRequirements,
-        ]),
+    ]),
     OptionGroup("Incoming Weapon Upgrades", [
         IncomingWeaponUpgradeBaseLevel,
         IncomingWeaponUpgradeMaxLevel,
@@ -593,7 +642,6 @@ option_groups = [
 
 @dataclass
 class DSROption(PerGameCommonOptions):
-
     # Game Options
     enable_deathlink: EnableDeathlinkOption
     goal_condition: GoalConditionOption
@@ -603,7 +651,7 @@ class DSROption(PerGameCommonOptions):
     # QoL
     can_warp_without_lordvessel: CanWarpWithoutLordvessel
     warp_to_all_bonfires: WarpToAllBonfires
-  
+
     # Sanity
     fogwall_sanity: FogwallSanity
     boss_fogwall_sanity: BossFogwallSanity

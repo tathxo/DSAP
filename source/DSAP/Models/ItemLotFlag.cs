@@ -10,6 +10,7 @@ namespace DSAP.Models
     {
         public bool IsEnabled { get; set; } = true;
         public int ItemLotParamId { get; set; } = 0;
+        public int OriginalFlagId { get; set; } = 0;
         public int DeliveredFlagId { get; set; } = 0;
     }
 }

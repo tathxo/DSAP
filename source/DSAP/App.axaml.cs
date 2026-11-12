@@ -811,7 +811,7 @@ public partial class App : Application
         int category = (int)item.Category;
         if (category == (int)DSItemCategory.Trap)
         {
-            RunLagTrap();
+            //RunLagTrap();
         }
         else if (category == (int)DSItemCategory.DsrEvent)
         {
@@ -907,6 +907,33 @@ public partial class App : Application
         Log.Logger.Verbose($"additem w/message result {result}");
         Memory.FreeMemory(resultArea);
 
+        return result;
+    }
+    public static long AddItemPopup(int category, int id, int quantity)
+    {
+        var command = MiscHelper.GetItemPopupCommand();
+
+        nint resultArea = Memory.Allocate(4); // dword size
+
+        //set item quantity, 18 (0x12)
+        Array.Copy(BitConverter.GetBytes(quantity), 0, command, 0x12, 4);
+        //Set item id 24 (0x18)
+        Array.Copy(BitConverter.GetBytes(id), 0, command, 0x18, 4);
+        //Set item category 29 (0x1d)
+        Array.Copy(BitConverter.GetBytes(category), 0, command, 0x1d, 4);
+
+        // set result address at 2, 187, and 209 (0x02, 0xBB and 0xD1)
+        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0x2, 8);
+        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0xBB, 8);
+        Array.Copy(BitConverter.GetBytes(resultArea), 0, command, 0xD1, 8);
+
+        var execResult = Memory.ExecuteCommand(command);
+
+        int result = Memory.ReadInt((ulong)resultArea); // get result
+
+        Log.Logger.Information($"item popup w/message result {result}");
+        Memory.FreeMemory(resultArea);
+        
         return result;
     }
 
@@ -1527,7 +1554,10 @@ public partial class App : Application
 
         if (SaveidSet && MiscHelper.IsInGame() && MiscHelper.CanPopupItems())
         {
-            bool will_popup = WillPopupReceive(e.Player, e.Item);
+            bool will_popup = false;
+            if (e.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot) // items sent by own game will popup elsewhere
+                will_popup = WillPopupReceive(e.Player, e.Item);
+
             // For items that will give popups, limit how often they send
             if (will_popup)
             {
@@ -1550,7 +1580,10 @@ public partial class App : Application
 
             if (EventsByApId.TryGetValue((int)e.Item.Id, out var fog_key)) // make sure to receive fog key items; then later received the "unlock event"
             {
-                AddItemWithMessage((int)DSItemCategory.KeyItems, fog_key.Id, 1);
+                if (will_popup)
+                    AddItemWithMessage((int)DSItemCategory.KeyItems, fog_key.Id, 1);
+                else
+                    AddItem((int)DSItemCategory.KeyItems, fog_key.Id, 1);
 
                 DarkSoulsItem keychain = null;
                 if (fog_key.Name.Contains("Boss"))
@@ -1626,7 +1659,7 @@ public partial class App : Application
             });
         }
     }
-    private static bool WillPopupReceive(PlayerInfo player, Item item)
+    internal static bool WillPopupReceive(PlayerInfo player, Item item)
     {
         bool willsend = false;
         if (player.Slot == Client.CurrentSession.ConnectionInfo.Slot) // from and to ourself

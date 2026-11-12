@@ -774,6 +774,25 @@ namespace DSAP.Helpers
             
             if (checksToSend.Count > 0)
             {
+                
+                foreach (var loc in checksToSend)
+                {
+                    var item = App.scoutedLocationInfo[loc];
+                    if (item.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
+                    {
+                        bool will_popup = App.WillPopupReceive(item.Player, new Item() { flags = item.Flags });
+                        if (will_popup)
+                        {
+                            var dsitem = App.AllItemsByApId[(int)item.ItemId];
+                            Log.Logger.Information($"Sending popup for {item.ItemName}");
+                            var category = dsitem.Category;
+                            if (category == DSItemCategory.DsrEvent || category == DSItemCategory.Progressive)
+                                category = DSItemCategory.KeyItems;
+                            App.AddItemPopup((int)category, dsitem.Id, dsitem.Quantity);
+                        }   
+                    }
+                }
+
                 Log.Logger.Information($"Sending {checksToSend.Count} locations");
                 App.Client.CurrentSession.Locations.CompleteLocationChecks(checksToSend.ToArray());
                 // player already got a popup for these locations above (for others' items)
@@ -789,6 +808,7 @@ namespace DSAP.Helpers
                     App.AddAbstractItem(item, true);
                 }   
             }
+            // set "local item delivered" flags
             if (flagsToSet.Count > 0)
             {
                 Log.Logger.Information($"Setting {flagsToSet.Count} flags");

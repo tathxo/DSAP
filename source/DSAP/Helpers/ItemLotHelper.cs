@@ -534,7 +534,7 @@ namespace DSAP.Helpers
             var arms_armor = armors.Where(x => ((x.Id / 1000) % 10) == 2).ToList(); // 0 in 1000s place = arms armor
             var legs_armor = armors.Where(x => ((x.Id / 1000) % 10) == 3).ToList(); // 0 in 1000s place = legs armor
 
-            Random random = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed) + App.Client.CurrentSession.ConnectionInfo.Slot);
+            Random random = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed) + App.Client.CurrentSession.ConnectionInfo.Slot + 1);
 
             // For each class loadout slot, randomize it
             foreach (var loadout in loadouts)
@@ -1129,78 +1129,103 @@ namespace DSAP.Helpers
             List<DarkSoulsLocation> origLocalRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
             List<DarkSoulsLocation> localRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
 
-            Log.Logger.Verbose($"localrandolist size = {localRandoList.Count}");
+            Log.Logger.Information($"localrandolist size = {localRandoList.Count}");
             // create a mapping for locally rando'd ids => other locations
+            var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed) + App.Client.CurrentSession.ConnectionInfo.Slot + 3);
+            ParamHelper.ReadFromBytes(out ParamStruct<ShopLineupParam> shopLineupParamStruct,
+                                                    ShopLineupParam.spOffset,
+                                                    (ps) => ps.ParamEntries.Last().id >= 99999990);
+            var shopLineupFlags = LocationHelper.GetShopLineupFlags();
+
+            ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> itemLotParamStruct,
+                                                    ItemLotParam.spOffset,
+                                                    (ps) => ps.ParamEntries.Last().id >= 99999990);
+            var itemLotFlags = LocationHelper.GetItemLotFlags();
+            var extraItemLotFlags = LocationHelper.GetExtraItemLotFlags();
+            var extraBossItemLotFlags = LocationHelper.GetBossExtraItemLotFlags();
+
+            var itemFlags = itemLotFlags.Union(extraItemLotFlags).Union(extraBossItemLotFlags).ToList();
+
+            // for each ID in the list, choose a random slot to correspond to it. Check the shop lineups & item lots to find what the item should be.
+            foreach (var loc in localRandoList.Select(x => x.Id).ToList())
             {
-                var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed + 1));
-                ParamHelper.ReadFromBytes(out ParamStruct<ShopLineupParam> shopLineupParamStruct,
-                                                     ShopLineupParam.spOffset,
-                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
-                var shopLineupFlags = LocationHelper.GetShopLineupFlags();
+                var nextSlotIdx = rand.Next(localRandoList.Count());
+                var nextSlot = localRandoList.ElementAt(nextSlotIdx);
+                localRandoList.Remove(nextSlot);
 
-                ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> itemLotParamStruct,
-                                                     ItemLotParam.spOffset,
-                                                     (ps) => ps.ParamEntries.Last().id >= 99999990);
-                var itemLotFlags = LocationHelper.GetItemLotFlags();
 
-                foreach (var loc in localRandoList.Select(x => x.Id).ToList())
+                foreach (var shoplineup in shopLineupFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
                 {
-                    var nextSlotIdx = rand.Next(localRandoList.Count());
-                    var nextSlot = localRandoList.ElementAt(nextSlotIdx);
-                    localRandoList.Remove(nextSlot);
-
-
-                    foreach (var shoplineup in shopLineupFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
+                    foreach (var parament in shopLineupParamStruct.ParamEntries.Where(x => x.id == shoplineup.ParamId)) // for each param that matches param id
                     {
-                        foreach (var parament in shopLineupParamStruct.ParamEntries.Where(x => x.id == shoplineup.ParamId)) // for each param that matches param id
+                        uint target_id = BitConverter.ToUInt32(shopLineupParamStruct.ParamBytes, (int)(parament.paramOffset + ShopLineupParam.EQUIP_ID));
+                        byte target_quantity = Math.Max((byte)shopLineupParamStruct.ParamBytes[parament.paramOffset + ShopLineupParam.SELL_QUANTITY], (byte)1); // guarantee at least 1
+
+                        byte target_type = shopLineupParamStruct.ParamBytes[parament.paramOffset + ShopLineupParam.EQUIP_TYPE];
+                        Dictionary<int, DSItemCategory> typecatmap = new Dictionary<int, DSItemCategory>()
+                                    {
+                                        { 0, DSItemCategory.AnyWeapon},
+                                        { 1, DSItemCategory.Armor},
+                                        { 2, DSItemCategory.Rings},
+                                        { 3, DSItemCategory.Consumables},
+                                        { 4, DSItemCategory.Spells}
+                                    };
+                        DSItemCategory target_category = typecatmap[target_type];
+
+                        DarkSoulsItem? target_item = App.AllItems.Find(x => x.Id == target_id && (x.Quantity == target_quantity || x.Quantity == 0) && x.Category == target_category);
+                        if (target_item != null)
                         {
-                            uint target_id = BitConverter.ToUInt32(shopLineupParamStruct.ParamBytes, (int)(parament.paramOffset + ShopLineupParam.EQUIP_ID));
-                            byte target_quantity = Math.Max((byte)shopLineupParamStruct.ParamBytes[parament.paramOffset + ShopLineupParam.SELL_QUANTITY], (byte)1); // guarantee at least 1
-
-                            byte target_type = shopLineupParamStruct.ParamBytes[parament.paramOffset + ShopLineupParam.EQUIP_TYPE];
-                            Dictionary<int, DSItemCategory> typecatmap = new Dictionary<int, DSItemCategory>()
-                                        {
-                                            { 0, DSItemCategory.AnyWeapon},
-                                            { 1, DSItemCategory.Armor},
-                                            { 2, DSItemCategory.Rings},
-                                            { 3, DSItemCategory.Consumables},
-                                            { 4, DSItemCategory.Spells}
-                                        };
-                            DSItemCategory target_category = typecatmap[target_type];
-
-                            DarkSoulsItem? target_item = App.AllItems.Find(x => x.Id == target_id && x.Quantity == target_quantity && x.Category == target_category);
-                            if (target_item != null)
-                            {
-                                int target_item_apid = target_item.ApId;
-                                localRandoMap.Add(loc, target_item_apid);
-                                Log.Logger.Verbose($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to loc '{nextSlot.Name}'; item='{target_item.Name}'");
-                            }
-                            else
-                                Log.Logger.Error($"failed to map locid={loc}");
+                            int target_item_apid = target_item.ApId;
+                            localRandoMap.Add(loc, target_item_apid);
+                            Log.Logger.Verbose($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to loc '{nextSlot.Name}'; item='{target_item.Name}'");
                         }
+                        else
+                            Log.Logger.Error($"failed to map locid={loc}");
                     }
+                }
 
-                    foreach (var itemlotflag in itemLotFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
+                foreach (var itemlotflag in itemFlags.Where(x => x.Id == nextSlot.Id)) // for first matching loc id
+                {
+                    foreach (var parament in itemLotParamStruct.ParamEntries.Where(x => x.id == itemlotflag.ItemLotParamId)) // for each lot param that matches param id
                     {
-                        foreach (var parament in itemLotParamStruct.ParamEntries.Where(x => x.id == itemlotflag.ItemLotParamId)) // for each lot param that matches param id
+                        int target_id = 0;
+                        byte target_quantity = 1;
+                        DSItemCategory target_category = DSItemCategory.INVALID;
+                        if (itemlotflag.OriginalItemId != 0)
                         {
-                            uint target_id = BitConverter.ToUInt32(itemLotParamStruct.ParamBytes, (int)(parament.paramOffset + ItemLotParam.LOT_ITEM_ID_01));
-                            byte target_quantity = Math.Max((byte)itemLotParamStruct.ParamBytes[parament.paramOffset + ItemLotParam.LOT_ITEM_NUM_01], (byte)1); // guarantee at least 1
-                            DSItemCategory target_category = (DSItemCategory)BitConverter.ToUInt32(itemLotParamStruct.ParamBytes, (int)(parament.paramOffset + ItemLotParam.LOT_ITEM_CATEGORY_01));
-
-                            DarkSoulsItem? target_item = App.AllItems.Find(x => x.Id == target_id && x.Quantity == target_quantity && x.Category == target_category);
-                            if (target_item != null)
-                            {
-                                int target_item_apid = target_item.ApId;
-                                localRandoMap.Add(loc, target_item_apid);
-                                Log.Logger.Verbose($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to loc '{nextSlot.Name}'; item='{target_item.Name}'");
-                            }
-                            else
-                                Log.Logger.Error($"failed to map locid={loc}");
+                            target_id = itemlotflag.OriginalItemId;
+                            target_category = itemlotflag.OriginalItemCategory;
                         }
+                        
+                        else if (itemlotflag.Name.Contains("Extra Titanite"))
+                        {
+                            List<int> titanites = new List<int>() { 1010, 1020, 1030, 1040, 1050, 1060 };
+                            target_id = titanites[rand.Next(titanites.Count)];
+                            target_quantity = 1;
+                            if (target_id <= 1030)
+                                target_quantity++;
+                            target_category = DSItemCategory.UpgradeMaterials;
+                        }
+                        else
+                        {
+                            target_id = BitConverter.ToInt32(itemLotParamStruct.ParamBytes, (int)(parament.paramOffset + ItemLotParam.LOT_ITEM_ID_01));
+                            target_quantity = Math.Max((byte)itemLotParamStruct.ParamBytes[parament.paramOffset + ItemLotParam.LOT_ITEM_NUM_01], (byte)1); // guarantee at least 1
+                            target_category = (DSItemCategory)BitConverter.ToUInt32(itemLotParamStruct.ParamBytes, (int)(parament.paramOffset + ItemLotParam.LOT_ITEM_CATEGORY_01));
+                        }
+
+                        DarkSoulsItem? target_item = App.AllItems.Find(x => x.Id == target_id && x.Quantity == target_quantity && x.Category == target_category);
+                        if (target_item != null)
+                        {
+                            int target_item_apid = target_item.ApId;
+                            localRandoMap.Add(loc, target_item_apid);
+                            Log.Logger.Verbose($"mapping locid={loc} ({origLocalRandoList.Find(x => x.Id == loc).Name}) to loc '{nextSlot.Name}'; item='{target_item.Name}'");
+                        }
+                        else
+                            Log.Logger.Error($"failed to map locid={loc}, item flagid={itemlotflag.Id},paramid={itemlotflag.ItemLotParamId}, itemid={itemlotflag.OriginalItemId}, item lot name='{itemlotflag.Name}', target_id={target_id}, cat={target_category}, quant={target_quantity}");
                     }
                 }
             }
+            Log.Logger.Information($"local rando done ({localRandoMap.Count()} items)");
         }
     }
 }

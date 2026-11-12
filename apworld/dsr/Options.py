@@ -281,9 +281,10 @@ class HostileNpcDropShuffle(LocalRandoChoice):
     See Black Knight Weapon Shuffle description for option choice descriptions."""
     display_name = "Hostile Npc Drop Shuffle"
 
-class MimicDropShuffle(DefaultOnToggle):
-    """Adds mimic drops as locations to the multiworld and item pool. Up to 9 locations total, includes 1 prog item (Crest Key).
-    If disabled, mimic drops are vanilla - the Crest Key mimic will drop the Crest Key, etc."""
+class MimicDropShuffle(LocalRandoChoice):
+    """Adds mimic drops as locations to the multiworld and item pool. Up to 8 locations total. Does not include the Crest Key mimic, which is considered a "chest item".
+
+    See Black Knight Weapon Shuffle description for option choice descriptions."""
     display_name = "Mimic Drop Shuffle"
 
 class MiscDropShuffle(DefaultOnToggle):
@@ -677,6 +678,9 @@ class DSROption(PerGameCommonOptions):
     include_gh: IncludeGreatHollow
 
     # Shuffling
+    lord_soul_shuffle: LordSoulShuffle
+
+    # Boss shuffling
     boss_soul_shuffle: BossSoulShuffle
     boss_humanity_shuffle: BossHumanityShuffle
     boss_bone_shuffle: BossBoneShuffle
@@ -685,9 +689,9 @@ class DSROption(PerGameCommonOptions):
     bk_weapon_shuffle: BlackKnightWeaponShuffle
     bk_titanite_shuffle: BlackKnightTitaniteShuffle
     lizard_shuffle: CrystalLizardShuffle
-    mimic_drop_shuffle: MimicDropShuffle
     miniboss_drop_shuffle: MinibossDropShuffle
     hostile_npc_drop_shuffle: HostileNpcDropShuffle
+    mimic_drop_shuffle: MimicDropShuffle
     misc_drop_shuffle: MiscDropShuffle
 
     # Item Pickup Shuffling

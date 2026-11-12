@@ -140,7 +140,6 @@ location_name_groups = {
     "Corpse Filler Items": set(),
     "Corpse Prog Items": set(),
     "Corpse Useful Items": set(),
-    "Missable Npc Items": set(),
     "Hostile Npc Drops": set(),
     "Miniboss Drops": set(),
     "Misc Drops": set(),
@@ -210,7 +209,6 @@ post_os_prog_items = [
     "Boss Fog Wall Key - Sanctuary Guardian",
     "Boss Fog Wall Key - Artorias",
     "Boss Fog Wall Key - Manus",
-    "Boss Fog Wall Key - Gwyndolin",
     "Boss Fog Wall Key - Nito",
     "Key to the Seal",
     "Fog Wall Key - New Londo (Lower)",
@@ -229,6 +227,8 @@ post_os_cata_prog_items = [
     "Boss Fog Wall Key - Pinwheel",
     "Skull Lantern", # light only needed in dlc and TotG, and dlc is known excluded if this is included
     "Sunlight Maggot", # light only needed in dlc and TotG, and dlc is known excluded if this is included
+    "Darkmoon Seance Ring",
+    "Boss Fog Wall Key - Gwyndolin",
 ]
 
 # Map door+shortcut regions to their "parent" region

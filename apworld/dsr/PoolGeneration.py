@@ -10,15 +10,15 @@ def BuildRequiredItemPool(world, count, ignorable_items):
 
     key_items = [item for item in _all_items if item.name in key_item_names or item.category == DSRItemCategory.KEY_ITEM]
 
-    print(f"DSR [{world.player_name}]: poolgen key items = {key_items}")
+    # print(f"DSR [{world.player_name}]: poolgen key items = {key_items}")
 
     for item in key_items:
         if item.name not in ignorable_items and item.name not in ["Dungeon Cell Key", "Estus Flask", "Undead Asylum F2 East Key", "Big Pilgrim's Key", "Master Key"]:
             item_pool.append(item)
             remaining_count = remaining_count - 1
-            print(f"DSR [{world.player_name}]: added key item to pool: {item.name}")
+            # print(f"DSR [{world.player_name}]: added key item to pool: {item.name}")
 
-    print(f"DSR [{world.player_name}]: itempool1: {item_pool}")
+    # print(f"DSR [{world.player_name}]: itempool1: {item_pool}")
 
     if(world.options.fogwall_sanity.value == True):
         fogwalls = [item for item in _all_items if item.category in [DSRItemCategory.FOGWALL] and item.name != "Fog Wall Key - Northern Undead Asylum"]
@@ -56,7 +56,7 @@ def BuildRequiredItemPool(world, count, ignorable_items):
             item = item_dictionary["Progressive Incoming Weapon Upgrade"]
             item_pool.append(item)
             remaining_count = remaining_count - 1
-    print(f"DSR [{world.player_name}]: itempool2: {item_pool}")
+    # print(f"DSR [{world.player_name}]: itempool1: {item_pool}")
     # print(f"item pool = [{item_pool}]")
 
     # Start commenting out of skips

@@ -727,7 +727,7 @@ namespace DSAP.Helpers
                 var paramIds = infiniteShopSlots.Select(x => x.ParamId).ToList();
 
                 // init rand from seed
-                var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed));
+                var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed) + App.Client.CurrentSession.ConnectionInfo.Slot + 2);
                 // foreach paramid, assign it a random slot, and replace that slot's id.
                 foreach (var paramId in paramIds)
                 {

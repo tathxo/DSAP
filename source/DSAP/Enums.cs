@@ -51,7 +51,8 @@
             DsrEvent = 0x11111111,
             BonfireWarp = 0x11111112,
             Progressive = 0x11111113,
-            Trap = 0x33333333
+            Trap = 0x33333333,
+            INVALID = -0x1,
         }
         public enum SpellCategory
         {

@@ -2,6 +2,7 @@
 from typing import Dict, Set, List, ClassVar, TextIO, Any, Optional
 
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location, LocationProgressType
+from Fill import FillError
 from Options import Toggle, OptionError, Option
 
 from worlds.AutoWorld import World, WebWorld
@@ -11,7 +12,7 @@ from rule_builder.rules import Rule, True_, Has, HasAll
 from .Items import DSRItem, DSRItemCategory, item_dictionary, key_item_names, item_descriptions, _all_items
 from .PoolGeneration import BuildRequiredItemPool, BuildGuaranteedItemPool, ReplaceItem, titanite_replacements
 from .Locations import DSRLocation, DSRLocationCategory, location_tables, location_dictionary, location_skip_categories, \
-    location_locked_categories, region_name_list
+    region_name_list
 from .Groups import location_name_groups, item_name_groups, \
     dlc_prog_items, pw_prog_items, gh_prog_items, post_os_prog_items, post_os_cata_prog_items
 from .Options import DSROption, option_groups, GoalConditionOption, LogicToAccessCatacombs, GhostDifficulty, \
@@ -21,6 +22,7 @@ from .Skips import get_all_skips
 from . import Patch as Patch
 
 from settings import Group, FilePath
+
 
 class DSRWeb(WebWorld):
     bug_report_page = ""
@@ -71,6 +73,7 @@ class DSRWorld(World):
     data_version = 0
     base_id = 11110000
     enabled_location_categories: Set[DSRLocationCategory]
+    locked_location_categories: Set[DSRLocationCategory]
     ap_loc_categories = []
     local_loc_categories = []
     vanilla_loc_categories = []
@@ -119,6 +122,7 @@ class DSRWorld(World):
         self.locked_locations = []
         self.main_path_locations = []
         self.enabled_location_categories = set()
+        self.locked_location_categories = set()
 
 
     def generate_early(self):
@@ -160,7 +164,7 @@ class DSRWorld(World):
                 # maybe go the other way, to check for unknown acronyms in the slot data?
                 for (acr, copt, cat) in acr_cat_map:
                     if acr in slot_data["ap_loc_categories"].split(","):
-                        copt.value = CorpseFillerItemShuffle.option_into_multiworld
+                        copt.value = LocalRandoChoice.option_true
 
 
 
@@ -201,9 +205,17 @@ class DSRWorld(World):
         ## Incoming Weapon Upgrades
         # If there won't be enough AP weapons for upgrades to matter much (and not many souls to replace), reduce steps to 0
         # This prevents the problem of having to remove weapons from the pool to support the weapon upgrade items
-        if self.options.limited_shop_item_shuffle.value == False and self.options.corpse_filler_item_shuffle.value != CorpseFillerItemShuffle.option_into_multiworld:
-            print(f"DSR [{self.player_name}]: Very few weapons and locations in item pool - disabling progressive incoming weapon upgrade system")
-            self.options.incoming_weapon_upgrade_steps.value = 0
+        if self.options.limited_shop_item_shuffle.value == False and self.options.corpse_filler_item_shuffle.value != LocalRandoChoice.option_true:
+            if (self.options.incoming_weapon_upgrade_steps.value > 0):
+                print(f"DSR [{self.player_name}]: Very few weapons and locations in item pool - disabling progressive incoming weapon upgrade system")
+                self.options.incoming_weapon_upgrade_steps.value = 0
+
+            # For O+S goal, 10 seems to be the max to add
+            if self.options.goal_condition == GoalConditionOption.option_ornstein_and_smough and (self.options.soul_multiplier_steps.value + self.options.weight_multiplier_steps > 10):
+                print(f"DSR [{self.player_name}]: Not enough locations for number of soul + weight multiplier steps. Decrease them to 10 total (e.g. 5 and 5)")
+                raise OptionError(f"DSR [{self.player_name}]: Not enough locations for number of soul + weight multiplier steps. Decrease them to 10 total (e.g. 5 and 5)")
+
+            # For gwyn goal, 20 as a limit is fine (weapon upgrades are already limited!)
 
 
         # If Incoming Weapon Upgrade Steps is 0, don't make there be an increase at all. Base is both the base and max
@@ -260,8 +272,10 @@ class DSRWorld(World):
             if acr in self.ap_loc_categories:
                 self.enabled_location_categories.add(cat)
 
-
-        self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL)
+        if (self.options.lord_soul_shuffle == True):
+            self.enabled_location_categories.add(DSRLocationCategory.LORD_SOUL) # Add to pool if setting is true
+        else:
+            self.locked_location_categories.add(DSRLocationCategory.LORD_SOUL) # Add as "event" items otherwise, so they aren't duplicated to pool
 
         if (self.options.fogwall_sanity.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.FOG_WALL)
@@ -272,7 +286,8 @@ class DSRWorld(World):
         if (self.options.limited_shop_item_shuffle.value == True):
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_ITEM)
             self.enabled_location_categories.add(DSRLocationCategory.SHOP_EXTENDED_ITEM)
-            # self.enabled_location_categories.add(DSRLocationCategory.MISSABLE_SHOP_ITEM)
+        else:
+            self.locked_location_categories.add(DSRLocationCategory.SHOP_ITEM) # add shop_item as locked, so residence key and crest of artorias aren't duplicated to pool
 
         self.ignorable_items = [item.name for item in _all_items if
                               ((self.options.include_dlc.value == False) and item.name in dlc_prog_items)
@@ -283,9 +298,9 @@ class DSRWorld(World):
                            or ((self.options.goal_condition.value == GoalConditionOption.option_ornstein_and_smough)
                                and self.options.logic_to_access_catacombs == LogicToAccessCatacombs.option_ornstein_and_smough
                                 and item.name in post_os_cata_prog_items)]
-        print(f"DSR [{self.player_name}]: totg logic = {self.options.logic_to_access_totg.current_key}")
-        print(f"DSR [{self.player_name}]: sunlight maggot ignored = {"Sunlight Maggot" in self.ignorable_items}")
-        print(f"DSR [{self.player_name}]: ignorable items = {self.ignorable_items}")
+        # print(f"DSR [{self.player_name}]: totg logic = {self.options.logic_to_access_totg.current_key}")
+        # print(f"DSR [{self.player_name}]: sunlight maggot ignored = {"Sunlight Maggot" in self.ignorable_items}")
+        # print(f"DSR [{self.player_name}]: ignorable items = {self.ignorable_items}")
         # Remove sunlight maggot from ignored items if it's required
         # if self.options.logic_to_access_totg.current_key == "sunlight_maggot" and "Sunlight Maggot" in self.ignorable_items:
         #     self.ignorable_items.remove("Sunlight Maggot")
@@ -349,7 +364,7 @@ class DSRWorld(World):
             if location.category in self.enabled_location_categories or self.is_item_prog(default_item) or self.is_item_useful(default_item):
                 if (location.category in self.enabled_location_categories
                     and location.category not in location_skip_categories   # [DSRLocationCategory.EVENT, DSRLocationCategory.DOOR]:
-                    and location.category not in location_locked_categories):
+                    and location.category not in self.locked_location_categories):
                     self.gc = self.gc + 1
                     if (location.category in [DSRLocationCategory.FOG_WALL, DSRLocationCategory.BOSS_FOG_WALL]):
                         default_item = "Fogwall Filler"
@@ -410,10 +425,11 @@ class DSRWorld(World):
             citem = self.create_item(itemname)
             
             if (location.category in location_skip_categories 
-             or location.category in location_locked_categories): # [DSRLocationCategory.EVENT]:
+             or location.category in self.locked_location_categories): # [DSRLocationCategory.EVENT]:
                 # print("Adding skip item: " + location.default_item_name + " for location: " + location.name)
-                skip_itemlocs.append((citem, location))
-                skipitempool.append(citem)
+                if self.is_item_prog(citem.name) or self.is_item_useful(citem.name):
+                    skip_itemlocs.append((citem, location))
+                    skipitempool.append(citem)
             elif location.category in self.enabled_location_categories:
                 #print("Adding item: " + location.default_item_name)
                 itempoolSize += 1
@@ -434,6 +450,8 @@ class DSRWorld(World):
         junk_items = [item for item in itempool if item.name in item_name_groups["Junk"]]
         removable_items = filler_items + junk_items
 
+        # print(f"DSR [{self.player_name}]: stillRequiredPool: {StillRequiredPool}")
+
         # print("marked " + str(len(removable_items)) + " items as removable")
         # print("marked " + str(len(filler_items)) + " items as filler")
         # print("marked " + str(len(junk_items)) + " items as non filler")
@@ -450,7 +468,7 @@ class DSRWorld(World):
         #     print("StillRequiredPool item: " + str(item))
         # for item in skipitempool:
         #     print("skip item: " + str(item))
-        limited_pool = [item for item in StillRequiredPool if item_dictionary[item.name].category not in [DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]]
+        # limited_pool = [item for item in StillRequiredPool if item_dictionary[item.name].category not in [DSRItemCategory.FOGWALL, DSRItemCategory.BOSSFOGWALL]]
         
         # for item in limited_pool:
         #     print("non-fogwall required item: " + str(item))
@@ -487,14 +505,16 @@ class DSRWorld(World):
                        and item.name not in excluded_consumables
                        ]
 
-        armors = [item.name for item in _all_items if item.category == DSRItemCategory.ARMOR]
-        weapons = [item.name for item in _all_items if item.category == DSRItemCategory.WEAPON]
-        shields  = [item.name for item in _all_items if item.category == DSRItemCategory.SHIELD and item.name not in ["Grass Crest Shield"]]
-        upg_mats = [item.name for item in _all_items if item.category == DSRItemCategory.UPGRADE_MATERIAL]
 
         if num_required_to_remove > num_removable:
+            armors = [item.name for item in _all_items if item.category == DSRItemCategory.ARMOR]
+            weapons = [item.name for item in _all_items if item.category == DSRItemCategory.WEAPON]
+            shields = [item.name for item in _all_items if
+                       item.category == DSRItemCategory.SHIELD and item.name not in ["Grass Crest Shield"]]
+            upg_mats = [item.name for item in _all_items if item.category == DSRItemCategory.UPGRADE_MATERIAL]
+
             num_more_required = num_required_to_remove - num_removable
-            print(f"DSR [{self.player_name}]: Could not remove enough items to meet requirements from yaml settings...removing additional items")
+            print(f"DSR [{self.player_name}]: Could not remove enough Soul items to meet requirements from yaml settings...removing additional items")
 
             # list all the items, first
             # print("_items:")
@@ -503,9 +523,9 @@ class DSRWorld(World):
             # print(f"{StillRequiredPool}")
             typelists = [("armor", armors, 0.6),
                          ("consumable", consumables, 0.8),
-                         ("shield", shields, 0.7),
-                         ("weapon", weapons, 0.7),
+                         ("shield", shields, 0.8),
                          ("upgrade material", upg_mats, 0.9),
+                         ("weapon", weapons, 0.7),
                          ]
             for i in range(5):
                 if num_more_required <= 0:
@@ -515,14 +535,14 @@ class DSRWorld(World):
                 weight = typelists[i][2]
                 type_removable_items = [item for item in itempool if item.name in typelist and item.name not in key_item_names and item.name not in self.options.guaranteed_items.value.keys()]
                 self.random.shuffle(type_removable_items)
-                num_items_to_replace = min(num_more_required, int(len(type_removable_items) * weight))  # don't replace more than half
+                num_items_to_replace = min(num_more_required, int(len(type_removable_items) * weight))  # don't replace more than weight *100 %
                 print(f"DSR [{self.player_name}]: Removing {num_items_to_replace} {tlname} items from group of {len(type_removable_items)} eligible {tlname}s")
                 removable_items += type_removable_items[0:num_items_to_replace]
                 num_more_required -= num_items_to_replace
             # if after all of that, there still aren't enough removed, throw an error
             if num_more_required > 0:
-                print(f"DSR [{self.player_name}]: Still could not remove enough items to meet requirements from yaml settings ({len(removable_items)}/{len(StillRequiredPool) + len(guaranteedpool)}). Error - reduce number of \"steps\" specified.")
-            #     raise OptionError
+                print(f"DSR [{self.player_name}]: ERROR: Still could not remove enough items to meet requirements from yaml settings ({len(removable_items)}/{len(StillRequiredPool) + len(guaranteedpool)}). Reduce number of \"steps\" specified.")
+                raise FillError(f"DSR [{self.player_name}]: ERROR: Still could not remove enough items to meet requirements from yaml settings ({len(removable_items)}/{len(StillRequiredPool) + len(guaranteedpool)}). Reduce number of \"steps\" specified.")
 
         for item in removable_items:
             if len(StillRequiredPool) > 0:
@@ -692,6 +712,9 @@ class DSRWorld(World):
                 "include_dlc": self.options.include_dlc.value,
                 "include_pw": self.options.include_pw.value,
                 "include_gh": self.options.include_gh.value,
+
+                # lord soul setting
+                "lord_soul_shuffle": self.options.lord_soul_shuffle.value,
 
                 # info about which location categories are ap randomized
                 "ap_loc_categories": ",".join(self.ap_loc_categories),

@@ -72,6 +72,7 @@ namespace DSAP.Helpers
                     Name = lot.Name,
                     Address = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item1,
                     AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(lot.Flag).Item2,
+                    DeliveredFlagId = lot.DeliveredFlagId,
                     Id = lot.Id,
                 });
             }

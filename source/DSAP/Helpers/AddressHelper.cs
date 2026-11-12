@@ -754,8 +754,13 @@ namespace DSAP.Helpers
                                             flagsToSet.Add(loc.DeliveredFlagId);
                                         }
                                     }
-                                    locsToRemove.Add(loc);
+                                    else
+                                        Log.Logger.Error($"delivered flag id=0 for loc {loc.Name} with id {loc.Id}");
                                 }
+                                else
+                                    Log.Logger.Error($"could not find loc {loc.Name} with id {loc.Id}");
+
+                                locsToRemove.Add(loc);
                             }
                         }
                     }
@@ -997,7 +1002,7 @@ namespace DSAP.Helpers
                 }
             }
 
-            watch.Stop();
+            //watch.Stop();
             
             //Log.Logger.Information($"[Eventflag Diff] Completed, took {watch.ElapsedTicks} ticks total to find {changedFlags} changed flags");
         }

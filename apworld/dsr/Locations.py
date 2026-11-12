@@ -89,9 +89,6 @@ location_skip_categories = {
     DSRLocationCategory.BONFIRE
 }
 
-location_locked_categories = {
-}
-
 # List of regions and tags
 region_name_list : Dict[str, List[str]] = {
     "Undead Asylum Cell" : [],
@@ -158,8 +155,8 @@ region_name_list : Dict[str, List[str]] = {
     "Anor Londo - After Second Fog" : [],
     "Anor Londo - Ornstein and Smough" : [],
     "Anor Londo - After Ornstein and Smough" : ["postos"],
-    "Anor Londo - Gwyndolin" : ["postos"],
-    "Anor Londo - After Gwyndolin" : ["postos"],
+    "Anor Londo - Gwyndolin" : ["postos_cata"],
+    "Anor Londo - After Gwyndolin" : ["postos_cata"],
     "Painted World of Ariamis" : ["pw"],
     "Painted World of Ariamis - After Fog" : ["pw"],
     "Painted World of Ariamis - After Annex Key" : ["pw"],
@@ -1582,7 +1579,7 @@ location_tables = {
     DSRLocationData(11111038, f"OT: Twinkling Titanite - Crystal Lizard Drop, Little Isolated Rooftop", f"Twinkling Titanite x2", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11111039, f"OT: Extra Titanite - Crystal Lizard Drop, Little Isolated Rooftop", f"Extra Blue Titanite", DSRLocationCategory.CRYSTAL_LIZARD),
     DSRLocationData(11110762, f"OT: Soul of a Hero - Stair Ledge", f"Soul of a Hero", DSRLocationCategory.CORPSE_FILLER_ITEM),
-    DSRLocationData(11110764, f"OT: Crest Key - Mimic Drop, By Fireplace", f"Crest Key", DSRLocationCategory.MIMIC_DROP),
+    DSRLocationData(11110764, f"OT: Crest Key - Mimic Drop, By Fireplace", f"Crest Key", DSRLocationCategory.CHEST_ITEM), # Even though it's a mimic - so that mimics are allowed to rando locally
     DSRLocationData(11110765, f"OT: Sorcery: Dark Fog", f"Sorcery: Dark Fog", DSRLocationCategory.CORPSE_FILLER_ITEM),
     DSRLocationData(11110766, f"OT: Twin Humanities - Drop onto Roof", f"Twin Humanities", DSRLocationCategory.CORPSE_FILLER_ITEM),
     DSRLocationData(11110767, f"OT: Soul of a Brave Warrior - Corpse in Corner of Statue Hallway", f"Soul of a Brave Warrior", DSRLocationCategory.CORPSE_FILLER_ITEM),

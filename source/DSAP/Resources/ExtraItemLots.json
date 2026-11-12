@@ -107,6 +107,8 @@
   {
     "Name": "UB: Black Knight Sword - Black Knight Drop",
     "Flag": 11010861,
+    "OriginalItemId": 310000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27900000,
     "DeliveredFlagId": 61323215,
     "Id": 11111004
@@ -121,6 +123,8 @@
   {
     "Name": "UP: Black Knight Greatsword - Black Knight Drop, in Tower",
     "Flag": 11010862,
+    "OriginalItemId": 355000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27900100,
     "DeliveredFlagId": 61323217,
     "Id": 11111005
@@ -135,6 +139,8 @@
   {
     "Name": "DB: Black Knight Halberd - Black Knight Drop",
     "Flag": 11200816,
+    "OriginalItemId": 1105000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27901000,
     "DeliveredFlagId": 61323219,
     "Id": 11111006
@@ -149,6 +155,8 @@
   {
     "Name": "TC: Black Knight Greataxe - Black Knight Drop",
     "Flag": 11300859,
+    "OriginalItemId": 753000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27902000,
     "DeliveredFlagId": 61323221,
     "Id": 11111007
@@ -163,6 +171,8 @@
   {
     "Name": "TotG: Black Knight Halberd - Black Knight Drop",
     "Flag": 11310820,
+    "OriginalItemId": 1105000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27903000,
     "DeliveredFlagId": 61323223,
     "Id": 11111008
@@ -177,6 +187,8 @@
   {
     "Name": "UA2: Black Knight Sword - Black Knight Drop, Hallway Before Fog",
     "Flag": 11810851,
+    "OriginalItemId": 310000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27907000,
     "DeliveredFlagId": 61323225,
     "Id": 11111009
@@ -191,6 +203,8 @@
   {
     "Name": "UA2: Black Knight Shield - Black Knight Drop, By Starting Cell",
     "Flag": 11810850,
+    "OriginalItemId": 1474000,
+    "OriginalItemCategory": "MeleeWeapons",
     "ItemLotParamId": 27907000,
     "DeliveredFlagId": 61323227,
     "Id": 11111011

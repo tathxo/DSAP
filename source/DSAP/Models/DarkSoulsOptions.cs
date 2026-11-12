@@ -170,7 +170,7 @@ namespace DSAP.Models
                     {"LIZ", "Crystal Lizards"},
                     {"MIM", "Mimic Drops"},
                     {"MBD", "Miniboss Drops"},
-                    {"NPC", "Npc Prog Items"},
+                    {"NPC", "Hostile Npc Items"},
                     {"MIS", "Misc Drops"},
 
                     //# Item Pickup Shuffling

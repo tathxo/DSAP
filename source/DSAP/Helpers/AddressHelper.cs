@@ -780,15 +780,20 @@ namespace DSAP.Helpers
                     var item = App.scoutedLocationInfo[loc];
                     if (item.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
                     {
-                        bool will_popup = App.WillPopupReceive(item.Player, new Item() { flags = item.Flags });
+                        bool will_popup = App.WillPopupReceive(item.Player, new Item() { flags = item.Flags }, loc);
                         if (will_popup)
                         {
-                            var dsitem = App.AllItemsByApId[(int)item.ItemId];
+                            var itemToReceive = App.AllItemsByApId[(int)item.ItemId];
+                            if (App.DSOptions.IncomingWeaponUpgradeSteps > 0 && itemToReceive.UpgradeType != ItemUpgrade.None && itemToReceive.Category != DSItemCategory.Armor)
+                            {
+                                itemToReceive = MiscHelper.UpgradeItem(itemToReceive, true);
+                            }
+
                             Log.Logger.Information($"Sending popup for {item.ItemName}");
-                            var category = dsitem.Category;
+                            var category = itemToReceive.Category;
                             if (category == DSItemCategory.DsrEvent || category == DSItemCategory.Progressive)
                                 category = DSItemCategory.KeyItems;
-                            App.AddItemPopup((int)category, dsitem.Id, dsitem.Quantity);
+                            App.AddItemPopup((int)category, itemToReceive.Id, itemToReceive.Quantity);
                         }   
                     }
                 }

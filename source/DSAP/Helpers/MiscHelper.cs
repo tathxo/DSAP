@@ -398,16 +398,20 @@ namespace DSAP.Helpers
             int itemseed = item.ApId + roomseed + connslot;
             Random rand = new Random(itemseed);
             string infusion_type = "Normal";
-            uint lvl = ParamHelper.CalculateIncomingWeaponUpgradeLevel();
+
+            uint lvl = 0;
+            if (App.DSOptions.IncomingWeaponUpgradeBase > 0 || App.DSOptions.IncomingWeaponUpgradeSteps > 0)
+                lvl = ParamHelper.CalculateIncomingWeaponUpgradeLevel();
             if (lvl == 0)
                 return item;
+            uint pyrolvl = 0;
 
             if (item.UpgradeType == Enums.ItemUpgrade.Infusable)
             {
                 int infusionIdx = rand.Next() % App.DSOptions.IncomingWeaponUpgradeInfusionPaths.Count;
                 infusion_type = App.DSOptions.IncomingWeaponUpgradeInfusionPaths[infusionIdx];
             }
-            if (item.UpgradeType == Enums.ItemUpgrade.InfusableRestricted)
+            else if (item.UpgradeType == Enums.ItemUpgrade.InfusableRestricted)
             {
                 // get limited infusion list
                 List<String> RestrictedInfusions = ["Normal", "Crystal", "Lightning", "Magic", "Divine", "Fire"];
@@ -419,10 +423,21 @@ namespace DSAP.Helpers
                 int infusionIdx = rand.Next() % AllowedRestrictedInfusions.Count;
                 infusion_type = AllowedRestrictedInfusions[infusionIdx];
             }
-            if (item.UpgradeType == Enums.ItemUpgrade.Unique)
+            else if (item.UpgradeType == Enums.ItemUpgrade.Unique)
             {
                 lvl = lvl / 3;
                 if (lvl == 0)
+                    return item;
+            }
+            else if (item.UpgradeType == Enums.ItemUpgrade.PyroFlame)
+            {
+                pyrolvl = lvl;
+            }
+            else if (item.UpgradeType == Enums.ItemUpgrade.PyroFlameAscended)
+            {
+                lvl = lvl / 3;
+                pyrolvl = lvl;
+                if (pyrolvl == 0)
                     return item;
             }
             // type, id, max level, min level, prev type id
@@ -457,15 +472,32 @@ namespace DSAP.Helpers
                 // normalize (e.g. Occult of lvl 11 => Occult +1)
                 int actual_lvl = (int)lvl - (int)infusion_entry.minlevel;
 
-                DarkSoulsItem newitem = new DarkSoulsItem
+                DarkSoulsItem newitem;
+                if (pyrolvl > 0) // special handling for pyro flame + ascended flame
                 {
-                    Name = item.Name,
-                    Id = item.Id + (int)actual_lvl + 100 * infusion_entry.id,
-                    StackSize = item.StackSize,
-                    UpgradeType = item.UpgradeType,
-                    Category = item.Category,
-                    ApId = item.ApId
-                };
+                    newitem = new DarkSoulsItem
+                    {
+                        Name = item.Name,
+                        Id = item.Id + 100 * (int)pyrolvl,
+                        StackSize = item.StackSize,
+                        UpgradeType = item.UpgradeType,
+                        Category = item.Category,
+                        ApId = item.ApId
+                    };
+                }
+                else // normal handling
+                {
+                    newitem = new DarkSoulsItem
+                    {
+                        Name = item.Name,
+                        Id = item.Id + (int)actual_lvl + 100 * infusion_entry.id,
+                        StackSize = item.StackSize,
+                        UpgradeType = item.UpgradeType,
+                        Category = item.Category,
+                        ApId = item.ApId
+                    };
+                }
+
 
                 if (log)
                 {

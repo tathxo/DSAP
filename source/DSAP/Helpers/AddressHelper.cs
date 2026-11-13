@@ -780,7 +780,7 @@ namespace DSAP.Helpers
                     var item = App.scoutedLocationInfo[loc];
                     if (item.Player.Slot == App.Client.CurrentSession.ConnectionInfo.Slot)
                     {
-                        bool will_popup = App.WillPopupReceive(item.Player, new Item() { flags = item.Flags }, loc);
+                        bool will_popup = App.WillPopupReceive(item.Player, new Item() { Id=item.ItemId, flags = item.Flags }, loc);
                         if (will_popup)
                         {
                             var itemToReceive = App.AllItemsByApId[(int)item.ItemId];

@@ -21,6 +21,7 @@ using DSAP.ViewModels;
 using ReactiveUI;
 using Serilog;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
@@ -1161,6 +1162,7 @@ public partial class App : Application
                     {
                         if (await CheckClientSave())
                         {
+                            ownItemsReceivedThisSave = [];
                             SaveidSet = true;
                             await Client.ReceiveReady();
                         }
@@ -1559,8 +1561,8 @@ public partial class App : Application
             bool will_popup = false;
 
             //Log.Logger.Information($"item recieved, self={Client.CurrentSession.ConnectionInfo.Slot}, slot={e.Player.Slot}, locid={e.LocationId}");
-            if (e.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot || e.LocationId == -1) // skip popping up items sent by own game, or those sent from console
-                will_popup = WillPopupReceive(e.Player, e.Item, e.LocationId);
+            // check if this will popup; if it's already been received via local send, it won't be
+            will_popup = WillPopupReceive(e.Player, e.Item, e.LocationId);
 
             // For items that will give popups, limit how often they send
             if (will_popup)
@@ -1663,6 +1665,7 @@ public partial class App : Application
             });
         }
     }
+    static internal ConcurrentDictionary<(long, long), bool> ownItemsReceivedThisSave = [];
     internal static bool WillPopupReceive(PlayerInfo player, Item item, long locid)
     {
         bool willsend = false;
@@ -1670,6 +1673,16 @@ public partial class App : Application
 
         if (player.Slot == Client.CurrentSession.ConnectionInfo.Slot && locid != -1) // from and to ourself
         {
+            // if it's already been received this save, don't popup
+            if (ownItemsReceivedThisSave.ContainsKey((item.Id, locid)))
+            {
+                ownItemsReceivedThisSave.TryRemove((item.Id, locid), out bool result);
+                return false;
+            }
+            else // if not, mark it as received this save
+            {
+                ownItemsReceivedThisSave.TryAdd((item.Id, locid), true);
+            }
             if (item.IsProgression && ControlsContext.FoundItemProgressive)
                 willsend = true;
             else if (item.IsUseful && ControlsContext.FoundItemUseful)

@@ -19,6 +19,7 @@ namespace DSAP.Models
         public Enums.DSGoal Goal {  get; set; }
         public long RequiredBosses { get; set; }
         public string IncludedOptionalZones { get; set; } = "";
+        public List<String> ApRandodLocGroups { get; set; } = [];
         public List<String> LocalRandodLocGroups { get; set; } = [];
         // QoL
         public bool WarpToAllBonfires { get; set; }
@@ -40,11 +41,7 @@ namespace DSAP.Models
         public uint IncomingWeaponUpgradeMax { get; set; }
         public uint IncomingWeaponUpgradeSteps { get; set; }
         // Shuffle
-        public bool BossSoulShuffle { get; set; }
-        public bool BossHumanityShuffle { get; set; }
-        public bool BossBoneShuffle { get; set; }
-        public bool BlackKnightWeaponShuffle { get; set; }
-        public bool LizardShuffle { get; set; }
+        public bool LordSoulShuffle { get; set; }
         // Shops
         public bool LimitedShopItemShuffle { get; set; }
         public bool UnlimitedShopItemShuffle { get; set; }
@@ -155,10 +152,8 @@ namespace DSAP.Models
                 IncludedOptionalZones += "gh ";
 
             LocalRandodLocGroups = [];
-            if (App.Client.Options.ContainsKey("local_loc_categories"))
-            {
-                var loc_group_string = ((JsonElement)App.Client.Options["local_loc_categories"]).ToString();
-                Dictionary<string, string> acrToGroup = new Dictionary<string, string>()
+            ApRandodLocGroups = [];
+            Dictionary<string, string> acrToGroup = new Dictionary<string, string>()
                 {
                     {"BS", "Boss Souls"},
                     {"BH", "Boss Humanity"},
@@ -178,11 +173,27 @@ namespace DSAP.Models
                     {"CUI", "Corpse Useful Items"},
                     {"CRI", "Corpse Ring Items"}
                 };
+            if (App.Client.Options.ContainsKey("local_loc_categories"))
+            {
+                var loc_group_string = ((JsonElement)App.Client.Options["local_loc_categories"]).ToString();
+
                 foreach (var acr in loc_group_string.Split(','))
                 {
                     if (acrToGroup.TryGetValue(acr, out string val))
                     {
                         LocalRandodLocGroups.Add(val);
+                    }
+                }
+            }
+            if (App.Client.Options.ContainsKey("ap_loc_categories"))
+            {
+                var loc_group_string = ((JsonElement)App.Client.Options["ap_loc_categories"]).ToString();
+
+                foreach (var acr in loc_group_string.Split(','))
+                {
+                    if (acrToGroup.TryGetValue(acr, out string val))
+                    {
+                        ApRandodLocGroups.Add(val);
                     }
                 }
             }
@@ -259,12 +270,8 @@ namespace DSAP.Models
             FogwallSanity = GetBool("fogwall_sanity");
             BossFogwallSanity = GetBool("boss_fogwall_sanity");
 
-            BossSoulShuffle = GetBool("boss_soul_shuffle");
-            BossHumanityShuffle = GetBool("boss_humanity_shuffle");
-            BossBoneShuffle = GetBool("boss_bone_shuffle");
-            BlackKnightWeaponShuffle = GetBool("bk_weapon_shuffle");
-            LizardShuffle = GetBool("lizard_shuffle");
-
+            LordSoulShuffle = GetBool("lord_soul_shuffle");
+            
             LimitedShopItemShuffle = GetBool("limited_shop_item_shuffle");
             UnlimitedShopItemShuffle = GetBool("unlimited_shop_item_shuffle");
 
@@ -325,10 +332,10 @@ namespace DSAP.Models
                 object value = descriptor.GetValue(this);
                 if (name == "RequiredBosses")
                     result += $"{name}={value:X}\n";
-                else if (name == "LocalRandodLocGroups")
+                else if (name == "LocalRandodLocGroups" || name == "ApRandodLocGroups")
                 {
                     result += $"{name}=[";
-                    foreach (var g in LocalRandodLocGroups)
+                    foreach (var g in (List<String>)value)
                         result += $"{g},";
                     result += "]\n";
                 }

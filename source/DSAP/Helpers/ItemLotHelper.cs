@@ -1,7 +1,6 @@
 ﻿using Archipelago.Core.Models;
 using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Models;
-using DSAP.Helpers;
 using DSAP.Models;
 using Serilog;
 using System;

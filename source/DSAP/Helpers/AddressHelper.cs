@@ -4,7 +4,6 @@ using Archipelago.Core.Util;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using DSAP.Models;
-using DynamicData;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -288,10 +287,7 @@ namespace DSAP.Helpers
                                     CheckForHintTriggers(flags, mapInfo);
                                     ShopSafety(flags);
                                 }
-                                if (App.DSOptions.LizardShuffle)
-                                {
-                                    GhLizardSafety(flags);
-                                }
+                                GhLizardSafety(flags);
                                 PisacaSafety(flags);
                                 PWDAWarpSafety(flags);
                                 CollectSafety(flags);

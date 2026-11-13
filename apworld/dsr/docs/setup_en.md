@@ -4,13 +4,14 @@
 
 - [Dark Souls: Remastered](https://store.steampowered.com/app/570940/DARK_SOULS_REMASTERED/)
 - [dsr.apworld - Dark Souls: Remastered Apworld](https://github.com/tathxo/DSAP/releases/latest)
-- [DSAP - Dark Souls: Remastered AP client](https://github.com/tathxo/DSAP/releases/latest)
+- [DSAP.Desktop.exe - Dark Souls: Remastered AP client](https://github.com/tathxo/DSAP/releases/latest)
 - [Archipelago Launcher (v0.6.7 or above REQUIRED)](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 
 ## Optional Software
 - [PopTracker](https://poptracker.github.io/)
 - [DSR PopTracker Pack with maps](https://github.com/routhken/Dark_Souls_Remastered_tracker/releases)
 - [Matt's DS1 Enemy Randomizer](https://www.nexusmods.com/darksoulsremastered/mods/922)
+- [APIconPatch.apdsr - optional ap icon patch for DSR](https://github.com/tathxo/DSAP/releases/latest)
 
 
 ## Setting Up
@@ -31,6 +32,14 @@
 3. Either run Generate.py or press the Generate button on the launcher to generate a seed/multiworld.
 4. When this has completed, you will have a zip file in your Archipelago/Output folder.
 5. Host the output zip either using the Host option on the launcher or by uploading it to Archipelago.gg
+
+### Patching your Game for the AP Icon (optional)
+To show an AP-style icon in game for AP-specific items, you can apply an optional patch. 
+1. Download the latest patch file (`APIconPatch.apdsr`).
+2. After you've installed the apworld, re-open the Archipelago Launcher and drag the patch file onto it. 
+3. If prompted for the game executable location, find it and select `DarkSoulsRemastered.exe`.
+4. It should now be patched. When you next connect with the `DSAP.Desktop.exe` client, ap items will show with the new icon.
+5. If at any time you wish to _unpatch_ it, either use the "verify integrity of game files" option through steam, or open the Archipelago Launcher, and run the "Revert DSR Patch" component.
 
 ### Running and Connecting the Game
 

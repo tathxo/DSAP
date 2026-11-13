@@ -536,7 +536,7 @@ class IncomingWeaponUpgradeSteps(Range):
     Setting this to 15 steps will result in 15 items, receiving each of which will increase incoming weapon upgrade level by 1.
 
     Has no effect if the incoming_weapon_upgrade_base and incoming_weapon_upgrade_max are equal.
-    Has no effect (will be set to 0) if very few weapons are expected to be in the pool.
+    Has no effect (will be set to 0) if very few weapons are expected to be in the pool (e.g. if corpse filler is not in pool & shops are not in pool).
 
     If zero, incoming_weapon_upgrade_base is applied to all weapons."""
     display_name = "Incoming Weapon Upgrade Steps"

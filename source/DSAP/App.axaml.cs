@@ -470,8 +470,10 @@ public partial class App : Application
         {
             var sm = ParamHelper.CalculateSoulMultiplier();
             var wm = ParamHelper.CalculateWeightMultiplier();
+            var ul = ParamHelper.CalculateIncomingWeaponUpgradeLevel();
             Log.Logger.Information($"Soul multiplier is {(sm / 100.0):P0}");
             Log.Logger.Information($"Weight multiplier is {(wm / 100.0):P0}");
+            Log.Logger.Information($"Incoming Weapon Upgrades level is {ul}");
         }
 #if DEBUG
         else if (command.StartsWith("/item"))
@@ -1555,8 +1557,10 @@ public partial class App : Application
         if (SaveidSet && MiscHelper.IsInGame() && MiscHelper.CanPopupItems())
         {
             bool will_popup = false;
-            if (e.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot) // items sent by own game will popup elsewhere
-                will_popup = WillPopupReceive(e.Player, e.Item);
+
+            //Log.Logger.Information($"item recieved, self={Client.CurrentSession.ConnectionInfo.Slot}, slot={e.Player.Slot}, locid={e.LocationId}");
+            if (e.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot || e.LocationId == -1) // skip popping up items sent by own game, or those sent from console
+                will_popup = WillPopupReceive(e.Player, e.Item, e.LocationId);
 
             // For items that will give popups, limit how often they send
             if (will_popup)
@@ -1659,10 +1663,12 @@ public partial class App : Application
             });
         }
     }
-    internal static bool WillPopupReceive(PlayerInfo player, Item item)
+    internal static bool WillPopupReceive(PlayerInfo player, Item item, long locid)
     {
         bool willsend = false;
-        if (player.Slot == Client.CurrentSession.ConnectionInfo.Slot) // from and to ourself
+        //Log.Logger.Information($"slot={player.Slot}, self={Client.CurrentSession.ConnectionInfo.Slot}, locid={locid}");
+
+        if (player.Slot == Client.CurrentSession.ConnectionInfo.Slot && locid != -1) // from and to ourself
         {
             if (item.IsProgression && ControlsContext.FoundItemProgressive)
                 willsend = true;
@@ -2031,6 +2037,7 @@ public partial class App : Application
 
         // update the various params (options are read within)
         ParamHelper.UpdateWeightMultiplier(); // setup weight multiplier for weapons + armor
+        ParamHelper.UpdateIncomingWeaponUpgradeLevel();
         ParamHelper.ModifyWeaponParams();
         ParamHelper.ModifyArmorParams();
 
@@ -2039,9 +2046,6 @@ public partial class App : Application
         ParamHelper.ModifyNpcAttackParams();
         ParamHelper.ModifyGameAreaParams();
         ParamHelper.ModifyShopLineupParams(scoutedLocationInfo);
-
-        // handle setting weapon upg modifier as well, since it's like the multipliers
-        ParamHelper.UpdateIncomingWeaponUpgradeLevel();
 
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params

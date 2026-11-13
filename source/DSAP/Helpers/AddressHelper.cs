@@ -755,7 +755,7 @@ namespace DSAP.Helpers
                                         }
                                     }
                                     else
-                                        Log.Logger.Error($"delivered flag id=0 for loc {loc.Name} with id {loc.Id}");
+                                        Log.Logger.Debug($"delivered flag id=0 for loc {loc.Name} with id {loc.Id}");
                                 }
                                 else
                                     Log.Logger.Error($"could not find loc {loc.Name} with id {loc.Id}");
@@ -789,7 +789,7 @@ namespace DSAP.Helpers
                                 itemToReceive = MiscHelper.UpgradeItem(itemToReceive, true);
                             }
 
-                            Log.Logger.Information($"Sending popup for {item.ItemName}");
+                            Log.Logger.Debug($"Sending popup for {item.ItemName}");
                             var category = itemToReceive.Category;
                             if (category == DSItemCategory.DsrEvent || category == DSItemCategory.Progressive)
                                 category = DSItemCategory.KeyItems;
@@ -798,7 +798,7 @@ namespace DSAP.Helpers
                     }
                 }
 
-                Log.Logger.Information($"Sending {checksToSend.Count} locations");
+                Log.Logger.Debug($"Sending {checksToSend.Count} locations");
                 App.Client.CurrentSession.Locations.CompleteLocationChecks(checksToSend.ToArray());
                 // player already got a popup for these locations above (for others' items)
                 // todo get a popup for players' own items and remove it from receiveItems callback
@@ -806,7 +806,7 @@ namespace DSAP.Helpers
             // deliver local rando items to player
             if (itemsToDeliver.Count > 0)
             {
-                Log.Logger.Information($"Sending {itemsToDeliver.Count} Items");
+                Log.Logger.Debug($"Sending {itemsToDeliver.Count} Items");
                 foreach (var item in itemsToDeliver)
                 {
                     //Log.Logger.Warning($"Sending item: {itemToReceive.Name}");
@@ -816,7 +816,7 @@ namespace DSAP.Helpers
             // set "local item delivered" flags
             if (flagsToSet.Count > 0)
             {
-                Log.Logger.Information($"Setting {flagsToSet.Count} flags");
+                Log.Logger.Debug($"Setting {flagsToSet.Count} flags");
                 Task.Run(() =>
                 {
                     Task.Delay(100);
@@ -828,7 +828,7 @@ namespace DSAP.Helpers
             }
             if (locsToRemove.Count > 0)
             {
-                Log.Logger.Information($"Removing {locsToRemove.Count} locations from checking");
+                Log.Logger.Debug($"Removing {locsToRemove.Count} locations from checking");
                 foreach (var loc in locsToRemove)
                 {
                     cached_fullLocationsList.Remove(loc); 

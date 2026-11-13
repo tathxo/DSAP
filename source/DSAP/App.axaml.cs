@@ -934,7 +934,7 @@ public partial class App : Application
 
         int result = Memory.ReadInt((ulong)resultArea); // get result
 
-        Log.Logger.Information($"item popup w/message result {result}");
+        Log.Logger.Debug($"item popup w/message result {result}");
         Memory.FreeMemory(resultArea);
         
         return result;

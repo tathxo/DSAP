@@ -1129,7 +1129,7 @@ namespace DSAP.Helpers
             List<DarkSoulsLocation> origLocalRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
             List<DarkSoulsLocation> localRandoList = fullLocationsList.Where(x => !App.Client.CurrentSession.Locations.AllLocations.Contains((long)x.Id) && localRandoLocs.Contains(x.Id)).ToList();
 
-            Log.Logger.Information($"localrandolist size = {localRandoList.Count}");
+            Log.Logger.Debug($"localrandolist size = {localRandoList.Count}");
             // create a mapping for locally rando'd ids => other locations
             var rand = new Random(MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed) + App.Client.CurrentSession.ConnectionInfo.Slot + 3);
             ParamHelper.ReadFromBytes(out ParamStruct<ShopLineupParam> shopLineupParamStruct,
@@ -1225,7 +1225,7 @@ namespace DSAP.Helpers
                     }
                 }
             }
-            Log.Logger.Information($"local rando done ({localRandoMap.Count()} items)");
+            Log.Logger.Debug($"local rando done ({localRandoMap.Count()} items)");
         }
     }
 }

@@ -19,7 +19,6 @@
 
 # Current Known issues
 * Going to NG+ causes you to lose key items, and likely can result in a softlock. If playing without Release on Goal, or if playing with `goal_condition` of `all_bosses`, it is recommended to kill Gwyn only after doing everything else needed in your game.
-* v0.1.2+, especially v0.2.0+ - Occasional client crash related (i think) to bonfire syncing code.
 * Upon receiving a Fog Wall Key, the related Fog Wall sometimes does not unlock. To work around this, completely close both the game and client (DSR and DSAP), then relaunch them and reconnect.
 * Master Key chosen from character creation (whether as a gift or thief starting item) is not ever considered to be in-logic. The `Randomized Starting Loadout` and `Randomized Starting Gift` options replace the master key from the thief's starting item and the starting gifts respectively. A master key that comes from the multiworld (if shop shuffling is enabled), however, will put its available locations in-logic.
 * If you give a later Ember to a blacksmith before an earlier one in the same chain, they might lock you out of some upgrades. This is a vanilla bug, but will be mitigated in the future with "progressive embers".
@@ -28,6 +27,8 @@
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
 
 # Old Known Issues
+* v0.2.6: rickert_sells_curses for ghost_difficulty does not work
+* v0.2.6.2 - v0.1.2 - Occasional client crash related to bonfire syncing code (fixed in v0.3.0)
 * v0.2.2 - v0.2.0: Location Groups "All DLC regions" and "After O+S" did not include merchants, so even when excluding those groups you could end up with those merchants being randomized and/or having progression items.
 * v0.2.1 - v0.2.0: Logic - 4 kings not logically requiring Covenant of Artorias if boss fogwall sanity is off.
 * v0.2.1 - v0.2.0: Logic - Demon Firesage not logically requiring Lordvessel if boss fogwall sanity is off.
@@ -54,6 +55,83 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+## Version 0.3.0 - AP Icon, Regional and Categorical Shuffle options, New Weapon Upgrade System
+### Version update -> 0.3.0. **Client is _NOT_ compatible with 0.2.x generated apworlds**. 
+**Make sure your host generates with the v0.3.0 apworld**.
+
+### Features
+* Add AP icon **via optional patch** `APIconPatch.apdsr` - see Setup Guide for more details. Huge thanks to Nave!
+* Yaml options: Optional Region selection - explicit selection for DLC, Painted Work, and Great Hollow+Ash Lake. Unshuffled regions will not have their bosses removed for the `all_bosses` goal.
+* Yaml options: Toggleable shuffling by location category (subcategories of Corpse items/One-time Enemy drops, etc). For categories without prog items, includes an option for Local-only Randomization. `/lrspoiler` command added to check where local items are randomized from and to.
+  * By customizing these options, you can both decrease filler item bloat in the multiworld _and_ lower your check count, which can play better with other worlds/significantly reduce how long a run takes.
+* Yaml option: `lord_soul_shuffle`, to allow lord souls to be unshuffled.
+* Location Groups added for locations by category (see updated list in Game Info page).
+* If `ornstein_and_smough` is chosen as goal, all locations considered "post o+s" (the lordvessel and any locations requiring the lordvessel) will not be shuffled. If catacombs is put behind o+s in logic, it will also not be shuffled.
+* Yaml Options: Weapon upgrade system Updated! Now `Progressive Incoming Weapon Upgrade`s - in the same style as the Soul and Weight Multiplier options. Only affects items received via AP once the relevant progressive items are received. Does not affect items from unrandomized or local_only-randomized locations.
+* "Collect" Support included from experimental v0.2.6.2 below.
+
+### Fixes
+* Fully rewrote/Changed method of flag polling/location checking - Drastically reducing number of memory reads in DSR process and improving performance by up to 160x.
+* Removed network delay on item popups for others & self
+* Refactored boss tracking - when bosses are killed, it will sync that they were killed between all saves.
+* Refactored bonfire tracking
+* Allow for more replacement of itmes during generate if needed to make room for the Progressive multiplier/ugprade items
+* Fix Ring of Sacrifice x10 giving 10 of a x10 item (resulting in 20 total if you move them into the bottomless box)
+
+
+## Version 0.2.6.2 - Experimental **Collect/Seamless Co-op Support**
+### Client update -> 0.2.6.2. **Client is compatible with 0.2.x generated apworlds**. 
+* "Collect" support - AP items (treasures on the ground and in shops) which were remotely collected (**via seamless co-op, AP "collect", and other saves) will be removed and their flags turned on. This is done in real time (approx. once per second).**
+
+
+## Version 0.2.6.1 - hotfix
+### Version update -> 0.2.6.1. **Client is compatible with 0.2.x generated apworlds**. 
+### Fixes:
+* fix Rickert's curses removed from shop after purchasing it or another of his items.
+* Bonfire sync code fix attempt
+* Change Overlay setting -> default off (will stay on if in your saved-settings.json file)
+
+## Version 0.2.6 - Bigger Shops and Better Popups
+### Version update -> 0.2.6. **Client is compatible with 0.2.x generated apworlds**. 
+New options and locations are added, so older clients will not have access to the new locations and features.
+
+### Features
+* AP item names in Popups and in Shops will be in color based on AP category, using AP client default values. As rendered in game, Progression is roughly purplish, Useful is blue, Traps are Orange, and Filler is teal.
+* 64 AP locations added across several shops - added shop armor and weapons to the pool, and made their shop entries single-use
+* 20 more AP locations added to Domhnall's shop (in addition to the above) - boss armor sets, available after you kill the appropriate bosses.
+* New Yaml Option `unlimited_shop_item_shuffle` to shuffle merchant unlimited shop items (consumables and arrows) amongst each other (client-side, not AP checks).
+* Removed Domhnall's Master Key from the pool for a better experience - it makes too many other keys redundant/useless and opens up too many different parts of the map at once.
+
+### Fixes
+* Add in missing post-Quelaag lever bone for when boss_bone_shuffle is on
+* Tracker autotabbing detected wrong map in a part of Upper Undead Burg.
+* Better Version error messages
+* Force disconnect on sufficiently mismatched versions
+* Better messages for "new room" error
+* Better messages on failed connection
+* Fix multiple autotab problem areas: UP hallway, DA 1st seath encounter, and demon ruins ramp
+* Logic: fix `TotG: Soul of a Brave Warrior - Lower Giant Coffin` region to be before the white fog
+
+
+## Version 0.2.5 - Pausing and Prison update
+### Version update -> 0.2.5. **Client is compatible with 0.2.x generated apworlds**.
+All relevant changes are to the client only. The only change to the apworld from 0.2.4 is a version number update. 
+## Features
+* Pauses the game while the Gesture menu is open. The behavior can be toggled off via the "Custom Controls" window in DSAP client settings. Items received during the pause will still be acquired. Deathlinks received while paused will both kill you and unpause.
+* DA/PW Warp Safety - Removes the warp prohibition which the game applies while player is in DA Prison cell or the Painted World.
+* DA Prison Break Cutscene Safety - resets the flags that get set if you've pulled the lever twice, allowing the gate to the Pisacas to open.
+* Additional options are available for the client's Font size.
+## Fixes
+* "Ghosts are not ghostly" setting now also removes the property of their attacks which make them unblockable while not cursed.
+* Tracker autotabbing detected wrong map in a part of Upper Undead Burg.
+
+
+
+## Version 0.2.4 - Laurentius Shop, Forced GH Lizard Spawns, and a DA Logic Update
+* Version update -> 0.2.4. Both apworld and client have updated. Client is compatible with 0.2.x generated apworlds. Latest client required if using updated apworld.
+* Feature: Added Laurentius's shop to limited_shop_item_shuffle-enabled locations. He is also prevented from moving on until you buy out his shop.
+* Feature: Force lizard spawns in the Great Hollow on every load instead of the vanilla 1-in-3 occurrence rate, when lizard_shuffle is enabled.
+* Fix: Corrected broken logic in Duke's Archives with Boss Fogwall Sanity on which didn't require Boss Fog Wall Key - Seath 1st Encounter for getting into the main prison area with the DA Prison Extra Key.
 
 ## Version 0.2.3 - Petrus, Ricard, I'm Sorry, and Loc Group Fixes
 * Version update -> 0.2.3. Both apworld and client have updated. **Client is compatible with 0.2.x generated apworlds**. Latest client required if using updated apworld.
@@ -251,7 +329,7 @@
 # Contributors
 * tathxo (aka noka) - Maintainer (as of May 2026)
 * ArsonAssassin - Creator and Maintainer from initial creation in Oct 2024 through May 2026, creator of the memory library "Archipelago.Core" used heavily by this implementation.
-* Nave - Contributor, research/reverse engineering
+* Nave - Contributor, research/reverse engineering, AP Icon Patcher
 * BroodierLake140 (discord) - Contributor, O+S and Manus goals
 * DeeKay - Contributor, "Allow Skips" Logic
 * TheAbysmalKraken - Linux-enabling fix in dependant memory library

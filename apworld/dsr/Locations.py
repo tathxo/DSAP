@@ -1562,7 +1562,7 @@ location_tables = {
 "Royal Wood - After Hawkeye Gough": [
     DSRLocationData(11110747, f"RW: Black Dragon Kalameet Defeated", f"Black Dragon Kalameet Defeated", DSRLocationCategory.BOSS),
     DSRLocationData(11110748, f"RW: Calamity Ring", f"Calamity Ring", DSRLocationCategory.BOSS_DROP),
-    DSRLocationData(11110749, f"RW: Gough's Great Arrow - Kalemeet's Arena", f"Gough's Great Arrow x3", DSRLocationCategory.CORPSE_FILLER_ITEM),
+    DSRLocationData(11110749, f"RW: Gough's Great Arrow - Kalameet's Arena", f"Gough's Great Arrow x3", DSRLocationCategory.CORPSE_FILLER_ITEM),
     DSRLocationData(11110750, f"RW: Titanite Slab - Kalameet's Arena Behind Waterfall", f"Titanite Slab", DSRLocationCategory.CHEST_ITEM),
     DSRLocationData(11110751, f"RW: Gough's Greatbow - Kalameet reward", f"Gough's Greatbow", DSRLocationCategory.ENEMY_DROP), # Actually a reward from Gough after killing Kalameet
 ],

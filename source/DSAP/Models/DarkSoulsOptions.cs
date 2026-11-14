@@ -325,7 +325,7 @@ namespace DSAP.Models
         }
         public string ToString()
         {
-            string result = "[\n";
+            string result = "";
             foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(this))
             {
                 string name = descriptor.Name;

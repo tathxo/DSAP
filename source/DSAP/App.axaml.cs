@@ -23,9 +23,11 @@ using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -148,6 +150,7 @@ public partial class App : Application
             Log.Logger.Warning(" /goalcheck - Manually check if the goal has been completed, if for some reason it did not send.");
             Log.Logger.Warning("              Please report back with the screenshots + the resulting messages if you have to use this.");
             Log.Logger.Warning(" /warp [DLC/AP/FA] - warp to the DLC/Archives Prison/Firelink Altar if you've been locked out.");
+            Log.Logger.Warning(" /lrspoiler - Print spoiler log for local randomization to local_rando_spoiler.txt file inside executable folder.");
             Log.Logger.Warning("--- Client Settings ---");
             Log.Logger.Warning(" /deathlink [on/off/toggle] - change your deathlink status (does not persist beyond current session).");
             Log.Logger.Warning("--- End of DSAP commands. ---");
@@ -424,16 +427,24 @@ public partial class App : Application
         }
         else if (command.StartsWith("/sef")) // set event flag
         {
-            string[] cmdparts = command.Split(" ");
-            if (cmdparts.Length == 2)
+            if (!Client.CurrentSession.DataStorage.GetRaceMode())
             {
-                int result = SetEventFlag(Int32.Parse(cmdparts[1]), true);
-                Log.Logger.Information($"{cmdparts[1]}={result}");
+                string[] cmdparts = command.Split(" ");
+                if (cmdparts.Length == 2)
+                {
+                    int result = SetEventFlag(Int32.Parse(cmdparts[1]), true);
+                    Log.Logger.Information($"{cmdparts[1]}={result}");
+                }
+                if (cmdparts.Length == 3)
+                {
+                    int result = SetEventFlag(Int32.Parse(cmdparts[1]), cmdparts[2] == "1" ? true : false);
+                    Log.Logger.Information($"{cmdparts[1]}={result}");
+                }
             }
-            if (cmdparts.Length == 3)
+            else
             {
-                int result = SetEventFlag(Int32.Parse(cmdparts[1]), cmdparts[2] == "1" ? true : false);
-                Log.Logger.Information($"{cmdparts[1]}={result}");
+                Log.Logger.Error("Could not execute command because Race Mode flag is enabled for this multiworld");
+                return;
             }
         }
         else if (command.StartsWith("/cef")) // check event flag
@@ -473,6 +484,44 @@ public partial class App : Application
             Log.Logger.Information($"Soul multiplier is {(sm / 100.0):P0}");
             Log.Logger.Information($"Weight multiplier is {(wm / 100.0):P0}");
             Log.Logger.Information($"Incoming Weapon Upgrades level is {ul}");
+        }
+        else if (command.StartsWith("/lrspoiler")) // set event flag
+        {
+            if (!(Client?.IsConnected ?? false))
+            {
+                Log.Logger.Error("Could not send command as client is not connected to server");
+                return;
+            }
+            if (!Client.CurrentSession.DataStorage.GetRaceMode())
+            {
+                string RunningDirectory = AppDomain.CurrentDomain.BaseDirectory; //TODO: verify this works in other operating systems besides windows
+                string lrspoilerLocation = RunningDirectory + System.IO.Path.DirectorySeparatorChar + "local_rando_spoiler.txt";
+                StringBuilder localRandoSpoiler = new StringBuilder();
+                
+                int localRandoSeed = MiscHelper.HashSeed(App.Client.CurrentSession.RoomState.Seed) + App.Client.CurrentSession.ConnectionInfo.Slot + 3;
+                localRandoSpoiler.AppendLine($"ver='{DSOptions.VersionInfoString()}',seed='{localRandoSeed}'");
+                localRandoSpoiler.AppendLine($"Options:");
+                localRandoSpoiler.AppendLine($"{DSOptions.ToString()}");
+                localRandoSpoiler.AppendLine($"Location => Item");
+                //foreach (var (k,v) in localRandoMap)
+                //{
+                //    localRandoSpoiler.AppendLine($"{k} => {v}");
+                //}
+                foreach (var (k, v) in localRandoMap)
+                {
+                    string loc = Client.CurrentSession.Locations.GetLocationNameFromId(k);
+                    string item = Client.CurrentSession.Items.GetItemName(v);
+                    localRandoSpoiler.AppendLine($"{loc} => {item}");
+                }
+
+                File.WriteAllText(lrspoilerLocation, localRandoSpoiler.ToString());
+                Log.Logger.Warning($"Local rando spoiler written to {lrspoilerLocation}");
+            }
+            else
+            {
+                Log.Logger.Error("Could not execute /lrspoiler command because Race Mode flag is enabled for this multiworld");
+                return;
+            }
         }
 #if DEBUG
         else if (command.StartsWith("/item"))

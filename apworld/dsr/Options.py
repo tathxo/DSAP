@@ -15,7 +15,7 @@ class GoalConditionOption(Choice):
     """Set the goal condition
 
     - **Gwyn:** Default option -Beat Gwyn, Lord of Cinder
-    - **Bosses:** Defeat all bosses
+    - **Bosses:** Defeat all bosses. If DLC or PW are not shuffled, their bosses will not be required for this goal.
     - **Ornstein and Smough:** Kill Ornstein and Smough. Choosing this option also excludes all checks that would require the Lordvessel."""
     display_name = "Goal Condition"
     option_gwyn = 0

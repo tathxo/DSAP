@@ -32,6 +32,7 @@ And these flags specifically:
 "Flag": "61323160"
 "Flag": "61323170"
 
+"Flag": "61323996" Flag reserved for Fire Keeper Soul in BT (lautrec safety)
 "Flag": "61323998" Flag reserved for o+s armor set handling
 "Flag": "61323999" Flag reserved for gwyn armor set handling (currently unused)
 

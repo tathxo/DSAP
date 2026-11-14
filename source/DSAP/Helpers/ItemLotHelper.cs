@@ -329,6 +329,18 @@ namespace DSAP.Helpers
                     Log.Logger.Verbose($"ItemLot id='{param_entry.id}' with GetItemFlagId {currentItemLotFlag} not overwritten.");
                 }
             }
+
+            var replacedItemLotFlags = LocationHelper.GetItemLotFlags().Where(x => x.OriginalFlagId != 0);
+            // do some flag manipulation for e.g. BT Firekeeper Soul to appease Lautrec
+            foreach (var repflag in replacedItemLotFlags)
+            {
+                foreach (var entry in paramStruct.ParamEntries.Where(x => x.id == repflag.ItemLotParamId)) // get the matching scouted item
+                {
+                    // write to its "flag id" the new/fake one 61322640, which we'll monitor alongside 61322520 (the catalyst flag)
+                    Array.Copy(BitConverter.GetBytes(repflag.Flag), 0, paramStruct.ParamBytes, entry.paramOffset + ItemLotParam.GET_ITEM_FLAG_ID, sizeof(int));
+                }
+            }
+
             ///* Only if we are using Verbose logging, read in every ItemLotParam to print it out. */
             //if (Log.Logger.IsEnabled(Serilog.Events.LogEventLevel.Verbose))
             //{

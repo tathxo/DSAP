@@ -2214,7 +2214,8 @@
   },
   {
     "Name": "Fire Keeper Soul - Blighttown",
-    "Flag": 51400350,
+    "Flag": 61323996,
+    "OriginalFlagId": 51400350,
     "ItemLotParamId": 1400350,
     "Id": 11110167
   },

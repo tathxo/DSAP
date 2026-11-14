@@ -130,6 +130,7 @@ namespace DSAP.Models
         public const int LOT_ITEM_NUM_01 = 0x8a;
         public const int LOT_ITEM_CATEGORY_01 = 0x20;
         public const int LOT_ITEM_ID_01 = 0x0;
+        public const int GET_ITEM_FLAG_ID = 0x80;
 
         override public string ToString()
         {

@@ -325,14 +325,14 @@ namespace DSAP.Models
         }
         public string ToString()
         {
-            string result = "[\n";
+            string result = "";
             foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(this))
             {
                 string name = descriptor.Name;
                 object value = descriptor.GetValue(this);
                 if (name == "RequiredBosses")
                     result += $"{name}={value:X}\n";
-                else if (name == "LocalRandodLocGroups" || name == "ApRandodLocGroups")
+                else if (name == "LocalRandodLocGroups" || name == "ApRandodLocGroups" || name == "IncomingWeaponUpgradeInfusionPaths")
                 {
                     result += $"{name}=[";
                     foreach (var g in (List<String>)value)

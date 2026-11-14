@@ -69,7 +69,7 @@ public partial class App : Application
     public static DarkSoulsOptions DSOptions;
     public static bool SaveidSet { get; set; } = false;
     public static bool CheckSaveId = true;
-    private static bool _goalSent = false;
+    internal static bool _goalSent = false;
     private static readonly SemaphoreSlim _goalSemaphore = new SemaphoreSlim(1, 1);
     public static List<EmkController> EmkControllers { get; set; } = [];
     internal static DarkSoulsClient dsrClient = null;
@@ -1411,84 +1411,6 @@ public partial class App : Application
     internal static void NewLocationCompletedCallback(DarkSoulsLocation loc)
     {
         var locid = loc.Id;
-        if (DSOptions.Goal == DSGoal.gwyn)
-        {
-            if (loc.Name.Contains("Lord of Cinder"))
-            {
-                Log.Logger.Information($"Sending Goal for location: {loc.Name}");
-                SendGoal();
-            }
-            else if (locid == 11110499) // hardcoded "Gwyn, Lord of Cinder" location
-            {
-                Log.Logger.Information($"Sending Goal for location id: {locid}");
-                SendGoal();
-            }
-        }
-        else if (DSOptions.Goal == DSGoal.all_bosses)
-        {
-            var hasGoaledBosses = true;
-            var bossLocs = LocationHelper.GetBossFlagLocations();
-            bossLocs.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            if (bossLocs.Any(x => x.Name == loc.Name)) // only bother doing all the checks if current location is in the list
-            {
-                int total_bosses = bossLocs.Count;
-                int completed_bosses = 0;
-                foreach (var boss in bossLocs)
-                {
-                    if (boss.Check())
-                    {
-                        completed_bosses++;
-                    }
-                }
-                Log.Logger.Information($"Boss defeated: {loc.Name}");
-                Client.AddOverlayMessage($"Boss defeated: {loc.Name}");
-                if (completed_bosses == total_bosses)
-                {
-                    Log.Logger.Information($"Sending Goal for All Bosses");
-                    SendGoal();
-                }
-                else
-                {
-                    Client.AddOverlayMessage($"You have defeated {completed_bosses}/{total_bosses} bosses.");
-                    Log.Logger.Information($"You have defeated {completed_bosses}/{total_bosses} bosses.");
-                }
-            }
-        }
-        else if (DSOptions.Goal == DSGoal.ornstein_and_smough)
-        {
-            if (loc.Name == "Ornstein and Smough")
-            {
-                Log.Logger.Information($"Sending Goal for location: {loc.Name}");
-                SendGoal();
-            }
-        }
-        else if (DSOptions.Goal == DSGoal.manus)
-        {
-            if (loc.Name == "Manus, Father of the Abyss")
-            {
-                Log.Logger.Information($"Sending Goal for location: {loc.Name}");
-                SendGoal();
-            }
-        }
-
-        // if it's a boss location, check the boss fogwall. If its flag is not set, set it
-        var bossdeps = MiscHelper.GetDsrBossDeps();
-        if (bossdeps.TryGetValue(loc.Name, out DsrEvent dsrevent))
-        {
-            var baseAddress = AddressHelper.GetEventFlagsOffset();
-            Location loc2 = new Location
-            {
-                Name = dsrevent.Locname,
-                Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item1,
-                AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(dsrevent.Flag).Item2,
-                Id = dsrevent.Locid,
-            };
-            if (!loc.Check())
-            {
-                Memory.WriteBit(loc.Address, loc.AddressBit, true);
-            }
-        }
 
         // if it's in our scouted locs & not in our own game,
         if (scoutedLocationInfo.TryGetValue(loc.Id, out var value) && value.Player.Slot != Client.CurrentSession.ConnectionInfo.Slot)

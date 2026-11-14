@@ -293,6 +293,7 @@ namespace DSAP.Helpers
                                 CollectSafety(flags);
                                 BonfireInjectorHelper.PollBonfires(flags);
                                 PollBosses(flags);
+                                BossFogSafety(flags);
                             }
                             
                             // every iteration
@@ -308,6 +309,7 @@ namespace DSAP.Helpers
                             cached_local_boss_pflags = -1;
                             cached_fullLocationsList = [];
                             hasInitiallyTestedFlags = false;
+                            bossesList = [];
                         }
                         oldFlags = flags;
                         await Task.Delay(100);
@@ -874,8 +876,9 @@ namespace DSAP.Helpers
                 initial_load = true;
                 local_boss_pflags = 0;
             }
-                
 
+            if (App._goalSent)
+                return;
 
             if (App.DSOptions.Goal == DSGoal.all_bosses)
             {
@@ -886,9 +889,9 @@ namespace DSAP.Helpers
                 {
                     if (((local_boss_pflags >> (i - 1)) & 0x00000001) == 0) // if (i-1) bit is off
                     {
-                        if (bossmap.TryGetValue(i, out var boss)) // get the corresponding bonfire
+                        if (bossmap.TryGetValue(i, out var boss)) // get the corresponding boss flag
                         {
-                            // if the bonfire flag is on, mark the pflag on
+                            // if the boss flag is on, mark the pflag on
                             if (isFlagOnInBuffer(flags, boss.Flag))
                             {
                                 local_boss_pflags |= (long)1 << (i - 1);
@@ -945,7 +948,33 @@ namespace DSAP.Helpers
                 }
                 cached_local_boss_pflags = local_boss_pflags;
             }
-            
+            else if (App.DSOptions.Goal == DSGoal.gwyn)
+            {
+                var bossLoc = LocationHelper.GetBossFlags().Find(x => x.Name.Equals("Gwyn, Lord of Cinder"));
+                if (isFlagOnInBuffer(flags, bossLoc.Flag))
+                {
+                    Log.Logger.Information($"Sending Goal for Gwyn Defeated");
+                    App.SendGoal();
+                }
+            }
+            else if (App.DSOptions.Goal == DSGoal.ornstein_and_smough)
+            {
+                var bossLoc = LocationHelper.GetBossFlags().Find(x => x.Name.Equals("Ornstein and Smough"));
+                if (isFlagOnInBuffer(flags, bossLoc.Flag))
+                {
+                    Log.Logger.Information($"Sending Goal for O+S Defeated");
+                    App.SendGoal();
+                }
+            }
+            else if (App.DSOptions.Goal == DSGoal.manus)
+            {
+                var bossLoc = LocationHelper.GetBossFlags().Find(x => x.Name.Equals("Manus, Father of the Abyss"));
+                if (isFlagOnInBuffer(flags, bossLoc.Flag))
+                {
+                    Log.Logger.Information($"Sending Goal for Manus Defeated");
+                    App.SendGoal();
+                }
+            }
         }
         // just goalcheck all bosses
         internal static bool GoalCheckAllBosses()
@@ -982,6 +1011,41 @@ namespace DSAP.Helpers
                 return false;
             }
         }
+        internal static List<BossFlag> bossesList = [];
+        private static void BossFogSafety(byte[] flags)
+        {
+            // for each boss location, when they are checked, check their boss fogwall. If its flag is not set, set it.
+            if (bossesList.Count == 0 && !App._goalSent)
+                bossesList = LocationHelper.GetBossFlags();
+
+            Dictionary<string, DsrEvent> bossdeps = MiscHelper.GetDsrBossDeps();
+            List<BossFlag> removedList = new List<BossFlag>();
+            foreach (var boss in bossesList)
+            {
+                if (isFlagOnInBuffer(flags, boss.Flag))
+                {
+                    if (bossdeps.TryGetValue(boss.Name, out DsrEvent dsrevent))
+                    {
+                        if (!isFlagOnInBuffer(flags, dsrevent.Flag))
+                        {
+                            int setflag = dsrevent.Flag;
+                            Task.Run(() =>
+                            {
+                                Task.Delay(100);
+                                App.SetEventFlag(setflag, true);
+                            });
+                        }
+                    }
+                    removedList.Add(boss); // cleanup to stop checking this boss
+                }
+            }
+            // cleanup
+            foreach (var boss in removedList)
+            {
+                bossesList.Remove(boss);
+            }
+        }
+
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {
             //int changedFlags = 0;

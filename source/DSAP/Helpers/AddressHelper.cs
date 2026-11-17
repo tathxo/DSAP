@@ -318,6 +318,7 @@ namespace DSAP.Helpers
                 catch (Exception ex)
                 {
                     Log.Logger.Error($"Exception in event flags watcher: {ex.Message}\n{ex.InnerException}\n{ex.Source}");
+                    Log.Logger.Error($"Client is unlikely to continue to function until restart. Please report this error to the developer.");
                 }
             });
         }

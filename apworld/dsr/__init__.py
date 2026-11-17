@@ -3,7 +3,7 @@ from typing import Dict, Set, List, ClassVar, TextIO, Any, Optional
 
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, Location, LocationProgressType
 from Fill import FillError
-from Options import Toggle, OptionError, Option
+from Options import Toggle, OptionError, Option, DefaultOnToggle
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, add_item_rule
@@ -233,11 +233,11 @@ class DSRWorld(World):
 
         # If goal_condition is o+s, force no dlc
         if self.options.include_dlc.value == True and self.options.goal_condition.value == GoalConditionOption.option_ornstein_and_smough:
-            self.options.include_dlc.value = False
+            self.options.include_dlc.value = DefaultOnToggle.option_false
 
         # If goal_condition is manus, force dlc
         if self.options.include_dlc.value == False and self.options.goal_condition.value == GoalConditionOption.option_manus:
-            self.options.include_dlc.value = True
+            self.options.include_dlc.value = DefaultOnToggle.option_true
 
 
 

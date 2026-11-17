@@ -123,6 +123,10 @@ namespace DSAP.Models
                 outofdate = true;
             }
 
+            // stop parsing options if apworld is out of date
+            if (outofdate)
+                return;
+
             if (App.Client.Options.ContainsKey("goal_condition") && Enum.TryParse(((JsonElement)App.Client.Options["goal_condition"]).ToString(), out Enums.DSGoal goal))
                 Goal = goal;
             else
@@ -141,7 +145,7 @@ namespace DSAP.Models
                     RequiredBosses &= (0xFFFFFFFF - (0xF << 23 - 1)); // Remove all 4 DLC bosses, Sanc Guardian -> Manus
                 }
             }
-            Log.Logger.Debug($"req bosses = {RequiredBosses:X}, dlc {GetBool("include_dlc")}, pw {GetBool("include_dlc")}");
+            Log.Logger.Debug($"req bosses = {RequiredBosses:X}, dlc {GetBool("include_dlc")}, pw {GetBool("include_pw")}");
 
             IncludedOptionalZones = "";
             if (GetBool("include_dlc"))
@@ -243,7 +247,7 @@ namespace DSAP.Models
 
 
             // Progressive Incoming Weapon Upgrades
-            if (App.Client.Options.ContainsKey("soul_multiplier_base"))
+            if (App.Client.Options.ContainsKey("incoming_weapon_upgrade_base"))
                 IncomingWeaponUpgradeBase = ((JsonElement)App.Client.Options["incoming_weapon_upgrade_base"]).GetUInt32();
             else
                 IncomingWeaponUpgradeBase = 0;
@@ -318,8 +322,20 @@ namespace DSAP.Models
         {
             if (App.Client.Options.ContainsKey(str))
             {
-                if (((JsonElement)App.Client.Options[str]).GetUInt32() > 0)
+                if (((JsonElement)App.Client.Options[str]).ValueKind == JsonValueKind.Number)
+                {
+                    if (((JsonElement)App.Client.Options[str]).GetUInt32() > 0)
+                        return true;
+                }
+                else if (((JsonElement)App.Client.Options[str]).ValueKind == JsonValueKind.True)
                     return true;
+                else if (((JsonElement)App.Client.Options[str]).ValueKind == JsonValueKind.False)
+                    return false;
+                else
+                {
+                    Log.Logger.Warning($"Unknown value for bool {str}, element={((JsonElement)App.Client.Options[str])}, kind = {((JsonElement)App.Client.Options[str]).ValueKind}");
+                    Log.Logger.Warning($"Defaulting to false");
+                }
             }
             return false;
         }

@@ -655,6 +655,7 @@ public partial class App : Application
             Address = baseAddress + AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item1,
             AddressBit = AddressHelper.GetEventFlagAddrAndByteOffset(flagnum).Item2
         };
+        Log.Logger.Information($"flag {flagnum} addr {newloc.Address:X} bit {newloc.AddressBit}");
         int result = newloc.Check() ? 1 : 0;
         return result;
     }
@@ -1964,14 +1965,24 @@ public partial class App : Application
             scoutedLocationInfo = scoutedLocationInfoTask.Result;
             Log.Logger.Verbose($"len slotdata = {slotData.Count}, lng={locNameGroups.Count}, sli={scoutedLocationInfo.Count}");
 
-            DSOptions = new DarkSoulsOptions(App.Client.Options, slotData);
-            if (DSOptions.outofdate)
+            try
             {
-                Log.Logger.Error("ERROR: Client or apworld out of date - DISCONNECTING.");
-                Client.AddOverlayMessage("ERROR: Client or apworld out of date - DISCONNECTING.");
+                DSOptions = new DarkSoulsOptions(App.Client.Options, slotData);
+                if (DSOptions.outofdate)
+                {
+                    Log.Logger.Error("ERROR: Client or apworld out of date - DISCONNECTING.");
+                    Client.AddOverlayMessage("ERROR: Client or apworld out of date - DISCONNECTING.");
+                    return;
+                }
+                Log.Logger.Debug($"{DSOptions.ToString()}");
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error($"{ex.ToString()}");
+                Log.Logger.Error("ERROR: unable to parse options - DISCONNECTING.");
+                Client.AddOverlayMessage("ERROR: unable to parse options - DISCONNECTING.");
                 return;
             }
-            Log.Logger.Debug($"{DSOptions.ToString()}");
 
             EmkControllers = EmkHelper.BuildEmkControllers(slotData);
             /* Look for event unlocks in full list of received items and locations */

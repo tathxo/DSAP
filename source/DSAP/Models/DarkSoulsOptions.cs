@@ -315,6 +315,9 @@ namespace DSAP.Models
             else
                 StartingPyromancy = 0;
 
+            NoWeaponRequirements = GetBool("no_weapon_requirements");
+            NoSpellStatRequirements = GetBool("no_spell_stat_requirements");
+            NoMiracleCovenantRequirements = GetBool("no_miracle_covenant_requirements");
             // Equipment options group end
 
         }

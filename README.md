@@ -27,8 +27,8 @@
 * "Warp to all bonfires" lets players do Undead Asylum 2nd visit checks out of logic - before access to the Firelink-Parish elevator.
 
 # Old Known Issues
-* v0.2.6: rickert_sells_curses for ghost_difficulty does not work
-* v0.2.6.2 - v0.1.2 - Occasional client crash related to bonfire syncing code (fixed in v0.3.0)
+* v0.2.6: rickert_sells_curses for ghost_difficulty does not work (fixed in v0.2.6.1 of client)
+* v0.2.6.2 - v0.1.2: Occasional client crash related to bonfire syncing code (fixed in v0.3.0)
 * v0.2.2 - v0.2.0: Location Groups "All DLC regions" and "After O+S" did not include merchants, so even when excluding those groups you could end up with those merchants being randomized and/or having progression items.
 * v0.2.1 - v0.2.0: Logic - 4 kings not logically requiring Covenant of Artorias if boss fogwall sanity is off.
 * v0.2.1 - v0.2.0: Logic - Demon Firesage not logically requiring Lordvessel if boss fogwall sanity is off.
@@ -55,6 +55,18 @@
 * v0.0.18.2 and lower: Items do not get replaced. Upgrade your client version.
 
 # Changelog
+
+## Version 0.3.1.1 - 2026-11-17 Hotfix
+* Fix options broken in client: `no_weapon_requirements`, `no_spell_stat_requirements`, `no_miracle_covenant_requirements`. Updated client on 0.3.1 release.
+
+## Version update -> 0.3.1. **Client is compatible with 0.3.x generated apworlds**. 
+**Make sure your host generates with the v0.3.0 or v0.3.1 apworld**.
+
+### Fixes
+* Fix a crash that happens upon connecting with a client to a slot where yaml was defined with goal=O+S but dlc on (where it is forced off) or with goal=Manus and dlc off (where it is forced on). The different json element types in the slot data involved are now both handled and corrected.
+* Fix in client to stop parsing options if out-of-date apworld or client version detected
+* Throw error messages instead of crashing in options/slotdata handling
+
 ## Version 0.3.0 - AP Icon, Regional and Categorical Shuffle options, New Weapon Upgrade System
 ### Version update -> 0.3.0. **Client is _NOT_ compatible with 0.2.x generated apworlds**. 
 **Make sure your host generates with the v0.3.0 apworld**.

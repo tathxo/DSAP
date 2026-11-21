@@ -40,6 +40,7 @@ To show an AP-style icon in game for AP-specific items, you can apply an optiona
 3. If prompted for the game executable location, find it and select `DarkSoulsRemastered.exe`.
 4. It should now be patched. When you next connect with the `DSAP.Desktop.exe` client, ap items will show with the new icon.
 5. If at any time you wish to _unpatch_ it, either use the "verify integrity of game files" option through steam, or open the Archipelago Launcher, and run the "Revert DSR Patch" component.
+* This patch process will only work if the `menu_0.tpf.dcx` file in your install is not modified. If it _is_ modified (such as by icon-, texture-, or UI-changing mods), but you still want the icon, you can manually replace the prism stone icon with the `dsr_ap_logo.png` file from the repository (using existing DS1 modding tools).
 
 ### Running and Connecting the Game
 

@@ -872,7 +872,25 @@ namespace DSAP.Helpers
             }
 
             if (App._goalSent)
+            {
+                // if haven't already unlocked ng+, and player is in game and in save
+                if (!EmkHelper.ngp_unlocked && MiscHelper.IsInGame() && App.SaveidSet)
+                {
+                    // if all checks completed
+                    if (App.Client.CurrentSession.Locations.AllMissingLocations.Count == 0)
+                    {
+                        // allow ngplus
+                        foreach (var emk in App.EmkControllers.Where(x=>x.Name.StartsWith("NG+")))
+                        {
+                            emk.Unlock();
+                        }
+                        EmkHelper.ngp_unlocked = true;
+                        EmkHelper.UpdateEventSkipStruct(App.EmkControllers);
+                    }
+                }
                 return;
+            }
+                
 
             if (App.DSOptions.Goal == DSGoal.all_bosses)
             {

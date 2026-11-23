@@ -2048,14 +2048,29 @@ public partial class App : Application
         if (DSOptions.NoSpellStatRequirements || DSOptions.NoMiracleCovenantRequirements)
             ParamHelper.RemoveSpellRequirements(); // modifies Magic Params
 
+        EmkHelper.AddEventSkipHook(EmkControllers);
         /* Set to only receive remote items and starting inventory */
-        ParamHelper.UpdateItemLots(ItemLotReplacementMap);
 
         //StartEmkWatchers(EmkControllers);
-        EmkHelper.AddEventSkipHook(EmkControllers);
         StartInGameWatcher();
         AddressHelper.StartEventFlagMonitor();
         MapHelper.StartMapAutoTracking();
+
+        ParamHelper.UpdateItemLots(ItemLotReplacementMap);
+        
+        Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
+        Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
+        if (MiscHelper.IsInGame())
+        {
+            HomewardBoneCommand();
+            Log.Logger.Information($"After Load screen, new item lots will be live.");
+            Client.AddOverlayMessage($"After Load screen, new item lots will be live.");
+        }
+        else
+        {
+            Log.Logger.Information($"You are now safe to load your save.");
+            Client.AddOverlayMessage($"You are now safe to load your save.");
+        }
 
         watch.Stop();
         Log.Logger.Information($"Finished setup, took {watch.ElapsedMilliseconds}ms total");

@@ -61,20 +61,6 @@ namespace DSAP.Helpers
 
             Log.Logger.Debug($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
             //App.Client.AddOverlayMessage($"Finished overwriting items, took {watch.ElapsedMilliseconds}ms");
-
-            Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
-            Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
-            if (MiscHelper.IsInGame())
-            {
-                App.HomewardBoneCommand();
-                Log.Logger.Information($"After Load screen, new item lots will be live.");
-                App.Client.AddOverlayMessage($"After Load screen, new item lots will be live.");
-            }
-            else
-            {
-                Log.Logger.Information($"You are now safe to load your save.");
-                App.Client.AddOverlayMessage($"You are now safe to load your save.");
-            }
         }
 
         internal static bool RemoveSpellRequirements()

@@ -390,6 +390,7 @@ namespace DSAP.Helpers
         }
         // Build a list of event controllers, which we use to lock events until player has received the items.
         // We only add events to the list if their items are in the multiworld.
+        internal static bool ngp_unlocked = false;
         internal static List<EmkController> BuildEmkControllers(Dictionary<string, object> slotData)
         {
             List<EmkController> result = [];
@@ -412,6 +413,18 @@ namespace DSAP.Helpers
                 result.Add(newemk);
             }
 
+            // block events 20 and 21 for NG+ safety
+            {
+                ngp_unlocked = false;
+                var ngp_emk_1 = new EmkController("NG+ Light", "none", Enums.DsrEventType.GENERIC, 20, 0, 0, 0);
+                ngp_emk_1.MapId3 = 180;
+                result.Add(ngp_emk_1);
+
+                var ngp_emk_2 = new EmkController("NG+ Dark", "none", Enums.DsrEventType.GENERIC, 21, 0, 0, 0);
+                ngp_emk_2.MapId3 = 180;
+                result.Add(ngp_emk_2);
+            }
+            
             return result;
         }
         // Clear the saved ptrs of our list of "EmkControllers", because we detected there being no events in the list.

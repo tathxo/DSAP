@@ -476,6 +476,10 @@ public partial class App : Application
         {
             monitoringEventFlags = true;
         }
+        else if (command.StartsWith("/maes")) // monitor all events
+        {
+            StartEmkWatchers(EmkControllers);
+        }
         else if (command.StartsWith("/multipliers"))
         {
             var sm = ParamHelper.CalculateSoulMultiplier();
@@ -1831,7 +1835,7 @@ public partial class App : Application
                         return;
                     }
                     EmkHelper.CheckEventsList();
-                    EmkHelper.ManageEventsList(emkControllers);
+                    //EmkHelper.ManageEventsList(emkControllers);
                     await Task.Delay(1000);
                 }
             }
@@ -1858,7 +1862,8 @@ public partial class App : Application
         if (emk != null)
         {
             emk.Unlock();
-            
+            EmkHelper.UpdateEventSkipStruct(EmkControllers);
+
             var keychains = MiscHelper.GetKeychainItems();
             DarkSoulsItem keychain = null;
             // then update description text of the appropriate fogwall type
@@ -2046,7 +2051,8 @@ public partial class App : Application
         /* Set to only receive remote items and starting inventory */
         ParamHelper.UpdateItemLots(ItemLotReplacementMap);
 
-        StartEmkWatchers(EmkControllers);
+        //StartEmkWatchers(EmkControllers);
+        EmkHelper.AddEventSkipHook(EmkControllers);
         StartInGameWatcher();
         AddressHelper.StartEventFlagMonitor();
         MapHelper.StartMapAutoTracking();
@@ -2069,7 +2075,6 @@ public partial class App : Application
         SaveidSet = false;
         BonfireInjectorHelper.ResetKnownBonfires();
         EmkControllers = [];
-        AddressHelper.added_warping_emk = false;
         AllowedBonfireWarps = [];
         ItemLotReplacementMap = [];
         scoutedLocationInfo = [];

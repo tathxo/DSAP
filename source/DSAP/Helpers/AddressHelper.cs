@@ -546,16 +546,9 @@ namespace DSAP.Helpers
                 });
             }
         }
-        public static bool added_warping_emk = false;
         private static void PWDAWarpSafety(byte[] flags) // based on 11705101 event
         {
-            if (!added_warping_emk && !App.EmkControllers.Any(x => x.Eventid == 706)) // if not yet added, add the emk.
-            {
-                var newemk = new EmkController("Warping", "none", Enums.DsrEventType.GENERIC, 706, 0, 0, 0);
-                newemk.MapId3 = 170;
-                App.EmkControllers.Add(newemk);
-                added_warping_emk = true;
-            }
+            // event is blocked in BuildEmkControllers(), see event 706
 
             bool hasLordvessel = isFlagOnInBuffer(flags, 710); // "got lordvessel" flag
             bool canWarp = isFlagOnInBuffer(flags, 706); // "can warp" flag (turned off in PW / DA prison)

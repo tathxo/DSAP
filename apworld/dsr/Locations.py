@@ -234,7 +234,7 @@ region_name_list : Dict[str, List[str]] = {
     "Firelink Shrine - Domhnall of Zena" : [],
     "Firelink Shrine - Domhnall of Zena After Iron Golem" : [],
     "Firelink Shrine - Domhnall of Zena After O+S" : ["postos"],
-    "Firelink Shrine - Domhnall of Zena After Gwyndolin" : ["postos"],
+    "Firelink Shrine - Domhnall of Zena After Gwyndolin" : ["postos_cata"],
     "Firelink Shrine - Domhnall of Zena Under Aqueduct After Artorias" : ["dlc", "postos"],
     "Upper Undead Burg - Male Undead Merchant" : [],
     "Undead Parish - Andre of Astora" : [],

@@ -2103,5 +2103,6 @@ public partial class App : Application
         EmkHelper.ReleaseEvents(EmkControllers); // pointers in emk list become invalid on game restart
         BonfireInjectorHelper.ClearHookArea();
         HookHelper.pauseHookActive = false;
+        HookHelper.HookList = [];
     }
 }

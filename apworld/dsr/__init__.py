@@ -160,11 +160,18 @@ class DSRWorld(World):
                 if opt is not None:
                     # You can also set .value directly but that won't work if you have OptionSets
                     setattr(self.options, key, opt.from_any(value))
-            if "ap_loc_categories" in slot_data:
+            if "ap_loc_categories" in slot_options:
                 # maybe go the other way, to check for unknown acronyms in the slot data?
                 for (acr, copt, cat) in acr_cat_map:
-                    if acr in slot_data["ap_loc_categories"].split(","):
+                    if acr in slot_options["ap_loc_categories"].split(","):
                         copt.value = LocalRandoChoice.option_true
+                        # print(f"{acr} found in ap loc cats ")
+                    elif acr in slot_options["local_loc_categories"].split(","):
+                        copt.value = LocalRandoChoice.option_local_only
+                        # print(f"{acr} found in local loc cats ")
+                    else:
+                        copt.value = LocalRandoChoice.option_false
+                        # print(f"{acr} found in no loc cats ")
 
 
 
@@ -267,6 +274,7 @@ class DSRWorld(World):
                 self.local_loc_categories.append(acr)
             elif copt.value == LocalRandoChoice.option_false:
                 self.vanilla_loc_categories.append(acr)
+            # print(f"{acr} found with value {copt.value}")
         # Use the values in the ap loc list to enable those categories specifically
         for (acr, copt, cat) in acr_cat_map:
             if acr in self.ap_loc_categories:

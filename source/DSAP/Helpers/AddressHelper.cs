@@ -311,6 +311,13 @@ namespace DSAP.Helpers
                             hasInitiallyTestedFlags = false;
                             bossesList = [];
                         }
+
+                        // every 10 seconds, even if not connected.
+                        if (iterations % 100 == 0)
+                        {
+                            HookHelper.CheckHooks();
+                        }
+
                         oldFlags = flags;
                         await Task.Delay(100);
                     }

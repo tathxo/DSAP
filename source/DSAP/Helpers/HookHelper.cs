@@ -12,6 +12,21 @@ namespace DSAP.Helpers
     {
         static public bool pauseHookActive { get; set; } = false; // whether the pause hook is currently active
 
+        internal class Hook
+        {
+            internal ulong Loc_start;
+            internal int ReplacedLength;
+            internal byte[] Bytes;
+            internal byte[] Jmpstub;
+            public Hook(ulong loc_start, int replaced_length, byte[] bytes, byte[] jmpstub)
+            {
+                Loc_start = loc_start;
+                ReplacedLength = replaced_length;
+                Bytes = bytes;
+                Jmpstub = jmpstub;
+            }
+        }
+        internal static List<Hook> HookList = new List<Hook>();
         // creates a hook at loc_start
         // replaces loc_Start with a jmp to the given new_instructions array of bytes
         // Adds replaced_length bytes of instructions from loc_start before the new_instructions, and a jmp back.
@@ -35,6 +50,8 @@ namespace DSAP.Helpers
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // jmp's target address
             };
 
+
+
             ulong next_write_pos = replacement_func_start_addr;
             // write the replaced instructions if the bool is on
             if (include_replaced_bytes)
@@ -52,6 +69,47 @@ namespace DSAP.Helpers
 
             //Memory.WriteByteArray(replacement_func_start_addr + new_instructions.Length, return_jmp);
             Memory.WriteByteArray(loc_start, jmpstub); // write jmp stub (e.g. "create hook")
+
+            var conflicting_hooks = HookList.Where(x => x.Loc_start == loc_start).ToList();
+            foreach (var hook in conflicting_hooks)
+            {
+                Log.Logger.Warning($"Duplicate hook found in list: addr {hook.Loc_start}");
+                HookList.Remove(hook);
+                Log.Logger.Information($"Overwriting duplicate hook");
+            }
+            HookList.Add(new Hook(loc_start, replaced_length, new_instructions, jmpstub));
+        }
+        internal static void RemoveHook(ulong location, byte[] original_bytes)
+        {
+            Memory.WriteByteArray(location, original_bytes);
+            
+            var known_hooks = HookList.Where(x => x.Loc_start == location);
+            foreach (var hook in known_hooks)
+            {
+                HookList.Remove(hook);
+            }
+        }
+
+        internal static void CheckHooks()
+        {
+            foreach (Hook hook in HookList)
+            {
+                if (hook.Loc_start != 0 && hook.ReplacedLength != 0 && hook.Jmpstub.Length > 0)
+                {
+                    byte[] checkedHookBytes = Memory.ReadByteArray(hook.Loc_start, hook.Jmpstub.Length);
+                    if (!checkedHookBytes.SequenceEqual(hook.Jmpstub))
+                    {
+                        Log.Logger.Error($"Error: Hook was removed by game. Please report these messages to the developer.");
+                        Log.Logger.Error($"time <{DateTime.Now.ToLocalTime()}>, addr=<{hook.Loc_start:X}>");
+                        Log.Logger.Error($"jmpstub=<{String.Join(",",hook.Jmpstub.Select(x => $"{x:X}"))}> over=<{String.Join(",",checkedHookBytes.Select(x => $"{x:X}"))}>");
+                        Log.Logger.Error($"Attempting to reinsert hook.");
+                        Memory.WriteByteArray(hook.Loc_start, hook.Jmpstub);
+                        byte[] recheckedHookBytes = Memory.ReadByteArray(hook.Loc_start, hook.Jmpstub.Length);
+                        if (recheckedHookBytes.SequenceEqual(hook.Jmpstub))
+                            Log.Logger.Information($"Hook reinsertion completed.");
+                    }
+                }
+            }
         }
 
         internal static void InitPauseHook()
@@ -191,7 +249,7 @@ namespace DSAP.Helpers
             }
             else if (!pauseSettingOn && pauseHookActive)
             {
-                Memory.WriteByteArray(hook1_loc, restoreBytes);
+                RemoveHook(hook1_loc, restoreBytes);
                 pauseHookActive = false;
             }
         }

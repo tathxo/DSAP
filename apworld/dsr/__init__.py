@@ -755,7 +755,7 @@ class DSRWorld(World):
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             "base_id": self.base_id,  # to merge location and items lists
-            "apworld_api_version" : "0.3.1" # Manually set our apworld api level, for detecting compatibility with client
+            "apworld_api_version" : "0.3.2" # Manually set our apworld api level, for detecting compatibility with client
         }
 
         self.items_id = items_id

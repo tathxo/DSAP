@@ -1120,8 +1120,8 @@ public partial class App : Application
                     Client.Disconnect();
                 }
 
-                Log.Logger.Warning($"Login failed to AP Server as slot '{e.Slot}' failed");
-                Client.AddOverlayMessage($"Login failed to AP Server as slot '{e.Slot}' failed");
+                Log.Logger.Warning($"Login to AP Server as slot '{e.Slot}' failed");
+                Client.AddOverlayMessage($"Login to AP Server as slot '{e.Slot}' failed");
                 Context.ConnectButtonEnabled = true;
                 return;
             }
@@ -1951,6 +1951,7 @@ public partial class App : Application
 
         SaveidSet = false;
 
+
         /* Make ready to receive items */
         /* If we haven't yet initialized the dictionary, do so. */
         if (ItemLotReplacementMap.Count == 0)
@@ -1980,6 +1981,25 @@ public partial class App : Application
                     return;
                 }
                 Log.Logger.Debug($"{DSOptions.ToString()}");
+
+
+                if (!ItemLotHelper.VerifyItemLots())
+                {
+                    Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                    Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
+                    Log.Logger.Error("Error: Incorrect item lots detected. This is usually a sign of leftover mod files,\n" +
+                                     " or from running on top of another item randomizer's changes, \n" +
+                                     " and would cause problems with detection of location checks.");
+                    Log.Logger.Error("Error: Disconnecting.");
+                    Log.Logger.Warning("To fix this issue:");
+                    Log.Logger.Warning("1) Delete your game's param/GameParam folder, and Verify Integrity of Game Files in Steam.\n" +
+                                       "   Then, if running an Enemy Randomizer, re-run it to pull in the fixed base game files.\n" +
+                                       "   Then relaunch your game & DSAP, and reconnect.");
+                    Log.Logger.Warning("2) Alternatively, you can completely clean out the DS:R install directory, and then reinstall the game.\n");
+                    Log.Logger.Warning("See the Setup Guide's Troubleshooting section for more information.");
+                    DSOptions.outofdate = true;
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -2057,7 +2077,12 @@ public partial class App : Application
         MapHelper.StartMapAutoTracking();
 
         ParamHelper.UpdateItemLots(ItemLotReplacementMap);
-        
+
+        if (DSOptions.outofdate)
+        {
+            watch.Stop();
+            return;
+        }
         Log.Logger.Debug($"Player in game? {(MiscHelper.IsInGame() ? "yes" : "no")}");
         Log.Logger.Debug($"ingame time = {MiscHelper.getIngameTime()}");
         if (MiscHelper.IsInGame())

@@ -1035,8 +1035,11 @@ namespace DSAP.Helpers
             return true;
         }
 
-        internal static bool VerifyItemLots(ParamStruct<ItemLotParam> paramStruct)
+        internal static bool VerifyItemLots()
         {
+            bool reloadRequired = ParamHelper.ReadFromBytes(out ParamStruct<ItemLotParam> paramStruct,
+                                         ItemLotParam.spOffset,
+                                         (ps) => ps.ParamEntries.Last().id >= 99999990);
             var result = true;
             var mismatches = 0;
             var itemlots = LocationHelper.GetItemLotFlags();

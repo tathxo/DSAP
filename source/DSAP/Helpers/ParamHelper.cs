@@ -28,18 +28,6 @@ namespace DSAP.Helpers
 
             Log.Logger.Debug($"ItemParam list rowcount='{paramStruct.ParamEntries.Count}'");
 
-            if (!ItemLotHelper.VerifyItemLots(paramStruct))
-            {
-                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
-                App.Client.AddOverlayMessage($"ERROR DETECTED, SEE DSAP CLIENT LOG!");
-                Log.Logger.Error("Incorrect item lots detected. This is usually a sign of leftover mod files,");
-                Log.Logger.Error(" and will cause problems with detection of location checks.");
-                Log.Logger.Error("RECOMMENDED ACTIONS:");
-                Log.Logger.Error("1) Full uninstall of the game,");
-                Log.Logger.Error("2) Completely clean out the DS:R install directory, and then");
-                Log.Logger.Error("3) Reinstall.");
-            }
-
             // if we are here, we are updating the params.
             int new_entries = 0;
             ItemLotHelper.AddInitItemLots(paramStruct, ref new_entries);

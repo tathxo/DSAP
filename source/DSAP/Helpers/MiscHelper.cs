@@ -193,6 +193,18 @@ namespace DSAP.Helpers
             var list = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json, GetJsonOptions());
             return list;
         }
+        // Only use the below for "key item validation" -> not for any item lists. It is intended only for checking if player is missing key items on connect
+        public static List<DarkSoulsItem> GetTotalKeyItems()
+        {
+            var json = OpenEmbeddedResource("DSAP.Resources.KeyItems.json");
+            var list = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json, GetJsonOptions());
+            
+            var json2 = OpenEmbeddedResource("DSAP.Resources.NonKeyKeyItems.json");
+            var list2 = JsonSerializer.Deserialize<List<DarkSoulsItem>>(json2, GetJsonOptions());
+
+            list.AddRange(list2);
+            return list;
+        }
         public static List<DarkSoulsItem> GetRings()
         {
             var json = OpenEmbeddedResource("DSAP.Resources.Rings.json");

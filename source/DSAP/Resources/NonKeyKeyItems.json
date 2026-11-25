@@ -1,0 +1,27 @@
+﻿[
+  {
+    "Name": "Skull Lantern",
+    "Id": 1396000,
+    "StackSize": 1,
+    "UpgradeType": "None",
+    "Category": "Shields",
+    "Strength": 5,
+    "ApId": 11119000
+  },
+  {
+    "Name": "Covenant of Artorias",
+    "Id": 138,
+    "StackLimit": 1,
+    "UpgradeType": "None",
+    "Category": "Rings",
+    "ApId": 11114029
+  },
+  {
+    "Name": "Orange Charred Ring",
+    "Id": 139,
+    "StackLimit": 1,
+    "UpgradeType": "None",
+    "Category": "Rings",
+    "ApId": 11114030
+  }
+]

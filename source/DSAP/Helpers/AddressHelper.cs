@@ -294,6 +294,7 @@ namespace DSAP.Helpers
                                 BonfireInjectorHelper.PollBonfires(flags);
                                 PollBosses(flags);
                                 BossFogSafety(flags);
+                                CheckKeyItems(flags);
                             }
                             
                             // every iteration
@@ -310,6 +311,7 @@ namespace DSAP.Helpers
                             cached_fullLocationsList = [];
                             hasInitiallyTestedFlags = false;
                             bossesList = [];
+                            KeyItemsChecked = false;
                         }
 
                         // every 10 seconds, even if not connected.
@@ -1064,7 +1066,73 @@ namespace DSAP.Helpers
                 bossesList.Remove(boss);
             }
         }
+        internal static bool KeyItemsChecked { get; set; } = false;
+        private static void CheckKeyItems(byte[] flags)
+        {
+            if (KeyItemsChecked)
+                return;
 
+            int itemsReceivedIndex = App.Client.ItemManager.itemsReceivedCurrentSession;
+            if (itemsReceivedIndex != 0)
+            {
+                ulong GameDataMan = Memory.ReadULong(0x141c8a530);
+                ulong playergamedata = Memory.ReadULong(GameDataMan + 0x10);
+                //ulong equipgamedata = playergamedata + 0x280;
+                ulong inventoryStart = Memory.ReadULong(playergamedata + 0x3b8);
+                ulong boxStart = Memory.ReadULong(playergamedata + 0x560) + 0x10;
+
+                byte[] fullInventory = Memory.ReadByteArray(inventoryStart, 0x1c * 2048);
+                if (!MiscHelper.IsInGame())
+                    return;
+
+                var itemsReceived = App.Client.CurrentSession.Items.AllItemsReceived.Take(itemsReceivedIndex).Select(x=>x.ItemId).ToHashSet();
+                var key_items = MiscHelper.GetTotalKeyItems().Where(x => itemsReceived.Contains(x.ApId)).ToDictionary(x => (x.Id, x.Category));
+                Log.Logger.Verbose($"sizeof key items = {key_items.Count()}");
+                // go through all key items
+                for (int i = 0; i < 2048 * 0x1c; i = i + 0x1c)
+                {
+                    uint itemcat = BitConverter.ToUInt32(fullInventory, i);
+                    if (itemcat == 0xffffffff) // blank slot
+                        continue;
+                    int quantity = BitConverter.ToInt32(fullInventory, i + 8);
+                    int itemid = BitConverter.ToInt32(fullInventory, i + 4);
+                    if (key_items.ContainsKey((itemid, (DSItemCategory)itemcat)))
+                    {
+                        key_items.Remove((itemid, (DSItemCategory)itemcat));
+                    }
+                }
+                byte[] boxInventory = Memory.ReadByteArray(boxStart, 0x20 * 2048);
+                // go through all box items
+                for (int i = 0; i < 2048 * 0x20; i = i + 0x20)
+                {
+                    //Log.Logger.Information($"reached i={i}");
+                    uint itemid = BitConverter.ToUInt32(boxInventory, i);
+                    if (itemid == 0xffffffff) // blank slot
+                        continue;
+                    uint itemcat = (itemid & 0xf0000000);
+                    itemid = itemid & 0x0fffffff;
+                    int quantity = BitConverter.ToInt16(boxInventory, i + 8);
+                    if (key_items.ContainsKey(((int)itemid, (DSItemCategory)itemcat)))
+                    {
+                        key_items.Remove(((int)itemid, (DSItemCategory)itemcat));
+                    }
+                }
+                if (!MiscHelper.IsInGame())
+                    return;
+                Task.Run(() =>
+                {
+                    Task.Delay(200);
+                    foreach (var item in key_items)
+                    {
+                        Log.Logger.Warning($"Key Item Was not found in inventory: {item.Value.Name}.");
+                        Log.Logger.Information($"Sending Item to player: {item.Value.Name}.");
+                        App.AddItem((int)item.Value.Category, item.Value.Id, 1);
+                        App.AddItemPopup((int)item.Value.Category, item.Value.Id, 1);
+                    }
+                });
+                KeyItemsChecked = true;
+            }
+        }
         private static void DetectEventFlagDifferences(byte[] oldFlags, byte[] newFlags)
         {
             //int changedFlags = 0;

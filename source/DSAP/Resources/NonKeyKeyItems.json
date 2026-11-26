@@ -9,6 +9,14 @@
     "ApId": 11119000
   },
   {
+    "Name": "Sunlight Maggot",
+    "Id": 190000,
+    "StackSize": 1,
+    "UpgradeType": "None",
+    "Category": "Armor",
+    "ApId": 11117068
+  },
+  {
     "Name": "Covenant of Artorias",
     "Id": 138,
     "StackLimit": 1,
@@ -23,5 +31,13 @@
     "UpgradeType": "None",
     "Category": "Rings",
     "ApId": 11114030
+  },
+  {
+    "Name": "Darkmoon Seance Ring",
+    "Id": 149,
+    "StackLimit": 1,
+    "UpgradeType": "None",
+    "Category": "Rings",
+    "ApId": 11114039
   }
 ]
